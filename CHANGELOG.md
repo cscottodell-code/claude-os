@@ -1,5 +1,14 @@
 # Toolkit Changelog
 
+## v2.3.0 - 2026-03-03
+- **New workflow: `/scott:compare-sources`** — compare context engineering sources against the current toolkit to surface congruencies, discrepancies, and unique ideas
+  - 5-phase workflow: Collect Sources, Process Sources, Build Comparison Inventory, Run Comparison Analysis (subagent), Generate Review & Act
+  - Uses manifest/index pattern for context window protection — subagent gets its own fresh window for the heavy comparison work
+  - Review output feeds directly into `/scott:toolkit-update` via `_pending-updates.md`
+- **Fix: `/scott:tweet-to-source`** — corrected 4 path references from `~/Sites/context-engineering/` to `~/Sites/Global/context-engineering/`
+- **New directory:** `~/Sites/Global/context-engineering/reviews/` for review outputs and intermediate artifacts
+- Triggered by: need to systematically compare collected sources against toolkit configuration
+
 ## v2.2.0 - 2026-03-03
 - **toolkit-update v1.1:** Add Phase 5 — auto-update `scott-toolkit-instructions.md` and regenerate PDF after every toolkit change
 - **New skill: `/scott:bypass`** — temporarily disable a guard hook, run the blocked action, re-enable

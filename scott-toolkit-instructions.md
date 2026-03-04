@@ -30,6 +30,7 @@ These are your workflows. Type them and Claude walks you through each one.
 | `/scott:toolkit-update` | When you want to improve the toolkit itself |
 | `/scott:log-success` | Something went really well — capture it |
 | `/scott:log-error` | Something went wrong — capture it |
+| `/scott:compare-sources` | Compare context engineering sources against your toolkit |
 | `/scott:bypass` | A guard hook blocked something you approved — bypass it |
 
 You don't need to memorize these. Just describe what you want to do and Claude will suggest the right one.

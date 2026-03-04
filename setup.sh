@@ -155,6 +155,12 @@ deploy_workflow_skill "log-error.md" "scott-log-error" \
   and Log It." \
   "Capture a mistake or failure for future reference"
 
+deploy_workflow_skill "compare-sources.md" "scott-compare-sources" \
+  "Compare context engineering sources against the current toolkit configuration.
+  Walks through 5 phases: Collect Sources, Process Sources, Build Comparison
+  Inventory, Run Comparison Analysis (subagent), and Generate Review & Act." \
+  "Compare new sources against your toolkit and surface what's actionable"
+
 # --- 4. Deploy standalone skills (symlinks) ---
 echo "4. Deploying standalone skills..."
 for skill_dir in "$TOOLKIT_PATH"/skills/scott-*/; do
@@ -199,7 +205,7 @@ for rule in claude-behavior.md code-style.md n8n-sync.md; do
 done
 
 # Check skills
-for skill in scott-new-project scott-resume scott-new-feature scott-retro scott-handoff scott-toolkit-update scott-log-success scott-log-error scott-bypass; do
+for skill in scott-new-project scott-resume scott-new-feature scott-retro scott-handoff scott-toolkit-update scott-log-success scott-log-error scott-compare-sources scott-bypass; do
   if [ -f "$SKILLS_DIR/$skill/SKILL.md" ]; then
     : # OK
   else

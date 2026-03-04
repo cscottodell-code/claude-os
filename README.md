@@ -37,6 +37,7 @@ All workflows are invoked via slash commands:
 | `/scott:handoff` | Prepare a project for Gary to productionize |
 | `/scott:toolkit-update` | Update the toolkit itself |
 | `/scott:log-success` | Capture a win while context is fresh |
+| `/scott:compare-sources` | Compare context engineering sources against your toolkit |
 | `/scott:log-error` | Capture a failure while context is fresh |
 
 ## Three-System Architecture
@@ -82,7 +83,8 @@ scott-toolkit/
 │   ├── handoff-to-gary.md
 │   ├── toolkit-update.md
 │   ├── log-success.md
-│   └── log-error.md
+│   ├── log-error.md
+│   └── compare-sources.md
 │
 ├── hooks/                            # Automated session management
 │   ├── session-start.sh             # Context file discovery
