@@ -58,17 +58,15 @@ scheduled tasks, or webhook receivers from external services. When needed:
 - Tauri apps call n8n webhooks via Rust HTTP client
 - Web apps call n8n webhooks via Nuxt server routes
 
-## Version Pinning
+## Versioning Policy
 
-**Stay on these stable versions:**
-- SurrealDB v3.0.0 (GA as of Feb 17, 2026)
-- Nuxt 4.x
-- Nuxt UI v4.3.0
-- Tailwind CSS v4.0
-- Tauri 2.x
+**Default:** Use latest stable versions. Don't pin specific versions unless there's a reason.
+
+**SurrealDB version split:**
+- Advosy CRM v1 (advosy.app): stays on SurrealDB v2.6.0 (Gary's production app)
+- ALL other projects (personal, Bresco, future Advosy): SurrealDB v3.0.0+ (GA Feb 17, 2026)
 
 **Do NOT upgrade to:**
-- SurrealDB v3.1+ (wait for stability)
 - Nuxt 5 (not released)
 - Tauri 3 (not released)
 
@@ -88,12 +86,12 @@ scheduled tasks, or webhook receivers from external services. When needed:
 ## Project Catalog
 
 For a full list of all active projects, their locations, GitHub repos, and deployment
-status, see `~/scott-toolkit/references/project-catalog.md`.
+status, see `~/Sites/Global/scott-toolkit/references/project-catalog.md`.
 
 **Quick reference — active code projects:**
-- **Life OS** (Personal) — ~/Sites/personal/life-os/ — 97% complete
-- **D2D Payroll** (Advosy) — ~/Sites/advosy/d2d-payroll/ — ~90% complete
-- **BreSco Platform** (Bresco) — ~/Sites/bresco/automation-business/ — v1.1 deployed
-- **Spotio-CF** (Advosy) — ~/Sites/advosy/spotio-cf/ — Code complete
-- **D2D Income Tool** (Advosy) — ~/Sites/advosy/d2d-income-tool/advosy-nuxt/ — Prototype
-- **D2D Apps** (Advosy) — ~/Sites/advosy/d2d-apps/ — Prototype (React)
+- **Life OS** (Personal) — ~/Sites/Personal/life-os/ — 97% complete
+- **D2D Payroll** (Advosy) — ~/Sites/Advosy/d2d-payroll/ — ~90% complete
+- **BreSco Platform** (Bresco) — ~/Sites/Bresco/automation-business/ — v1.1 deployed
+- **Spotio-CF** (Advosy) — ~/Sites/Advosy/spotio-cf/ — Code complete
+- **D2D Income Tool** (Advosy) — ~/Sites/Advosy/d2d-income-tool/advosy-nuxt/ — Prototype
+- **D2D Apps** (Advosy) — ~/Sites/Advosy/d2d-apps/ — Prototype (React)

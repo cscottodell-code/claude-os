@@ -18,7 +18,7 @@ are the same for every project.
 
 - **Project:** [name] - [one-line description]
 - **PRD:** See PRD.md in this repo
-- **Type:** Advosy / Bresco / Personal
+- **Type:** Global / Personal / Advosy / Bresco
 - **Target:** Desktop (Tauri) / Web / Both
 
 ## Tech Stack

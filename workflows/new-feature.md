@@ -1,9 +1,10 @@
 # New Feature
 
 ## Metadata
-- Last updated: 2026-02-27
-- Version: 1.3
+- Last updated: 2026-03-03
+- Version: 2.0
 - Changelog:
+  - v2.0: Slim to orchestrator — delegate build to GSD + Superpowers, keep discovery phases
   - v1.3: Add post-build test coverage review with /gsd:add-tests (Phase 4)
   - v1.2: Integrate Superpowers plugin — git worktrees, TDD, subagent-driven development, two-stage code review, and branch merging into Build phase (Phase 4)
   - v1.1: Add optional Impeccable design review step (critique + polish) to Build phase for UI-heavy features
@@ -86,38 +87,26 @@ A mini-PRD document (can be added to the project's PRD.md as an appendix or kept
 ### Done when
 Scott approves the mini-PRD.
 
-## Phase 4: Build
+## Phase 4: Build (Delegated)
 
 ### What this phase does
-Implement the feature.
+Implement the feature using GSD for execution and Superpowers for methodology.
 
 ### Steps
 1. Create a git worktree for this feature using `superpowers:using-git-worktrees`
-   — this isolates feature work on a separate branch without affecting main
-2. Break the feature into small (2-5 minute) tasks using `superpowers:writing-plans`
-3. Write tasks to tasks/todo.md
-4. If data model changes are needed, do those first:
-   - Update schema.surql
-   - Update CLAUDE.md's SurrealDB Schema section
-5. Execute each task using `superpowers:subagent-driven-development`:
-   - Each task gets a fresh subagent with focused context
-   - TDD is enforced automatically via `superpowers:test-driven-development`
-     (write failing test → implement → refactor)
-   - Each task gets a two-stage code review before completion
-6. Verify each task works before marking it complete
-7. Test the complete feature end-to-end
-8. Review test coverage for the new feature:
-   - If coverage is thin on critical logic, use `/gsd:add-tests` to generate
-     additional tests for the completed feature
-   - Focus on edge cases and integration points with existing code
-9. Design review (if the feature has significant UI changes):
+2. Plan the build using `/gsd:plan-phase` — feed it the mini-PRD from Phase 3
+3. Execute the plan using `/gsd:execute-phase` — this handles:
+   - Task breakdown and dependency tracking
+   - TDD is enforced via `superpowers:test-driven-development`
+   - Each task gets atomic commits
+4. After execution, verify with `/gsd:verify-work`
+5. If test coverage is thin, use `/gsd:add-tests` for critical logic
+6. Design review (if significant UI changes):
    - Run `/impeccable:critique` for visual quality feedback
-   - Address critical issues
    - Run `/impeccable:polish` as a final detail pass
-   Skip for backend-only changes or minor UI tweaks.
-10. Run `superpowers:requesting-code-review` — two-stage review of the complete feature.
-   Fix any Critical issues immediately and Important issues before proceeding
-11. Use `superpowers:finishing-a-development-branch` to merge the worktree back to main
+7. Code review using `superpowers:requesting-code-review`
+   — fix Critical issues immediately, Important issues before proceeding
+8. Merge using `superpowers:finishing-a-development-branch`
 
 ### Output
 Working feature, verified, tested, and code-reviewed.
@@ -146,7 +135,8 @@ CLAUDE.md accurately reflects the current state of the project.
 - [ ] Feature clearly described
 - [ ] Impact on existing code assessed
 - [ ] Mini-PRD written and approved
-- [ ] Feature built and verified
+- [ ] Feature built and verified (via GSD + Superpowers)
 - [ ] Design review completed (if UI-heavy feature)
 - [ ] CLAUDE.md updated
 - [ ] tasks/todo.md updated
+- [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)

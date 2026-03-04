@@ -125,3 +125,5 @@ Both machines can pull the latest toolkit.
 - [ ] File metadata updated (version, date, changelog)
 - [ ] CHANGELOG.md updated
 - [ ] Changes committed and pushed
+
+- [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)

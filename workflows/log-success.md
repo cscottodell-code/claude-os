@@ -125,3 +125,5 @@ Log file is created and metadata is updated.
 - [ ] Log file created in ~/scott-toolkit/successes/
 - [ ] Metadata counter incremented
 - [ ] Assessed whether this should become standard practice
+
+- [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)

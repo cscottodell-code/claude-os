@@ -155,3 +155,5 @@ All approved changes are applied and committed.
 - [ ] Toolkit updates applied
 - [ ] CHANGELOG.md updated
 - [ ] Toolkit changes committed
+
+- [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)

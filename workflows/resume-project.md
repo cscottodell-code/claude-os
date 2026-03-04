@@ -1,9 +1,10 @@
 # Resume Project
 
 ## Metadata
-- Last updated: 2026-02-25
-- Version: 1.0
+- Last updated: 2026-03-03
+- Version: 2.0
 - Changelog:
+  - v2.0: Slim to orchestrator — delegate GSD state recovery, keep Scott-specific summary + direction
   - v1.0: Initial workflow
 
 ## Purpose
@@ -34,8 +35,16 @@ Get fully up to speed on the project's current state by reading all relevant fil
 5. **Recent git log** — to see what was last committed
 6. **Any open issues or pending work**
 
+### GSD State Recovery
+If the project has a `.planning/` directory (GSD-managed project):
+- Read `.planning/STATE.md` to understand GSD phase progress
+- Read any `.planning/phases/*/PLAN.md` for active phase details
+- Read `.planning/phases/*/VERIFICATION.md` for completed phase results
+- This tells you where the structured build process left off
+
 ### Output
-A mental model of where the project stands.
+A mental model of where the project stands — both the human context (CLAUDE.md, PRD)
+and the build state (GSD planning files).
 
 ### Done when
 All context files have been reviewed.
@@ -52,6 +61,7 @@ Present a summary like this:
 
 **Last completed:** [what was finished in the last session]
 **Current milestone:** [which milestone we're on] — [X of Y tasks done]
+**GSD phase status:** [if GSD-managed: current phase, % complete, next step]
 **Next up:** [what the next task or feature is]
 **Known issues:** [any bugs or problems noted in CLAUDE.md or lessons.md]
 **Time since last work:** [based on git log dates]"
@@ -80,14 +90,17 @@ Scott confirms what to work on.
 ## Phase 4: Resume Work
 
 ### What this phase does
-Continue from where the project left off.
+Continue from where the project left off, using the appropriate tools.
 
 ### Steps
 1. Review tasks/lessons.md to avoid repeating past mistakes
 2. Pick up the next task from tasks/todo.md
 3. If Scott redirected to something else, update tasks/todo.md accordingly
-4. Follow the project's CLAUDE.md behavior rules
-5. Work through tasks, checking in as appropriate
+4. **For GSD-managed projects:** Use `/gsd:execute-phase` to continue the current phase,
+   or `/gsd:plan-phase` if starting a new phase
+5. **For quick tasks:** Use `/gsd:quick` for ad-hoc work with state tracking
+6. Follow the project's CLAUDE.md behavior rules
+7. Work through tasks, checking in as appropriate
 
 ### Output
 Progress on the project.
@@ -96,8 +109,9 @@ Progress on the project.
 The session's work is complete (either the task is done or Scott ends the session).
 
 ## Completion Checklist
-- [ ] Project context fully read
+- [ ] Project context fully read (including .planning/ if GSD-managed)
 - [ ] State summarized for Scott
 - [ ] Direction confirmed
 - [ ] Work resumed (or redirected based on Scott's input)
 - [ ] CLAUDE.md Current Status updated at end of session
+- [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)

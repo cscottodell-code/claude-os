@@ -19,13 +19,13 @@ communications distinct.
 | Person | Role |
 |--------|------|
 | **Scott O'Dell** | Architecture, specification, quality evaluation |
-| **Brett Arrington** | Co-developer, VRZA Operations at Advosy, vibe coder |
+| **Brett Arrington** | Vibe coder, VRZA Operations at Advosy |
 
 ## BreSco Platform (automation-business)
 
 | Detail | Value |
 |--------|-------|
-| **Location** | ~/Sites/bresco/automation-business/ |
+| **Location** | ~/Sites/Bresco/automation-business/ |
 | **GitHub** | cscottodell-code/automation-business |
 | **Status** | v1.1 complete |
 | **Deployed** | Vercel |
@@ -37,9 +37,9 @@ The BreSco Platform is the client-facing automation business website/app.
 
 | Project | Location | Purpose |
 |---------|----------|---------|
-| Background Ops | ~/Sites/bresco/Background Ops/ | Reference PDFs (Sebastian Marshall methodology) |
-| BOPS Guides | ~/Sites/bresco/bops-guides/ | Complete documentation for Background Ops |
-| Brett Setup | ~/Sites/bresco/brett-setup/ | Ready-to-use setup package for Brett |
+| Background Ops | ~/Sites/Bresco/Background Ops/ | Reference PDFs (Sebastian Marshall methodology) |
+| BOPS Guides | ~/Sites/Bresco/bops-guides/ | Complete documentation for Background Ops |
+| Brett Setup | ~/Sites/Bresco/brett-setup/ | Ready-to-use setup package for Brett |
 
 ## Project Context for Bresco Work
 
@@ -47,12 +47,12 @@ When building tools for Bresco:
 - **Both Scott and Brett** are users/developers
 - **Brett** may use the toolkit in the future — keep instructions beginner-friendly
 - **Personal/startup feel** is appropriate (less corporate than Advosy)
-- Projects live in `~/Sites/bresco/`
+- Projects live in `~/Sites/Bresco/`
 - Brett's n8n instance: https://banc-r.app.n8n.cloud/
 - No need for Gary handoff — Bresco manages its own deployment
 
 ## Technical Notes
 
-- Bresco projects use: Nuxt 4 + SurrealDB v2.6.0 + TypeScript + Tailwind v4
+- Bresco projects use: Nuxt 4 + SurrealDB v3 + TypeScript + Tailwind v4
 - Brett has less technical knowledge — code should be well-commented
 - Prototyping speed matters — get something working and iterate

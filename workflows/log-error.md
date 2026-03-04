@@ -145,3 +145,5 @@ Log file is created and metadata is updated.
 - [ ] Log file created in ~/scott-toolkit/errors/
 - [ ] Metadata counter incremented
 - [ ] Checked for recurring patterns
+
+- [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)

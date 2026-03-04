@@ -100,7 +100,7 @@ Document how to clone, install, and run the project from scratch.
    ```bash
    git clone [repo url]
    cd [project]
-   npm install
+   pnpm install
    ```
 3. **Database setup:** How to initialize SurrealDB and run the schema
 4. **Run the app:** Commands for dev mode and production build
@@ -129,7 +129,7 @@ Final verification that everything is ready.
 - [ ] ARCHITECTURE.md exists and is accurate
 - [ ] Setup instructions work from scratch
 - [ ] All database schema files are up to date
-- [ ] All tests pass (`npm test`)
+- [ ] All tests pass (`pnpm test`)
 - [ ] Test coverage covers critical business logic
 - [ ] Gary has access to the GitHub repo
 - [ ] Known issues and tech debt are documented
@@ -148,3 +148,5 @@ All checklist items are checked and Scott confirms the handoff is ready.
 - [ ] Setup instructions verified
 - [ ] Handoff checklist passed
 - [ ] Scott confirms ready for Gary
+
+- [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)

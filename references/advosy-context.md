@@ -9,7 +9,7 @@
 
 Advosy is a home services company based in Arizona, operating under the EOS
 (Entrepreneurial Operating System) framework. One leadership team oversees all
-subsidiary companies. Scott is the Head of Sales Training & Development.
+subsidiary companies. Scott is the Head of Sales.
 
 **Core Principles:** Versatility, Growth, Win
 
@@ -37,7 +37,7 @@ ADVOSY (Parent Company)
 | **Visionary** | Brett Ray | Founder, majority owner |
 | **Integrator** | Gary Fenn | Lead developer, branding, owns Panda Promo |
 | **Finance** | Wesley Hathcock | Majority owner |
-| **Sales** | Scott O'Dell | Head of training & development |
+| **Sales** | Scott O'Dell | Head of Sales |
 | **Marketing** | Chandler Ricks | GoHighLevel automations |
 | **Operations** | Melissa Lunt | Gary's sister, often remote from UT |
 | **HR** | Kris Davis | |
@@ -54,7 +54,7 @@ ADVOSY (Parent Company)
 | Person | Role | Relevance |
 |--------|------|-----------|
 | **Scott O'Dell** | Sales Seat | AI orchestrator, builds prototypes with Claude Code |
-| **Brett Arrington** | VRZA Ops + Bresco co-founder | Co-developer, vibe coder |
+| **Brett Arrington** | VRZA Ops + Bresco co-founder | Vibe coder, builds prototypes with Scott |
 | **Gary Fenn** | Integrator | Production developer, productionizes Scott's prototypes |
 | **Jeramy Hubbard** | IT Support | Built Claimsforce & Homeforce (EspoCRM) |
 | **Chandler Ricks** | Marketing | Manages GoHighLevel automations |
@@ -68,12 +68,13 @@ ADVOSY (Parent Company)
 | **GoHighLevel** | Marketing automation | Managed by Chandler |
 | **n8n (Gary)** | Production workflows | events.advosy.app |
 | **n8n (Brett)** | Prototypes + Bresco | banc-r.app.n8n.cloud |
-| **RepCard** | D2D rep management | api.repcard.com |
+| **Spotio** | D2D field sales management | Replacing RepCard |
+| **Advosy CRM** | Custom CRM (Gary's build) | advosy.app (Nuxt 4 + Nuxt UI + SurrealDB) |
 | **RingCentral** | SMS/Phone | |
 
 **Workflow pattern:** Prototype in Brett's n8n → Move to Gary's for production
 
-## Notion Database IDs (Migration Complete)
+## Notion Database IDs (Legacy - Migrating to SurrealDB)
 
 | Resource | Notion ID |
 |----------|-----------|
@@ -82,18 +83,18 @@ ADVOSY (Parent Company)
 | Software Systems Database | `2ee4b348-1256-8129-8d7f-d1c4c0e7846f` (17 records) |
 | Organizations Database | `2ee4b348-1256-81c6-833a-c68df44434b0` (7 records) |
 
-**Notion is the source of truth for Advosy company data.**
+**Note:** Notion was the source of truth but Scott is migrating data to SurrealDB. These IDs are kept for reference during the transition.
 
 ## Advosy Tech Projects
 
 | Project | Location | Status | Purpose |
 |---------|----------|--------|---------|
-| D2D Payroll | ~/Sites/advosy/d2d-payroll/ | ~90% complete | Payroll calculator for D2D reps |
-| Spotio-CF | ~/Sites/advosy/spotio-cf/ | Code complete | Spotio → Claimsforce integration |
-| D2D Income Tool | ~/Sites/advosy/d2d-income-tool/ | Prototype | Income calculator (Nuxt version) |
-| D2D Apps | ~/Sites/advosy/d2d-apps/ | Prototype | React D2D apps |
-| CF Automations | ~/Sites/advosy/automations/ | Active | n8n workflow automations |
-| Membership Docs | ~/Sites/advosy/membership-docs/ | Complete | Research docs |
+| D2D Payroll | ~/Sites/Advosy/d2d-payroll/ | ~90% complete | Payroll calculator for D2D reps |
+| Spotio-CF | ~/Sites/Advosy/spotio-cf/ | Code complete | Spotio → Claimsforce integration |
+| D2D Income Tool | ~/Sites/Advosy/d2d-income-tool/ | Prototype | Income calculator (Nuxt version) |
+| D2D Apps | ~/Sites/Advosy/d2d-apps/ | Prototype | React D2D apps |
+| CF Automations | ~/Sites/Advosy/automations/ | Active | n8n workflow automations |
+| Membership Docs | ~/Sites/Advosy/membership-docs/ | Complete | Research docs |
 
 ## Project Context for Advosy Work
 
@@ -103,7 +104,7 @@ When building tools for Advosy:
 - **Claimsforce (EspoCRM)** is the existing CRM — new tools may integrate with it
 - **Gary** will productionize anything that goes live — keep handoff in mind
 - **n8n workflows** exist for operations — check Brett's instance for existing automations
-- **Notion** is the source of truth for company data (people, systems, orgs)
+- **Notion** was the source of truth (migrating to SurrealDB)
 
 ## Claimsforce (CF) Integration Notes
 

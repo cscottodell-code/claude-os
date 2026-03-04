@@ -1,5 +1,47 @@
 # Toolkit Changelog
 
+## v2.1.0 - 2026-03-03
+- Add "Global" as 4th work context for cross-cutting projects (toolkit, shared references, infrastructure)
+- **new-project v1.4:** Global option in Phase 1 (Brain Dump) and Phase 5 (Create Repository)
+- **PRD-TEMPLATE, CLAUDE-MD-TEMPLATE:** Updated project type options to include Global
+- **project-catalog.md:** Changed "Tool" org label to "Global" for consistency
+- **session-start.sh:** Detect and display project category (Global/Personal/Advosy/Bresco) at session start
+- **scott-toolkit-instructions.md:** Fixed 6 stale path references to use ~/Sites/Global/
+- Triggered by: Scott wants a 4th project context for cross-cutting projects
+
+## v2.0.0 - 2026-03-03
+Major restructure: context engineering update based on ce-synthesis.md findings.
+
+### Architecture
+- **Three-system ownership:** Toolkit owns context engineering, GSD owns project management, Superpowers owns dev methodology
+- **Directory restructure:** templates/ -> context/, skills/workflows/ -> workflows/, skills/reference/ -> knowledge/active/ + knowledge/archive/
+- **New hooks/ directory:** Top-level for session automation
+
+### Workflows
+- **debug:** REMOVED — replaced by `/gsd:debug` + `superpowers:systematic-debugging` + behavior rule for lesson capture
+- **resume-project v2.0:** Slimmed to orchestrator — delegates GSD `.planning/` state recovery, keeps Scott-specific summary + direction
+- **new-feature v2.0:** Slimmed to orchestrator — delegates build phase to `/gsd:plan-phase` + `/gsd:execute-phase` + Superpowers
+
+### Knowledge
+- **surrealdb.md:** Consolidated from surrealdb-v3.md + surrealql.md into single reference (~430 lines -> ~280 lines, no content lost)
+- **Archived:** tauri-nuxt.md, rust-tauri-commands.md, error-handling.md, frontend-design.md (moved to knowledge/archive/)
+
+### Hooks (NEW)
+- **session-start.sh:** Discovers and lists project context files at session start
+- **pre-compact.sh:** Saves .context-snapshot.md before context compaction
+- **session-end.sh:** Reminds to update CLAUDE.md, todo.md, lessons.md at session close
+
+### Rules
+- **claude-behavior.md v2.0:** Restructured into 3-system sections (Development Methodology -> Superpowers, Project Management -> GSD, Context Engineering -> Toolkit)
+
+### Infrastructure
+- **setup.sh:** NEW — one-command deployment script with symlinks and --toolkit-path support
+- **SETUP.md:** REMOVED (replaced by setup.sh)
+- **FILE-STRUCTURE-TEMPLATE.md:** REMOVED (new-project Phase 5 generates from PRD)
+- **mcp-config/:** REMOVED (machine-specific, not toolkit's concern)
+- **_WORKFLOW-TEMPLATE.md, _SKILL-TEMPLATE.md:** REMOVED (meta-templates, toolkit-update handles creation)
+- **references/ai-orchestration/:** Reorganized into subfolder with shorter names
+
 ## v1.2.0 - 2026-02-27
 - **debug v1.2:** Require human verification of fix before resolution (Phase 4)
 - **new-project v1.3:** Add post-build test coverage review with /gsd:add-tests (Phase 7)

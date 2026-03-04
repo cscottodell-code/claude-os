@@ -31,7 +31,7 @@ your answer.
 PROMPTING QUESTIONS:
 - What's the name of this project?
 - In one paragraph, what is it and who is it for?
-- Is this for Advosy, Bresco, or personal?
+- Is this for Global, Advosy, Bresco, or personal?
 - Will this be a desktop app (Tauri), web app, or both?
 
 EXAMPLE:
@@ -50,7 +50,7 @@ COMMON MISTAKES:
 
 - **Project name:** [name]
 - **Description:** [one paragraph - what is this, who is it for, why does it matter]
-- **Project type:** Advosy / Bresco / Personal
+- **Project type:** Global / Personal / Advosy / Bresco
 - **Deployment target:** Desktop (Tauri) / Web / Both
 
 ---

@@ -1,129 +1,138 @@
-# Scott's Toolkit
+# Scott's Toolkit v2
 
-A shared repository of reusable templates, skills, references, and retrospectives for building apps with Claude Code. Lives at `~/scott-toolkit/` on all of Scott's machines. Every project references this toolkit.
+A context engineering toolkit for building apps with Claude Code. Owns session management, templates, domain knowledge, and learning capture. Delegates project management to GSD and development methodology to Superpowers.
+
+Lives at `~/Sites/Global/scott-toolkit/` on all of Scott's machines. Deployed to `~/.claude/` via `setup.sh`.
 
 ## Who It's For
 
 - **Scott O'Dell** - AI orchestrator building prototypes with Claude Code
-- **Brett** - Co-developer on Bresco (may use this in the future)
+- **Brett (Arrington)** - Partner on Bresco, vibe coder
 
 ## Quick Start
 
-1. Clone the repo:
-   ```bash
-   git clone git@github.com:cscottodell-code/scott-toolkit.git ~/scott-toolkit
-   ```
+```bash
+# Clone the repo
+git clone git@github.com:cscottodell-code/scott-toolkit.git ~/Sites/Global/scott-toolkit
 
-2. Verify the structure:
-   ```bash
-   ls ~/scott-toolkit/
-   # Should see: templates/ skills/ references/ mcp-config/ retros/ README.md SETUP.md CHANGELOG.md
-   ```
+# Deploy to ~/.claude/
+cd ~/Sites/Global/scott-toolkit && ./setup.sh
 
-3. Point your project's `CLAUDE.md` to the toolkit:
-   ```markdown
-   ## External References
-   Before starting work, read the relevant skills from ~/scott-toolkit/skills/
-   Specific skills for this project:
-   - ~/scott-toolkit/skills/reference/surrealdb-v3.md
-   - ~/scott-toolkit/skills/reference/tauri-nuxt.md
-   ```
+# On Brett's machine (different path):
+./setup.sh --toolkit-path /path/to/scott-toolkit
+```
 
-That's it. The toolkit is NOT a submodule. It's a standalone repo at a fixed path. Update it once, every project benefits immediately.
+That's it. The setup script creates symlinks from `~/.claude/` to the repo. Update the repo once, every machine benefits after `git pull`.
 
 ## How to Use It
 
-### Starting a New Project
-Tell Claude Code: "Read ~/scott-toolkit/skills/workflows/new-project.md and walk me through it."
+All workflows are invoked via slash commands:
 
-This will guide you through:
-- Brain dump (capture what you want to build)
-- Clarify & challenge (poke holes, find gaps)
-- Draft a PRD (using the PRD template)
-- Create the repo with proper structure
-- Design proof (nail the look before building features)
-- Build milestone 1
+| Command | What it does |
+|---------|-------------|
+| `/scott:new-project` | Start a new project (8-phase guided workflow) |
+| `/scott:new-feature` | Add a feature to an existing project |
+| `/scott:resume` | Pick up where you left off on a project |
+| `/scott:retro` | Run a retrospective after a milestone |
+| `/scott:handoff` | Prepare a project for Gary to productionize |
+| `/scott:toolkit-update` | Update the toolkit itself |
+| `/scott:log-success` | Capture a win while context is fresh |
+| `/scott:log-error` | Capture a failure while context is fresh |
 
-### Adding a Feature to an Existing Project
-Tell Claude Code: "Read ~/scott-toolkit/skills/workflows/new-feature.md and walk me through it."
+## Three-System Architecture
 
-### Running a Retrospective
-After finishing a project or milestone, tell Claude Code: "Read ~/scott-toolkit/skills/workflows/retro.md and walk me through it."
+| System | Owns | Use for |
+|--------|------|---------|
+| **Scott-toolkit** | Context engineering | Session management, templates, domain knowledge, learning capture |
+| **GSD** | Project management | Phases, milestones, execution, task tracking, verification |
+| **Superpowers** | Development methodology | TDD, git worktrees, code review, plan writing, debugging |
 
-This captures lessons and feeds them back into the toolkit so the next project is better.
-
-### Debugging
-When stuck, tell Claude Code: "Read ~/scott-toolkit/skills/workflows/debug.md and walk me through it."
-
-### Updating the Toolkit
-After a retro or when you discover better patterns: "Read ~/scott-toolkit/skills/workflows/toolkit-update.md and walk me through it."
-
-### Handing Off to Gary
-When a prototype is ready for production: "Read ~/scott-toolkit/skills/workflows/handoff-to-gary.md and walk me through it."
-
-### Resuming a Project After Time Away
-Tell Claude Code: "Read ~/scott-toolkit/skills/workflows/resume-project.md and walk me through it."
+Toolkit workflows are **orchestrators** — they call GSD and Superpowers at the right moments.
 
 ## Repo Structure
 
 ```
 scott-toolkit/
-├── README.md              # This file
-├── SETUP.md               # Environment setup guide
-├── CHANGELOG.md           # Running log of toolkit updates
+├── README.md
+├── CHANGELOG.md
+├── setup.sh                          # One-command deploy to ~/.claude/
 │
-├── templates/             # Project starter templates
-│   ├── PRD-TEMPLATE.md
+├── context/                          # Templates for new projects
 │   ├── CLAUDE-MD-TEMPLATE.md
-│   ├── FILE-STRUCTURE-TEMPLATE.md
+│   ├── PRD-TEMPLATE.md
 │   ├── DESIGN-INTENT-TEMPLATE.md
 │   └── RETRO-TEMPLATE.md
 │
-├── skills/
-│   ├── workflows/         # Interactive step-by-step process skills
-│   │   ├── _WORKFLOW-TEMPLATE.md
-│   │   ├── new-project.md
-│   │   ├── new-feature.md
-│   │   ├── retro.md
-│   │   ├── debug.md
-│   │   ├── handoff-to-gary.md
-│   │   ├── toolkit-update.md
-│   │   └── resume-project.md
-│   │
-│   └── reference/         # Passive knowledge for Claude Code
-│       ├── _SKILL-TEMPLATE.md
-│       ├── surrealdb-v3.md
-│       ├── surrealql.md
+├── knowledge/                        # Domain knowledge skills
+│   ├── active/                       # Used regularly
+│   │   ├── surrealdb.md             # SurrealDB + SurrealQL (consolidated)
+│   │   ├── nuxt-ui-v4.md
+│   │   └── n8n-integration.md
+│   └── archive/                      # Available but not promoted
 │       ├── tauri-nuxt.md
-│       ├── nuxt-ui-v4.md
 │       ├── rust-tauri-commands.md
-│       ├── n8n-integration.md
 │       ├── error-handling.md
 │       └── frontend-design.md
 │
-├── references/            # Business and stack context
-│   ├── stack-overview.md
+├── workflows/                        # Interactive step-by-step processes
+│   ├── new-project.md               # 8-phase orchestrator
+│   ├── resume-project.md            # Session start (delegates to GSD)
+│   ├── new-feature.md               # Feature workflow (delegates build to GSD)
+│   ├── retro.md
+│   ├── handoff-to-gary.md
+│   ├── toolkit-update.md
+│   ├── log-success.md
+│   └── log-error.md
+│
+├── hooks/                            # Automated session management
+│   ├── session-start.sh             # Context file discovery
+│   ├── pre-compact.sh               # State snapshot before compaction
+│   ├── session-end.sh               # Close reminder
+│   ├── guard-git-push.sh
+│   ├── guard-destructive.sh
+│   ├── guard-claude-md.sh
+│   └── guard-npm-install.sh
+│
+├── rules/                            # Behavior rules (-> ~/.claude/rules/)
+│   ├── claude-behavior.md           # 3-system delegation rules
+│   ├── code-style.md
+│   └── n8n-sync.md
+│
+├── references/                       # Business context (loaded on demand)
+│   ├── project-catalog.md
 │   ├── advosy-context.md
-│   └── bresco-context.md
+│   ├── bresco-context.md
+│   ├── advosy-offer-bundles.md
+│   ├── stack-overview.md
+│   └── ai-orchestration/
+│       ├── framework.md
+│       ├── assessment.md
+│       └── courses.md
 │
-├── mcp-config/            # MCP server documentation
-│   ├── mcp-servers-reference.md
-│   └── mcp-setup-guide.md
-│
-└── retros/                # Post-project retrospectives
-    └── _retro-index.md
+├── retros/                           # Retrospective outputs
+│   └── _retro-index.md
+├── errors/                           # Error logs
+│   └── _metadata.json
+└── successes/                        # Success logs
+    └── _metadata.json
+```
+
+## Multi-Machine Sync
+
+```
+git pull                              # Get latest from GitHub
+./setup.sh                            # Re-deploy (symlinks update automatically)
 ```
 
 ## How It Improves Over Time
 
 ```
 Start project (use toolkit)
-  -> Build with Claude Code
+  -> Build with Claude Code + GSD + Superpowers
   -> Things go well or wrong
-  -> Run retro workflow
-  -> Capture lessons in retro file
-  -> Identify toolkit updates
-  -> Apply updates to skills/templates
+  -> Run /scott:retro
+  -> Capture lessons
+  -> /scott:toolkit-update to apply improvements
   -> Push to GitHub
   -> Next project starts smarter
 ```

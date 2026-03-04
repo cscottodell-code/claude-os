@@ -1,9 +1,10 @@
 # New Project
 
 ## Metadata
-- Last updated: 2026-02-27
-- Version: 1.3
+- Last updated: 2026-03-03
+- Version: 1.4
 - Changelog:
+  - v1.4: Add Global as 4th work context for cross-cutting projects (toolkit, shared references)
   - v1.3: Add post-build test coverage review with /gsd:add-tests (Phase 7)
   - v1.2: Integrate Superpowers plugin — git worktrees, TDD, subagent-driven development, and two-stage code review into Build (Phase 7) and Milestone Review (Phase 8) phases
   - v1.1: Replace binary Gary question with 3 work contexts (Personal/Advosy/Bresco), integrate Impeccable plugin into Design Proof (Phase 6), Build (Phase 7), and Milestone Review (Phase 8) phases
@@ -17,7 +18,7 @@ complete PRD, project repo, and design proof before any features are built.
 Use this whenever Scott says something like "let's start a new project" or "I want to build..."
 
 ## Prerequisites
-- The toolkit repo exists at ~/scott-toolkit/
+- The toolkit repo exists at ~/Sites/Global/scott-toolkit/
 - Scott has a rough idea of what he wants to build (doesn't need to be detailed)
 
 ## Instructions for Claude Code
@@ -47,6 +48,7 @@ This is intentionally unstructured — the goal is quantity over quality.
 5. Do you have any visual inspiration? (Apps you like the look of, screenshots, Figma files?)
 6. Desktop app, web app, or both?
 7. Which work context is this for?
+   - **Global** — Cross-cutting project used by all contexts (toolkit, shared references, infrastructure)
    - **Personal** — Solo project, you deploy and maintain it yourself
    - **Advosy** — Work project, may hand off to Gary for production
    - **Bresco** — Co-developing with Brett, shared ownership
@@ -82,11 +84,11 @@ Scott has answered all clarifying questions and no major gaps remain.
 ## Phase 3: Draft PRD
 
 ### What this phase does
-Load the PRD template from ~/scott-toolkit/templates/PRD-TEMPLATE.md and walk through
+Load the PRD template from ~/Sites/Global/scott-toolkit/templates/PRD-TEMPLATE.md and walk through
 it section by section, using the brain dump answers as the starting material.
 
 ### How to do it
-1. Read ~/scott-toolkit/templates/PRD-TEMPLATE.md
+1. Read ~/Sites/Global/scott-toolkit/templates/PRD-TEMPLATE.md
 2. For each section (1-11):
    a. Explain what this section is about (use the template's guidance comments)
    b. Draft the content using the brain dump and clarification answers
@@ -132,13 +134,14 @@ Set up the project repo with the proper file structure and configuration files.
 
 ### Steps
 1. Create the project directory based on work context:
-   - Personal → ~/Sites/personal/[project-name]
-   - Advosy → ~/Sites/advosy/[project-name]
-   - Bresco → ~/Sites/bresco/[project-name]
+   - Global → ~/Sites/Global/[project-name]
+   - Personal → ~/Sites/Personal/[project-name]
+   - Advosy → ~/Sites/Advosy/[project-name]
+   - Bresco → ~/Sites/Bresco/[project-name]
 2. Initialize git
-3. Read ~/scott-toolkit/templates/FILE-STRUCTURE-TEMPLATE.md
+3. Read ~/Sites/Global/scott-toolkit/templates/FILE-STRUCTURE-TEMPLATE.md
 4. Create the directory structure matching the deployment target (web/desktop/both)
-5. Generate CLAUDE.md from ~/scott-toolkit/templates/CLAUDE-MD-TEMPLATE.md:
+5. Generate CLAUDE.md from ~/Sites/Global/scott-toolkit/templates/CLAUDE-MD-TEMPLATE.md:
    - Fill in project context from the PRD
    - Fill in tech stack (standard + any project-specific additions)
    - List relevant toolkit skill files in External References
@@ -277,3 +280,5 @@ Scott confirms the milestone is acceptable and gives direction for what's next.
 - [ ] Polish pass completed (Phase 8)
 - [ ] Milestone review completed
 - [ ] CLAUDE.md updated with current status
+
+- [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)
