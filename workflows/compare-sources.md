@@ -2,8 +2,9 @@
 
 ## Metadata
 - Last updated: 2026-03-03
-- Version: 1.0
+- Version: 1.1
 - Changelog:
+  - v1.1: Redesigned Phases 1-2, added Phase 6 (Archive), renamed folders
   - v1.0: Initial workflow
 
 ## Purpose
@@ -11,64 +12,83 @@ Compare new context engineering sources against the current scott-toolkit config
 Surfaces what's validated, what's new, and what conflicts — so Scott can decide whether
 to update his toolkit. The primary goal is always to **maximize protecting context windows**.
 
-Use when Scott has collected new articles, tweets, repos, or resources into
-`~/Sites/Global/context-engineering/` and wants to know what's actionable.
+Use when Scott has added new articles, tweets, repos, or resources into
+`~/Sites/Global/context-engineering/raw-sources/` and wants to know what's actionable.
 
 ## Prerequisites
-- Sources exist in `~/Sites/Global/context-engineering/sources/` (processed .md files)
-- Optionally: new raw inputs in `~/Sites/Global/context-engineering/research-sources/`
+- Raw source files exist in `~/Sites/Global/context-engineering/raw-sources/` (.md files added manually by Scott)
 - The toolkit repo at `~/Sites/Global/scott-toolkit/`
 
 ## Instructions for Claude Code
-This is a 5-phase workflow. Each phase has clear inputs, outputs, and "done when"
+This is a 6-phase workflow. Each phase has clear inputs, outputs, and "done when"
 criteria. Follow them in order. Protect the main context window — Phase 3 builds
 lightweight indexes so Phase 4's subagent can do the heavy lifting in its own window.
 
----
-
-## Phase 1: Collect Sources
-
-### What this phase does
-Identify what new sources to process.
-
-### Steps
-1. List files in `~/Sites/Global/context-engineering/research-sources/` (raw inputs)
-2. List files in `~/Sites/Global/context-engineering/sources/` (processed markdown)
-3. Show both lists to Scott in a table:
-   | Location | File | Status |
-   |----------|------|--------|
-   | research-sources/ | [name] | Unprocessed |
-   | sources/ | [name] | Processed |
-4. Ask Scott: "Are there new sources to add?" — accept URLs, file drops, or pasted content
-5. For x.com links → delegate to `/scott:tweet-to-source`
-6. For other URLs → use WebFetch to extract content, save raw output to `research-sources/`
-7. For PDFs already in `research-sources/` → note for Phase 2 processing
-
-### Done when
-Scott confirms the list of new sources to process (or says "just review existing sources").
+**Important:** Track which files are processed during this run. Phases 1 and 2 should
+build a list of filenames they touched. Phase 6 uses that list to archive only what
+was processed, not everything in the folders.
 
 ---
 
-## Phase 2: Process Sources
+## Phase 1: Scan & Refresh Raw Sources
 
 ### What this phase does
-Convert each new source into standardized markdown. Skip this phase if Scott said
-"just review existing sources" in Phase 1.
+Check each raw source for outdated content (old version numbers, stale dates, deprecated
+features, superseded claims) and update them in place with current information.
 
 ### Steps
-1. Read 1-2 existing files in `~/Sites/Global/context-engineering/sources/` to match
-   formatting conventions
-2. For each new source, apply the standard processing prompt:
-   > "Create a .md file that gives you all of the helpful information from this source
-   > to help customize Claude Code later. Update any outdated information with current
-   > information. Don't customize the information to any context about the user — stay
-   > true to the source, except for the updates."
-3. Name using convention: `[topic-slug]-[author-or-project]-[year].md`
-4. Save to `~/Sites/Global/context-engineering/sources/`
-5. Show each processed file to Scott for approval before moving to the next
+1. List files in `~/Sites/Global/context-engineering/raw-sources/` — **skip the `completed/` subfolder**
+2. Show the file list to Scott in a table:
+   | # | File | Last Modified |
+   |---|------|---------------|
+   | 1 | [name] | [date] |
+3. For each `.md` file:
+   a. Read the file
+   b. Check for outdated content:
+      - Version numbers that have since been updated (e.g., "Claude 3.5" when Claude 4 exists)
+      - Dates or timelines that have passed
+      - Features described as "upcoming" or "beta" that are now GA or deprecated
+      - Claims about tools or APIs that may have changed
+   c. If outdated content is found, use WebSearch to find current information
+   d. Update the file in place — preserve the original structure and voice, just fix the stale parts
+   e. Add a comment at the top of the file: `<!-- Last refreshed: YYYY-MM-DD -->`
+4. Show Scott a summary of what was updated:
+   | File | Changes Made |
+   |------|-------------|
+   | [name] | [brief description of updates, or "No changes needed"] |
+5. **Track the list of files processed** — store as a variable for Phase 6
 
 ### Done when
-All new sources are processed and saved (or Phase 1 said "review only").
+All raw sources have been scanned, outdated content updated, and Scott has seen the summary.
+
+---
+
+## Phase 2: Revise Sources
+
+### What this phase does
+Distill each raw source down to only what's useful for Claude Code customization.
+Cut fluff, marketing language, generic advice, and anything not actionable. Save the
+revised version to a separate folder.
+
+### Steps
+1. Read 1-2 existing files in `~/Sites/Global/context-engineering/revised-sources/` (if any exist)
+   to match formatting conventions
+2. For each raw source processed in Phase 1:
+   a. Read the file from `~/Sites/Global/context-engineering/raw-sources/[filename]`
+   b. Apply this revision prompt:
+      > "Extract only the information from this source that would be useful for
+      > customizing Claude Code — patterns, techniques, configuration advice, architectural
+      > decisions, workflow improvements. Cut marketing fluff, generic programming advice,
+      > biographical details, and anything not actionable. Stay true to the source's
+      > claims and structure, just trim to essentials."
+   c. Name using convention: `[topic-slug]-[author-or-project]-[year].md`
+      (keep the same name as the raw source if it already follows this convention)
+   d. Save to `~/Sites/Global/context-engineering/revised-sources/`
+   e. Show each revised file to Scott for approval before moving to the next
+3. **Track the list of revised files created** — store for Phase 6
+
+### Done when
+All raw sources have been revised and saved. Scott has approved each one.
 
 ---
 
@@ -92,14 +112,14 @@ Scan these files and write a 1-2 line summary for each:
 | Hooks | `~/Sites/Global/scott-toolkit/hooks/*.sh` |
 | MEMORY.md | `~/.claude/projects/-Users-scott/memory/MEMORY.md` |
 | CLAUDE.md | `~/.claude/CLAUDE.md` |
-| Existing synthesis | `~/Sites/Global/context-engineering/sources/ce-synthesis.md` (summary only) |
+| Existing synthesis | `~/Sites/Global/context-engineering/ce-synthesis.md` (summary only) |
 
 For each file, read it and write a brief summary capturing:
 - What the file configures or teaches
 - Key patterns, rules, or techniques it implements
 
 Write the manifest to:
-`~/Sites/Global/context-engineering/reviews/_comparison-manifest.md`
+`~/Sites/Global/context-engineering/compared-sources/_comparison-manifest.md`
 
 Format:
 ```markdown
@@ -119,12 +139,12 @@ Generated: YYYY-MM-DD
 ```
 
 ### Step 2: Build Source Index
-For each file in `~/Sites/Global/context-engineering/sources/` (both old and new):
+For each file in `~/Sites/Global/context-engineering/revised-sources/` (both old and new):
 - Read the file
 - Write a 1-2 line summary listing key claims, patterns, and techniques
 - Note the author and focus area
 
-Write to: `~/Sites/Global/context-engineering/reviews/_source-index.md`
+Write to: `~/Sites/Global/context-engineering/compared-sources/_source-index.md`
 
 Format:
 ```markdown
@@ -160,14 +180,14 @@ Launch a **general-purpose** subagent (via the Agent tool) with these instructio
 You are comparing context engineering sources against Scott's toolkit configuration.
 
 ## Your Inputs
-1. Read `~/Sites/Global/context-engineering/reviews/_comparison-manifest.md` (toolkit inventory)
-2. Read `~/Sites/Global/context-engineering/reviews/_source-index.md` (source summaries)
+1. Read `~/Sites/Global/context-engineering/compared-sources/_comparison-manifest.md` (toolkit inventory)
+2. Read `~/Sites/Global/context-engineering/compared-sources/_source-index.md` (source summaries)
 
 ## Your Task: Two-Pass Comparison
 
 ### Pass 1 — Source Scan (new sources first)
 For each source in the index:
-1. Read the full source file from `~/Sites/Global/context-engineering/sources/[filename]`
+1. Read the full source file from `~/Sites/Global/context-engineering/revised-sources/[filename]`
 2. For each significant claim, pattern, or technique in the source:
    - Check the manifest: does the toolkit already implement this?
      → If yes: **Congruency** (note which toolkit file)
@@ -182,7 +202,7 @@ For each toolkit file in the manifest:
 2. Is the toolkit doing something no source supports? (flag for awareness, not necessarily a problem)
 
 ## Output
-Write your findings to `~/Sites/Global/context-engineering/reviews/_raw-findings.md`
+Write your findings to `~/Sites/Global/context-engineering/compared-sources/_raw-findings.md`
 using this format:
 
 ```markdown
@@ -241,10 +261,10 @@ Transform raw findings into a scannable review document, then let Scott decide w
 ### Steps
 
 #### 1. Read the raw findings
-Read `~/Sites/Global/context-engineering/reviews/_raw-findings.md`
+Read `~/Sites/Global/context-engineering/compared-sources/_raw-findings.md`
 
 #### 2. Generate the review document
-Write to `~/Sites/Global/context-engineering/reviews/YYYY-MM-DD-review.md` using this format:
+Write to `~/Sites/Global/context-engineering/compared-sources/YYYY-MM-DD-review.md` using this format:
 
 ```markdown
 # Context Engineering Review — YYYY-MM-DD
@@ -308,7 +328,7 @@ Show:
 - Ask: "Which of these do you want to act on?"
 
 #### 4. For approved recommendations
-Write `~/Sites/Global/context-engineering/reviews/_pending-updates.md`:
+Write `~/Sites/Global/context-engineering/compared-sources/_pending-updates.md`:
 
 ```markdown
 # Pending Toolkit Updates
@@ -332,12 +352,38 @@ Review document is generated and Scott has decided which recommendations to purs
 
 ---
 
+## Phase 6: Archive Processed Sources
+
+### What this phase does
+Move the files that were processed during this run into `completed/` subfolders.
+This keeps the working folders clean for the next run. Only archive what was
+processed in this session — don't touch files that weren't part of this run.
+
+### Steps
+1. For each raw source file processed in Phase 1:
+   - Move from `~/Sites/Global/context-engineering/raw-sources/[filename]`
+     to `~/Sites/Global/context-engineering/raw-sources/completed/[filename]`
+2. For each revised source file created in Phase 2:
+   - Move from `~/Sites/Global/context-engineering/revised-sources/[filename]`
+     to `~/Sites/Global/context-engineering/revised-sources/completed/[filename]`
+3. Show Scott what was archived:
+   | Folder | Files Archived |
+   |--------|---------------|
+   | raw-sources/completed/ | [list] |
+   | revised-sources/completed/ | [list] |
+
+### Done when
+All processed files are archived. Working folders only contain unprocessed files (if any).
+
+---
+
 ## Completion Checklist
-- [ ] Sources collected (Phase 1)
-- [ ] New sources processed into markdown (Phase 2, if applicable)
+- [ ] Raw sources scanned and refreshed (Phase 1)
+- [ ] Sources revised to essentials (Phase 2)
 - [ ] Toolkit manifest built (`_comparison-manifest.md`)
 - [ ] Source index built (`_source-index.md`)
 - [ ] Subagent comparison complete (`_raw-findings.md`)
 - [ ] Review document generated (`YYYY-MM-DD-review.md`)
 - [ ] Scott reviewed recommendations
 - [ ] Pending updates written (if any approved)
+- [ ] Processed files archived to `completed/` (Phase 6)

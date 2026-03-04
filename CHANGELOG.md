@@ -1,5 +1,15 @@
 # Toolkit Changelog
 
+## v2.4.0 - 2026-03-03
+- **`/scott:compare-sources` v1.1** — redesigned workflow for streamlined pipeline
+  - Phase 1: "Scan & Refresh Raw Sources" replaces interactive collection — scans for outdated content and updates in place
+  - Phase 2: "Revise Sources" replaces format conversion — cuts fluff, keeps only what's useful for Claude Code customization
+  - New Phase 6: "Archive Processed Sources" — moves processed files to `completed/` subfolders
+  - Folder renames: `research-sources/` → `raw-sources/`, `sources/` → `revised-sources/`, `reviews/` → `compared-sources/`
+  - Moved `ce-synthesis.md` from `sources/` to root of `context-engineering/`
+- **`/scott:tweet-to-source`** — updated 4 path references to use `raw-sources/` instead of `sources/`
+- Triggered by: Scott wants a more autonomous pipeline — drop files in raw-sources, run the command, get results
+
 ## v2.3.0 - 2026-03-03
 - **New workflow: `/scott:compare-sources`** — compare context engineering sources against the current toolkit to surface congruencies, discrepancies, and unique ideas
   - 5-phase workflow: Collect Sources, Process Sources, Build Comparison Inventory, Run Comparison Analysis (subagent), Generate Review & Act
