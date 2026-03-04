@@ -1,5 +1,10 @@
 # Toolkit Changelog
 
+## v2.2.0 - 2026-03-03
+- **toolkit-update v1.1:** Add Phase 5 — auto-update `scott-toolkit-instructions.md` and regenerate PDF after every toolkit change
+- **New skill: `/scott:bypass`** — temporarily disable a guard hook, run the blocked action, re-enable
+- Triggered by: instructions doc and PDF were getting stale after toolkit changes
+
 ## v2.1.0 - 2026-03-03
 - Add "Global" as 4th work context for cross-cutting projects (toolkit, shared references, infrastructure)
 - **new-project v1.4:** Global option in Phase 1 (Brain Dump) and Phase 5 (Create Repository)

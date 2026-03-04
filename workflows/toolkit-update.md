@@ -1,9 +1,10 @@
 # Toolkit Update
 
 ## Metadata
-- Last updated: 2026-02-25
-- Version: 1.0
+- Last updated: 2026-03-03
+- Version: 1.1
 - Changelog:
+  - v1.1: Add Phase 5 — auto-update instructions doc and regenerate PDF after every toolkit change
   - v1.0: Initial workflow
 
 ## Purpose
@@ -15,7 +16,7 @@ or when a new version of a technology is released.
 
 ## Prerequisites
 - A specific reason to update (retro findings, bug pattern, version update)
-- The toolkit repo at ~/scott-toolkit/
+- The toolkit repo at ~/Sites/Global/scott-toolkit/
 
 ## Instructions for Claude Code
 Be surgical. Only change what needs changing. Every change should have a clear
@@ -102,7 +103,43 @@ Add an entry to the toolkit's changelog.
 ### Done when
 Changelog entry is added.
 
-## Phase 5: Commit & Push
+## Phase 5: Update Instructions & Regenerate PDF
+
+### What this phase does
+Keep the user-facing instructions document in sync with the toolkit. This phase
+runs after every toolkit update — no exceptions.
+
+### Files
+- Source: `scott-toolkit-instructions.md` (in toolkit repo root)
+- Output: `scott-toolkit-instructions.pdf` (same location)
+
+### Steps
+1. Read the current `scott-toolkit-instructions.md`
+2. Review all changes made in Phases 2-4 and determine what sections of the
+   instructions need updating:
+   - New hooks → update the "Hooks that fire on their own" table
+   - New skills/commands → update the "Slash Commands" table
+   - New guard hooks → update the "Guard hooks" list
+   - New auto-generated files → update the "Files that write themselves" table
+   - Changed paths → update all path references
+   - New rules → update the "Behavior rules always loaded" table
+   - New "Coming Soon" items or completed items → update that section
+   - Changed directory structure → update "Quick Reference: What Lives Where"
+3. Make the edits to the markdown file
+4. Generate a styled HTML version and convert to PDF:
+   ```bash
+   node ~/.claude/tools/pdf-tools/html-to-pdf.js <html-file> scott-toolkit-instructions.pdf
+   ```
+5. Delete the intermediate HTML file
+6. Visually verify the PDF renders correctly (spot-check 1-2 pages)
+
+### Output
+Updated `scott-toolkit-instructions.md` and freshly generated `scott-toolkit-instructions.pdf`.
+
+### Done when
+The instructions doc reflects all changes made in this update and the PDF is regenerated.
+
+## Phase 6: Commit & Push
 
 ### What this phase does
 Save the changes and sync so both machines have the update.
@@ -110,7 +147,7 @@ Save the changes and sync so both machines have the update.
 ### Steps
 1. Stage all changed files
 2. Commit with a descriptive message: "Update [files]: [reason]"
-3. Push to GitHub
+3. Push to GitHub (use `/scott:bypass` if the guard hook blocks it)
 
 ### Output
 Changes committed and pushed.
@@ -124,6 +161,8 @@ Both machines can pull the latest toolkit.
 - [ ] Changes made and approved
 - [ ] File metadata updated (version, date, changelog)
 - [ ] CHANGELOG.md updated
+- [ ] scott-toolkit-instructions.md updated to reflect changes
+- [ ] scott-toolkit-instructions.pdf regenerated
 - [ ] Changes committed and pushed
 
 - [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)
