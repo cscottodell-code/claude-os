@@ -102,7 +102,9 @@ scott-toolkit/
 │   ├── project-catalog.md
 │   ├── advosy-context.md
 │   ├── bresco-context.md
-│   ├── advosy-offer-bundles.md
+│   ├── brett-setup-instructions.md
+│   ├── claude-cowork-instructions.md
+│   ├── hetzner-surrealdb-setup.md
 │   ├── stack-overview.md
 │   └── ai-orchestration/
 │       ├── framework.md

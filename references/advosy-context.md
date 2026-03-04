@@ -3,7 +3,8 @@
 ## Metadata
 - Last updated: 2026-02-25
 - Version: 2.0
-- Sources: advosy-company-structure-for-brett.md, advosy-notion-migration-status.md
+- Sources: advosy-context skill (SKILL.md), advosy-notion-migration-status.md
+- See also: ~/Sites/Advosy/advosy-context/ (consolidated reference repo)
 
 ## About Advosy
 

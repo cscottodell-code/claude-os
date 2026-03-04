@@ -14,6 +14,7 @@
 | Spotio-CF | Advosy | ~/Sites/Advosy/spotio-cf/ | — | Code complete | Not deployed |
 | D2D Income Tool | Advosy | ~/Sites/Advosy/d2d-income-tool/advosy-nuxt/ | cscottodell-code/advosy-sales | Prototype | Not deployed |
 | D2D Apps | Advosy | ~/Sites/Advosy/d2d-apps/ | — | Prototype | Not deployed |
+| Advosy Context | Advosy | ~/Sites/Advosy/advosy-context/ | cscottodell-code/advosy-context | Reference docs | N/A |
 | CF Automations | Advosy | ~/Sites/Advosy/automations/ | — | Active | n8n cloud |
 | n8n-MCP Reference | Global | ~/Sites/Global/n8n-mcp-reference/ | — | Production | Multiple instances |
 | Scott Toolkit | Global | ~/Sites/Global/scott-toolkit/ | cscottodell-code/scott-toolkit | Active | N/A |
@@ -36,6 +37,7 @@
 | cscottodell-code/d2d-payroll | ~/Sites/Advosy/d2d-payroll/ | Active |
 | cscottodell-code/advosy-sales | ~/Sites/Advosy/d2d-income-tool/advosy-nuxt/ | Active |
 | cscottodell-code/automation-business | ~/Sites/Bresco/automation-business/ | Active |
+| cscottodell-code/advosy-context | ~/Sites/Advosy/advosy-context/ | Active |
 | cscottodell-code/personal | (old terminal-ai-course) | Archived |
 
 ## ~/Sites/ Directory Structure
@@ -43,6 +45,7 @@
 ```
 ~/Sites/
 ├── Advosy/
+│   ├── advosy-context/          # Consolidated reference material (company, CRM, sales)
 │   ├── automations/             # Active (n8n workflows)
 │   ├── d2d-apps/                # Working prototype (React)
 │   ├── d2d-income-tool/         # Working prototype (Nuxt 3)
