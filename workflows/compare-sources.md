@@ -2,8 +2,9 @@
 
 ## Metadata
 - Last updated: 2026-03-03
-- Version: 1.1
+- Version: 1.2
 - Changelog:
+  - v1.2: Added source ingestion to Phase 1 — paste links, content, or repos directly in session
   - v1.1: Redesigned Phases 1-2, added Phase 6 (Archive), renamed folders
   - v1.0: Initial workflow
 
@@ -12,12 +13,13 @@ Compare new context engineering sources against the current scott-toolkit config
 Surfaces what's validated, what's new, and what conflicts — so Scott can decide whether
 to update his toolkit. The primary goal is always to **maximize protecting context windows**.
 
-Use when Scott has added new articles, tweets, repos, or resources into
-`~/Sites/Global/context-engineering/raw-sources/` and wants to know what's actionable.
+Use when Scott has new articles, tweets, repos, or resources to compare against
+his toolkit. Sources can be pasted directly in the session or pre-loaded into
+`~/Sites/Global/context-engineering/raw-sources/`.
 
 ## Prerequisites
-- Raw source files exist in `~/Sites/Global/context-engineering/raw-sources/` (.md files added manually by Scott)
 - The toolkit repo at `~/Sites/Global/scott-toolkit/`
+- At least one of: new sources to paste in the session, OR existing files in `raw-sources/`
 
 ## Instructions for Claude Code
 This is a 6-phase workflow. Each phase has clear inputs, outputs, and "done when"
@@ -30,19 +32,52 @@ was processed, not everything in the folders.
 
 ---
 
-## Phase 1: Scan & Refresh Raw Sources
+## Phase 1: Ingest & Refresh Raw Sources
 
 ### What this phase does
-Check each raw source for outdated content (old version numbers, stale dates, deprecated
-features, superseded claims) and update them in place with current information.
+Two jobs: (1) Convert any new sources Scott provides into `.md` files in `raw-sources/`,
+then (2) scan all raw sources for outdated content and update in place.
 
-### Steps
-1. List files in `~/Sites/Global/context-engineering/raw-sources/` — **skip the `completed/` subfolder**
-2. Show the file list to Scott in a table:
+### Part A: Ingest New Sources
+
+1. Ask Scott: **"Do you have new sources to add? Paste links, content, or say 'skip' to work with what's already in raw-sources."**
+2. For each source Scott provides, convert it to a `.md` file:
+
+   **URLs (articles, blog posts, docs):**
+   - Fetch with WebFetch, extract the useful content
+   - Save as `.md` to `~/Sites/Global/context-engineering/raw-sources/`
+   - Include `**Source:** [Title](url)` at the top of the file
+
+   **x.com / twitter.com links:**
+   - Delegate to `/scott:tweet-to-source` (it already saves to `raw-sources/`)
+
+   **GitHub repos:**
+   - Fetch the README via WebFetch (`https://raw.githubusercontent.com/[owner]/[repo]/main/README.md`)
+   - If the repo has other key files (CLAUDE.md, docs/, etc.), fetch those too
+   - Combine into a single `.md` file with sections for each file
+   - Include `**Source:** [repo-name](https://github.com/owner/repo)` at the top
+
+   **Pasted content (text, markdown, copied from a doc):**
+   - Wrap in a `.md` file with whatever context Scott provides
+   - Ask for a source link if Scott has one; include it if provided
+
+   **PDFs or uploaded files:**
+   - Read the file, extract content
+   - Save as `.md` to `raw-sources/`
+   - Include `**Source:** [filename]` at the top (no link if it's a local file)
+
+3. Name each file using convention: `[topic-slug]-[author-or-project]-[year].md`
+4. Show Scott each ingested file for a quick confirmation before moving on
+5. Repeat until Scott says "that's all" or "skip"
+
+### Part B: Scan & Refresh
+
+6. List all files in `~/Sites/Global/context-engineering/raw-sources/` — **skip the `completed/` subfolder**
+7. Show the file list to Scott in a table:
    | # | File | Last Modified |
    |---|------|---------------|
    | 1 | [name] | [date] |
-3. For each `.md` file:
+8. For each `.md` file:
    a. Read the file
    b. Check for outdated content:
       - Version numbers that have since been updated (e.g., "Claude 3.5" when Claude 4 exists)
@@ -52,14 +87,14 @@ features, superseded claims) and update them in place with current information.
    c. If outdated content is found, use WebSearch to find current information
    d. Update the file in place — preserve the original structure and voice, just fix the stale parts
    e. Add a comment at the top of the file: `<!-- Last refreshed: YYYY-MM-DD -->`
-4. Show Scott a summary of what was updated:
+9. Show Scott a summary of what was updated:
    | File | Changes Made |
    |------|-------------|
    | [name] | [brief description of updates, or "No changes needed"] |
-5. **Track the list of files processed** — store as a variable for Phase 6
+10. **Track the list of files processed** (ingested + refreshed) — store for Phase 6
 
 ### Done when
-All raw sources have been scanned, outdated content updated, and Scott has seen the summary.
+All new sources are ingested, all raw sources scanned and refreshed, Scott has seen the summary.
 
 ---
 
@@ -378,7 +413,8 @@ All processed files are archived. Working folders only contain unprocessed files
 ---
 
 ## Completion Checklist
-- [ ] Raw sources scanned and refreshed (Phase 1)
+- [ ] New sources ingested into `raw-sources/` (Phase 1A)
+- [ ] Raw sources scanned and refreshed (Phase 1B)
 - [ ] Sources revised to essentials (Phase 2)
 - [ ] Toolkit manifest built (`_comparison-manifest.md`)
 - [ ] Source index built (`_source-index.md`)

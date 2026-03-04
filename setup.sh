@@ -157,7 +157,7 @@ deploy_workflow_skill "log-error.md" "scott-log-error" \
 
 deploy_workflow_skill "compare-sources.md" "scott-compare-sources" \
   "Compare context engineering sources against the current toolkit configuration.
-  Walks through 6 phases: Scan & Refresh Raw Sources, Revise Sources, Build Comparison
+  Walks through 6 phases: Ingest & Refresh Raw Sources, Revise Sources, Build Comparison
   Inventory, Run Comparison Analysis (subagent), Generate Review & Act, and Archive Processed Sources." \
   "Compare new sources against your toolkit and surface what's actionable"
 
