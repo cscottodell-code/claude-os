@@ -1,5 +1,9 @@
 # Toolkit Changelog
 
+## v2.5.0 - 2026-03-03
+- **CLAUDE.md:** Add conversation history path (`~/.claude/projects/`) to Quick References
+- Triggered by: `/scott:compare-sources` review of YK Dojo's 42 Claude Code tips — tip #14 identifies conversation history as a searchable knowledge base
+
 ## v2.4.0 - 2026-03-03
 - **`/scott:compare-sources` v1.2** — redesigned workflow for streamlined pipeline
   - Phase 1: "Ingest & Refresh Raw Sources" — paste links, content, repos, or PDFs directly in session; Claude converts to `.md` and saves to `raw-sources/`. Then scans all sources for outdated content and updates in place
