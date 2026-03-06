@@ -1,9 +1,10 @@
 # Log Error
 
 ## Metadata
-- Last updated: 2026-02-25
-- Version: 1.0
+- Last updated: 2026-03-05
+- Version: 1.1
 - Changelog:
+  - v1.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.0: Initial workflow
 
 ## Purpose
@@ -27,7 +28,7 @@ Be specific, not generic. The goal is a log entry that's useful months from now.
 After logging, check if this error matches a previous pattern in ~/scott-toolkit/errors/.
 If it does, flag it — recurring patterns need toolkit changes, not just logs.
 
-## Phase 1: Review Context
+## Phase 1: Review Context [STOP]
 
 ### What this phase does
 Claude reviews the recent conversation to identify what went wrong.
@@ -43,7 +44,7 @@ A clear description of what went wrong, presented for Scott's confirmation.
 ### Done when
 Scott confirms the summary is accurate (or corrects it).
 
-## Phase 2: Interview Scott
+## Phase 2: Interview Scott [STOP]
 
 ### What this phase does
 Ask targeted questions to capture the full picture. These are NOT generic —
@@ -65,7 +66,7 @@ Answers to the relevant questions (skip any that don't apply).
 ### Done when
 Scott has provided enough detail to understand the root cause.
 
-## Phase 3: Trace the Trigger
+## Phase 3: Trace the Trigger [STOP]
 
 ### What this phase does
 Identify the exact prompt or action that triggered the failure.
@@ -85,7 +86,7 @@ The triggering prompt (verbatim), failure category, and rewritten prompt.
 ### Done when
 The trigger is identified and categorized.
 
-## Phase 4: Log It
+## Phase 4: Log It [AUTO]
 
 ### What this phase does
 Create the log file and update the metadata counter.

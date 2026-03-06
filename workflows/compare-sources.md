@@ -1,9 +1,10 @@
 # Compare Sources
 
 ## Metadata
-- Last updated: 2026-03-03
-- Version: 1.2
+- Last updated: 2026-03-05
+- Version: 1.3
 - Changelog:
+  - v1.3: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.2: Added source ingestion to Phase 1 — paste links, content, or repos directly in session
   - v1.1: Redesigned Phases 1-2, added Phase 6 (Archive), renamed folders
   - v1.0: Initial workflow
@@ -32,7 +33,7 @@ was processed, not everything in the folders.
 
 ---
 
-## Phase 1: Ingest & Refresh Raw Sources
+## Phase 1: Ingest & Refresh Raw Sources [STOP]
 
 ### What this phase does
 Two jobs: (1) Convert any new sources Scott provides into `.md` files in `raw-sources/`,
@@ -98,7 +99,7 @@ All new sources are ingested, all raw sources scanned and refreshed, Scott has s
 
 ---
 
-## Phase 2: Revise Sources
+## Phase 2: Revise Sources [STOP]
 
 ### What this phase does
 Distill each raw source down to only what's useful for Claude Code customization.
@@ -127,7 +128,7 @@ All raw sources have been revised and saved. Scott has approved each one.
 
 ---
 
-## Phase 3: Build Comparison Inventory
+## Phase 3: Build Comparison Inventory [AUTO]
 
 ### What this phase does
 Create lightweight indexes of the toolkit and sources — **this is the context window
@@ -202,7 +203,7 @@ needed — these are intermediate artifacts.
 
 ---
 
-## Phase 4: Run Comparison Analysis (Subagent)
+## Phase 4: Run Comparison Analysis (Subagent) [DELEGATE]
 
 ### What this phase does
 Delegate the heavy comparison work to a subagent with a fresh context window.
@@ -288,7 +289,7 @@ The subagent has returned and `_raw-findings.md` exists.
 
 ---
 
-## Phase 5: Generate Review & Act
+## Phase 5: Generate Review & Act [STOP]
 
 ### What this phase does
 Transform raw findings into a scannable review document, then let Scott decide what to do.
@@ -387,7 +388,7 @@ Review document is generated and Scott has decided which recommendations to purs
 
 ---
 
-## Phase 6: Archive Processed Sources
+## Phase 6: Archive Processed Sources [AUTO]
 
 ### What this phase does
 Move the files that were processed during this run into `completed/` subfolders.

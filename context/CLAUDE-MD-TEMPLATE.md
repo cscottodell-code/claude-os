@@ -20,6 +20,7 @@ are the same for every project.
 - **PRD:** See PRD.md in this repo
 - **Type:** Global / Personal / Advosy / Bresco
 - **Target:** Desktop (Tauri) / Web / Both
+- **PM Mode:** GSD _(or BMAD — GSD uses /gsd:plan-phase, /gsd:execute-phase for structured builds; BMAD uses /bmad-bmm-create-epics-and-stories, /bmad-bmm-dev-story for agile story-driven builds. Default to GSD if unsure.)_
 
 ## Tech Stack
 <!-- [PRE-FILLED] Scott's standard stack. Add project-specific items below. -->

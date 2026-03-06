@@ -1,9 +1,10 @@
 # Retrospective
 
 ## Metadata
-- Last updated: 2026-02-25
-- Version: 1.0
+- Last updated: 2026-03-05
+- Version: 1.1
 - Changelog:
+  - v1.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.0: Initial workflow
 
 ## Purpose
@@ -26,7 +27,7 @@ conversationally. Draft each section, get approval, and move on.
 The most important output is Section 5 (Toolkit Updates Needed) — this is how the
 toolkit gets better.
 
-## Phase 1: Gather Context
+## Phase 1: Gather Context [AUTO]
 
 ### What this phase does
 Claude Code reviews the project artifacts to build a summary of what was built
@@ -49,7 +50,7 @@ A brief summary presented to Scott:
 ### Done when
 Scott confirms the summary is accurate.
 
-## Phase 2: Guided Reflection
+## Phase 2: Guided Reflection [STOP]
 
 ### What this phase does
 Walk Scott through the retro template questions to capture his thoughts.
@@ -84,7 +85,7 @@ Answers to all reflection questions, drafted into retro template format.
 ### Done when
 Scott has reflected on all areas and is satisfied with the captured insights.
 
-## Phase 3: Generate Retro Document
+## Phase 3: Generate Retro Document [AUTO]
 
 ### What this phase does
 Create the formal retro file using the RETRO-TEMPLATE.md format.
@@ -103,7 +104,7 @@ Retro document saved in both locations.
 ### Done when
 Both copies saved and retro index updated.
 
-## Phase 4: Identify Toolkit Updates
+## Phase 4: Identify Toolkit Updates [STOP]
 
 ### What this phase does
 The most important phase. Based on the lessons learned, propose specific changes
@@ -125,7 +126,7 @@ A list of approved toolkit changes with file paths and descriptions.
 ### Done when
 Scott has approved or rejected each proposed change.
 
-## Phase 5: Apply Updates
+## Phase 5: Apply Updates [AUTO]
 
 ### What this phase does
 Make the approved changes to the toolkit files.

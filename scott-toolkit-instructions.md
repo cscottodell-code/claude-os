@@ -20,6 +20,8 @@ If you're in your home directory (`~`), the hook shows your active projects list
 
 These are your workflows. Type them and Claude walks you through each one.
 
+### Project Workflows
+
 | Command | When to use it |
 |---------|---------------|
 | `/scott:new-project` | Starting something from scratch |
@@ -27,11 +29,42 @@ These are your workflows. Type them and Claude walks you through each one.
 | `/scott:resume` | Picking up a project after time away |
 | `/scott:retro` | After finishing a milestone — capture lessons |
 | `/scott:handoff` | When a prototype is ready for Gary |
-| `/scott:toolkit-update` | When you want to improve the toolkit itself |
+
+### Learning & Improvement
+
+| Command | When to use it |
+|---------|---------------|
 | `/scott:log-success` | Something went really well — capture it |
 | `/scott:log-error` | Something went wrong — capture it |
 | `/scott:compare-sources` | Compare context engineering sources against your toolkit |
+| `/scott:toolkit-update` | When you want to improve the toolkit itself |
+
+### Reference & Knowledge
+
+| Command | When to use it |
+|---------|---------------|
+| `/scott:debug` | Structured 5-phase debugging workflow |
+| `/scott:surrealdb-patterns` | SurrealDB syntax, schema patterns, query optimization |
+| `/scott:n8n-complete` | Comprehensive n8n automation reference |
+| `/scott:automation-best-practices` | Best practices for reliable automations |
+| `/scott:tweet-to-source` | Extract tweet/thread content into source files |
+
+### Tools & Utilities
+
+| Command | When to use it |
+|---------|---------------|
+| `/scott:remind` | Send a Telegram reminder to Scott or Brett |
+| `/scott:sync` | Sync config and code between machines |
+| `/scott:pdf` | Recreate a PDF in HTML/CSS, convert to fillable PDF |
 | `/scott:bypass` | A guard hook blocked something you approved — bypass it |
+
+### Business Context (Advosy)
+
+| Command | When to use it |
+|---------|---------------|
+| `/advosy:context` | Company structure, leadership, subsidiaries, contacts |
+| `/advosy:claimsforce` | Claimsforce (EspoCRM) workflows, webhooks, n8n patterns |
+| `/advosy:crm` | Advosy CRM design system, layout patterns, mockup-building |
 
 You don't need to memorize these. Just describe what you want to do and Claude will suggest the right one.
 
@@ -54,7 +87,7 @@ You don't need to memorize these. Just describe what you want to do and Claude w
 - This is your safety net — even if you forget, the reminder fires
 
 ### Guard hooks (always running)
-- **git push blocked** — prevents accidental pushes (use `/scott:push` or confirm manually)
+- **git push blocked** — prevents accidental pushes (use `/scott:bypass` or confirm manually)
 - **Destructive commands blocked** — `rm -rf`, `git reset --hard`, etc. require explanation
 - **CLAUDE.md protected** — can't be overwritten without confirmation
 - **npm install blocked** — new dependencies need your approval
@@ -202,7 +235,112 @@ The hooks and rules in `~/.claude/` are symlinks — shortcuts that point back t
 
 ---
 
-## Coming Soon (Designed, Not Yet Built)
+## Native Claude Code Commands
 
-- **PM Mode switching** — Each project will declare GSD or BMAD mode in its CLAUDE.md. Workflows will automatically use the right tools and PRD template for that mode.
-- **Phase auto-advancement** — Mechanical phases (create repo, generate PRD) will run without asking "ready for next phase?" Only judgment phases (approve PRD, confirm direction) will pause for your input.
+These are built-in — no setup needed. Just type them.
+
+### Session Management
+
+| Command | What it does |
+|---------|-------------|
+| `/clear` | Clear conversation and free context |
+| `/compact [instructions]` | Compress conversation (optional focus instructions) |
+| `/resume` | Resume a previous session (interactive picker) |
+| `/fork [name]` | Fork conversation at this point — try two approaches safely |
+| `/rename [name]` | Name current session for easy finding later |
+| `/export [filename]` | Save conversation as plain text |
+| `/rewind` | Rewind code and/or conversation to a checkpoint (`Esc+Esc` shortcut) |
+
+### Code & Git
+
+| Command | What it does |
+|---------|-------------|
+| `/diff` | Interactive diff viewer for uncommitted changes |
+| `/review` | Review a PR for quality, correctness, security, tests |
+| `/security-review` | Scan pending changes for security vulnerabilities |
+| `/pr-comments [PR]` | Fetch and display comments from a GitHub PR |
+| `/plan` | Enter plan mode (read-only analysis, then propose changes) |
+
+### Model & Output
+
+| Command | What it does |
+|---------|-------------|
+| `/model [model]` | Change AI model (sonnet, opus, haiku) |
+| `/fast [on|off]` | Toggle fast mode (same Opus model, faster output) |
+| `/output-style [style]` | Switch between Default, Explanatory, Learning styles |
+
+### Configuration
+
+| Command | What it does |
+|---------|-------------|
+| `/config` | Open settings interface |
+| `/permissions` | View or update tool permissions |
+| `/memory` | Edit CLAUDE.md files and auto-memory |
+| `/hooks` | Manage hook configurations |
+| `/plugin` | Manage plugins |
+| `/keybindings` | Configure keyboard shortcuts |
+| `/statusline` | Configure the status line display |
+| `/theme` | Change color theme |
+| `/vim` | Toggle vim editing mode |
+
+### Tools & Integration
+
+| Command | What it does |
+|---------|-------------|
+| `/mcp` | Manage MCP server connections |
+| `/ide` | Manage IDE integrations |
+| `/chrome` | Configure Chrome browser automation |
+| `/add-dir <path>` | Add a working directory to current session |
+| `/skills` | List all available skills |
+| `/tasks` | List and manage background tasks |
+
+### Info & Diagnostics
+
+| Command | What it does |
+|---------|-------------|
+| `/help` | Show help and available commands |
+| `/cost` | Token usage and spending stats |
+| `/usage` | Plan limits and rate limit status |
+| `/context` | Visual grid of context window usage |
+| `/stats` | Session history, streaks, usage patterns |
+| `/insights` | Generate report analyzing your Claude Code sessions |
+| `/doctor` | Diagnose installation issues |
+| `/release-notes` | View changelog |
+| `/status` | Version, model, and account info |
+
+### Useful Keyboard Shortcuts
+
+| Shortcut | What it does |
+|----------|-------------|
+| `Esc + Esc` | Rewind/summarize (same as `/rewind`) |
+| `Shift+Tab` | Cycle permission modes (normal → plan → auto) |
+| `Ctrl+V` | Paste image from clipboard |
+| `Ctrl+T` | Toggle task list |
+| `Ctrl+O` | Toggle verbose output (see Claude's thinking) |
+| `Ctrl+B` | Background a running task |
+| `@` | File path autocomplete (type `@` then start typing) |
+| `!` | Bash mode (run command directly) |
+| `?` | Show available shortcuts |
+
+---
+
+## Active Features
+
+### Phase Auto-Advancement
+Every workflow phase is tagged with one of three behaviors:
+
+| Tag | Meaning | What Claude Does |
+|-----|---------|-----------------|
+| `[STOP]` | Judgment phase — needs your input/approval | Pauses and waits for you |
+| `[AUTO]` | Mechanical phase — output is deterministic | Shows a one-line summary, proceeds immediately |
+| `[DELEGATE]` | Hands off to GSD/BMAD/Superpowers | Shows what was delegated, proceeds |
+
+No tag defaults to `[STOP]` (safe default). AUTO means "don't wait for permission," not "skip" — if an AUTO phase hits something unexpected, Claude will still pause and ask.
+
+### PM Mode Switching
+Each project declares its PM mode in CLAUDE.md (`PM Mode: GSD` or `PM Mode: BMAD`). Workflows automatically branch to use the right tools:
+
+- **GSD mode (default):** `/gsd:plan-phase`, `/gsd:execute-phase`, `/gsd:quick`, `/gsd:verify-work`, `/gsd:add-tests`
+- **BMAD mode:** `/bmad-bmm-create-prd`, `/bmad-bmm-create-epics-and-stories`, `/bmad-bmm-sprint-planning`, `/bmad-bmm-dev-story`, `/bmad-bmm-code-review`
+
+If no PM Mode is specified, workflows default to GSD. The 4 workflows with PM conditionals are: new-project, new-feature, resume-project, and handoff-to-gary. The other 5 workflows (retro, log-error, log-success, toolkit-update, compare-sources) work the same in both modes.

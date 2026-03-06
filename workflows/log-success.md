@@ -1,9 +1,10 @@
 # Log Success
 
 ## Metadata
-- Last updated: 2026-02-25
-- Version: 1.0
+- Last updated: 2026-03-05
+- Version: 1.1
 - Changelog:
+  - v1.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.0: Initial workflow
 
 ## Purpose
@@ -23,7 +24,7 @@ Walk Scott through each phase conversationally. Reference specific messages and
 outputs from the current conversation. Keep it quick — success logging should
 feel rewarding, not like paperwork.
 
-## Phase 1: Review Context
+## Phase 1: Review Context [STOP]
 
 ### What this phase does
 Claude reviews the recent conversation to identify what went well.
@@ -39,7 +40,7 @@ A clear description of the success, presented for Scott's confirmation.
 ### Done when
 Scott confirms the summary is accurate (or corrects it).
 
-## Phase 2: Interview Scott
+## Phase 2: Interview Scott [STOP]
 
 ### What this phase does
 Ask targeted questions to understand why it worked.
@@ -58,7 +59,7 @@ Answers to the relevant questions (skip any that don't apply).
 ### Done when
 Scott has explained why it worked well enough to reproduce.
 
-## Phase 3: Trace the Trigger
+## Phase 3: Trace the Trigger [STOP]
 
 ### What this phase does
 Identify the exact prompt or approach that led to the success.
@@ -78,7 +79,7 @@ The triggering prompt (verbatim) and key success factor.
 ### Done when
 The trigger is identified and the key factor is clear.
 
-## Phase 4: Log It
+## Phase 4: Log It [AUTO]
 
 ### What this phase does
 Create the log file and update the metadata counter.

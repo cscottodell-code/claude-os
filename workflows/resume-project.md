@@ -1,9 +1,10 @@
 # Resume Project
 
 ## Metadata
-- Last updated: 2026-03-03
-- Version: 2.0
+- Last updated: 2026-03-05
+- Version: 2.1
 - Changelog:
+  - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and PM mode conditional (GSD/BMAD) in Phase 4
   - v2.0: Slim to orchestrator — delegate GSD state recovery, keep Scott-specific summary + direction
   - v1.0: Initial workflow
 
@@ -22,7 +23,7 @@ or returns to a project after days/weeks away.
 Read everything first, then summarize. Don't start working until Scott confirms
 the direction. Priorities may have changed since the last session.
 
-## Phase 1: Read Context
+## Phase 1: Read Context [AUTO]
 
 ### What this phase does
 Get fully up to speed on the project's current state by reading all relevant files.
@@ -49,7 +50,7 @@ and the build state (GSD planning files).
 ### Done when
 All context files have been reviewed.
 
-## Phase 2: Summarize State
+## Phase 2: Summarize State [STOP]
 
 ### What this phase does
 Tell Scott exactly where things stand in plain English.
@@ -69,7 +70,7 @@ Present a summary like this:
 ### Done when
 Scott confirms the summary is accurate.
 
-## Phase 3: Confirm Direction
+## Phase 3: Confirm Direction [STOP]
 
 ### What this phase does
 Check whether priorities have changed since the last session.
@@ -87,7 +88,7 @@ Confirmed direction for this session.
 ### Done when
 Scott confirms what to work on.
 
-## Phase 4: Resume Work
+## Phase 4: Resume Work [DELEGATE]
 
 ### What this phase does
 Continue from where the project left off, using the appropriate tools.
@@ -96,9 +97,17 @@ Continue from where the project left off, using the appropriate tools.
 1. Review tasks/lessons.md to avoid repeating past mistakes
 2. Pick up the next task from tasks/todo.md
 3. If Scott redirected to something else, update tasks/todo.md accordingly
-4. **For GSD-managed projects:** Use `/gsd:execute-phase` to continue the current phase,
+
+**If PM Mode is GSD:**
+4. Use `/gsd:execute-phase` to continue the current phase,
    or `/gsd:plan-phase` if starting a new phase
-5. **For quick tasks:** Use `/gsd:quick` for ad-hoc work with state tracking
+5. For quick tasks: Use `/gsd:quick` for ad-hoc work with state tracking
+
+**If PM Mode is BMAD:**
+4. Use `/bmad-bmm-dev-story` to continue the current story
+5. For new work: Use `/bmad-bmm-create-story` to create the next story
+
+**Both modes:**
 6. Follow the project's CLAUDE.md behavior rules
 7. Work through tasks, checking in as appropriate
 

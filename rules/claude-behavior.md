@@ -14,12 +14,19 @@ Three systems handle different concerns. Use the right one for the job.
 - Debugging methodology: follow `superpowers:systematic-debugging`
 - Plan writing: `superpowers:writing-plans` for breaking work into tasks
 
-### Project Management (-> GSD)
-- Structured projects: `/gsd:plan-phase` and `/gsd:execute-phase` for milestone work
-- Quick tasks: `/gsd:quick` for ad-hoc work with state tracking
-- Debugging operations: `/gsd:debug` for subagent-isolated investigation
-- Verification: `/gsd:verify-work` after phase execution
-- Test gaps: `/gsd:add-tests` after completing phases
+### Workflow Execution
+- Phases tagged [STOP]: pause and wait for Scott's input before continuing
+- Phases tagged [AUTO]: show a one-line summary, then immediately proceed
+- Phases tagged [DELEGATE]: hand off to GSD/BMAD/Superpowers, then proceed
+- No tag = [STOP] (safe default)
+- Never skip a phase — AUTO means "don't wait for permission," not "skip"
+- If an AUTO phase hits an issue requiring Scott's judgment, pause and ask
+
+### Project Management (-> GSD or BMAD, per project CLAUDE.md)
+- Read the project's CLAUDE.md PM Mode field to determine tools
+- **GSD mode (default):** /gsd:plan-phase, /gsd:execute-phase, /gsd:quick, /gsd:debug, /gsd:verify-work, /gsd:add-tests
+- **BMAD mode:** /bmad-bmm-create-prd, /bmad-bmm-create-epics-and-stories, /bmad-bmm-sprint-planning, /bmad-bmm-dev-story, /bmad-bmm-code-review
+- If no PM Mode specified, default to GSD
 
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`

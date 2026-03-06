@@ -1,9 +1,10 @@
 # New Feature
 
 ## Metadata
-- Last updated: 2026-03-03
-- Version: 2.0
+- Last updated: 2026-03-05
+- Version: 2.1
 - Changelog:
+  - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and PM mode conditional (GSD/BMAD) in Phase 4
   - v2.0: Slim to orchestrator — delegate build to GSD + Superpowers, keep discovery phases
   - v1.3: Add post-build test coverage review with /gsd:add-tests (Phase 4)
   - v1.2: Integrate Superpowers plugin — git worktrees, TDD, subagent-driven development, two-stage code review, and branch merging into Build phase (Phase 4)
@@ -25,7 +26,7 @@ Read the project's CLAUDE.md and PRD.md first to understand the current state.
 Then walk Scott through each phase. Keep it lightweight — this shouldn't feel
 as heavy as starting a new project.
 
-## Phase 1: Feature Description
+## Phase 1: Feature Description [STOP]
 
 ### What this phase does
 Understand what the new feature is and why it's needed.
@@ -42,7 +43,7 @@ A clear, one-paragraph feature description.
 ### Done when
 Scott has clearly described what the feature is and why it matters.
 
-## Phase 2: Impact Assessment
+## Phase 2: Impact Assessment [STOP]
 
 ### What this phase does
 Figure out what existing parts of the app this feature touches. New features
@@ -68,7 +69,7 @@ A list of files and systems that will be affected, with the nature of each chang
 ### Done when
 The full scope of impact is understood.
 
-## Phase 3: Mini-PRD
+## Phase 3: Mini-PRD [STOP]
 
 ### What this phase does
 Create a lightweight PRD for just this feature. Not the full 11-section template —
@@ -87,13 +88,17 @@ A mini-PRD document (can be added to the project's PRD.md as an appendix or kept
 ### Done when
 Scott approves the mini-PRD.
 
-## Phase 4: Build (Delegated)
+## Phase 4: Build (Delegated) [DELEGATE]
 
 ### What this phase does
 Implement the feature using GSD for execution and Superpowers for methodology.
 
 ### Steps
+
+**Both modes:**
 1. Create a git worktree for this feature using `superpowers:using-git-worktrees`
+
+**If PM Mode is GSD:**
 2. Plan the build using `/gsd:plan-phase` — feed it the mini-PRD from Phase 3
 3. Execute the plan using `/gsd:execute-phase` — this handles:
    - Task breakdown and dependency tracking
@@ -101,6 +106,13 @@ Implement the feature using GSD for execution and Superpowers for methodology.
    - Each task gets atomic commits
 4. After execution, verify with `/gsd:verify-work`
 5. If test coverage is thin, use `/gsd:add-tests` for critical logic
+
+**If PM Mode is BMAD:**
+2. Create epics and stories using `/bmad-bmm-create-epics-and-stories`
+3. Implement each story using `/bmad-bmm-dev-story`
+4. Code review each story using `/bmad-bmm-code-review`
+
+**Both modes:**
 6. Design review (if significant UI changes):
    - Run `/impeccable:critique` for visual quality feedback
    - Run `/impeccable:polish` as a final detail pass
@@ -114,7 +126,7 @@ Working feature, verified, tested, and code-reviewed.
 ### Done when
 All acceptance criteria from the mini-PRD are met.
 
-## Phase 5: Update CLAUDE.md
+## Phase 5: Update CLAUDE.md [AUTO]
 
 ### What this phase does
 Keep the project's living documentation current.

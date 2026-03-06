@@ -1,9 +1,10 @@
 # Handoff to Gary
 
 ## Metadata
-- Last updated: 2026-02-27
-- Version: 1.2
+- Last updated: 2026-03-05
+- Version: 1.3
 - Changelog:
+  - v1.3: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and note that /gsd:add-tests works in both PM modes
   - v1.2: Add test coverage assessment with /gsd:add-tests (Phase 1)
   - v1.1: Add Superpowers two-stage code review to Phase 1, add test verification items to Phase 5 handoff checklist
   - v1.0: Initial workflow
@@ -25,7 +26,7 @@ Be thorough. Gary is a professional developer who will productionize this code. 
 to understand the architecture, the decisions that were made, and any shortcuts or tech
 debt. Don't hide problems — document them clearly.
 
-## Phase 1: Code Review
+## Phase 1: Code Review [AUTO]
 
 ### What this phase does
 Review the entire codebase for quality, consistency, and completeness.
@@ -44,7 +45,8 @@ Review the entire codebase for quality, consistency, and completeness.
    Fix any Critical issues immediately and Important issues before proceeding.
 10. **Test coverage:** Review test suite completeness. If critical business logic
     lacks tests, use `/gsd:add-tests` to fill gaps before handoff — Gary shouldn't
-    have to write tests for prototype logic.
+    have to write tests for prototype logic. (Note: `/gsd:add-tests` is a utility
+    that works in both GSD and BMAD modes.)
 
 ### Output
 A list of issues found and fixed (from both manual checks and Superpowers review).
@@ -53,7 +55,7 @@ If any issues can't be fixed easily, document them.
 ### Done when
 The codebase is clean and consistent.
 
-## Phase 2: Documentation
+## Phase 2: Documentation [AUTO]
 
 ### What this phase does
 Ensure all documentation reflects what was ACTUALLY built (not what was planned).
@@ -70,7 +72,7 @@ Updated documentation files.
 ### Done when
 A developer reading these docs could understand the project without asking questions.
 
-## Phase 3: Architecture Summary
+## Phase 3: Architecture Summary [AUTO]
 
 ### What this phase does
 Create a brief document explaining the app's architecture for Gary.
@@ -89,7 +91,7 @@ An `ARCHITECTURE.md` file in the project repo.
 ### Done when
 Gary could read this and understand how to work with the codebase.
 
-## Phase 4: Setup Instructions
+## Phase 4: Setup Instructions [AUTO]
 
 ### What this phase does
 Document how to clone, install, and run the project from scratch.
@@ -116,7 +118,7 @@ Setup instructions in README.md or SETUP.md.
 ### Done when
 The instructions work when followed from scratch.
 
-## Phase 5: Handoff Checklist
+## Phase 5: Handoff Checklist [STOP]
 
 ### What this phase does
 Final verification that everything is ready.

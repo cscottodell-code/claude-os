@@ -1,9 +1,10 @@
 # Toolkit Update
 
 ## Metadata
-- Last updated: 2026-03-03
-- Version: 1.1
+- Last updated: 2026-03-05
+- Version: 1.2
 - Changelog:
+  - v1.2: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.1: Add Phase 5 — auto-update instructions doc and regenerate PDF after every toolkit change
   - v1.0: Initial workflow
 
@@ -22,7 +23,7 @@ or when a new version of a technology is released.
 Be surgical. Only change what needs changing. Every change should have a clear
 reason documented in the changelog. Don't "improve" things that don't need improving.
 
-## Phase 1: Review Trigger
+## Phase 1: Review Trigger [STOP]
 
 ### What this phase does
 Understand what prompted this update.
@@ -42,7 +43,7 @@ A clear scope statement: "Updating [X] because [Y]."
 ### Done when
 The scope of the update is defined.
 
-## Phase 2: Identify Files to Update
+## Phase 2: Identify Files to Update [STOP]
 
 ### What this phase does
 Determine exactly which files need changes.
@@ -65,7 +66,7 @@ A table of files and changes:
 ### Done when
 Scott approves the change list.
 
-## Phase 3: Draft Changes
+## Phase 3: Draft Changes [STOP]
 
 ### What this phase does
 Make the edits.
@@ -87,7 +88,7 @@ Updated files with metadata changes.
 ### Done when
 All changes are made and approved.
 
-## Phase 4: Update CHANGELOG.md
+## Phase 4: Update CHANGELOG.md [AUTO]
 
 ### What this phase does
 Add an entry to the toolkit's changelog.
@@ -103,7 +104,7 @@ Add an entry to the toolkit's changelog.
 ### Done when
 Changelog entry is added.
 
-## Phase 5: Update Instructions & Regenerate PDF
+## Phase 5: Update Instructions & Regenerate PDF [AUTO]
 
 ### What this phase does
 Keep the user-facing instructions document in sync with the toolkit. This phase
@@ -139,7 +140,7 @@ Updated `scott-toolkit-instructions.md` and freshly generated `scott-toolkit-ins
 ### Done when
 The instructions doc reflects all changes made in this update and the PDF is regenerated.
 
-## Phase 6: Commit & Push
+## Phase 6: Commit & Push [AUTO]
 
 ### What this phase does
 Save the changes and sync so both machines have the update.
