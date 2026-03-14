@@ -1,5 +1,21 @@
 # Toolkit Changelog
 
+## v2.7.0 - 2026-03-13
+- **`rules/claude-behavior.md`:** 5 additions from context engineering source comparison
+  - Pre-completion verification checklist (4-item gate before declaring tasks done) -- from Trivedy's harness engineering research
+  - Doom-loop detection rule (3+ edits to same file without progress = re-plan) -- from Bui/Trivedy
+  - Subagent trigger threshold (3+ files for investigation = spawn subagent) -- from Divyansh
+  - Context rot awareness (suggest /compact or fresh session after 1+ hours) -- from Trivedy/Xu/Bui
+  - TDD exception for low-criticality UI changes (with Scott's approval) -- from YK Dojo
+- Triggered by: `/scott:compare-sources` review of 4 new sources (Trivedy harness anatomy, Bui OPENDEV paper, Mishra Cowork practices, Divyansh subagent rule)
+
+## v2.6.0 - 2026-03-11
+- **`workflows/new-project.md` v1.6:** Add API key model access verification to Phase 1 Brain Dump
+- **`skills/scott-surrealdb-patterns/SKILL.md`:** Add SurrealDB v3 Breaking Changes section (surrealkv://, no /rpc, ORDER BY in SELECT, type::record, StringRecordId pattern)
+- **MEMORY.md:** Add LLM JSON fence-stripping as a standard integration pattern
+- **First retro:** Eleanor M1 Foundation retrospective saved to `retros/2026-03-eleanor-m1.md` and retro index updated
+- Triggered by: `/scott:retro` on Eleanor M1 Foundation milestone
+
 ## v2.5.0 - 2026-03-03
 - **CLAUDE.md:** Add conversation history path (`~/.claude/projects/`) to Quick References
 - Triggered by: `/scott:compare-sources` review of YK Dojo's 42 Claude Code tips — tip #14 identifies conversation history as a searchable knowledge base

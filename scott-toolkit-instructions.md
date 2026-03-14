@@ -225,7 +225,7 @@ These rules live in `~/.claude/rules/` and Claude reads them automatically in ev
 
 | Rule | What it tells Claude |
 |------|---------------------|
-| **claude-behavior.md** | Use Superpowers for dev methodology, GSD for project management, toolkit for learning capture. Enter plan mode for complex tasks. Never mark work done without proving it works. |
+| **claude-behavior.md** | Use Superpowers for dev methodology, GSD for project management, toolkit for learning capture. Enter plan mode for complex tasks. Pre-completion verification gate (tests pass, git clean, todo updated, feature works). Doom-loop detection (3+ edits to same file = re-plan). Subagent trigger (3+ files = spawn subagent). Context rot awareness (suggest fresh session after 1+ hours). |
 | **code-style.md** | TypeScript strict mode, Vue 3 Composition API, Tailwind v4, Pinia, 2-space indent, single quotes. |
 | **n8n-sync.md** | Keep local tools-needing-setup file and n8n reminder workflow in sync. |
 
