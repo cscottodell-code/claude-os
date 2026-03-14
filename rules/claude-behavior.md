@@ -37,8 +37,7 @@ Three systems handle different concerns. Use the right one for the job.
 - Review `tasks/lessons.md` at session start (before work begins)
 - After completing a milestone: consider `/scott:retro`
 - After any debug session: capture lessons in `tasks/lessons.md`
-- Watch for context rot: if a session has been running 1+ hours or context feels noisy, suggest /compact or a fresh session
-  - Signs of degradation: repeating earlier mistakes, forgetting instructions, inconsistent behavior
+- Context rot is monitored by the context-reminders hook (warns at 60min and 100 tool uses). If you notice signs of degradation (repeating mistakes, forgetting instructions, inconsistent behavior), suggest /compact or a fresh session even before the hook warns.
 - Post-compaction recovery: after any compaction, immediately re-read:
   1. .claude-resume.md and .context-snapshot.md (written by pre-compact hook)
   2. The current task from tasks/todo.md

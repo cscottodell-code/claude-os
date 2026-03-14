@@ -1,5 +1,13 @@
 # Toolkit Changelog
 
+## v2.11.0 - 2026-03-14
+- **`hooks/auto-format.sh` (NEW):** PostToolUse hook runs Prettier on Write/Edit for .js/.ts/.vue/.css/.json files. Checks for project Prettier config, uses local binary, notifies Claude when formatting changes occur.
+- **`hooks/pre-completion-checklist.sh` (REWRITE):** Added resume file and lessons file checks. Stronger visual formatting with bordered box and item count. Still warns only.
+- **`hooks/context-reminders.sh` (NEW):** PostToolUse hook tracks session duration and tool use count via /tmp state file. Warns at 60min (then every 30min) and 100 tool uses (then every 50). Replaces behavioral context rot self-monitoring.
+- **`rules/claude-behavior.md`:** Simplified context rot rule to reference context-reminders hook instead of relying on self-monitoring.
+- **`~/.claude/settings.json`:** Registered auto-format (PostToolUse Write|Edit) and context-reminders (PostToolUse all) hooks.
+- Triggered by: Phase 2 of 6-phase harness upgrade plan (from `/scott:compare-sources` review)
+
 ## v2.10.0 - 2026-03-14
 - **`rules/claude-behavior.md` (Subagents):** Added pattern referencing rule (point to existing code patterns instead of describing verbally)
 - **`knowledge/active/context-protection.md`:** Added thinking token cap guidance (`MAX_THINKING_TOKENS=10000` for routine coding)
