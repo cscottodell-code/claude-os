@@ -14,4 +14,4 @@ surreal start \
   --user root \
   --pass root \
   --bind 0.0.0.0:8000 \
-  file://~/Sites/surreal-data
+  surrealkv://~/Sites/surreal-data

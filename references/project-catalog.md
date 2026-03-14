@@ -1,80 +1,46 @@
 # Project Catalog
 
 ## Metadata
-- Last updated: 2026-03-03
-- Version: 1.0
+- Last updated: 2026-03-04
+- Version: 2.0
 
-## All Active Projects
+## Active Projects
 
-| Project | Org | Location | GitHub | Status | Deployed |
-|---------|-----|----------|--------|--------|----------|
-| Life OS | Personal | ~/Sites/Personal/life-os/ | cscottodell-code/life-os | 97% (Phase 6/7) | Vercel |
-| BreSco Platform | Bresco | ~/Sites/Bresco/automation-business/ | cscottodell-code/automation-business | v1.1 complete | Vercel |
-| D2D Payroll | Advosy | ~/Sites/Advosy/d2d-payroll/ | cscottodell-code/d2d-payroll | ~90% | Vercel |
-| Spotio-CF | Advosy | ~/Sites/Advosy/spotio-cf/ | — | Code complete | Not deployed |
-| D2D Income Tool | Advosy | ~/Sites/Advosy/d2d-income-tool/advosy-nuxt/ | cscottodell-code/advosy-sales | Prototype | Not deployed |
-| D2D Apps | Advosy | ~/Sites/Advosy/d2d-apps/ | — | Prototype | Not deployed |
-| Advosy Context | Advosy | ~/Sites/Advosy/advosy-context/ | cscottodell-code/advosy-context | Reference docs | N/A |
-| CF Automations | Advosy | ~/Sites/Advosy/automations/ | — | Active | n8n cloud |
-| n8n-MCP Reference | Global | ~/Sites/Global/n8n-mcp-reference/ | — | Production | Multiple instances |
-| Scott Toolkit | Global | ~/Sites/Global/scott-toolkit/ | cscottodell-code/scott-toolkit | Active | N/A |
+| Keywords | Project | Org | Path | Status |
+|----------|---------|-----|------|--------|
+| life os, life, habits, reviews, bops | Life OS | Personal | ~/Sites/Personal/life-os/ | v1 complete |
+| eleanor, ellie, assistant, chief of staff | Eleanor | Personal | ~/Sites/Personal/eleanor/ | Planning (docs only) |
+| bresco, platform, events center, ec app | Bresco Platform | Bresco | ~/Sites/Bresco/automation-business/ | v1.1 shipped |
+| payroll, pay, d2d pay | D2D Payroll | Advosy | ~/Sites/Advosy/d2d-payroll/ | ~90% (ops setup left) |
+| spotio, sf, webhook sync | Spotio-CF | Advosy | ~/Sites/Advosy/spotio-cf/ | Code complete |
+| d2d apps, d2d tools, sales tools | D2D Apps | Advosy | ~/Sites/Advosy/d2d-apps/ | Prototype |
+| cf workflows, n8n, repcard workflow | CF Workflows | Advosy | ~/Sites/Advosy/automations/ | Active |
+| advosy context, company docs, crm specs | Advosy Context | Advosy | ~/Sites/Advosy/advosy-context/ | Reference docs |
+| toolkit, skills, hooks, rules | Scott Toolkit | Global | ~/Sites/Global/scott-toolkit/ | Active |
+| context engineering, ce, synthesis | Context Engineering | Global | ~/Sites/Global/context-engineering/ | Complete (reference) |
 
-## Non-Code Projects
+## Non-Code / Reference
 
-| Project | Org | Location | Purpose |
-|---------|-----|----------|---------|
-| Background Ops | Bresco | ~/Sites/Bresco/Background Ops/ | Reference PDFs (methodology) |
-| BOPS Guides | Bresco | ~/Sites/Bresco/bops-guides/ | Complete documentation |
-| Brett Setup | Bresco | ~/Sites/Bresco/brett-setup/ | Ready-to-use setup package for Brett |
-| Membership Docs | Advosy | ~/Sites/Advosy/membership-docs/ | Research documents |
-| AI Orchestration Framework | All | ~/Sites/Global/scott-toolkit/references/ai-orchestration-*.md | 8-domain mastery framework + courses + self-assessment |
+| Keywords | Project | Org | Path |
+|----------|---------|-----|------|
+| bmad, agile framework | BMAD Method | Global | ~/Sites/Global/BMAD-METHOD/ |
+| surreal data, db storage | SurrealDB Data | Global | ~/Sites/Global/surreal-data/ |
+
+## Archived (~/Sites/Global/inactive/)
+
+| Project | Original Org | What It Was |
+|---------|-------------|-------------|
+| d2d-income-tool | Advosy | Sales income projector (Nuxt 3 prototype) |
+| bops-guides | Global | Background Ops Notion template docs |
+| membership-docs | Global | Membership model research (delivered) |
+| notebooklm-context.md | Advosy | Company context doc for NotebookLM |
 
 ## GitHub Repos
 
-| Repo | Points to | Status |
-|------|-----------|--------|
-| cscottodell-code/life-os | ~/Sites/Personal/life-os/ | Active |
-| cscottodell-code/d2d-payroll | ~/Sites/Advosy/d2d-payroll/ | Active |
-| cscottodell-code/advosy-sales | ~/Sites/Advosy/d2d-income-tool/advosy-nuxt/ | Active |
-| cscottodell-code/automation-business | ~/Sites/Bresco/automation-business/ | Active |
-| cscottodell-code/advosy-context | ~/Sites/Advosy/advosy-context/ | Active |
-| cscottodell-code/personal | (old terminal-ai-course) | Archived |
-
-## ~/Sites/ Directory Structure
-
-```
-~/Sites/
-├── Advosy/
-│   ├── advosy-context/          # Consolidated reference material (company, CRM, sales)
-│   ├── automations/             # Active (n8n workflows)
-│   ├── d2d-apps/                # Working prototype (React)
-│   ├── d2d-income-tool/         # Working prototype (Nuxt 3)
-│   ├── d2d-payroll/             # Active (~90% complete)
-│   ├── membership-docs/         # Complete (research docs)
-│   └── spotio-cf/               # Code complete, needs deploy
-├── Bresco/
-│   ├── automation-business/     # v1.1 complete, deployed
-│   ├── Background Ops/          # Reference PDFs
-│   ├── bops-guides/             # Complete docs
-│   └── brett-setup/             # Ready for Brett
-├── Global/
-│   ├── scott-toolkit/           # Claude Code reference files (skills, references)
-│   ├── n8n-mcp-reference/       # Production tool
-│   ├── surreal-data/
-│   └── ...                      # BMAD-METHOD, context-engineering, inactive
-└── Personal/
-    └── life-os/                 # Active (97% complete)
-```
-
-## CLAUDE.md Coverage
-
-| Project | Has CLAUDE.md | Notes |
-|---------|--------------|-------|
-| life-os | Yes | Created 2026-02-25 |
-| automation-business | Yes | Pre-existing |
-| d2d-payroll | Yes | Created 2026-02-25 |
-| spotio-cf | Yes | Created 2026-02-25 |
-| d2d-income-tool | Yes | Created 2026-02-25 |
-| d2d-apps | Yes | Created 2026-02-25 |
-| automations | Yes | Pre-existing |
-| n8n-mcp-reference | Yes | Pre-existing |
+| Repo | Project |
+|------|---------|
+| cscottodell-code/life-os | Life OS |
+| cscottodell-code/automation-business | Bresco Platform |
+| cscottodell-code/d2d-payroll | D2D Payroll |
+| cscottodell-code/advosy-context | Advosy Context |
+| cscottodell-code/scott-toolkit | Scott Toolkit |

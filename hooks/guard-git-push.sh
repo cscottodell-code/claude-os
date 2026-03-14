@@ -9,7 +9,7 @@ COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 STRIPPED=$(echo "$COMMAND" | sed -E "s/'[^']*'//g; s/\"[^\"]*\"//g")
 
 if echo "$STRIPPED" | grep -qE 'git\s+push'; then
-  echo "Git push blocked — use /scott:push or confirm manually before pushing."
+  echo "Git push blocked — use /scott:bypass or confirm manually before pushing."
   exit 2
 fi
 

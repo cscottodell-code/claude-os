@@ -2,7 +2,11 @@
 name: scott:bypass
 description: |
   Temporarily disable a guard hook, execute the blocked action, then re-enable.
-  Use when a hook blocks an action that Scott has explicitly approved.
+  Use when a hook blocks an action that Scott has explicitly approved. Trigger
+  when you see a "PreToolUse hook error" or "hook blocked" message, when Scott
+  says "bypass the hook", "just do it", "override the guard", or when a git push,
+  npm install, destructive command, or CLAUDE.md edit is blocked by a guard hook
+  and Scott has given explicit permission to proceed.
 user_invocable: true
 invocation_hint: /scott:bypass - Temporarily bypass a guard hook to run a blocked action
 ---

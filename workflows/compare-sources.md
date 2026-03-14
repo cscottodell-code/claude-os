@@ -354,7 +354,7 @@ For each:
 |---|--------|--------------------|----------|
 | 1 | [specific action] | [path(s)] | P1/P2/P3 |
 
-[For each P1: implementation notes detailed enough for /scott:update-toolkit]
+[For each P1: implementation notes detailed enough for /scott:toolkit-update]
 ```
 
 #### 3. Present summary to Scott
@@ -377,10 +377,10 @@ Approved by: Scott
 ```
 
 This file uses the same table format as toolkit-update Phase 2, so it plugs
-directly into `/scott:update-toolkit`.
+directly into `/scott:toolkit-update`.
 
 #### 5. Tell Scott next steps
-"Run `/scott:update-toolkit` when ready. The pending updates file will be picked up
+"Run `/scott:toolkit-update` when ready. The pending updates file will be picked up
 automatically in Phase 2."
 
 ### Done when
