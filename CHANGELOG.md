@@ -1,5 +1,25 @@
 # Toolkit Changelog
 
+## v2.8.0 - 2026-03-13
+- **10 context engineering improvements** across 3 chains (Context Protection, Task Execution, Learning & Maintenance)
+- **Chain A — Context Protection Pipeline:**
+  - `~/.zshrc`: Set `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=50` for earlier compaction (3 sources recommend)
+  - `hooks/offload-large-output.sh` (NEW): PostToolUse hook offloads tool results >4KB to `.claude/tool-output-overflow/`
+  - `rules/claude-behavior.md`: Added post-compaction recovery rule (re-read resume, snapshot, task, offloaded files after any compaction)
+  - `knowledge/active/context-protection.md` (NEW): Documents deferred loading (already native), caching, offloading, and skill example conventions
+- **Chain B — Task Execution Lifecycle:**
+  - `rules/claude-behavior.md`: Added task contract convention (define completion criteria upfront with immutable tests)
+  - `rules/claude-behavior.md`: Added neutral prompting discipline (avoid sycophancy bias in investigations)
+  - `rules/claude-behavior.md`: Upgraded doom-loop detection with fresh subagent recovery option
+- **Chain C — Learning & Maintenance Cycle:**
+  - `hooks/extract-instincts.sh` (NEW): PreCompact/Stop hook prompts instinct capture to `~/.claude/instinct-candidates.md`
+  - `workflows/toolkit-spa-day.md` (NEW): Periodic consolidation workflow (audit, review candidates, scan contradictions, consolidate)
+  - Skill `input_examples` convention documented in context-protection.md
+- **`~/.claude/settings.json`:** Registered offload hook (PostToolUse) and instinct hook (PreCompact + Stop)
+- **`/scott:tweet-to-source`:** Fixed tweet extraction — added fxtwitter/vxtwitter API as primary method, demoted WebSearch to fallback
+- **Firecrawl CLI** installed globally (v1.10.0)
+- Triggered by: `/scott:compare-sources` review of Lance Martin ("Give Claude a Computer") and sysls ("World-Class Agentic Engineer")
+
 ## v2.7.0 - 2026-03-13
 - **`rules/claude-behavior.md`:** 5 additions from context engineering source comparison
   - Pre-completion verification checklist (4-item gate before declaring tasks done) -- from Trivedy's harness engineering research

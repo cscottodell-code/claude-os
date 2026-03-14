@@ -38,6 +38,7 @@ These are your workflows. Type them and Claude walks you through each one.
 | `/scott:log-error` | Something went wrong — capture it |
 | `/scott:compare-sources` | Compare context engineering sources against your toolkit |
 | `/scott:toolkit-update` | When you want to improve the toolkit itself |
+| Toolkit Spa Day | Monthly: consolidate rules/skills, review instinct candidates, remove contradictions |
 
 ### Reference & Knowledge
 
@@ -80,10 +81,13 @@ You don't need to memorize these. Just describe what you want to do and Claude w
 ### When context is about to compact
 - Hook saves a mechanical backup (`.context-snapshot.md`)
 - Hook tells Claude to write a proper resume file (`.claude-resume.md`)
+- Hook prompts Claude to capture any notable session patterns to `~/.claude/instinct-candidates.md`
 - **You might see Claude write a file right before compaction — that's normal and intentional**
+- **After compaction**, Claude re-reads the resume file, snapshot, current task, and any offloaded files before continuing
 
 ### When a session ends
 - Hook reminds Claude to write the resume file and update docs
+- Hook prompts Claude to capture any notable session patterns to `~/.claude/instinct-candidates.md`
 - This is your safety net — even if you forget, the reminder fires
 
 ### Guard hooks (always running)
@@ -199,6 +203,8 @@ Everything below happens behind the scenes. You'll never need to trigger, config
 | `.claude-resume.md` | Per-project handoff note (~10 lines) | Before compaction, at session end, at workflow end | Claude |
 | `.context-snapshot.md` | Mechanical backup (git state, todos) | Right before compaction | Hook (shell script) |
 | `~/Sites/Global/ACTIVE-PROJECTS.md` | Master list of all in-flight projects | Every session start | Hook (shell script) |
+| `.claude/tool-output-overflow/*.md` | Offloaded large tool results (>4KB) | When a tool returns a large result | Hook (shell script) |
+| `~/.claude/instinct-candidates.md` | Auto-captured session patterns for review | Before compaction + session end | Claude (prompted by hook) |
 
 You never create, edit, or delete these files. They're machine-to-machine communication.
 
@@ -213,6 +219,8 @@ You never create, edit, or delete these files. They're machine-to-machine commun
 | **guard-destructive.sh** | Every time Claude tries `rm -rf`, `git reset --hard`, etc. | Blocks it and explains why | "Blocked: [command] would..." message |
 | **guard-claude-md.sh** | Every time Claude tries to edit CLAUDE.md or MEMORY.md | Blocks it until you confirm | "CLAUDE.md modification blocked" message |
 | **guard-npm-install.sh** | Every time Claude tries to install packages | Blocks it and lists the packages | "npm install blocked — packages: ..." message |
+| **offload-large-output.sh** | After every tool use | Writes tool results >4KB to `.claude/tool-output-overflow/` to prevent context bloat | "Large tool output saved to..." message |
+| **extract-instincts.sh** | Before compaction + session end | Prompts Claude to note session patterns to `~/.claude/instinct-candidates.md` | Claude may write a quick pattern note |
 | **bash logger** | Every Bash command Claude runs | Logs the command to `~/.claude/bash-commands.log` | Nothing — completely silent |
 | **GSD context monitor** | After every tool use | Tracks how full the context window is | Warning when context reaches 80%+ |
 | **GSD update checker** | At session start | Checks if GSD has updates available | Update notification if one exists |
@@ -225,7 +233,7 @@ These rules live in `~/.claude/rules/` and Claude reads them automatically in ev
 
 | Rule | What it tells Claude |
 |------|---------------------|
-| **claude-behavior.md** | Use Superpowers for dev methodology, GSD for project management, toolkit for learning capture. Enter plan mode for complex tasks. Pre-completion verification gate (tests pass, git clean, todo updated, feature works). Doom-loop detection (3+ edits to same file = re-plan). Subagent trigger (3+ files = spawn subagent). Context rot awareness (suggest fresh session after 1+ hours). |
+| **claude-behavior.md** | Use Superpowers for dev methodology, GSD for project management, toolkit for learning capture. Enter plan mode for complex tasks. Pre-completion verification gate (tests pass, git clean, todo updated, feature works). Task contracts (define completion criteria upfront with immutable tests). Doom-loop detection (3+ edits = re-plan or fresh subagent with contract). Subagent trigger (3+ files = spawn subagent). Context rot awareness (suggest fresh session after 1+ hours). Post-compaction recovery (re-read resume, snapshot, task, offloaded files). Neutral prompting (avoid sycophancy bias in investigations). |
 | **code-style.md** | TypeScript strict mode, Vue 3 Composition API, Tailwind v4, Pinia, 2-space indent, single quotes. |
 | **n8n-sync.md** | Keep local tools-needing-setup file and n8n reminder workflow in sync. |
 

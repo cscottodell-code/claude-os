@@ -39,6 +39,11 @@ Three systems handle different concerns. Use the right one for the job.
 - After any debug session: capture lessons in `tasks/lessons.md`
 - Watch for context rot: if a session has been running 1+ hours or context feels noisy, suggest /compact or a fresh session
   - Signs of degradation: repeating earlier mistakes, forgetting instructions, inconsistent behavior
+- Post-compaction recovery: after any compaction, immediately re-read:
+  1. .claude-resume.md and .context-snapshot.md (written by pre-compact hook)
+  2. The current task from tasks/todo.md
+  3. Any relevant offloaded files from .claude/tool-output-overflow/
+  Do NOT continue work based on assumptions about what was in context before compaction.
 
 ### Planning
 - Enter plan mode for any non-trivial task (3+ steps or architectural decisions)
@@ -46,6 +51,7 @@ Three systems handle different concerns. Use the right one for the job.
 - If something goes sideways mid-task, STOP and re-plan. Don't keep pushing.
 - Doom-loop detection: if you've edited the same file 3+ times without progress, stop and re-plan the approach
   - Repeated minor variations on a failing strategy waste tokens -- step back and reconsider
+  - Recovery option: spawn a fresh subagent with clean context to retry, passing it the task contract or acceptance criteria so it knows what "done" means without the failed context
 
 ### Subagents
 - Use subagents for research, exploration, and parallel analysis
@@ -61,11 +67,20 @@ Three systems handle different concerns. Use the right one for the job.
   3. tasks/todo.md updated (completed items checked off)
   4. The feature actually works (demonstrate it)
 - Ask: "Would Gary be comfortable productionizing this?"
+- Task contracts: for non-trivial tasks, define completion criteria upfront:
+  - What tests must pass (agent cannot edit these tests)
+  - What visual/behavioral verification is needed
+  - Any other acceptance criteria specific to this task
+  - GSD phases already have acceptance criteria in PLAN.md; use those as the contract
 
 ### Bug Fixing
 - When given a bug report, just fix it. Don't ask for permission.
 - Point at logs, errors, failing tests, then resolve them
 - Only escalate to Scott when a decision is needed, not when a fix is needed
+- Prompting discipline: use neutral framing when investigating issues
+  - Don't say "find the bug" (biases toward manufacturing bugs)
+  - Say "trace the logic of each component and report all findings"
+  - Neutral prompts reduce sycophancy-driven false positives
 
 ### Progress Tracking
 - Maintain tasks/todo.md with current milestone tasks
