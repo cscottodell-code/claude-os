@@ -1,9 +1,10 @@
 # New Feature
 
 ## Metadata
-- Last updated: 2026-03-05
-- Version: 2.1
+- Last updated: 2026-03-14
+- Version: 2.2
 - Changelog:
+  - v2.2: Add clarifying questions step to Phase 1 (from 2026-03-14 source review)
   - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and PM mode conditional (GSD/BMAD) in Phase 4
   - v2.0: Slim to orchestrator — delegate build to GSD + Superpowers, keep discovery phases
   - v1.3: Add post-build test coverage review with /gsd:add-tests (Phase 4)
@@ -37,11 +38,18 @@ Understand what the new feature is and why it's needed.
 3. Why is this needed now? What triggered this request?
 4. How urgent is it? (Blocking other work, or a nice enhancement?)
 
+### Follow-up
+After Scott answers the initial questions, ask 3-5 clarifying questions about:
+- Scope boundaries (what's explicitly NOT included?)
+- Edge cases (what happens when data is missing, invalid, or unexpected?)
+- Constraints (performance requirements, accessibility needs, mobile support?)
+- Integration points (how does this connect to existing features?)
+
 ### Output
-A clear, one-paragraph feature description.
+A clear, one-paragraph feature description with scope and edge cases identified.
 
 ### Done when
-Scott has clearly described what the feature is and why it matters.
+Scott has clearly described what the feature is, why it matters, and clarifying questions are answered.
 
 ## Phase 2: Impact Assessment [STOP]
 

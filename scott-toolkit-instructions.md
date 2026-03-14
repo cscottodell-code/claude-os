@@ -37,7 +37,7 @@ These are your workflows. Type them and Claude walks you through each one.
 | `/scott:log-success` | Something went really well — capture it |
 | `/scott:log-error` | Something went wrong — capture it |
 | `/scott:source-review` | Compare context engineering sources against your toolkit |
-| `/scott:update-toolkit` | When you want to improve the toolkit itself |
+| `/scott:toolkit-update` | When you want to improve the toolkit itself |
 | Toolkit Spa Day | Monthly: consolidate rules/skills, review instinct candidates, remove contradictions |
 
 ### Reference & Knowledge
@@ -182,7 +182,7 @@ The setup script uses symlinks, so after `git pull` most changes take effect imm
 
 | Location | What's there | Who maintains it |
 |----------|-------------|-----------------|
-| `~/Sites/Global/scott-toolkit/` | The toolkit repo (source of truth) | You + Claude via `/scott:update-toolkit` |
+| `~/Sites/Global/scott-toolkit/` | The toolkit repo (source of truth) | You + Claude via `/scott:toolkit-update` |
 | `~/.claude/hooks/` | Deployed hooks (symlinked to toolkit) | `setup.sh` |
 | `~/.claude/rules/` | Behavior rules (symlinked to toolkit) | `setup.sh` |
 | `~/.claude/skills/scott-*/` | Deployed workflow skills | `setup.sh` |
@@ -221,6 +221,7 @@ You never create, edit, or delete these files. They're machine-to-machine commun
 | **guard-npm-install.sh** | Every time Claude tries to install packages | Blocks it and lists the packages | "npm install blocked — packages: ..." message |
 | **offload-large-output.sh** | After every tool use | Writes tool results >4KB to `.claude/tool-output-overflow/` to prevent context bloat | "Large tool output saved to..." message |
 | **extract-instincts.sh** | Before compaction + session end | Prompts Claude to note session patterns to `~/.claude/instinct-candidates.md` | Claude may write a quick pattern note |
+| **pre-completion-checklist.sh** | When a session ends | Checks for uncommitted changes and stale todo.md. Warns but doesn't block. | A checklist of items to address before ending |
 | **bash logger** | Every Bash command Claude runs | Logs the command to `~/.claude/bash-commands.log` | Nothing — completely silent |
 | **GSD context monitor** | After every tool use | Tracks how full the context window is | Warning when context reaches 80%+ |
 | **GSD update checker** | At session start | Checks if GSD has updates available | Update notification if one exists |
@@ -233,7 +234,7 @@ These rules live in `~/.claude/rules/` and Claude reads them automatically in ev
 
 | Rule | What it tells Claude |
 |------|---------------------|
-| **claude-behavior.md** | Use Superpowers for dev methodology, GSD for project management, toolkit for learning capture. Enter plan mode for complex tasks. Pre-completion verification gate (tests pass, git clean, todo updated, feature works). Task contracts (define completion criteria upfront with immutable tests). Doom-loop detection (3+ edits = re-plan or fresh subagent with contract). Subagent trigger (3+ files = spawn subagent). Context rot awareness (suggest fresh session after 1+ hours). Post-compaction recovery (re-read resume, snapshot, task, offloaded files). Neutral prompting (avoid sycophancy bias in investigations). |
+| **claude-behavior.md** | Use Superpowers for dev methodology, GSD for project management, toolkit for learning capture. Enter plan mode for complex tasks. Pre-completion verification gate (tests pass, git clean, todo updated, feature works). Task contracts (define completion criteria upfront with immutable tests). Doom-loop detection (3+ edits = re-plan or fresh subagent with contract). Subagent trigger (3+ files = spawn subagent). Subagent iterative retrieval (evaluate results, follow up if incomplete, max 3 cycles). Named agent roles with restricted tool sets (researcher, planner, reviewer, executor). Checkpoint commits before significant refactors. Context rot awareness (suggest fresh session after 1+ hours). Post-compaction recovery (re-read resume, snapshot, task, offloaded files). Neutral prompting (avoid sycophancy bias in investigations). |
 | **code-style.md** | TypeScript strict mode, Vue 3 Composition API, Tailwind v4, Pinia, 2-space indent, single quotes. |
 | **n8n-sync.md** | Keep local tools-needing-setup file and n8n reminder workflow in sync. |
 

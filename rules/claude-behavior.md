@@ -48,6 +48,7 @@ Three systems handle different concerns. Use the right one for the job.
 ### Planning
 - Enter plan mode for any non-trivial task (3+ steps or architectural decisions)
 - Write the plan to tasks/todo.md with checkable items before starting
+- Checkpoint commits: before significant refactors or multi-file changes, create a checkpoint: `git add -A && git commit -m "checkpoint before [description]"`. One `git reset` away from safety.
 - If something goes sideways mid-task, STOP and re-plan. Don't keep pushing.
 - Doom-loop detection: if you've edited the same file 3+ times without progress, stop and re-plan the approach
   - Repeated minor variations on a failing strategy waste tokens -- step back and reconsider
@@ -58,6 +59,13 @@ Three systems handle different concerns. Use the right one for the job.
 - If a task requires reading 3+ files for investigation, spawn a subagent rather than reading in the main context
 - Keep the main context window focused on the current build task
 - One objective per subagent for focused execution
+- Iterative retrieval: subagents should evaluate their own results before returning. If the result is incomplete or ambiguous, follow up with additional searches or reads. Max 3 retrieval cycles before returning what you have.
+- Named agent roles with minimum-necessary tool sets:
+  - **Researcher/Explorer:** Read, Grep, Glob, WebSearch, WebFetch only (no Write, Edit, Bash)
+  - **Planner:** Read, Grep, Glob only
+  - **Reviewer:** Read, Grep, Glob, Bash (for running tests)
+  - **Executor:** All tools (full access for implementation work)
+  - Match the role to the task. Don't give a research subagent write access.
 
 ### Verification
 - Never mark a task complete without proving it works

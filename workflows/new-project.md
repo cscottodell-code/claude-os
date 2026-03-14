@@ -1,9 +1,11 @@
 # New Project
 
 ## Metadata
-- Last updated: 2026-03-05
-- Version: 1.5
+- Last updated: 2026-03-14
+- Version: 1.7
 - Changelog:
+  - v1.7: Add follow-up clarifying questions to Phase 1 (from 2026-03-14 source review)
+  - v1.6: Add API key model access verification to Phase 1 (from Eleanor M1 retro)
   - v1.5: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and PM mode conditionals (GSD/BMAD) in Phase 3 and Phase 7
   - v1.4: Add Global as 4th work context for cross-cutting projects (toolkit, shared references)
   - v1.3: Add post-build test coverage review with /gsd:add-tests (Phase 7)
@@ -54,12 +56,23 @@ This is intentionally unstructured — the goal is quantity over quality.
    - **Advosy** — Work project, may hand off to Gary for production
    - **Bresco** — Co-developing with Brett, shared ownership
 8. Anything else bouncing around in your head about this?
+9. **API key check:** If the project uses AI APIs (Anthropic, Google, OpenAI, etc.),
+   verify that your API key has access to the specific models you plan to use.
+   Test each model ID with a simple API call before committing to it in the architecture.
+
+### Follow-up
+After the brain dump, ask 3-5 follow-up questions to fill gaps:
+- What's the simplest version of this that would still be useful?
+- What would make you stop using this after a week?
+- Are there any technical unknowns you're worried about?
+- Who else will touch this code? (Just you, Brett, Gary, a team?)
+- Is there anything similar you've tried before that didn't work?
 
 ### Output
 A raw brain dump document — bullet points, notes, and answers. Not organized yet.
 
 ### Done when
-Scott says "I think that's everything" or "that covers it."
+Scott says "I think that's everything" or "that covers it," and follow-up questions are answered.
 
 ## Phase 2: Clarify & Challenge [STOP]
 

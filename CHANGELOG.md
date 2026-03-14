@@ -1,5 +1,15 @@
 # Toolkit Changelog
 
+## v2.9.0 - 2026-03-14
+- **`workflows/new-feature.md` (v2.2):** Added clarifying questions follow-up step to Phase 1 (scope, edge cases, constraints, integration points)
+- **`workflows/new-project.md` (v1.7):** Added follow-up questions step to Phase 1 Brain Dump (simplest version, technical unknowns, who touches code)
+- **`rules/claude-behavior.md` (Subagents):** Added iterative retrieval rule (evaluate results, follow up if incomplete, max 3 cycles)
+- **`rules/claude-behavior.md` (Subagents):** Added named agent roles with restricted tool sets (researcher, planner, reviewer, executor)
+- **`rules/claude-behavior.md` (Planning):** Added checkpoint commit rule before significant refactors
+- **`hooks/pre-completion-checklist.sh` (NEW):** Stop hook that structurally enforces verification (uncommitted changes, todo.md freshness). Warns but doesn't block.
+- **`~/.claude/settings.json`:** Registered pre-completion-checklist hook on Stop event
+- Triggered by: `/scott:compare-sources` review of Faran's "15 Battle-Tested Tips" (new source) against 14 existing sources
+
 ## v2.8.0 - 2026-03-13
 - **10 context engineering improvements** across 3 chains (Context Protection, Task Execution, Learning & Maintenance)
 - **Chain A — Context Protection Pipeline:**
