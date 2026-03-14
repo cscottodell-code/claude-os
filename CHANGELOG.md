@@ -1,5 +1,12 @@
 # Toolkit Changelog
 
+## v2.10.0 - 2026-03-14
+- **`rules/claude-behavior.md` (Subagents):** Added pattern referencing rule (point to existing code patterns instead of describing verbally)
+- **`knowledge/active/context-protection.md`:** Added thinking token cap guidance (`MAX_THINKING_TOKENS=10000` for routine coding)
+- **`knowledge/active/context-protection.md`:** Added JSON state tracking pattern (use JSON over Markdown for autonomous progress tracking)
+- **`knowledge/active/context-protection.md`:** Added reasoning budget allocation table (high for planning/verification, standard for implementation)
+- Triggered by: `/scott:compare-sources` review of Justin Young's "Effective Harnesses for Long-Running Agents" (Phase 1 of 6-phase harness upgrade plan)
+
 ## v2.9.0 - 2026-03-14
 - **`workflows/new-feature.md` (v2.2):** Added clarifying questions follow-up step to Phase 1 (scope, edge cases, constraints, integration points)
 - **`workflows/new-project.md` (v1.7):** Added follow-up questions step to Phase 1 Brain Dump (simplest version, technical unknowns, who touches code)

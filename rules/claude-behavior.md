@@ -60,6 +60,7 @@ Three systems handle different concerns. Use the right one for the job.
 - Keep the main context window focused on the current build task
 - One objective per subagent for focused execution
 - Iterative retrieval: subagents should evaluate their own results before returning. If the result is incomplete or ambiguous, follow up with additional searches or reads. Max 3 retrieval cycles before returning what you have.
+- Pattern referencing: point to existing code patterns (e.g., "follow the pattern in /api/teams") instead of describing them verbally. Reduces prompt tokens and ensures consistency with existing code.
 - Named agent roles with minimum-necessary tool sets:
   - **Researcher/Explorer:** Read, Grep, Glob, WebSearch, WebFetch only (no Write, Edit, Bash)
   - **Planner:** Read, Grep, Glob only

@@ -49,3 +49,37 @@ input_examples:
 ```
 
 Start with most-used skills and add examples as skills are updated.
+
+## Thinking Token Budget
+
+For API-based orchestration (not Claude Code CLI), set `MAX_THINKING_TOKENS=10000`
+for routine coding sessions. Extended thinking is powerful but expensive -- capping
+it for standard implementation work reduces hidden costs ~70% while preserving
+quality. Reserve uncapped thinking for planning, debugging, and verification phases
+where deep reasoning matters most.
+
+## JSON State Tracking
+
+When tracking progress or feature state across autonomous multi-session workflows,
+use JSON files instead of Markdown checklists. Models optimistically edit Markdown
+(checking boxes, rewriting lists) but treat JSON as structurally rigid data.
+JSON state files resist accidental tampering and parse reliably.
+
+Example: use `progress.json` with `{"phase": 2, "tasks_complete": 5, "tasks_total": 8}`
+rather than a Markdown checklist that the model might optimistically check off.
+
+## Reasoning Budget Allocation
+
+For API-based orchestration with extended thinking, allocate reasoning budget
+strategically by phase type:
+
+| Phase Type | Reasoning Level | Why |
+|------------|----------------|-----|
+| Planning | High | Deep analysis of requirements and architecture |
+| Verification | High | Thorough checking catches issues early |
+| Implementation | Standard | Following established patterns, less exploration needed |
+| Documentation | Standard | Straightforward content generation |
+
+Strategic allocation achieved 66.5% task completion vs 53.9% for constant max
+reasoning in benchmarks (Trivedy). This is relevant for API use -- Claude Code
+manages its own reasoning internally.
