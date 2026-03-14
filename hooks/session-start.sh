@@ -67,9 +67,9 @@ if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
     fi
   else
     if [ -n "$CATEGORY" ]; then
-      echo "Project detected [$CATEGORY] (CLAUDE.md found). No resume file — use /scott:resume for a guided restart."
+      echo "Project detected [$CATEGORY] (CLAUDE.md found). No resume file — use /scott:resume-project for a guided restart."
     else
-      echo "Project detected (CLAUDE.md found). No resume file — use /scott:resume for a guided restart."
+      echo "Project detected (CLAUDE.md found). No resume file — use /scott:resume-project for a guided restart."
     fi
   fi
 elif [ "$PROJECT_DIR" = "$HOME" ]; then

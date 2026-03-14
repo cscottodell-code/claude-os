@@ -10,7 +10,7 @@ Just open Claude Code in your project folder. The toolkit handles the rest:
 
 1. **Session-start hook fires automatically** — it checks for context files and shows you what's available
 2. **If you see "Resume file found"** — Claude will read `.claude-resume.md` and know exactly where you left off
-3. **If you see "No resume file"** — type `/scott:resume` for a guided walkthrough of getting back up to speed
+3. **If you see "No resume file"** — type `/scott:resume-project` for a guided walkthrough of getting back up to speed
 
 If you're in your home directory (`~`), the hook shows your active projects list. Pick one and `cd` into it.
 
@@ -26,7 +26,7 @@ These are your workflows. Type them and Claude walks you through each one.
 |---------|---------------|
 | `/scott:new-project` | Starting something from scratch |
 | `/scott:new-feature` | Adding a feature to an existing project |
-| `/scott:resume` | Picking up a project after time away |
+| `/scott:resume-project` | Picking up a project after time away |
 | `/scott:retro` | After finishing a milestone — capture lessons |
 | `/scott:handoff` | When a prototype is ready for Gary |
 
@@ -36,8 +36,8 @@ These are your workflows. Type them and Claude walks you through each one.
 |---------|---------------|
 | `/scott:log-success` | Something went really well — capture it |
 | `/scott:log-error` | Something went wrong — capture it |
-| `/scott:compare-sources` | Compare context engineering sources against your toolkit |
-| `/scott:toolkit-update` | When you want to improve the toolkit itself |
+| `/scott:source-review` | Compare context engineering sources against your toolkit |
+| `/scott:update-toolkit` | When you want to improve the toolkit itself |
 | Toolkit Spa Day | Monthly: consolidate rules/skills, review instinct candidates, remove contradictions |
 
 ### Reference & Knowledge
@@ -45,10 +45,10 @@ These are your workflows. Type them and Claude walks you through each one.
 | Command | When to use it |
 |---------|---------------|
 | `/scott:debug` | Structured 5-phase debugging workflow |
-| `/scott:surrealdb-patterns` | SurrealDB syntax, schema patterns, query optimization |
-| `/scott:n8n-complete` | Comprehensive n8n automation reference |
-| `/scott:automation-best-practices` | Best practices for reliable automations |
-| `/scott:tweet-to-source` | Extract tweet/thread content into source files |
+| `/scott:surrealdb` | SurrealDB syntax, schema patterns, query optimization |
+| `/scott:n8n-reference` | Comprehensive n8n automation reference |
+| `/scott:automation-guide` | Best practices for reliable automations |
+| `/scott:save-tweet` | Extract tweet/thread content into source files |
 
 ### Tools & Utilities
 
@@ -182,7 +182,7 @@ The setup script uses symlinks, so after `git pull` most changes take effect imm
 
 | Location | What's there | Who maintains it |
 |----------|-------------|-----------------|
-| `~/Sites/Global/scott-toolkit/` | The toolkit repo (source of truth) | You + Claude via `/scott:toolkit-update` |
+| `~/Sites/Global/scott-toolkit/` | The toolkit repo (source of truth) | You + Claude via `/scott:update-toolkit` |
 | `~/.claude/hooks/` | Deployed hooks (symlinked to toolkit) | `setup.sh` |
 | `~/.claude/rules/` | Behavior rules (symlinked to toolkit) | `setup.sh` |
 | `~/.claude/skills/scott-*/` | Deployed workflow skills | `setup.sh` |

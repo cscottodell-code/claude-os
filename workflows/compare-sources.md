@@ -50,7 +50,7 @@ then (2) scan all raw sources for outdated content and update in place.
    - Include `**Source:** [Title](url)` at the top of the file
 
    **x.com / twitter.com links:**
-   - Delegate to `/scott:tweet-to-source` (it already saves to `raw-sources/`)
+   - Delegate to `/scott:save-tweet` (it already saves to `raw-sources/`)
 
    **GitHub repos:**
    - Fetch the README via WebFetch (`https://raw.githubusercontent.com/[owner]/[repo]/main/README.md`)
@@ -354,7 +354,7 @@ For each:
 |---|--------|--------------------|----------|
 | 1 | [specific action] | [path(s)] | P1/P2/P3 |
 
-[For each P1: implementation notes detailed enough for /scott:toolkit-update]
+[For each P1: implementation notes detailed enough for /scott:update-toolkit]
 ```
 
 #### 3. Present summary to Scott
@@ -377,10 +377,10 @@ Approved by: Scott
 ```
 
 This file uses the same table format as toolkit-update Phase 2, so it plugs
-directly into `/scott:toolkit-update`.
+directly into `/scott:update-toolkit`.
 
 #### 5. Tell Scott next steps
-"Run `/scott:toolkit-update` when ready. The pending updates file will be picked up
+"Run `/scott:update-toolkit` when ready. The pending updates file will be picked up
 automatically in Phase 2."
 
 ### Done when

@@ -12,7 +12,7 @@ Three systems handle different concerns. Use the right one for the job.
   - Fix Critical issues immediately, Important issues before proceeding
 - Git workflow: `superpowers:using-git-worktrees` for feature development
 - Branch merging: `superpowers:finishing-a-development-branch` when complete
-- Debugging methodology: follow `superpowers:systematic-debugging`
+- Debugging methodology: follow `scott:debug` for Scott's projects (adds lesson capture), `superpowers:systematic-debugging` for non-Scott projects
 - Plan writing: `superpowers:writing-plans` for breaking work into tasks
 
 ### Workflow Execution
