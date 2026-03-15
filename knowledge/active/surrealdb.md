@@ -1,9 +1,9 @@
 # SurrealDB
 
 ## Metadata
-- Last updated: 2026-03-03
-- Version: 2.0
-- Applies to: SurrealDB v3.0.0 (Scott's stack currently runs v2.6.0)
+- Last updated: 2026-03-14
+- Version: 3.0
+- Applies to: SurrealDB v3.0.0 (active projects on v3; life-os/d2d-payroll/spotio-cf locked on v2)
 - Changelog:
   - v2.0: Consolidated from surrealdb-v3.md + surrealql.md into single reference
   - v1.0: Initial skills (separate files)

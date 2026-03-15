@@ -1,8 +1,8 @@
 # Advosy Business Context
 
 ## Metadata
-- Last updated: 2026-02-25
-- Version: 2.0
+- Last updated: 2026-03-14
+- Version: 3.0
 - Sources: advosy-context skill (SKILL.md), advosy-notion-migration-status.md
 - See also: ~/Sites/Advosy/advosy-context/ (consolidated reference repo)
 
@@ -96,6 +96,12 @@ ADVOSY (Parent Company)
 | D2D Apps | ~/Sites/Advosy/d2d-apps/ | Prototype | React D2D apps |
 | CF Automations | ~/Sites/Advosy/automations/ | Active | n8n workflow automations |
 | Membership Docs | ~/Sites/Advosy/membership-docs/ | Complete | Research docs |
+
+## Tech Stack
+Follows the global stack: Nuxt 4 + Nuxt UI v4 + Tailwind CSS v4 | TypeScript | SurrealDB v3 (server, JS SDK surrealdb@2.0.1)
+- **Infrastructure:** Hetzner + Coolify (primary). Some projects still on Vercel (will migrate).
+- **Outlier:** D2D Apps uses React 19 + Vite 7 (not Nuxt). Being replaced by Advosy Sales.
+- **Legacy v2 projects:** d2d-payroll and spotio-cf still on SurrealDB v2 + WASM SDK v1.3.2 (will migrate when consolidated into advosy-sales).
 
 ## Project Context for Advosy Work
 

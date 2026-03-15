@@ -137,7 +137,7 @@ deploy_workflow_skill "handoff-to-gary.md" "scott-handoff" \
   Architecture Summary, Setup Instructions, and Handoff Checklist." \
   "Prepare project for handoff to Gary"
 
-deploy_workflow_skill "toolkit-update.md" "scott-toolkit-update" \
+deploy_workflow_skill "toolkit-update.md" "scott-update-toolkit" \
   "Update the scott-toolkit itself using the guided workflow.
   Walks through 6 phases: Review Trigger, Identify Files, Draft Changes,
   Update CHANGELOG, Update Instructions & PDF, and Commit & Push." \
@@ -205,7 +205,7 @@ for rule in claude-behavior.md code-style.md n8n-sync.md; do
 done
 
 # Check skills
-for skill in scott-new-project scott-resume scott-new-feature scott-retro scott-handoff scott-toolkit-update scott-log-success scott-log-error scott-compare-sources scott-bypass; do
+for skill in scott-new-project scott-resume scott-new-feature scott-retro scott-handoff scott-update-toolkit scott-log-success scott-log-error scott-compare-sources scott-bypass; do
   if [ -f "$SKILLS_DIR/$skill/SKILL.md" ]; then
     : # OK
   else

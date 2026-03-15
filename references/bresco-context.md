@@ -1,8 +1,8 @@
 # Bresco Business Context
 
 ## Metadata
-- Last updated: 2026-02-25
-- Version: 2.0
+- Last updated: 2026-03-14
+- Version: 3.0
 
 ## About Bresco
 
@@ -28,7 +28,7 @@ communications distinct.
 | **Location** | ~/Sites/Bresco/automation-business/ |
 | **GitHub** | cscottodell-code/automation-business |
 | **Status** | v1.1 complete |
-| **Deployed** | Vercel |
+| **Deployed** | Vercel (migrating to Coolify) |
 | **Has CLAUDE.md** | Yes |
 
 The BreSco Platform is the client-facing automation business website/app.
@@ -51,8 +51,16 @@ When building tools for Bresco:
 - Brett's n8n instance: https://banc-r.app.n8n.cloud/
 - No need for Gary handoff — Bresco manages its own deployment
 
+## Tech Stack
+Follows the global stack: Nuxt 4 + Nuxt UI v4 + Tailwind CSS v4 | TypeScript | SurrealDB v3 (server, JS SDK surrealdb@2.0.1) | Rust (future)
+
+## Infrastructure
+- **Deploy target:** Coolify on Hetzner (primary). Apps and SurrealDB on the same network.
+- **Vercel:** Marketing site only (automation-business). New client projects go to Coolify.
+- **Why:** One bill, faster DB connections (local network), no vendor limits on bandwidth/functions.
+- **Migration:** Move marketing site from Vercel to Coolify when convenient, not urgent.
+
 ## Technical Notes
 
-- Bresco projects use: Nuxt 4 + SurrealDB v3 + TypeScript + Tailwind v4
 - Brett has less technical knowledge — code should be well-commented
 - Prototyping speed matters — get something working and iterate

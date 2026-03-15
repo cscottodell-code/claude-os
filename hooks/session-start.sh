@@ -8,6 +8,11 @@ SITES_DIR="$HOME/Sites"
 ACTIVE_PROJECTS="$SITES_DIR/Global/ACTIVE-PROJECTS.md"
 PROJECT_DIR="$(pwd)"
 
+# --- 0. Sync down from GitHub ---
+if [ -x "$HOME/.claude-config/sync-down.sh" ]; then
+    "$HOME/.claude-config/sync-down.sh" || true
+fi
+
 # --- 1. Rebuild ACTIVE-PROJECTS.md from resume files ---
 {
   echo "# Active Projects"
