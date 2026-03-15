@@ -185,7 +185,7 @@ echo "4. Verifying deployment..."
 ERRORS=0
 
 # Check hooks
-for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh session-start.sh pre-compact.sh session-end.sh; do
+for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh session-start.sh pre-compact.sh session-end.sh auto-format.sh context-reminders.sh offload-large-output.sh extract-instincts.sh pre-completion-checklist.sh post-commit-skill-triggers.sh; do
   if [ -L "$HOOKS_DIR/$hook" ] && [ -e "$HOOKS_DIR/$hook" ]; then
     : # OK
   else
@@ -195,7 +195,7 @@ for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-
 done
 
 # Check rules
-for rule in claude-behavior.md code-style.md n8n-sync.md; do
+for rule in claude-behavior.md code-style.md; do
   if [ -L "$RULES_DIR/$rule" ] && [ -e "$RULES_DIR/$rule" ]; then
     : # OK
   else

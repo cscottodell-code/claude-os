@@ -35,7 +35,7 @@ All workflows are invoked via slash commands:
 | `/scott:resume` | Pick up where you left off on a project |
 | `/scott:retro` | Run a retrospective after a milestone |
 | `/scott:handoff` | Prepare a project for Gary to productionize |
-| `/scott:toolkit-update` | Update the toolkit itself |
+| `/scott:update-toolkit` | Update the toolkit itself |
 | `/scott:log-success` | Capture a win while context is fresh |
 | `/scott:compare-sources` | Compare context engineering sources against your toolkit |
 | `/scott:log-error` | Capture a failure while context is fresh |
@@ -87,9 +87,15 @@ scott-toolkit/
 │   └── compare-sources.md
 │
 ├── hooks/                            # Automated session management
-│   ├── session-start.sh             # Context file discovery
-│   ├── pre-compact.sh               # State snapshot before compaction
+│   ├── session-start.sh             # Context file discovery + AUTO-RESUME
 │   ├── session-end.sh               # Close reminder
+│   ├── pre-compact.sh               # State snapshot before compaction
+│   ├── pre-completion-checklist.sh  # Verification checklist at session end
+│   ├── post-commit-skill-triggers.sh # Skill nudges after git commits
+│   ├── context-reminders.sh         # Session health (duration/tool count)
+│   ├── auto-format.sh               # Prettier on Write/Edit
+│   ├── offload-large-output.sh      # Large output management
+│   ├── extract-instincts.sh         # Pattern capture before compaction
 │   ├── guard-git-push.sh
 │   ├── guard-destructive.sh
 │   ├── guard-claude-md.sh
@@ -97,21 +103,14 @@ scott-toolkit/
 │
 ├── rules/                            # Behavior rules (-> ~/.claude/rules/)
 │   ├── claude-behavior.md           # 3-system delegation rules
-│   ├── code-style.md
-│   └── n8n-sync.md
+│   └── code-style.md               # TypeScript/Vue/Tailwind standards
 │
 ├── references/                       # Business context (loaded on demand)
 │   ├── project-catalog.md
 │   ├── advosy-context.md
 │   ├── bresco-context.md
-│   ├── brett-setup-instructions.md
-│   ├── claude-cowork-instructions.md
 │   ├── hetzner-surrealdb-setup.md
-│   ├── stack-overview.md
-│   └── ai-orchestration/
-│       ├── framework.md
-│       ├── assessment.md
-│       └── courses.md
+│   └── surrealdb-v3-reference.md
 │
 ├── retros/                           # Retrospective outputs
 │   └── _retro-index.md

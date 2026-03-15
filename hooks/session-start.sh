@@ -13,6 +13,15 @@ if [ -x "$HOME/.claude-config/sync-down.sh" ]; then
     "$HOME/.claude-config/sync-down.sh" || true
 fi
 
+# --- 0b. Log rotation for bash-commands.log ---
+BASH_LOG="$HOME/.claude/bash-commands.log"
+if [ -f "$BASH_LOG" ]; then
+  line_count=$(wc -l < "$BASH_LOG")
+  if [ "$line_count" -gt 1000 ]; then
+    tail -500 "$BASH_LOG" > "${BASH_LOG}.tmp" && mv "${BASH_LOG}.tmp" "$BASH_LOG"
+  fi
+fi
+
 # --- 1. Rebuild ACTIVE-PROJECTS.md from resume files ---
 {
   echo "# Active Projects"
@@ -66,15 +75,21 @@ if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
 
   if [ -f "$PROJECT_DIR/.claude-resume.md" ]; then
     if [ -n "$CATEGORY" ]; then
-      echo "Resume file found [$CATEGORY]. Read .claude-resume.md to pick up where you left off."
+      echo "AUTO-RESUME [$CATEGORY]: Resume file found. You MUST invoke /scott:resume before doing any work. Read .claude-resume.md and tasks/todo.md to restore context."
     else
-      echo "Resume file found. Read .claude-resume.md to pick up where you left off."
+      echo "AUTO-RESUME: Resume file found. You MUST invoke /scott:resume before doing any work. Read .claude-resume.md and tasks/todo.md to restore context."
+    fi
+  elif [ -d "$PROJECT_DIR/.planning" ]; then
+    if [ -n "$CATEGORY" ]; then
+      echo "GSD PROJECT [$CATEGORY]: .planning/ directory found. You MUST invoke /scott:resume to check project state before doing any work."
+    else
+      echo "GSD PROJECT: .planning/ directory found. You MUST invoke /scott:resume to check project state before doing any work."
     fi
   else
     if [ -n "$CATEGORY" ]; then
-      echo "Project detected [$CATEGORY] (CLAUDE.md found). No resume file — use /scott:resume-project for a guided restart."
+      echo "Project detected [$CATEGORY] (CLAUDE.md found). No resume file. If Scott asks to continue prior work, invoke /scott:resume."
     else
-      echo "Project detected (CLAUDE.md found). No resume file — use /scott:resume-project for a guided restart."
+      echo "Project detected (CLAUDE.md found). No resume file. If Scott asks to continue prior work, invoke /scott:resume."
     fi
   fi
 elif [ "$PROJECT_DIR" = "$HOME" ]; then

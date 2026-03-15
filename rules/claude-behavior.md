@@ -32,10 +32,25 @@ Three systems handle different concerns. Use the right one for the job.
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`
   ("Next time, do X instead of Y because Z")
-- After debugging a prompt/context/harness error: `/scott:log-error`
-- After a notable success: `/scott:log-success`
+- **MUST invoke `/scott:log-error`** after:
+  - Claude makes a prompt, context, or harness mistake (writes to toolkit errors/)
+  - A skill or hook misfires or produces wrong output
+  - NOT for code bugs — use `scott-debug` for those (it captures lessons in tasks/lessons.md)
+  - The distinction: scott-debug = code is broken, scott-log-error = Claude/toolkit is broken
+- **MUST invoke `/scott:log-success`** after:
+  - Scott expresses satisfaction ("nice", "perfect", "love it", "that's great", etc.)
+  - Completing a feature that works on the first try
+  - Any moment worth celebrating, even small wins
+- **MUST invoke `/scott:retro`** after:
+  - Completing a GSD phase or milestone
+  - Completing a BMAD sprint or story
+  - Finishing a multi-session project
+  - The pre-completion hook will remind you, but don't wait for it
+- **MUST invoke `/scott:resume`** when:
+  - Session-start hook says "AUTO-RESUME" (non-negotiable)
+  - Scott says "let's continue", "where were we", "pick up where we left off"
+  - A `.claude-resume.md` or `.planning/` directory exists in the project
 - Review `tasks/lessons.md` at session start (before work begins)
-- After completing a milestone: consider `/scott:retro`
 - After any debug session: capture lessons in `tasks/lessons.md`
 - Context rot is monitored by the context-reminders hook (warns at 60min and 100 tool uses). If you notice signs of degradation (repeating mistakes, forgetting instructions, inconsistent behavior), suggest /compact or a fresh session even before the hook warns.
 - Post-compaction recovery: after any compaction, immediately re-read:

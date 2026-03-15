@@ -61,6 +61,27 @@ if [ -f "tasks/lessons.md" ]; then
   fi
 fi
 
+# Check 5: Skill triggers — did we miss any?
+skill_reminders=""
+
+# Check git log for recent fix commits without a log-error
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+  recent_fixes=$(git log --oneline --since="2 hours ago" --grep="fix\|bug\|debug\|error\|crash\|hotfix" -i 2>/dev/null | head -3)
+  if [ -n "$recent_fixes" ]; then
+    skill_reminders="${skill_reminders}\n  [ ] Bug fix commits found — code bugs: check tasks/lessons.md for lesson. Claude/toolkit mistakes: invoke /scott:log-error"
+    count=$((count + 1))
+  fi
+
+  # Check for milestone/phase completion commits
+  recent_milestones=$(git log --oneline --since="2 hours ago" --grep="milestone\|phase\|complete\|finish\|ship\|release" -i 2>/dev/null | head -3)
+  if [ -n "$recent_milestones" ]; then
+    skill_reminders="${skill_reminders}\n  [ ] Milestone/phase commits found this session — did you invoke /scott:retro?"
+    count=$((count + 1))
+  fi
+fi
+
+warnings="${warnings}${skill_reminders}"
+
 # Output warnings if any
 if [ -n "$warnings" ]; then
   echo ""
