@@ -1,4 +1,4 @@
 {
-  "next_id": 2,
+  "next_id": 3,
   "description": "Counter for success log IDs. Incremented each time /scott:log-success creates a new entry."
 }
