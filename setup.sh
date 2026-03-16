@@ -163,7 +163,7 @@ deploy_workflow_skill "compare-sources.md" "scott-compare-sources" \
 
 # --- 4. Deploy standalone skills (symlinks) ---
 echo "4. Deploying standalone skills..."
-for skill_dir in "$TOOLKIT_PATH"/skills/scott-*/; do
+for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
   skill_name="$(basename "$skill_dir")"
   target_dir="$SKILLS_DIR/$skill_name"
 

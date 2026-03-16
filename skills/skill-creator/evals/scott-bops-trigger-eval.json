@@ -1,0 +1,22 @@
+[
+  {"query": "hey I just had an idea — we should add a webhook health check dashboard to the toolkit. can you capture that in my inbox?", "should_trigger": true},
+  {"query": "/bops inbox automate the Monday standup notes", "should_trigger": true},
+  {"query": "I did my morning workout today, mark my keystone as done", "should_trigger": true},
+  {"query": "what's my bops status? how many inbox items do I have and what's my keystone streak looking like?", "should_trigger": true},
+  {"query": "I want to log a win — I figured out how to use parallel agents and it cut my build time in half", "should_trigger": true},
+  {"query": "let's do my weekly review — pull up everything from the past 7 days", "should_trigger": true},
+  {"query": "add a hard rule: no coding after 9pm on weeknights", "should_trigger": true},
+  {"query": "which of my projects are stalled? show me anything I haven't touched in over a week", "should_trigger": true},
+  {"query": "I want to track a new keystone habit — reading for 20 minutes before bed", "should_trigger": true},
+  {"query": "capture this as a win: the Claimsforce payroll automation is fully working now and saved 3 hours per week", "should_trigger": true},
+  {"query": "can you help me build an n8n workflow that sends a daily summary of my Notion tasks?", "should_trigger": false},
+  {"query": "I need to debug the webhook integration — it's returning 500 errors", "should_trigger": false},
+  {"query": "let's start a new project for a habit tracking app", "should_trigger": false},
+  {"query": "help me write a SurrealDB schema for storing daily habits and streaks", "should_trigger": false},
+  {"query": "I want to build a productivity dashboard in Nuxt that shows my weekly stats", "should_trigger": false},
+  {"query": "what's the best way to set up a cron job that runs every morning at 6am?", "should_trigger": false},
+  {"query": "can you look up Brett's email address for me?", "should_trigger": false},
+  {"query": "I want to create a Notion integration that automatically logs git commits", "should_trigger": false},
+  {"query": "help me deploy this app to Vercel", "should_trigger": false},
+  {"query": "how do I add a new feature to the CRM mockup?", "should_trigger": false}
+]

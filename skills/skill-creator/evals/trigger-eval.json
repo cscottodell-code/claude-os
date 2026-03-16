@@ -1,0 +1,22 @@
+[
+  {"query": "I have an idea for a new app — it would be a tool for tracking door-to-door sales reps' daily activity and showing managers a leaderboard", "should_trigger": true},
+  {"query": "let's start something new — I want to build a commission calculator that pulls data from Claimsforce and shows reps their projected payouts", "should_trigger": true},
+  {"query": "I want to create a new project from scratch. it's going to be an internal knowledge base for our sales team training materials", "should_trigger": true},
+  {"query": "new project idea: a webhook monitoring dashboard that shows the health of all our n8n workflows in one place", "should_trigger": true},
+  {"query": "I've been thinking about building a client portal where homeowners can check the status of their insurance claim — can we start on that?", "should_trigger": true},
+  {"query": "let's build a prototype for a new tool — it'll be a simple form that sales reps fill out after each door knock, and it logs to SurrealDB", "should_trigger": true},
+  {"query": "I want to build something from scratch that helps me manage my context engineering sources — like a personal knowledge graph", "should_trigger": true},
+  {"query": "start a new project: a Telegram bot that lets me interact with my Background Ops system from my phone", "should_trigger": true},
+  {"query": "I want to add a dark mode toggle to the CRM mockup", "should_trigger": false},
+  {"query": "can you add a new feature to the commission calculator? I want a CSV export button", "should_trigger": false},
+  {"query": "let's pick up where we left off on the sales dashboard project", "should_trigger": false},
+  {"query": "I need to fix a bug in the webhook listener — it's dropping events when two come in at the same time", "should_trigger": false},
+  {"query": "help me refactor the database schema for the leads table", "should_trigger": false},
+  {"query": "I want to build an n8n workflow that sends SMS alerts when a claim status changes", "should_trigger": false},
+  {"query": "can you help me understand how the CRM routing works?", "should_trigger": false},
+  {"query": "I want to do a retro on the payroll automation project", "should_trigger": false},
+  {"query": "deploy the current project to Vercel", "should_trigger": false},
+  {"query": "what's Gary's email? I need to send him the handoff notes", "should_trigger": false},
+  {"query": "help me write tests for the API endpoints", "should_trigger": false},
+  {"query": "can you look at this error in my n8n Code node? it says 'Cannot read property of undefined'", "should_trigger": false}
+]

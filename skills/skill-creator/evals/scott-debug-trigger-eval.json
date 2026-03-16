@@ -1,0 +1,22 @@
+[
+  {"query": "something's broken — the webhook was working yesterday but now it's returning 500 errors and I don't know what changed", "should_trigger": true},
+  {"query": "the SurrealDB query is returning empty results even though I know there's data in the table. here's the query I'm running...", "should_trigger": true},
+  {"query": "my Nuxt app crashes on page load with a hydration mismatch error — it works fine in dev but breaks in production", "should_trigger": true},
+  {"query": "the n8n workflow fires but the Compensation record never gets created in Claimsforce — no error, it just silently fails", "should_trigger": true},
+  {"query": "I'm getting a weird error: 'RecordId is not a string' — I thought I fixed this last week but it's back", "should_trigger": true},
+  {"query": "the commission calculations are wrong — reps are getting paid double on supplement checks but only sometimes", "should_trigger": true},
+  {"query": "the login page shows a blank white screen after I updated the auth middleware. no errors in console", "should_trigger": true},
+  {"query": "my Code node in n8n returns data when I test it manually but returns nothing when the workflow runs on schedule", "should_trigger": true},
+  {"query": "something broke after I merged the feature branch — the tests pass but the app won't start", "should_trigger": true},
+  {"query": "the API endpoint works in Postman but returns CORS errors when called from the frontend", "should_trigger": true},
+  {"query": "I want to add a new page to the CRM that shows rep performance metrics", "should_trigger": false},
+  {"query": "can you build an n8n workflow that sends a weekly digest email?", "should_trigger": false},
+  {"query": "help me write a SurrealQL schema for a new contacts table", "should_trigger": false},
+  {"query": "I want to start a new project — a tool for managing our sales training content", "should_trigger": false},
+  {"query": "let's do a retro on the Claimsforce integration project", "should_trigger": false},
+  {"query": "how do I deploy this to Vercel? I've never done it before", "should_trigger": false},
+  {"query": "can you explain what this Vue composable does? I'm trying to understand the pattern", "should_trigger": false},
+  {"query": "I want to refactor the dashboard component to use Pinia instead of local state", "should_trigger": false},
+  {"query": "help me hand this off to Gary — the prototype is ready for production", "should_trigger": false},
+  {"query": "add a hard rule to my background ops: always write tests before pushing", "should_trigger": false}
+]
