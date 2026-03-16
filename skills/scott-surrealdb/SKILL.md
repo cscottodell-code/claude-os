@@ -77,20 +77,44 @@ DEFINE ACCESS account ON DATABASE TYPE RECORD
   DURATION FOR TOKEN 15m, FOR SESSION 12h;
 ```
 
-### JS SDK 2.0 Connection
+### JS SDK 2.0 Connection (Eleanor pattern)
 ```typescript
-import Surreal from 'surrealdb';
-import { Table } from 'surrealdb';
+import { Surreal, RecordId } from 'surrealdb';
 
-const db = new Surreal();
-await db.connect('ws://localhost:8000', {
-  namespace: 'my_ns', database: 'my_db',
-  authentication: { username: 'root', password: 'root' },
-  reconnect: { attempts: 10, retryDelay: 1000 }
+const db = new Surreal({
+  codecOptions: {
+    useNativeDates: true,     // Dates come back as Date objects, not strings
+    valueDecodeVisitor(value) {
+      if (value instanceof RecordId) return String(value)  // IDs come back as strings
+      return value
+    },
+  },
 });
 
-// Table class required (no plain strings)
-await db.select(new Table('users'));
+await db.connect('ws://localhost:8000', {
+  namespace: 'my_ns', database: 'my_db',
+  reconnect: { attempts: 10, retryDelay: 1000 },
+  renewAccess: true,
+  authentication: () => ({ username: 'root', password: 'root' }),
+});
+```
+
+### JS SDK 2.0 Query Patterns (use these, not older patterns)
+```typescript
+// Type-safe queries (NOT `as any[]`)
+const [people] = await db.query<[Person[]]>('SELECT * FROM people');
+
+// surql template tag (NOT StringRecordId)
+import { surql } from 'surrealdb';
+await db.query(surql`SELECT * FROM messages WHERE conversation = ${convId}`);
+
+// Query builder for updates (NOT manual SET clause strings)
+await db.update(`people:${slug}`).merge({ name, relationship, updated_at: new Date() });
+
+// Live queries
+import { Table } from 'surrealdb';
+const live = await db.live(new Table('messages'));
+live.subscribe((action, result) => { /* CREATE | UPDATE | DELETE */ });
 ```
 
 ### n8n Connection
@@ -103,11 +127,23 @@ Body: SELECT * FROM contacts WHERE status = "new" LIMIT 10;
 
 ## Gotchas (top 5)
 
-1. **JS SDK returns RecordId objects** not strings. Use `String(id)` before comparing.
+1. **RecordId auto-decoded in Eleanor/advosy-sales.** db.ts has a `valueDecodeVisitor`. NEVER write `String(id)` or `.replace('table:', '')`. For other projects without the visitor, use `String(id)`.
 2. **JS null is not SurrealQL NONE.** Omit `option<>` fields entirely.
 3. **COMPUTED fields cannot be nested.** No `name.full`, flatten to `full_name`.
 4. **Live queries require `ws://`** not `http://`. HTTP silently fails.
 5. **UPDATE returns `[]`** if record missing. Use UPSERT for create-or-update.
+
+## Anti-Patterns (NEVER do these in Eleanor or advosy-sales)
+
+| Anti-Pattern | Use Instead |
+|---|---|
+| `as any[]` on query results | `db.query<[Type[]]>(...)` with generics |
+| `new StringRecordId(String(id))` | `surql` template tag |
+| `new Date(row.created_at)` | Already a Date (useNativeDates) |
+| Manual SET clause builders | `db.update(id).merge(data)` |
+| `string::lowercase(name)` in SurrealQL | `name.lowercase()` method chaining |
+| `SELECT * FROM table` when only 2 fields needed | `SELECT *.{ field1, field2 } FROM table` |
+| Multiple sequential queries for one record + relations | Graph traversal or multi-statement with LET |
 
 ## When to Read the Full Reference
 
@@ -121,3 +157,22 @@ Read `~/Sites/Global/scott-toolkit/references/surrealdb-v3-reference.md` when yo
 - Connection pattern decision tree
 - Embedded/edge deployment options
 - Full function rename map
+
+## Context7 Libraries (live docs, always current)
+
+Use Context7 to verify syntax before writing SurrealDB code:
+- **JS SDK:** `/surrealdb/surrealdb.js` (87 snippets, query builder, live queries, type-safe patterns)
+- **SurrealQL:** `/surrealdb/docs.surrealdb.com` (8588 snippets, COMPUTED, HNSW, events, destructuring, graph)
+
+Query these when:
+- You're unsure about SDK 2.0 method signatures
+- You need the exact syntax for a v3 feature (HNSW dimensions, CHANGEFEED duration, ENFORCED relations)
+- The local reference file doesn't cover a specific feature
+- You want to verify current best practices haven't changed
+
+## Eleanor-Specific Patterns
+
+Eleanor's db.ts is pre-configured. When working on Eleanor:
+- Read the project's CLAUDE.md "SurrealDB Patterns" section (loaded every session)
+- Read `tasks/lessons.md` for the JS SDK 2.0 AVOID/PREFER examples
+- Read `docs/mini-prd-bops-power-laws.md` Section 6 for the full v3 optimization roadmap
