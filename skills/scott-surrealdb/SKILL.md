@@ -145,6 +145,19 @@ Body: SELECT * FROM contacts WHERE status = "new" LIMIT 10;
 | `SELECT * FROM table` when only 2 fields needed | `SELECT *.{ field1, field2 } FROM table` |
 | Multiple sequential queries for one record + relations | Graph traversal or multi-statement with LET |
 
+## SurrealDB MCP Server (live testing)
+
+The SurrealDB MCP server is available in Claude Code sessions. Use it to **test queries before writing code**:
+- `mcp__surrealdb__connect_endpoint` — connect to Eleanor's DB or a test instance
+- `mcp__surrealdb__query` — run SurrealQL directly (test COMPUTED fields, EVENTs, indexes, new syntax)
+- `mcp__surrealdb__create`, `select`, `update`, `delete`, `relate` — CRUD operations
+
+**When to use it:**
+- Before writing a new migration: test the SurrealQL against the real server
+- When debugging a query error: run it directly instead of guessing
+- When adopting a new v3 feature: verify the syntax works with the actual server version
+- When validating mini-PRD examples: test them before implementing
+
 ## When to Read the Full Reference
 
 Read `~/Sites/Global/scott-toolkit/references/surrealdb-v3-reference.md` when you need:
