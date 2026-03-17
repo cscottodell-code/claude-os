@@ -141,6 +141,6 @@ For sales contexts, also run the Sales Narrative Checklist from the framework.
 ## Important Reminders
 
 - Scott's writing preference: NEVER use em dashes. Use commas, periods, or restructure.
-- Keep language at 5th-grade readability. Scott works in sales training, not academia.
+- Keep language at 5th-grade readability. Scott leads sales, not academia.
 - The audience for Scott's stories is typically sales teams, leadership, or clients.
 - When in doubt, favor vulnerability over polish. "Success impresses, but struggle changes."
