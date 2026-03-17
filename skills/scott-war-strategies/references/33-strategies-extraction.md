@@ -3,6 +3,18 @@
 Source: The 33 Strategies of War by Robert Greene
 Extracted via NotebookLM with context-specific prompting for Scott's role.
 
+## Table of Contents
+1. **Taxonomy** — All 33 strategies organized by category
+2. **Top 20 Strategies** — Ranked for Scott's context
+3. **Full Profiles** — Detailed profiles for top 20 (Principle, Recognition, Defensive, Offensive, Red Flags, Daily Check-in)
+4. **Dangerous Combinations** — 10 compound tactics with counters
+5. **Situation Templates** — 10 workplace scenarios with immediate/strategic/prevention responses
+6. **Weekly Strategic Audit** — 12 reflection questions
+7. **Meeting Prep Framework** — 9 pre-meeting questions
+8. **Ethical Boundaries** — Strategic vs. manipulative line for 5 key strategies
+
+---
+
 ## Taxonomy (All 33 Strategies by Category)
 
 ### Offensive

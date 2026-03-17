@@ -2,15 +2,16 @@
 name: scott-human-nature
 description: >-
   Human behavior and emotional intelligence advisor based on The Laws of Human
-  Nature. Use when Scott needs to read people, assess character, navigate group
-  dynamics, manage his own emotional reactions, or understand why someone is
-  behaving a certain way. Also trigger when Scott mentions: someone acting weird,
-  passive-aggressive behavior, a hiring decision, team morale problems, feeling
-  triggered or frustrated, an emotional reaction he regrets, groupthink in a
-  meeting, someone's mask slipping, envy or jealousy dynamics, or any "why is
-  this person doing this" question. Complements scott-power-laws (what to do)
-  and scott-war-strategies (how to execute) by explaining WHY people behave the
-  way they do. Applies across Eleanor, Advosy, and Bresco contexts.
+  Nature. This skill is for understanding WHY people behave the way they do —
+  not for political positioning (use scott-power-laws), tactical execution (use
+  scott-war-strategies), or self-development (use scott-mastery). Use when Scott
+  needs to read people, assess character, navigate group dynamics, manage his own
+  emotional reactions, or understand why someone is behaving a certain way. Also
+  trigger when Scott mentions: someone acting weird, passive-aggressive behavior,
+  a hiring decision, team morale problems, reading the room, feeling triggered or
+  frustrated, an emotional reaction he regrets, groupthink in a meeting, someone's
+  mask slipping, toxic colleague, envy or jealousy dynamics, or any "why is this
+  person doing this" question. Applies across Eleanor, Advosy, and Bresco contexts.
 ---
 
 # Human Nature - Behavioral Intelligence Skill

@@ -2,14 +2,16 @@
 name: scott-mastery
 description: >-
   Personal and professional development advisor based on Mastery by Robert Greene.
-  Use when Scott discusses learning new skills, coding progress, training his team,
-  mentorship dynamics, creative problem-solving, or building expertise. Also trigger
-  when Scott mentions: feeling stuck on a learning curve, imposter syndrome, frustration
-  with coding, training program design, onboarding new hires, deliberate practice,
-  creative blocks, prototype iteration, or any "how do I get better at this" question.
-  Distinct from power-laws (politics) and war-strategies (competition) because this
-  skill focuses on self-development and team development. Applies across Eleanor,
-  Advosy, and Bresco contexts.
+  This skill is for self-development, skill building, and team training — not for
+  corporate politics (use scott-power-laws), tactical execution (use scott-war-strategies),
+  or diagnosing behavior (use scott-human-nature). Use when Scott discusses learning
+  new skills, coding progress, training his team, mentorship dynamics, creative
+  problem-solving, building expertise, or hitting a skill plateau. Also trigger when
+  Scott mentions: feeling stuck on a learning curve, imposter syndrome, frustration
+  with coding, learning to code, new technology adoption, training program design,
+  onboarding new hires, deliberate practice, creative blocks, prototype iteration,
+  or any "how do I get better at this" question. Applies across Eleanor, Advosy,
+  and Bresco contexts.
 ---
 
 # Mastery - Personal & Professional Development Skill

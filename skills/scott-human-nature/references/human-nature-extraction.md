@@ -3,6 +3,18 @@
 Source: The Laws of Human Nature by Robert Greene
 Extracted via NotebookLM with context-specific prompting for Scott's role.
 
+## Table of Contents
+1. **Taxonomy** — All 18 laws organized by category
+2. **All 18 Laws Ranked** — Ranked for Scott's context
+3. **Full Profiles** — Detailed profiles for all 18 laws (Principle, Recognition, Defensive, Offensive, Red Flags, Daily Check-in)
+4. **Dangerous Combinations** — 10 compound tactics with counters
+5. **Situation Templates** — 10 workplace scenarios with immediate/strategic/prevention responses
+6. **Weekly Human Nature Audit** — 12 reflection questions
+7. **People Assessment Framework** — 9 questions for evaluating individuals
+8. **Ethical Boundaries** — Strategic vs. manipulative line for 5 key laws
+
+---
+
 ## Taxonomy (All 18 Laws by Category)
 
 ### Psychological

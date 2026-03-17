@@ -3,6 +3,18 @@
 Source: Mastery by Robert Greene
 Extracted via NotebookLM with context-specific prompting for Scott's role.
 
+## Table of Contents
+1. **Taxonomy** — All 49 principles organized by phase and category
+2. **Top 20 Principles** — Ranked for Scott's context
+3. **Full Profiles** — Detailed profiles for top 20 (Principle, Recognition, Defensive, Offensive, Red Flags, Daily Check-in)
+4. **Dangerous Combinations** — 10 compound tactics with counters
+5. **Situation Templates** — 10 workplace scenarios with immediate/strategic/prevention responses
+6. **Weekly Mastery Audit** — 12 reflection questions
+7. **Growth Assessment Framework** — 9 development questions
+8. **Ethical Boundaries** — Strategic vs. manipulative line for 5 key principles
+
+---
+
 ## Taxonomy (All 49 Principles by Category)
 
 ### Mastery (Phase I: Discover Your Calling + Phase VI: Attain Mastery)

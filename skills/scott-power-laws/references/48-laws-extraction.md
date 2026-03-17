@@ -3,6 +3,19 @@
 Source: The 48 Laws of Power by Robert Greene
 Extracted via NotebookLM with context-specific prompting for Scott's role.
 
+## Table of Contents
+1. **Taxonomy** — All 48 laws organized by category
+2. **Top 20 Laws** — Ranked for Scott's context
+3. **Full Profiles** — Detailed profiles for top 20 (Principle, Recognition, Defensive, Offensive, Red Flags, Daily Check-in)
+4. **Dangerous Combinations** — 10 compound tactics with counters
+5. **Vulnerability Map** — Scott's 5 blind spots and protective laws
+6. **Situation Templates** — 10 workplace scenarios with immediate/strategic/prevention responses
+7. **Weekly Power Audit** — 12 reflection questions
+8. **Meeting Prep Framework** — 9 pre-meeting questions
+9. **Ethical Boundaries** — Strategic vs. manipulative line for 5 key laws
+
+---
+
 ## Taxonomy (All 48 Laws by Category)
 
 ### Reputation & Image
