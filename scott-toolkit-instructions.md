@@ -378,3 +378,22 @@ All projects use **GSD + Superpowers** together. They have distinct roles:
 5. Review (Superpowers) -> after GSD execution completes
 6. Verify (GSD) -> UAT against acceptance criteria
 7. Finish branch (Superpowers) -> merge or PR
+
+### Proactive Toolkit Usage
+
+Claude suggests the next skill automatically after completing each one:
+
+| Just finished | What Claude suggests next |
+|--------------|--------------------------|
+| `/scott:new-project` (build) | Code review -> Retro -> Log success |
+| `/scott:new-feature` (build) | Code review -> Finish branch |
+| `/scott:debug` (fix applied) | Log success if clean fix, resume interrupted work |
+| `/scott:retro` | Update toolkit if improvements found |
+| `/scott:handoff` | Retro (project wrap-up) |
+| `/gsd:execute-phase` | Code review -> Verify work |
+| `/gsd:verify-work` (passes) | Finish branch -> Log success |
+| Code review passes | Finish branch |
+| Branch merged | Log success, retro if milestone complete |
+| Session wrapping up | Pause |
+
+Claude also invokes skills proactively when it detects triggers (bugs, satisfaction, errors, session end) without being asked.

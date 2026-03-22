@@ -1,5 +1,21 @@
 # Toolkit Changelog
 
+## v2.13.0 - 2026-03-22
+- **BMAD removal (all files):** Removed all BMAD references across toolkit. GSD + Superpowers is now the only PM methodology. BMAD-METHOD folder marked as archived.
+- **GSD + Superpowers integration model:** Established clear division of labor. GSD = orchestration (plan, execute, verify). Superpowers = discipline (TDD, code review, worktrees, brainstorming). Added 7-step build loop to instructions, templates, and all workflows.
+- **`scott-toolkit-instructions.md`:** Added "GSD + Superpowers Integration Model" section replacing the old PM Mode switching logic.
+- **`rules/claude-behavior.md`:** Rewrote Project Management section. Added integration pattern explaining how Superpowers discipline applies during GSD execution.
+- **`context/CLAUDE-MD-TEMPLATE.md`:** Expanded PM Mode from one-liner to structured explanation with build loop sequence.
+- **`workflows/new-project.md` (v1.8):** Aligned Phase 7 to GSD+Superpowers build loop. Removed Superpowers-only execution pipeline references.
+- **`workflows/new-feature.md` (v2.3):** Restructured Phase 4 as explicit "GSD + Superpowers Build Loop" with numbered handoff sequence.
+- **`workflows/resume-project.md` (v2.2):** Added Superpowers discipline note to Phase 4.
+- **`workflows/retro.md` (v1.2):** Phase 1 now reads GSD artifacts (.planning/STATE.md, ROADMAP.md, VERIFICATION.md files).
+- **`skills/pause/SKILL.md`:** Now captures Superpowers state (active plans, worktrees) and GSD state (STATE.md) for resume.
+- **`references/project-catalog.md`:** BMAD Method marked as archived.
+- **`~/.claude/CLAUDE.md`:** Added "Proactive Toolkit Usage" section with "what comes next" flow map, proactive triggers, and build loop sequence.
+- **Eleanor:** Deleted 42 BMAD command files. Updated .planning/, .claude-resume.md, and architecture refs to GSD + Superpowers.
+- Triggered by: Scott's decision to standardize on GSD + Superpowers across all projects. Research revealed GSD and Superpowers were operating as parallel pipelines with no integration. This update unifies them.
+
 ## v2.12.0 - 2026-03-22
 - **`rules/claude-behavior.md` (Verification):** Added mandatory second verification pass after code review fixes. "One pass is never enough for production code."
 - **`rules/claude-behavior.md` (Verification):** Added "tests pass does NOT mean code is correct" rule. Tests verify mocks; schema compliance and race conditions require end-to-end walkthroughs.
