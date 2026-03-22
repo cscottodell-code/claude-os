@@ -20,7 +20,10 @@ are the same for every project.
 - **PRD:** See PRD.md in this repo
 - **Type:** Global / Personal / Advosy / Bresco
 - **Target:** Desktop (Tauri) / Web / Both
-- **PM Mode:** GSD _(or BMAD — GSD uses /gsd:plan-phase, /gsd:execute-phase for structured builds; BMAD uses /bmad-bmm-create-epics-and-stories, /bmad-bmm-dev-story for agile story-driven builds. Default to GSD if unsure.)_
+- **PM Mode:** GSD + Superpowers
+  - **GSD** = orchestration engine: `/gsd:plan-phase` (planning), `/gsd:execute-phase` (execution), `/gsd:verify-work` (UAT), `/gsd:add-tests` (coverage). State tracked in `.planning/`.
+  - **Superpowers** = discipline layer: `superpowers:using-git-worktrees` (isolation), `superpowers:test-driven-development` (TDD during execution), `superpowers:requesting-code-review` (after execution), `superpowers:finishing-a-development-branch` (merge/PR).
+  - **Build loop:** Worktree (Superpowers) -> Plan (GSD) -> Execute with TDD (GSD+Superpowers) -> Review (Superpowers) -> Verify (GSD) -> Finish branch (Superpowers)
 
 ## Tech Stack
 <!-- [PRE-FILLED] Scott's standard stack. Add project-specific items below. -->

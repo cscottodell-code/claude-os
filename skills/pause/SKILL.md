@@ -2,7 +2,7 @@
 name: scott:pause
 description: |
   Generate a compact resume prompt when pausing any work session. Works globally
-  across GSD projects, BMAD projects, personal projects, or any conversation.
+  across GSD projects, personal projects, or any conversation.
   Produces a copy-paste prompt with just enough context to pick up where you left
   off in a fresh session. Use when Scott says "let's pause", "save my place",
   "I need to stop", "pause this", "bookmark this", "wrap up for now", "gotta go",
@@ -29,10 +29,11 @@ Quickly determine what kind of session this is by checking what's available:
 Check (in order, stop when you have enough):
 1. Current conversation - what was discussed, decided, built
 2. Working directory - is this a project? which one?
-3. .planning/ directory - GSD project state
-4. tasks/todo.md - task list with progress
-5. CLAUDE.md - project context
-6. Git status - uncommitted work
+3. .planning/ directory - GSD project state (read .planning/STATE.md for current phase/step)
+4. docs/superpowers/plans/ directory - active Superpowers workflow (TDD cycle, code review, etc.)
+5. tasks/todo.md - task list with progress
+6. CLAUDE.md - project context
+7. Git status - uncommitted work, current branch (worktree?)
 ```
 
 You don't need to read every file. Skim what's relevant based on the conversation.
@@ -49,6 +50,7 @@ Extract only what a fresh Claude needs:
 | **Key decisions made** | So they don't get re-asked |
 | **Files that matter** | Paths to read for context, not contents |
 | **Uncommitted changes** | So nothing gets lost |
+| **Active Superpowers workflow** | TDD mid-cycle? Code review pending? Worktree branch? |
 | **Next concrete step** | What to do first when resuming |
 
 ### Step 3: Generate the Resume Prompt

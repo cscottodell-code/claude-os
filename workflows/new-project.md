@@ -4,9 +4,10 @@
 - Last updated: 2026-03-14
 - Version: 1.7
 - Changelog:
+  - v1.8: Align Phase 7 to GSD+Superpowers integration pattern (GSD orchestrates, Superpowers provides discipline)
   - v1.7: Add follow-up clarifying questions to Phase 1 (from 2026-03-14 source review)
   - v1.6: Add API key model access verification to Phase 1 (from Eleanor M1 retro)
-  - v1.5: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and PM mode conditionals (GSD/BMAD) in Phase 3 and Phase 7
+  - v1.5: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.4: Add Global as 4th work context for cross-cutting projects (toolkit, shared references)
   - v1.3: Add post-build test coverage review with /gsd:add-tests (Phase 7)
   - v1.2: Integrate Superpowers plugin — git worktrees, TDD, subagent-driven development, and two-stage code review into Build (Phase 7) and Milestone Review (Phase 8) phases
@@ -103,7 +104,6 @@ it section by section, using the brain dump answers as the starting material.
 
 ### How to do it
 
-**If PM Mode is GSD:**
 1. Read ~/Sites/Global/scott-toolkit/templates/PRD-TEMPLATE.md
 2. For each section (1-11):
    a. Explain what this section is about (use the template's guidance comments)
@@ -116,11 +116,6 @@ it section by section, using the brain dump answers as the starting material.
    - Section 4 (User Flows): Make these concrete and step-by-step
    - Section 5 (Data Model): Get the tables and relationships right
    - Section 8 (Milestones): Milestone 1 = data model + basic CRUD always
-
-**If PM Mode is BMAD:**
-1. Use `/bmad-bmm-create-prd` to generate the PRD through BMAD's guided process
-2. Review the generated PRD with Scott section by section
-3. Pay special attention to the same areas (features, user flows, data model, milestones)
 
 ### Output
 A complete PRD draft with all 11 sections filled in.
@@ -228,37 +223,30 @@ Begin building the first milestone (usually data model + basic CRUD).
 
 ### Steps
 
-**Both modes:**
-1. Set up a git worktree for this milestone using `superpowers:using-git-worktrees`
-   — this isolates milestone work on a separate branch without affecting main
+1. **Worktree isolation** — `superpowers:using-git-worktrees`
+   Create a worktree for this milestone, isolating work on a separate branch
 2. Read tasks/todo.md for the milestone tasks
 3. Read tasks/lessons.md (may be empty for first milestone)
-
-**If PM Mode is GSD:**
-4. Break milestone tasks into small (2-5 minute) chunks using `superpowers:writing-plans`
-5. Execute each task using `superpowers:subagent-driven-development`:
-   - Each task gets a fresh subagent with focused context
-   - TDD is enforced automatically via `superpowers:test-driven-development`
-     (write failing test → implement → refactor)
-   - Each task gets a two-stage code review before completion
-   - Update tasks/todo.md as you go
-
-**If PM Mode is BMAD:**
-4. Create epics and stories using `/bmad-bmm-create-epics-and-stories`
-5. Plan the sprint using `/bmad-bmm-sprint-planning`
-6. Implement each story using `/bmad-bmm-dev-story`
-7. Code review each story using `/bmad-bmm-code-review`
-
-**Both modes:**
-8. Work autonomously on implementation — don't ask Scott for permission to fix bugs or write code
-9. When building pages with significant UI, use `/impeccable:frontend-design` for high-quality output
-10. For error/edge case hardening on key pages, use `/impeccable:harden`
-11. After all milestone tasks are complete, review test coverage:
+4. **Plan the work** — `/gsd:plan-phase`
+   Feed the milestone tasks into GSD for structured task breakdown and dependency tracking
+5. **Execute the plan** — `/gsd:execute-phase`
+   GSD orchestrates execution. TDD discipline from `superpowers:test-driven-development`
+   applies to every task (write failing test, implement, refactor).
+   Update tasks/todo.md as you go.
+6. Work autonomously on implementation — don't ask Scott for permission to fix bugs or write code
+7. When building pages with significant UI, use `/impeccable:frontend-design` for high-quality output
+8. For error/edge case hardening on key pages, use `/impeccable:harden`
+9. **Review test coverage** — after all milestone tasks are complete:
     - Run the project's test suite to verify all tests pass
-    - If coverage is thin on critical business logic, use `/gsd:add-tests` to generate
-      additional tests for the completed milestone
+    - If coverage is thin on critical business logic, use `/gsd:add-tests`
     - Focus on data model operations and key user flows
-12. Check in at the end of the milestone for review
+10. **Code review** — `superpowers:requesting-code-review`
+    Two-stage review (spec compliance + code quality). Fix Critical issues immediately,
+    Important issues before proceeding.
+11. **Verify** — `/gsd:verify-work` for UAT against acceptance criteria
+12. **Finish branch** — `superpowers:finishing-a-development-branch`
+    Merge the worktree back to main
+13. Check in at the end of the milestone for review
 
 ### Output
 A working first milestone with all tasks completed and verified.
@@ -276,17 +264,17 @@ Demo what was built and get Scott's feedback before proceeding.
    performance, theming, responsive design, and AI slop detection
 2. Run `/impeccable:polish` — final detail pass for alignment, spacing, consistency,
    and interaction states
-3. Run `superpowers:requesting-code-review` — two-stage code review (spec compliance +
-   code quality) of the entire milestone. Fix any Critical issues immediately and
-   Important issues before proceeding
-4. Use `superpowers:finishing-a-development-branch` to merge the worktree back to main
-5. Summarize what was built in Milestone 1
-6. Present audit and code review results alongside the milestone summary
-7. Show the current state of the app (describe what Scott would see)
-8. List any issues or concerns discovered during the build
-9. Get Scott's feedback
-10. Update CLAUDE.md's Current Status section
-11. Discuss next milestone or scope adjustments
+3. Summarize what was built in Milestone 1
+4. Present audit results alongside the milestone summary
+5. Show the current state of the app (describe what Scott would see)
+6. List any issues or concerns discovered during the build
+7. Get Scott's feedback
+8. Update CLAUDE.md's Current Status section
+9. Discuss next milestone or scope adjustments
+
+**Note:** Code review and branch merging happen in Phase 7 (Build) as part of the
+GSD+Superpowers build loop. By the time Phase 8 starts, code is already reviewed
+and merged to main.
 
 ### Output
 - Updated CLAUDE.md with current status

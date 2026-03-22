@@ -4,7 +4,8 @@
 - Last updated: 2026-03-05
 - Version: 2.1
 - Changelog:
-  - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and PM mode conditional (GSD/BMAD) in Phase 4
+  - v2.2: Add Superpowers discipline note to Phase 4 (GSD+Superpowers integration)
+  - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v2.0: Slim to orchestrator — delegate GSD state recovery, keep Scott-specific summary + direction
   - v1.0: Initial workflow
 
@@ -98,18 +99,17 @@ Continue from where the project left off, using the appropriate tools.
 2. Pick up the next task from tasks/todo.md
 3. If Scott redirected to something else, update tasks/todo.md accordingly
 
-**If PM Mode is GSD:**
 4. Use `/gsd:execute-phase` to continue the current phase,
    or `/gsd:plan-phase` if starting a new phase
 5. For quick tasks: Use `/gsd:quick` for ad-hoc work with state tracking
-
-**If PM Mode is BMAD:**
-4. Use `/bmad-bmm-dev-story` to continue the current story
-5. For new work: Use `/bmad-bmm-create-story` to create the next story
-
-**Both modes:**
 6. Follow the project's CLAUDE.md behavior rules
 7. Work through tasks, checking in as appropriate
+
+**Superpowers discipline applies during execution:**
+- TDD: `superpowers:test-driven-development` for all feature and bug fix tasks
+- Worktrees: `superpowers:using-git-worktrees` for feature branches
+- Code review: `superpowers:requesting-code-review` after completing a feature or phase
+- Branch completion: `superpowers:finishing-a-development-branch` when merging back to main
 
 ### Output
 Progress on the project.

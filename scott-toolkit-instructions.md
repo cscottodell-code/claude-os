@@ -344,14 +344,37 @@ Every workflow phase is tagged with one of three behaviors:
 |-----|---------|-----------------|
 | `[STOP]` | Judgment phase — needs your input/approval | Pauses and waits for you |
 | `[AUTO]` | Mechanical phase — output is deterministic | Shows a one-line summary, proceeds immediately |
-| `[DELEGATE]` | Hands off to GSD/BMAD/Superpowers | Shows what was delegated, proceeds |
+| `[DELEGATE]` | Hands off to GSD/Superpowers | Shows what was delegated, proceeds |
 
 No tag defaults to `[STOP]` (safe default). AUTO means "don't wait for permission," not "skip" — if an AUTO phase hits something unexpected, Claude will still pause and ask.
 
-### PM Mode Switching
-Each project declares its PM mode in CLAUDE.md (`PM Mode: GSD` or `PM Mode: BMAD`). Workflows automatically branch to use the right tools:
+### PM Mode: GSD + Superpowers Integration Model
 
-- **GSD mode (default):** `/gsd:plan-phase`, `/gsd:execute-phase`, `/gsd:quick`, `/gsd:verify-work`, `/gsd:add-tests`
-- **BMAD mode:** `/bmad-bmm-create-prd`, `/bmad-bmm-create-epics-and-stories`, `/bmad-bmm-sprint-planning`, `/bmad-bmm-dev-story`, `/bmad-bmm-code-review`
+All projects use **GSD + Superpowers** together. They have distinct roles:
 
-If no PM Mode is specified, workflows default to GSD. The 4 workflows with PM conditionals are: new-project, new-feature, resume-project, and handoff-to-gary. The other 5 workflows (retro, log-error, log-success, toolkit-update, compare-sources) work the same in both modes.
+**GSD = orchestration engine** (what to do, when, and tracking progress):
+- Project initialization: `/gsd:new-project`
+- Phase planning: `/gsd:plan-phase`, `/gsd:discuss-phase`
+- Phase execution: `/gsd:execute-phase`
+- Verification: `/gsd:verify-work`
+- State tracking: `.planning/` directory (STATE.md, ROADMAP.md, phase plans)
+- Quick tasks: `/gsd:quick`, `/gsd:fast`
+- Test coverage: `/gsd:add-tests`
+
+**Superpowers = discipline layer** (how to do it well):
+- Brainstorming: `superpowers:brainstorming` (before creative or architectural work)
+- Git isolation: `superpowers:using-git-worktrees` (feature branches in worktrees)
+- TDD enforcement: `superpowers:test-driven-development` (failing test, implement, refactor)
+- Code review: `superpowers:requesting-code-review`, `superpowers:receiving-code-review`
+- Plan quality: `superpowers:writing-plans` (for non-GSD contexts only, since GSD has its own planning)
+- Branch completion: `superpowers:finishing-a-development-branch` (merge or PR)
+- Verification discipline: `superpowers:verification-before-completion`
+
+**The build loop** (how they work together):
+1. Brainstorm (Superpowers) -> feeds into GSD planning
+2. Worktree (Superpowers) -> isolation for GSD execution
+3. Plan (GSD) -> structured task breakdown
+4. Execute (GSD) -> TDD discipline from Superpowers applies
+5. Review (Superpowers) -> after GSD execution completes
+6. Verify (GSD) -> UAT against acceptance criteria
+7. Finish branch (Superpowers) -> merge or PR

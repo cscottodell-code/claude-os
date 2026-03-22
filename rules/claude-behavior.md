@@ -18,16 +18,15 @@ Three systems handle different concerns. Use the right one for the job.
 ### Workflow Execution
 - Phases tagged [STOP]: pause and wait for Scott's input before continuing
 - Phases tagged [AUTO]: show a one-line summary, then immediately proceed
-- Phases tagged [DELEGATE]: hand off to GSD/BMAD/Superpowers, then proceed
+- Phases tagged [DELEGATE]: hand off to GSD/Superpowers, then proceed
 - No tag = [STOP] (safe default)
 - Never skip a phase — AUTO means "don't wait for permission," not "skip"
 - If an AUTO phase hits an issue requiring Scott's judgment, pause and ask
 
-### Project Management (-> GSD or BMAD, per project CLAUDE.md)
-- Read the project's CLAUDE.md PM Mode field to determine tools
-- **GSD mode (default):** /gsd:plan-phase, /gsd:execute-phase, /gsd:quick, /gsd:debug, /gsd:verify-work, /gsd:add-tests
-- **BMAD mode:** /bmad-bmm-create-prd, /bmad-bmm-create-epics-and-stories, /bmad-bmm-sprint-planning, /bmad-bmm-dev-story, /bmad-bmm-code-review
-- If no PM Mode specified, default to GSD
+### Project Management (-> GSD + Superpowers)
+- **GSD** for all project management: /gsd:plan-phase, /gsd:execute-phase, /gsd:quick, /gsd:debug, /gsd:verify-work, /gsd:add-tests
+- **Superpowers** for execution methodology: TDD, code review, git worktrees, debugging (see Development Methodology above)
+- **Integration pattern:** Superpowers discipline applies DURING GSD execution. When `/gsd:execute-phase` runs, TDD (`superpowers:test-driven-development`) governs how code is written. When execution completes, `superpowers:requesting-code-review` reviews the output. `superpowers:using-git-worktrees` provides isolation before GSD plans are executed. `superpowers:finishing-a-development-branch` handles merge/PR after GSD verification passes.
 
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`
@@ -43,7 +42,6 @@ Three systems handle different concerns. Use the right one for the job.
   - Any moment worth celebrating, even small wins
 - **MUST invoke `/scott:retro`** after:
   - Completing a GSD phase or milestone
-  - Completing a BMAD sprint or story
   - Finishing a multi-session project
   - The pre-completion hook will remind you, but don't wait for it
 - **MUST invoke `/scott:resume`** when:

@@ -45,8 +45,7 @@ Review the entire codebase for quality, consistency, and completeness.
    Fix any Critical issues immediately and Important issues before proceeding.
 10. **Test coverage:** Review test suite completeness. If critical business logic
     lacks tests, use `/gsd:add-tests` to fill gaps before handoff — Gary shouldn't
-    have to write tests for prototype logic. (Note: `/gsd:add-tests` is a utility
-    that works in both GSD and BMAD modes.)
+    have to write tests for prototype logic.
 
 ### Output
 A list of issues found and fixed (from both manual checks and Superpowers review).

@@ -23,7 +23,7 @@
 
 | Keywords | Project | Org | Path |
 |----------|---------|-----|------|
-| bmad, agile framework | BMAD Method | Global | ~/Sites/Global/BMAD-METHOD/ |
+| bmad, agile framework | BMAD Method (archived) | Global | ~/Sites/Global/BMAD-METHOD/ |
 | surreal data, db storage | SurrealDB Data | Global | ~/Sites/Global/surreal-data/ |
 
 ## Archived (~/Sites/Global/inactive/)

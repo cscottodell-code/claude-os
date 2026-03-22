@@ -4,8 +4,9 @@
 - Last updated: 2026-03-14
 - Version: 2.2
 - Changelog:
+  - v2.3: Clarify GSD+Superpowers build loop with explicit linear handoff sequence
   - v2.2: Add clarifying questions step to Phase 1 (from 2026-03-14 source review)
-  - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and PM mode conditional (GSD/BMAD) in Phase 4
+  - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v2.0: Slim to orchestrator — delegate build to GSD + Superpowers, keep discovery phases
   - v1.3: Add post-build test coverage review with /gsd:add-tests (Phase 4)
   - v1.2: Integrate Superpowers plugin — git worktrees, TDD, subagent-driven development, two-stage code review, and branch merging into Build phase (Phase 4)
@@ -101,32 +102,28 @@ Scott approves the mini-PRD.
 ### What this phase does
 Implement the feature using GSD for execution and Superpowers for methodology.
 
-### Steps
+### GSD + Superpowers Build Loop
 
-**Both modes:**
-1. Create a git worktree for this feature using `superpowers:using-git-worktrees`
+Follow this sequence in order. Each step hands off to the next.
 
-**If PM Mode is GSD:**
-2. Plan the build using `/gsd:plan-phase` — feed it the mini-PRD from Phase 3
-3. Execute the plan using `/gsd:execute-phase` — this handles:
-   - Task breakdown and dependency tracking
-   - TDD is enforced via `superpowers:test-driven-development`
-   - Each task gets atomic commits
-4. After execution, verify with `/gsd:verify-work`
-5. If test coverage is thin, use `/gsd:add-tests` for critical logic
-
-**If PM Mode is BMAD:**
-2. Create epics and stories using `/bmad-bmm-create-epics-and-stories`
-3. Implement each story using `/bmad-bmm-dev-story`
-4. Code review each story using `/bmad-bmm-code-review`
-
-**Both modes:**
-6. Design review (if significant UI changes):
+1. **Worktree** (Superpowers) — `superpowers:using-git-worktrees`
+   Create a feature branch in a worktree for isolation
+2. **Plan** (GSD) — `/gsd:plan-phase`
+   Feed the mini-PRD from Phase 3 into GSD for structured task breakdown
+3. **Execute** (GSD) — `/gsd:execute-phase`
+   GSD orchestrates execution. TDD discipline from `superpowers:test-driven-development`
+   applies to every task (write failing test, implement, refactor). Atomic commits per task.
+4. **Code review** (Superpowers) — `superpowers:requesting-code-review`
+   Two-stage review after GSD execution completes. Fix Critical issues immediately,
+   Important issues before proceeding.
+5. **Verify** (GSD) — `/gsd:verify-work`
+   UAT against the mini-PRD's acceptance criteria
+6. **Test gaps** — if coverage is thin on critical logic, use `/gsd:add-tests`
+7. **Design review** (if significant UI changes):
    - Run `/impeccable:critique` for visual quality feedback
    - Run `/impeccable:polish` as a final detail pass
-7. Code review using `superpowers:requesting-code-review`
-   — fix Critical issues immediately, Important issues before proceeding
-8. Merge using `superpowers:finishing-a-development-branch`
+8. **Finish branch** (Superpowers) — `superpowers:finishing-a-development-branch`
+   Merge the worktree back to main or create a PR
 
 ### Output
 Working feature, verified, tested, and code-reviewed.
