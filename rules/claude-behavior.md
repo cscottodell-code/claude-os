@@ -31,6 +31,7 @@ Three systems handle different concerns. Use the right one for the job.
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`
   ("Next time, do X instead of Y because Z")
+- Update `tasks/lessons.md` after EVERY completed phase, not just debug sessions. Empty lessons.md at the end of a multi-phase build is a failure mode. Decisions, gotchas, and patterns discovered during the phase belong there.
 - **MUST invoke `/scott:log-error`** after:
   - Claude makes a prompt, context, or harness mistake (writes to toolkit errors/)
   - A skill or hook misfires or produces wrong output
@@ -88,6 +89,8 @@ Three systems handle different concerns. Use the right one for the job.
   3. tasks/todo.md updated (completed items checked off)
   4. The feature actually works (demonstrate it)
 - Ask: "Would Gary be comfortable productionizing this?"
+- After code review fixes, ALWAYS run a second verification pass before declaring complete. One review pass is never enough for production code. The first pass catches surface patterns; the second catches schema alignment, business logic edge cases, and end-to-end user story gaps.
+- "Tests pass" does NOT mean "code is correct." Tests verify mock behavior. Schema compliance, race conditions, and timezone bugs require end-to-end walkthrough review.
 - Task contracts: for non-trivial tasks, define completion criteria upfront:
   - What tests must pass (agent cannot edit these tests)
   - What visual/behavioral verification is needed
