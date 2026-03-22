@@ -1,5 +1,15 @@
 # Toolkit Changelog
 
+## v2.12.0 - 2026-03-22
+- **`rules/claude-behavior.md` (Verification):** Added mandatory second verification pass after code review fixes. "One pass is never enough for production code."
+- **`rules/claude-behavior.md` (Verification):** Added "tests pass does NOT mean code is correct" rule. Tests verify mocks; schema compliance and race conditions require end-to-end walkthroughs.
+- **`rules/claude-behavior.md` (Context Engineering):** Added "update lessons.md after EVERY phase" rule. Empty lessons.md at end of multi-phase build is a failure mode.
+- **`~/.claude/get-shit-done/workflows/execute-phase.md` (code_review_gate):** NEW mandatory step between verify_phase_goal and update_roadmap. Dispatches superpowers:requesting-code-review with SurrealDB adherence prompt. Requires two-pass review (fix, then re-review) before phase can be marked complete.
+- **Superpowers `code-reviewer.md` (SurrealDB Schema Audit):** NEW checklist section for field-by-field SCHEMAFULL table comparison. Catches silent field drops in SurrealDB v3.
+- **Superpowers `code-reviewer.md` (End-to-End User Story):** NEW checklist section requiring 3-5 user journey walkthroughs checking for race conditions, cascade failures, and timezone bugs.
+- **Retro:** `retros/2026-03-bresco-phases-1-6.md` and retro index updated.
+- Triggered by: Bresco Phases 1-6 retrospective. Two-pass code review caught 21 Critical + Important issues that a single pass missed. SurrealDB SCHEMAFULL silent field drops were the #1 finding.
+
 ## v2.11.0 - 2026-03-14
 - **`hooks/auto-format.sh` (NEW):** PostToolUse hook runs Prettier on Write/Edit for .js/.ts/.vue/.css/.json files. Checks for project Prettier config, uses local binary, notifies Claude when formatting changes occur.
 - **`hooks/pre-completion-checklist.sh` (REWRITE):** Added resume file and lessons file checks. Stronger visual formatting with bordered box and item count. Still warns only.

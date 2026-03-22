@@ -1,7 +1,7 @@
 # Retrospective Index
 
 ## Metadata
-- Last updated: 2026-03-13
+- Last updated: 2026-03-22
 - Version: 1.0
 
 <!--
@@ -18,6 +18,17 @@ After every retro, the key lessons are added here as a summary entry.
 Claude Code reads this file to avoid repeating past mistakes across projects.
 
 ## Retros
+
+### 2026-03 — Bresco Phases 1-6 (Pre-Pilot)
+- **Lesson:** Run code review at the end of EVERY phase, not just when reminded. Skipping it let 9 Critical issues accumulate. Make it a workflow gate, not a honor-system rule.
+- **Lesson:** SurrealDB v3 SCHEMAFULL tables silently drop undefined fields. Every code review must do field-by-field schema/code comparison. Grep-level audits miss this.
+- **Lesson:** One review pass is never enough for production code. First pass catches patterns, second pass catches schema alignment and business logic edge cases.
+- **Lesson:** "Tests pass" does not mean "code is correct." Tests verify mock behavior. Schema compliance, race conditions, and timezone bugs require end-to-end user story walkthroughs.
+- **Pattern:** Webhook cascade (idempotency + records + fire-and-forget enrollment + notification) reusable for any webhook.
+- **Pattern:** SurrealDB computed tables (`TYPE NORMAL AS SELECT`) for derived metrics. No crons, no caches, always fresh.
+- **Pattern:** Content-based mock routing (`q.includes('table_name')`) survives refactors. Positional mocks break.
+- **Pattern:** AI call caching (TTL + score-delta) prevents AI spam in polling endpoints.
+- **Toolkit update:** Proposed adding mandatory code review step to execute-phase workflow and SurrealDB schema audit checklist to code-reviewer template.
 
 ### 2026-03 — Eleanor M1 Foundation
 - **Lesson:** Verify API key model access before committing to a model in the architecture. Sonnet 404s burned time mid-build.
