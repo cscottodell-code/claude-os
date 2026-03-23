@@ -108,8 +108,12 @@ const [people] = await db.query<[Person[]]>('SELECT * FROM people');
 import { surql } from 'surrealdb';
 await db.query(surql`SELECT * FROM messages WHERE conversation = ${convId}`);
 
-// Query builder for updates (NOT manual SET clause strings)
+// Query builder for updates — Node/Nuxt only (fails under Bun, see Bun section)
 await db.update(`people:${slug}`).merge({ name, relationship, updated_at: new Date() });
+
+// Bun-safe update (works everywhere)
+await db.query(`UPDATE type::record($id) SET name = $name, updated_at = time::now()`,
+  { id: `people:${slug}`, name });
 
 // Live queries
 import { Table } from 'surrealdb';
@@ -125,13 +129,46 @@ Auth: Basic (root/root for local dev)
 Body: SELECT * FROM contacts WHERE status = "new" LIMIT 10;
 ```
 
-## Gotchas (top 5)
+## Bun Runtime: SDK Method Restrictions (CRITICAL)
+
+**`db.create()` and `db.update().merge()` FAIL under Bun.** The Bun-native SDK transport (pure WebSocket) does not auto-coerce strings to RecordId objects like the Node/WASM transport does. SurrealDB v3's strict typing rejects string values where `record<table>` is expected.
+
+**This affects:** Eleanor's Hono API, any future Bun+SurrealDB project.
+**This does NOT affect:** Nuxt/Node projects (d2d-payroll, spotio-cf, life-os, advosy-sales).
+
+```typescript
+// FAILS under Bun:
+await db.create('messages', { conversation: convId, role: 'user', content: msg })
+await db.create('people:scott', { name: 'Scott' })
+await db.update('people:scott').merge({ nickname: 'Scotty' })
+
+// WORKS under Bun — use db.query() with type::record():
+await db.query(`CREATE messages SET conversation = type::record($conv), role = $role, content = $content`,
+  { conv: convId, role: 'user', content: msg })
+
+await db.query(`CREATE type::record($id) SET name = $name`,
+  { id: 'people:scott', name: 'Scott' })
+
+await db.query(`UPDATE type::record($id) SET nickname = $nick`,
+  { id: 'people:scott', nick: 'Scotty' })
+```
+
+**SELECT queries with string params still work** for WHERE comparison (the DB compares, not coerces):
+```typescript
+// This is fine under Bun:
+await db.query<[Msg[]]>('SELECT * FROM messages WHERE conversation = $conv', { conv: convId })
+```
+
+**Rule:** In Bun projects, use `db.query()` for all CREATE/UPDATE operations. Reserve `db.create()`/`db.update().merge()` for Node/Nuxt projects only. `db.query<[Type[]]>()` with generics works everywhere.
+
+## Gotchas (top 6)
 
 1. **RecordId auto-decoded in Eleanor/advosy-sales.** db.ts has a `valueDecodeVisitor`. NEVER write `String(id)` or `.replace('table:', '')`. For other projects without the visitor, use `String(id)`.
 2. **JS null is not SurrealQL NONE.** Omit `option<>` fields entirely.
 3. **COMPUTED fields cannot be nested.** No `name.full`, flatten to `full_name`.
 4. **Live queries require `ws://`** not `http://`. HTTP silently fails.
 5. **UPDATE returns `[]`** if record missing. Use UPSERT for create-or-update.
+6. **db.create()/db.update().merge() fail under Bun.** See "Bun Runtime" section above.
 
 ## Anti-Patterns (NEVER do these in Eleanor or advosy-sales)
 
@@ -140,7 +177,7 @@ Body: SELECT * FROM contacts WHERE status = "new" LIMIT 10;
 | `as any[]` on query results | `db.query<[Type[]]>(...)` with generics |
 | `new StringRecordId(String(id))` | `surql` template tag |
 | `new Date(row.created_at)` | Already a Date (useNativeDates) |
-| Manual SET clause builders | `db.update(id).merge(data)` |
+| Manual SET clause builders | `db.update(id).merge(data)` (Node only) or `db.query('UPDATE type::record($id) SET ...', {id, ...})` (Bun-safe) |
 | `string::lowercase(name)` in SurrealQL | `name.lowercase()` method chaining |
 | `SELECT * FROM table` when only 2 fields needed | `SELECT *.{ field1, field2 } FROM table` |
 | Multiple sequential queries for one record + relations | Graph traversal or multi-statement with LET |
