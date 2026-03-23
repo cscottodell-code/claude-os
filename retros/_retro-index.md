@@ -38,6 +38,15 @@ Claude Code reads this file to avoid repeating past mistakes across projects.
 - **Pattern:** Intent classifier + format directives cleanly separates detection from response formatting.
 - **Pattern:** StringRecordId from SDK instead of type::record() in parameterized SurrealDB queries.
 
+### 2026-03 — Eleanor M4 Phase 1 (Hono on Bun)
+- **Lesson:** When migrating runtimes (Node to Bun), research must ask "do SDK methods behave differently under the target runtime?" The SurrealDB SDK's `db.create()` and `db.update().merge()` fail under Bun's WebSocket transport but work under Node's WASM transport. All agent layers (researcher, planner, checker, executor) missed this.
+- **Lesson:** Mocked tests can't catch transport-layer issues. Migration phases need at least one integration test per route group hitting a real DB instance.
+- **Lesson:** Human checkpoints in migration plans catch real bugs that automated tests miss. Don't skip them.
+- **Pattern:** Hono RPC type chain (`.route()` + `export type AppType`) for end-to-end type safety API to frontend.
+- **Pattern:** `type::record($param)` in `db.query()` for all SurrealDB writes under Bun runtime.
+- **Pattern:** Zod-aware error envelope with `@hono/zod-validator` custom hook for field-level validation errors.
+- **Toolkit update:** Added Bun runtime section to scott-surrealdb skill. Error-002 and success-005 logged.
+
 ### 2026-03 — Eleanor M2 Intelligence
 - **Lesson:** Commit all work at the end of each story. Letting changes accumulate across sessions makes commit history messy and risks losing work.
 - **Lesson:** Update CLAUDE.md status after each story/milestone. Stale status wastes orientation time in new sessions.
