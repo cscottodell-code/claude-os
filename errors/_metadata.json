@@ -1,1 +1,1 @@
-{"next_id":8,"description":"Counter for error log IDs. Incremented each time /scott:log-error creates a new entry."}
+{"next_id":8,"description":"Counter for error log IDs. Incremented by /scott:phase-closeout reflect phase."}

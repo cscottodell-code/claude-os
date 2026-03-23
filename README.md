@@ -33,12 +33,10 @@ All workflows are invoked via slash commands:
 | `/scott:new-project` | Start a new project (8-phase guided workflow) |
 | `/scott:new-feature` | Add a feature to an existing project |
 | `/scott:resume` | Pick up where you left off on a project |
-| `/scott:retro` | Run a retrospective after a milestone |
+| `/scott:phase-closeout` | Mandatory post-execution: verify, review, reflect, gate (hook-enforced) |
 | `/scott:handoff` | Prepare a project for Gary to productionize |
 | `/scott:update-toolkit` | Update the toolkit itself |
-| `/scott:log-success` | Capture a win while context is fresh |
 | `/scott:compare-sources` | Compare context engineering sources against your toolkit |
-| `/scott:log-error` | Capture a failure while context is fresh |
 
 ## Three-System Architecture
 
@@ -132,9 +130,9 @@ git pull                              # Get latest from GitHub
 ```
 Start project (use toolkit)
   -> Build with Claude Code + GSD + Superpowers
-  -> Things go well or wrong
-  -> Run /scott:retro
-  -> Capture lessons
+  -> Phase completes
+  -> Run /scott:phase-closeout (verify, review, reflect)
+  -> Error logs + success logs + RETRO.md + lessons.md
   -> /scott:toolkit-update to apply improvements
   -> Push to GitHub
   -> Next project starts smarter

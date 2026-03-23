@@ -3,10 +3,10 @@
 # Detects git commits and suggests appropriate skills based on context.
 #
 # Triggers:
-#   - Commit message contains "fix", "bug", "debug", "error" → /scott:log-error
-#   - Commit message contains "complete", "finish", "done" on a milestone/phase → /scott:retro
-#   - Any successful commit → consider /scott:log-success
-#   - GSD phase completion detected → /scott:retro
+#   - Commit message contains "fix", "bug", "debug", "error" → check tasks/lessons.md
+#   - Commit message contains "complete", "finish", "done" on a milestone/phase → /scott:phase-closeout
+#   - GSD phase completion detected → /scott:phase-closeout
+#   - All error/success/retro logging handled by /scott:phase-closeout
 #
 # Reads tool_input from stdin (JSON). Only acts on git commit commands.
 
@@ -34,12 +34,12 @@ triggers=""
 
 # --- Trigger: Bug fix → ensure lesson was captured ---
 if echo "$msg_lower" | grep -qE '\b(fix|bug|debug|error|crash|broke|broken|hotfix|patch)\b'; then
-  triggers="${triggers}\n  → Bug fix committed. If this was a code bug, verify scott-debug Phase 5 captured the lesson in tasks/lessons.md. If this was a Claude/toolkit mistake, invoke /scott:log-error."
+  triggers="${triggers}\n  → Bug fix committed. If this was a code bug, verify scott-debug Phase 5 captured the lesson in tasks/lessons.md. Claude/toolkit mistakes are captured during /scott:phase-closeout."
 fi
 
 # --- Trigger: Milestone/phase completion → retro ---
 if echo "$msg_lower" | grep -qE '\b(milestone|phase|complete|completed|finish|finished|ship|shipped|release|v[0-9])\b'; then
-  triggers="${triggers}\n  → Milestone/phase completion detected. MUST invoke /scott:retro."
+  triggers="${triggers}\n  → Milestone/phase completion detected. MUST invoke /scott:phase-closeout."
 fi
 
 # --- Trigger: GSD phase directory exists with VERIFICATION.md → phase done ---
@@ -47,14 +47,14 @@ if [ -d ".planning" ]; then
   # Check if any phase has a fresh VERIFICATION.md (modified in last 10 min)
   recent_verification=$(find .planning -name "VERIFICATION.md" -mmin -10 2>/dev/null | head -1)
   if [ -n "$recent_verification" ]; then
-    triggers="${triggers}\n  → GSD phase verification complete. MUST invoke /scott:retro."
+    triggers="${triggers}\n  → GSD phase verification complete. MUST invoke /scott:phase-closeout."
   fi
 fi
 
 # --- Trigger: Any commit → consider log-success ---
 if [ -z "$triggers" ]; then
   # Only suggest log-success if nothing else triggered (avoid noise)
-  triggers="${triggers}\n  → Commit landed. If this was a notable win, invoke /scott:log-success."
+  triggers="${triggers}\n  → Commit landed. Notable wins are captured during /scott:phase-closeout."
 fi
 
 # Output triggers

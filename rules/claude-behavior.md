@@ -1,5 +1,6 @@
 # Claude Code Behavior Rules
 
+Last updated: 2026-03-22
 Loaded automatically for all projects via the rules system.
 
 Three systems handle different concerns. Use the right one for the job.
@@ -26,25 +27,25 @@ Three systems handle different concerns. Use the right one for the job.
 ### Project Management (-> GSD + Superpowers)
 - **GSD** for all project management: /gsd:plan-phase, /gsd:execute-phase, /gsd:quick, /gsd:debug, /gsd:verify-work, /gsd:add-tests
 - **Superpowers** for execution methodology: TDD, code review, git worktrees, debugging (see Development Methodology above)
-- **Integration pattern:** Superpowers discipline applies DURING GSD execution. When `/gsd:execute-phase` runs, TDD (`superpowers:test-driven-development`) governs how code is written. When execution completes, `superpowers:requesting-code-review` reviews the output. `superpowers:using-git-worktrees` provides isolation before GSD plans are executed. `superpowers:finishing-a-development-branch` handles merge/PR after GSD verification passes.
+- **Integration pattern:** Superpowers discipline applies DURING GSD execution. When `/gsd:execute-phase` runs, TDD (`superpowers:test-driven-development`) governs how code is written. `superpowers:using-git-worktrees` provides isolation before GSD plans are executed. `superpowers:finishing-a-development-branch` handles merge/PR after GSD verification passes.
+- **Phase closeout (MANDATORY, hook-enforced gate):**
+  After every GSD execution phase, invoke `/scott:phase-closeout`. This single skill runs:
+  1. **Verify** — test suite must pass
+  2. **Review** — code review + fix cycle until clean
+  3. **Reflect** — ONE conversation producing error logs, success logs, RETRO.md, and lessons.md
+  4. **Gate** — writes `.post-execution-complete` marker
+  The `guard-phase-completion.sh` hook blocks `phase complete` without the marker.
+  This cannot be skipped. It cannot be deferred. It replaces the old 5-step sequence that was skipped 3 times.
 
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`
   ("Next time, do X instead of Y because Z")
 - Update `tasks/lessons.md` after EVERY completed phase, not just debug sessions. Empty lessons.md at the end of a multi-phase build is a failure mode. Decisions, gotchas, and patterns discovered during the phase belong there.
-- **MUST invoke `/scott:log-error`** after:
-  - Claude makes a prompt, context, or harness mistake (writes to toolkit errors/)
-  - A skill or hook misfires or produces wrong output
-  - NOT for code bugs — use `scott-debug` for those (it captures lessons in tasks/lessons.md)
-  - The distinction: scott-debug = code is broken, scott-log-error = Claude/toolkit is broken
-- **MUST invoke `/scott:log-success`** after:
-  - Scott expresses satisfaction ("nice", "perfect", "love it", "that's great", etc.)
-  - Completing a feature that works on the first try
-  - Any moment worth celebrating, even small wins
-- **MUST invoke `/scott:retro`** after:
-  - Completing a GSD phase or milestone
-  - Finishing a multi-session project
-  - The pre-completion hook will remind you, but don't wait for it
+- **Error/success/retro logging** is handled by `/scott:phase-closeout` at GSD phase completion.
+  For mid-session captures outside of GSD phases, use the same patterns:
+  - Mistakes: create error log files in `~/Sites/Global/scott-toolkit/errors/`
+  - Wins: create success log files in `~/Sites/Global/scott-toolkit/successes/`
+  - The distinction: scott-debug = code is broken, error logs = Claude/toolkit is broken
 - **MUST invoke `/scott:resume`** when:
   - Session-start hook says "AUTO-RESUME" (non-negotiable)
   - Scott says "let's continue", "where were we", "pick up where we left off"

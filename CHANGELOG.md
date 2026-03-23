@@ -1,5 +1,16 @@
 # Toolkit Changelog
 
+## v2.14.0 - 2026-03-22
+- **NEW: `/scott:phase-closeout`** — single unified skill replacing separate log-error, log-success, and retro skills for GSD post-execution. Runs verification, code review, and one reflection interview. Produces error logs, success logs, RETRO.md, and lessons.md in one conversation.
+- **NEW: `guard-phase-completion.sh` hook** — PreToolUse hook that blocks `gsd-tools phase complete` unless `.post-execution-complete` marker file exists. The marker is written by phase-closeout as its final step. This is physical enforcement, not instructions.
+- **`execute-phase.md`:** Replaced the `code_review_gate` step (skipped 3 times) and the 5-step `post_execution_sequence` with a single `/scott:phase-closeout` invocation. Hook-enforced gate.
+- **`rules/claude-behavior.md`:** Updated Project Management section to reference phase-closeout. Consolidated old MUST rules for log-error/log-success/retro into the unified skill.
+- **REMOVED: `scott-log-error`, `scott-log-success`, `scott-retro`** as separate skills. Their functionality is now part of phase-closeout. Old workflow files retained in workflows/ for reference.
+- **`setup.sh`:** Added phase-closeout deployment, removed old 3 skill deployments, added hook to verification list.
+- **`settings.json`:** Registered guard-phase-completion.sh as PreToolUse hook on Bash.
+- **`README.md`:** Updated command table and learning loop diagram.
+- Triggered by: Bresco Pass 3 audit session. The old code_review_gate was skipped 3 times (errors #003, #005). Rules alone don't enforce. Hooks do.
+
 ## v2.13.0 - 2026-03-22
 - **BMAD removal (all files):** Removed all BMAD references across toolkit. GSD + Superpowers is now the only PM methodology. BMAD-METHOD folder marked as archived.
 - **GSD + Superpowers integration model:** Established clear division of labor. GSD = orchestration (plan, execute, verify). Superpowers = discipline (TDD, code review, worktrees, brainstorming). Added 7-step build loop to instructions, templates, and all workflows.

@@ -68,7 +68,7 @@ skill_reminders=""
 if git rev-parse --is-inside-work-tree &>/dev/null; then
   recent_fixes=$(git log --oneline --since="2 hours ago" --grep="fix\|bug\|debug\|error\|crash\|hotfix" -i 2>/dev/null | head -3)
   if [ -n "$recent_fixes" ]; then
-    skill_reminders="${skill_reminders}\n  [ ] Bug fix commits found — code bugs: check tasks/lessons.md for lesson. Claude/toolkit mistakes: invoke /scott:log-error"
+    skill_reminders="${skill_reminders}\n  [ ] Bug fix commits found — code bugs: check tasks/lessons.md for lesson. Claude/toolkit mistakes: capture in /scott:phase-closeout reflect phase"
     count=$((count + 1))
   fi
 

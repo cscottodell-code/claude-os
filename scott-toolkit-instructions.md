@@ -27,15 +27,13 @@ These are your workflows. Type them and Claude walks you through each one.
 | `/scott:new-project` | Starting something from scratch |
 | `/scott:new-feature` | Adding a feature to an existing project |
 | `/scott:resume-project` | Picking up a project after time away |
-| `/scott:retro` | After finishing a milestone — capture lessons |
+| `/scott:phase-closeout` | After a GSD phase — verify, review, reflect (hook-enforced) |
 | `/scott:handoff` | When a prototype is ready for Gary |
 
 ### Learning & Improvement
 
 | Command | When to use it |
 |---------|---------------|
-| `/scott:log-success` | Something went really well — capture it |
-| `/scott:log-error` | Something went wrong — capture it |
 | `/scott:source-review` | Compare context engineering sources against your toolkit |
 | `/scott:toolkit-update` | When you want to improve the toolkit itself |
 | Toolkit Spa Day | Monthly: consolidate rules/skills, review instinct candidates, remove contradictions |
@@ -385,15 +383,15 @@ Claude suggests the next skill automatically after completing each one:
 
 | Just finished | What Claude suggests next |
 |--------------|--------------------------|
-| `/scott:new-project` (build) | Code review -> Retro -> Log success |
-| `/scott:new-feature` (build) | Code review -> Finish branch |
-| `/scott:debug` (fix applied) | Log success if clean fix, resume interrupted work |
-| `/scott:retro` | Update toolkit if improvements found |
-| `/scott:handoff` | Retro (project wrap-up) |
-| `/gsd:execute-phase` | Code review -> Verify work |
-| `/gsd:verify-work` (passes) | Finish branch -> Log success |
+| `/scott:new-project` (build) | Phase closeout -> Finish branch |
+| `/scott:new-feature` (build) | Phase closeout -> Finish branch |
+| `/scott:debug` (fix applied) | Resume interrupted work |
+| `/scott:phase-closeout` | Update toolkit if improvements found |
+| `/scott:handoff` | Phase closeout (project wrap-up) |
+| `/gsd:execute-phase` | Phase closeout (auto-invoked, hook-enforced) |
+| `/gsd:verify-work` (passes) | Finish branch |
 | Code review passes | Finish branch |
-| Branch merged | Log success, retro if milestone complete |
+| Branch merged | Phase closeout if milestone complete |
 | Session wrapping up | Pause |
 
 Claude also invokes skills proactively when it detects triggers (bugs, satisfaction, errors, session end) without being asked.

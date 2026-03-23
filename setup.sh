@@ -125,11 +125,11 @@ deploy_workflow_skill "new-feature.md" "scott-new-feature" \
   Build (delegated to GSD + Superpowers), and Update CLAUDE.md." \
   "Add a feature to the current project with guided workflow"
 
-deploy_workflow_skill "retro.md" "scott-retro" \
-  "Run a project retrospective using the scott-toolkit workflow.
-  Walks through 5 phases: Gather Context, Guided Reflection, Generate Retro
-  Document, Identify Toolkit Updates, and Apply Updates." \
-  "Run a retrospective on the current project"
+deploy_workflow_skill "phase-closeout.md" "scott-phase-closeout" \
+  "Mandatory post-execution closeout for GSD phases. Runs verification, code review,
+  and a single reflection interview that produces error logs, success logs, RETRO.md,
+  and lessons.md. Hook-enforced gate — phase cannot be marked complete without it." \
+  "Run the mandatory phase closeout (verify, review, reflect, gate)"
 
 deploy_workflow_skill "handoff-to-gary.md" "scott-handoff" \
   "Prepare a project for handoff to Gary (production developer) using the
@@ -142,18 +142,6 @@ deploy_workflow_skill "toolkit-update.md" "scott-update-toolkit" \
   Walks through 6 phases: Review Trigger, Identify Files, Draft Changes,
   Update CHANGELOG, Update Instructions & PDF, and Commit & Push." \
   "Update the scott-toolkit with new lessons or patterns"
-
-deploy_workflow_skill "log-success.md" "scott-log-success" \
-  "Log a success or win from the current session while context is fresh.
-  Walks through 4 phases: Review Context, Interview Scott, Trace the Trigger,
-  and Log It." \
-  "Capture a win or successful pattern for future reference"
-
-deploy_workflow_skill "log-error.md" "scott-log-error" \
-  "Log an error or mistake from the current session while context is fresh.
-  Walks through 4 phases: Review Context, Interview Scott, Trace the Trigger,
-  and Log It." \
-  "Capture a mistake or failure for future reference"
 
 deploy_workflow_skill "compare-sources.md" "scott-compare-sources" \
   "Compare context engineering sources against the current toolkit configuration.
@@ -189,7 +177,7 @@ echo "4. Verifying deployment..."
 ERRORS=0
 
 # Check hooks
-for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh session-start.sh pre-compact.sh session-end.sh auto-format.sh context-reminders.sh offload-large-output.sh extract-instincts.sh pre-completion-checklist.sh post-commit-skill-triggers.sh; do
+for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh guard-phase-completion.sh session-start.sh pre-compact.sh session-end.sh auto-format.sh context-reminders.sh offload-large-output.sh extract-instincts.sh pre-completion-checklist.sh post-commit-skill-triggers.sh; do
   if [ -L "$HOOKS_DIR/$hook" ] && [ -e "$HOOKS_DIR/$hook" ]; then
     : # OK
   else
@@ -209,7 +197,7 @@ for rule in claude-behavior.md code-style.md; do
 done
 
 # Check skills
-for skill in scott-new-project scott-resume scott-new-feature scott-retro scott-handoff scott-update-toolkit scott-log-success scott-log-error scott-compare-sources scott-bypass; do
+for skill in scott-new-project scott-resume scott-new-feature scott-phase-closeout scott-handoff scott-update-toolkit scott-compare-sources scott-bypass; do
   if [ -f "$SKILLS_DIR/$skill/SKILL.md" ]; then
     : # OK
   else
