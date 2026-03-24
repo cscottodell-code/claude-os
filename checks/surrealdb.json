@@ -1,0 +1,96 @@
+{
+  "technology": "surrealdb",
+  "golden_version": "v3",
+  "sdk": "surrealdb@2.0.1",
+  "dependencies": [],
+  "context7_id": "/surrealdb/docs.surrealdb.com",
+  "file_patterns": ["*.surql", "**/db/**", "**/schemas/**"],
+  "content_patterns": ["db\\.query", "db\\.create", "db\\.select", "db\\.update", "db\\.delete", "surrealdb"],
+  "tools": [
+    { "type": "cli", "command": "surreal validate", "for": "schema validation" },
+    { "type": "mcp", "server": "surrealdb", "for": "live queries" },
+    { "type": "context7", "id": "/surrealdb/docs.surrealdb.com", "for": "doc reference" }
+  ],
+  "checks": {
+    "static": [
+      {
+        "id": "surreal-no-type-thing",
+        "pattern": "type::thing\\(",
+        "message": "Use type::record() in v3. type::thing() was renamed.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-future-type",
+        "pattern": "<future>",
+        "message": "<future> removed in v3. Use COMPUTED fields instead.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-define-scope",
+        "pattern": "DEFINE SCOPE",
+        "message": "DEFINE SCOPE replaced by DEFINE ACCESS in v3.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-type-is-colon",
+        "pattern": "type::is::",
+        "message": "type::is:: renamed to type::is_ in v3.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-type-from-colon",
+        "pattern": "type::from::",
+        "message": "type::from:: renamed to type::from_ in v3.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-rand-guid",
+        "pattern": "rand::guid\\(",
+        "message": "rand::guid() renamed to rand::id() in v3.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-bare-dollar-assign",
+        "pattern": "^\\$\\w+\\s*=(?!=)",
+        "message": "Bare $var = value broken in v3. Use LET $var = value.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-db-create-bun",
+        "pattern": "db\\.create\\(",
+        "condition": "bun_project",
+        "message": "db.create() fails under Bun runtime. Use db.query() with type::record() instead.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-db-update-merge-bun",
+        "pattern": "db\\.update\\(.*\\.merge\\(",
+        "condition": "bun_project",
+        "message": "db.update().merge() fails under Bun runtime. Use db.query() instead.",
+        "severity": "error"
+      },
+      {
+        "id": "surreal-no-string-record-id",
+        "pattern": "new StringRecordId",
+        "message": "StringRecordId is deprecated. Use surql template tag instead.",
+        "severity": "warning"
+      },
+      {
+        "id": "surreal-no-as-any-array",
+        "pattern": "as any\\[\\]",
+        "message": "Use db.query<[Type[]]>() with proper generics instead of 'as any[]'.",
+        "severity": "warning"
+      }
+    ],
+    "live": [
+      {
+        "id": "surreal-schema-apply",
+        "description": "Apply all schemas in dependency order to temp namespace"
+      },
+      {
+        "id": "surreal-seed-and-query",
+        "description": "Seed realistic data and test every db.query() pattern from codebase"
+      }
+    ]
+  }
+}

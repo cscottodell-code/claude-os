@@ -1,0 +1,49 @@
+{
+  "technology": "nuxt",
+  "golden_version": "4",
+  "sdk": "@nuxt/ui@4",
+  "dependencies": ["tailwind"],
+  "context7_id": "/llmstxt/ui4_nuxt_llms_txt",
+  "file_patterns": ["*.vue", "nuxt.config.ts", "app.config.ts", "app.vue"],
+  "content_patterns": ["defineNuxtConfig", "useNuxt", "NuxtPage", "NuxtLink"],
+  "tools": [
+    { "type": "cli", "command": "nuxi typecheck", "for": "type checking" },
+    { "type": "context7", "id": "/llmstxt/ui4_nuxt_llms_txt", "for": "Nuxt UI v4 docs" }
+  ],
+  "checks": {
+    "static": [
+      {
+        "id": "nuxt-no-ui-toggle",
+        "pattern": "<UToggle",
+        "message": "UToggle renamed to USwitch in Nuxt UI v4.",
+        "severity": "error"
+      },
+      {
+        "id": "nuxt-no-options-prop",
+        "pattern": ":options=",
+        "message": "USelect uses :items not :options in Nuxt UI v4.",
+        "severity": "warning",
+        "file_filter": "*.vue"
+      },
+      {
+        "id": "nuxt-no-ui-pro-import",
+        "pattern": "@nuxt/ui-pro",
+        "message": "Nuxt UI v4 merged Pro into @nuxt/ui. Remove @nuxt/ui-pro.",
+        "severity": "error"
+      },
+      {
+        "id": "nuxt-no-nullify-modifier",
+        "pattern": "v-model\\.nullify",
+        "message": "v-model.nullify renamed to v-model.nullable in Nuxt UI v4.",
+        "severity": "error"
+      },
+      {
+        "id": "nuxt-empty-string-error",
+        "pattern": ":error=\"[^\"]*\\|\\|\\s*''\"",
+        "message": "Empty string '' is truthy for :error prop. Use undefined to clear errors.",
+        "severity": "warning"
+      }
+    ],
+    "live": []
+  }
+}

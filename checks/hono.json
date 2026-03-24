@@ -1,0 +1,27 @@
+{
+  "technology": "hono",
+  "golden_version": "latest",
+  "sdk": "hono",
+  "dependencies": ["bun"],
+  "context7_id": null,
+  "file_patterns": ["**/src/**/*.ts"],
+  "content_patterns": ["from ['\"]hono['\"]", "Hono\\(", "app\\.get\\(", "app\\.post\\("],
+  "tools": [],
+  "checks": {
+    "static": [
+      {
+        "id": "hono-no-express-patterns",
+        "pattern": "req\\.body(?!\\()",
+        "message": "Hono uses c.req.json() not req.body. Use Hono request patterns.",
+        "severity": "warning"
+      },
+      {
+        "id": "hono-no-res-send",
+        "pattern": "res\\.send\\(",
+        "message": "Hono uses c.json() or c.text() not res.send(). Use Hono response patterns.",
+        "severity": "warning"
+      }
+    ],
+    "live": []
+  }
+}
