@@ -62,17 +62,6 @@ scott-toolkit/
 │   ├── DESIGN-INTENT-TEMPLATE.md
 │   └── RETRO-TEMPLATE.md
 │
-├── knowledge/                        # Domain knowledge skills
-│   ├── active/                       # Used regularly
-│   │   ├── surrealdb.md             # SurrealDB + SurrealQL (consolidated)
-│   │   ├── nuxt-ui-v4.md
-│   │   └── n8n-integration.md
-│   └── archive/                      # Available but not promoted
-│       ├── tauri-nuxt.md
-│       ├── rust-tauri-commands.md
-│       ├── error-handling.md
-│       └── frontend-design.md
-│
 ├── workflows/                        # Interactive step-by-step processes
 │   ├── new-project.md               # 8-phase orchestrator
 │   ├── resume-project.md            # Session start (delegates to GSD)
@@ -108,7 +97,10 @@ scott-toolkit/
 │   ├── advosy-context.md
 │   ├── bresco-context.md
 │   ├── hetzner-surrealdb-setup.md
-│   └── surrealdb-v3-reference.md
+│   ├── surrealdb-v3-reference.md
+│   ├── ADR-001-schema-bridge.md
+│   ├── ADR-002-migrations.md
+│   └── ADR-003-infrastructure.md
 │
 ├── retros/                           # Retrospective outputs
 │   └── _retro-index.md
@@ -124,6 +116,14 @@ scott-toolkit/
 git pull                              # Get latest from GitHub
 ./setup.sh                            # Re-deploy (symlinks update automatically)
 ```
+
+## Contributing Rules
+
+- Always update CHANGELOG.md when modifying hooks or skills
+- Do not modify settings.json directly (use the `update-config` skill)
+- Each skill lives in its own subfolder: `skills/<name>/SKILL.md`
+- Hook scripts must be executable (`chmod +x`)
+- Test changes by verifying the hook/skill loads correctly in a new session
 
 ## How It Improves Over Time
 
