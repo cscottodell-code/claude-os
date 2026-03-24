@@ -7,12 +7,22 @@
   - v1.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.0: Initial workflow
 
+## Scope
+**Supplementary workflow.** This is typically invoked as part of `/scott:phase-closeout`
+(the reflect phase), not as a standalone workflow. Use standalone only for mid-session
+captures outside of GSD phase boundaries.
+
+**What belongs here:** Mistakes in prompting, context management, harness/skill issues,
+or Claude Code session failures. Think "the toolkit or the operator broke."
+**What does NOT belong here:** Code bugs (use `scott:debug`), test failures (fix them),
+or project-specific issues (capture in project's `tasks/lessons.md`).
+
 ## Purpose
 Capture a mistake or failure in the moment, while context is fresh. Instead of
 waiting for a retro to remember what went wrong, this workflow logs the exact
 triggering prompt, root cause, and prevention strategy right away.
 
-Use this when something goes wrong — bad output from Claude, a prompt that
+Use this when something goes wrong: bad output from Claude, a prompt that
 backfired, a context mistake, or a harness/skill issue. Also use when the
 debug workflow reveals the bug was caused by a user error (not a code bug).
 
@@ -132,7 +142,7 @@ Create the log file and update the metadata counter.
 ```
 
 ### Output
-Log file saved at ~/scott-toolkit/errors/error-[ID].md
+Log file saved at ~/scott-toolkit/errors/[ID]-[short-description].md (e.g., 011-missed-context-window.md)
 
 ### Done when
 Log file is created and metadata is updated.

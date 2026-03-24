@@ -8,6 +8,15 @@
   - v1.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.0: Initial workflow
 
+## Scope
+**Supplementary workflow.** This is typically invoked as part of `/scott:phase-closeout`
+(the reflect phase) for GSD phase-level retros. Use standalone for full project or
+milestone-level retrospectives that span multiple phases.
+
+**Relationship to phase-closeout:** Phase-closeout produces error logs, success logs,
+RETRO.md, and lessons.md for a single phase. This standalone retro workflow is for
+bigger-picture reflection across an entire project or milestone.
+
 ## Purpose
 Run a post-project or post-milestone retrospective. Captures what went well, what
 went wrong, and feeds lessons back into the toolkit. This is the engine that makes

@@ -7,12 +7,22 @@
   - v1.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.0: Initial workflow
 
+## Scope
+**Supplementary workflow.** This is typically invoked as part of `/scott:phase-closeout`
+(the reflect phase), not as a standalone workflow. Use standalone only for mid-session
+captures outside of GSD phase boundaries.
+
+**What belongs here:** Wins in prompting, context engineering, workflow design, or
+skill effectiveness. Think "the toolkit or the approach worked exceptionally well."
+**What does NOT belong here:** Normal task completion (that's just doing the work),
+or project-specific patterns (capture in project's `tasks/lessons.md`).
+
 ## Purpose
 Capture what went RIGHT in the moment, while context is fresh. Successes are
-just as important to log as errors — they reveal which prompts, patterns, and
+just as important to log as errors: they reveal which prompts, patterns, and
 approaches work well so you can repeat them deliberately.
 
-Use this when Claude nails something — a prompt that worked perfectly, a workflow
+Use this when Claude nails something: a prompt that worked perfectly, a workflow
 that saved significant time, or a pattern that should become standard.
 
 ## Prerequisites
@@ -114,7 +124,7 @@ Create the log file and update the metadata counter.
 ```
 
 ### Output
-Log file saved at ~/scott-toolkit/successes/success-[ID].md
+Log file saved at ~/scott-toolkit/successes/[ID]-[short-description].md (e.g., 008-parallel-agent-strategy.md)
 
 ### Done when
 Log file is created and metadata is updated.
