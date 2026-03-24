@@ -2,9 +2,10 @@
 
 ## Metadata
 - Last updated: 2026-03-22
-- Version: 1.0
+- Version: 2.0
 - Changelog:
-  - v1.0: Initial workflow. Replaces separate log-error, log-success, and retro workflows for GSD post-execution. Synthesizes verification, code review, and reflection into one cohesive flow.
+  - v2.0: Add Phase 1.5 (Stack Audit) between Verify and Code Review. Add lesson tagging to Reflect. Update phase numbering.
+  - v1.0: Initial workflow. Replaces separate log-error, log-success, and retro workflows for GSD post-execution.
 
 ## Purpose
 Single post-execution skill that runs after every GSD execution phase. Produces all
@@ -47,6 +48,54 @@ pnpm test — 245 pass, 0 fail, 0 skip
 
 ### Done when
 All tests pass (0 fail). Skip count noted but acceptable if pre-existing.
+
+## Phase 1.5: Stack Audit [AUTO]
+
+### What this phase does
+Run stack compliance checks on all files changed in this phase. This is the final
+gate before code review, catching version-specific correctness issues (wrong API
+names, deprecated patterns, SDK mismatches).
+
+### Steps
+1. Run `stack-preflight.sh` on the project directory to determine the degradation tier
+2. Announce the tier: "Stack audit running in [FULL/REDUCED/MINIMAL] mode."
+3. Run `stack-check.sh` on all files changed in this phase:
+   ```bash
+   # Get changed files since phase start
+   git diff --name-only <base-sha> HEAD | xargs stack-check.sh --project-dir .
+   ```
+4. **If PASS:** Continue to Phase 2.
+5. **If FAIL (errors):** Show the failure report. Fix all errors before proceeding.
+   Each failure includes: what failed, why it's required, file:line, and suggested fix.
+6. **If WARN only:** Show warnings, continue to Phase 2 (warnings don't block).
+7. **At Full tier with SurrealDB:** Dispatch a live audit agent:
+   - Create temp namespace: `audit_<project>_<branch>_<timestamp>`
+   - Apply all schemas in dependency order
+   - Seed realistic data
+   - Test every `db.query()` pattern from the codebase
+   - Clean up temp namespace (always, even on failure)
+8. Write structured results to `.planning/audits/audit_<phase>.json`:
+   ```json
+   {
+     "phase": "<phase-id>",
+     "date": "<ISO date>",
+     "tier": "full|reduced|minimal",
+     "static": { "pass": 0, "fail": 0, "warn": 0 },
+     "live": { "pass": 0, "fail": 0, "skipped": false },
+     "issues": []
+   }
+   ```
+
+### Degraded behavior
+- **Reduced tier:** Static checks run. Live audit skipped (closeout logs the gap).
+- **Minimal tier:** Static checks only. Announce: "Live and agent-based checks unavailable."
+- **Any degradation:** Log the degradation in the audit JSON and note it in the Phase 4 summary.
+
+### Output
+Audit results shown to Scott. PASS/FAIL/WARN with details.
+
+### Done when
+Static checks pass (0 errors). Live audit passes or was skipped with logged reason.
 
 ## Phase 2: Code Review [DELEGATE]
 
@@ -204,6 +253,15 @@ Same quality, one interview instead of three.
    If lessons.md is empty or unchanged after this step, the phase closeout has failed.
    Format: what happened, why, what to do differently next time.
 
+3. **Tag each lesson.** After writing each lesson, suggest a tag based on its content:
+   - `[stack]` — technology version, SDK, or compatibility issue
+   - `[pattern]` — reusable code or process pattern discovered
+   - `[project]` — project-specific context or decision
+   - `[prompt]` — prompting technique or context engineering insight
+   - `[harness]` — toolkit, skill, or hook issue
+   Scott approves, overrides, or skips the tag. Untagged defaults to `[project]`.
+   Tags go at the start of the lesson line: `[stack] Next time, use db.query() instead of...`
+
 ### Output
 Error log files (if any), success log files (if any), RETRO.md, updated lessons.md.
 
@@ -227,11 +285,12 @@ Write the completion marker and summarize all artifacts created.
    ## Phase Closeout Complete
 
    **Verification:** [pass count] tests passed
+   **Stack Audit:** [PASS/WARN/degraded] at [tier] tier
    **Code Review:** Clean (no Critical/Important)
    **Errors Logged:** [count] entries (or "None")
    **Successes Logged:** [count] entries (or "None")
    **Retro:** RETRO.md [created/updated]
-   **Lessons:** tasks/lessons.md updated with [count] entries
+   **Lessons:** tasks/lessons.md updated with [count] entries (tagged)
 
    Phase is now eligible for completion.
    ```
@@ -241,9 +300,10 @@ Marker file exists and summary shown.
 
 ## Completion Checklist
 - [ ] Tests pass (Phase 1)
+- [ ] Stack audit pass or degraded with logged reason (Phase 1.5)
 - [ ] Code review clean — no Critical/Important (Phase 2)
 - [ ] Errors captured or confirmed none (Phase 3A)
 - [ ] Successes captured or confirmed none (Phase 3B)
 - [ ] RETRO.md created/updated (Phase 3C)
-- [ ] tasks/lessons.md updated (Phase 3C)
+- [ ] tasks/lessons.md updated with tagged lessons (Phase 3C)
 - [ ] .post-execution-complete marker written (Phase 4)

@@ -104,19 +104,20 @@ run_checks_for_tech() {
       continue
     fi
 
-    # Parse check fields
+    # Parse check fields (use -E for extended regex, handle JSON escaping)
     if echo "$line" | grep -q '"id"'; then
-      id=$(echo "$line" | sed 's/.*"id":\s*"\([^"]*\)".*/\1/')
+      id=$(echo "$line" | sed -E 's/.*"id":[[:space:]]*"(.*)".*/\1/')
     elif echo "$line" | grep -q '"pattern"'; then
-      pattern=$(echo "$line" | sed 's/.*"pattern":\s*"\([^"]*\)".*/\1/')
+      # Extract pattern and unescape JSON backslashes (\\( -> \()
+      pattern=$(echo "$line" | sed -E 's/.*"pattern":[[:space:]]*"(.*)".*/\1/' | sed 's/\\\\/\\/g')
     elif echo "$line" | grep -q '"message"'; then
-      message=$(echo "$line" | sed 's/.*"message":\s*"\([^"]*\)".*/\1/')
+      message=$(echo "$line" | sed -E 's/.*"message":[[:space:]]*"(.*)".*/\1/')
     elif echo "$line" | grep -q '"severity"'; then
-      severity=$(echo "$line" | sed 's/.*"severity":\s*"\([^"]*\)".*/\1/')
+      severity=$(echo "$line" | sed -E 's/.*"severity":[[:space:]]*"(.*)".*/\1/')
     elif echo "$line" | grep -q '"condition"'; then
-      condition=$(echo "$line" | sed 's/.*"condition":\s*"\([^"]*\)".*/\1/')
+      condition=$(echo "$line" | sed -E 's/.*"condition":[[:space:]]*"(.*)".*/\1/')
     elif echo "$line" | grep -q '"file_filter"'; then
-      file_filter=$(echo "$line" | sed 's/.*"file_filter":\s*"\([^"]*\)".*/\1/')
+      file_filter=$(echo "$line" | sed -E 's/.*"file_filter":[[:space:]]*"(.*)".*/\1/')
     fi
 
     # End of a check object — process it
@@ -174,7 +175,9 @@ run_checks_for_tech() {
             else
               local color="\033[33m" # yellow for warning
               [[ "$severity" == "error" ]] && color="\033[31m" # red for error
-              echo -e "${color}[${severity^^}]${color}\033[0m ${file_path}:${line_num}"
+              local sev_upper
+              sev_upper=$(echo "$severity" | tr '[:lower:]' '[:upper:]')
+              echo -e "${color}[${sev_upper}]\033[0m ${file_path}:${line_num}"
               echo "  ${id}: ${message}"
             fi
           done <<< "$matches"
