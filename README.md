@@ -94,12 +94,8 @@ scott-toolkit/
 │
 ├── references/                       # Business context (loaded on demand)
 │   ├── project-catalog.md
-│   ├── advosy-context.md
 │   ├── bresco-context.md
 │   ├── hetzner-surrealdb-setup.md
-│   ├── surrealdb-v3-reference.md
-│   ├── ADR-001-schema-bridge.md
-│   ├── ADR-002-migrations.md
 │   └── ADR-003-infrastructure.md
 │
 ├── retros/                           # Retrospective outputs

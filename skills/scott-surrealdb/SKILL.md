@@ -12,7 +12,7 @@ invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and
 # SurrealDB Quick Reference
 
 **Version:** SurrealDB v3 server + JS SDK surrealdb@2.0.x (npm)
-**Deep reference:** `~/Sites/Global/scott-toolkit/references/surrealdb-v3-reference.md`
+**Deep reference:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-reference.md`
 **Context7 library:** `/surrealdb/docs.surrealdb.com`
 
 ## Project Versions (don't mix these up)
@@ -197,7 +197,7 @@ The SurrealDB MCP server is available in Claude Code sessions. Use it to **test 
 
 ## When to Read the Full Reference
 
-Read `~/Sites/Global/scott-toolkit/references/surrealdb-v3-reference.md` when you need:
+Read `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-reference.md` when you need:
 - Vector search / HNSW index setup
 - AI agent memory schemas
 - Graph + vector combo queries

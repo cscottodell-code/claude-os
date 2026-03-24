@@ -180,7 +180,47 @@ Reports to Scott O'Dell. Covers sales for ALL companies.
 
 ---
 
+## Advosy Tech Projects
+
+| Project | Location | Status | Purpose |
+|---------|----------|--------|---------|
+| D2D Payroll | ~/Sites/Advosy/d2d-payroll/ | ~90% complete | Payroll calculator for D2D reps |
+| Spotio-CF | ~/Sites/Advosy/spotio-cf/ | Code complete | Spotio → Claimsforce integration |
+| D2D Income Tool | ~/Sites/Advosy/d2d-income-tool/ | Prototype | Income calculator (Nuxt version) |
+| D2D Apps | ~/Sites/Advosy/d2d-apps/ | Prototype | React D2D apps (outlier, being replaced) |
+| CF Automations | ~/Sites/Advosy/automations/ | Active | n8n workflow automations |
+| Advosy CRM | advosy.app | Active | Custom CRM (Gary's build, Nuxt 4 + Nuxt UI + SurrealDB) |
+
+**Legacy v2 projects:** d2d-payroll and spotio-cf still on SurrealDB v2 + WASM SDK v1.3.2 (will migrate when consolidated into advosy-sales).
+
+---
+
+## Notion Database IDs (Legacy - Migrating to SurrealDB)
+
+| Resource | Notion ID |
+|----------|-----------|
+| Advosy EOS Page | `2ec4b348-1256-800f-98d2-efa913d2ee91` |
+| People Database | `2ee4b348-1256-8149-9f6d-f5a1c9501301` (117 records) |
+| Software Systems Database | `2ee4b348-1256-8129-8d7f-d1c4c0e7846f` (17 records) |
+| Organizations Database | `2ee4b348-1256-81c6-833a-c68df44434b0` (7 records) |
+
+---
+
+## Project Context for Advosy Work
+
+When building tools for Advosy:
+- **Users** are typically internal employees (adjusters, sales reps, managers)
+- **Data** is often related to claims, customers, scheduling, or training
+- **Claimsforce (EspoCRM)** is the existing CRM, new tools may integrate with it
+- **Gary** will productionize anything that goes live, keep handoff in mind
+- **n8n workflows** exist for operations, check Brett's instance for existing automations
+- UI should feel corporate but approachable
+- Data accuracy is critical for insurance/claims work
+- Gary expects clean, well-documented code for productionization
+
+---
+
 ## Full Resources
 
-- **Employee Directory:** Google Sheet (requires authentication — ask Scott for access if needed)
+- **Employee Directory:** Google Sheet (requires authentication, ask Scott for access if needed)
 - **Full Context Doc:** ~/Sites/Advosy/advosy-context/company/structure.md
