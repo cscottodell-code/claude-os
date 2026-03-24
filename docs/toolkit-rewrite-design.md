@@ -1,11 +1,11 @@
 # Scott-Toolkit Rewrite: Full Design Document
 
 **Date:** 2026-03-23
-**Revised:** 2026-03-23 (v3: Cowork v2 applied, Claude Code pushbacks applied, BOPs audit integrated)
+**Revised:** 2026-03-23 (v4: ETH Zurich context research applied, UI/UX reminder hook added)
 **Status:** All three topics designed. Ready for implementation planning.
 **Purpose:** Comprehensive design for implementation in Claude Code
 
-**Changes from v2:** Claude-suggested lesson tagging during phase-closeout, interfaces.json resolution via CLAUDE.md rule, metrics.json is gitignored/regenerated, fix_attempts replaces time_to_fix_ms in audit artifacts, type field added to interfaces.json for health check routing, stack-metrics.sh discovers project directories dynamically (narrowed scan), overlap detection simplified to manual review, system health calibration signal added to stack-review, degradation stress tests added to Step 3 DoD. See Section 12 for full changelog.
+**Version history:** v1 (initial), v2 (Cowork v1 research), v3 (Cowork v2 + Claude Code pushbacks + BOPs audit), v4 (ETH Zurich context file research + UI/UX hook). See Section 12 for full changelog.
 
 ---
 
@@ -217,6 +217,8 @@ Two tiers:
 | `*.ts` in Bun project | CLI static only (Bun gotchas) |
 | None of the above | Skip |
 
+**Hard rule: Scoped check file loading.** Audit agents only load check files for technologies that appear in the dispatch table above. If only SurrealDB files changed, the agent gets `surrealdb.json`, not `nuxt.json` or `tailwind.json`. Every irrelevant check file loaded into agent context increases cost and reduces effectiveness. This is a correctness requirement, not an optimization.
+
 #### Closeout -- "Final Gate Before Code Review"
 
 **When:** Phase 1.5 of phase-closeout, before code review.
@@ -388,10 +390,24 @@ toolkit/checks/test-fixtures/
   surrealdb/bad/     -- should all FAIL with specific expected messages
   nuxt/good/
   nuxt/bad/
-  degradation/       -- chaos test scenarios (see Section 5.21)
+  degradation/       -- chaos test scenarios (see below)
 ```
 
 **Trigger:** A `PostToolUse` hook on check file edits runs the test fixtures automatically. Also run manually via `/scott:audit-selftest`.
+
+**Degradation stress tests:** Test fixtures that simulate degraded conditions to verify the 4 degradation tiers work as designed:
+
+```
+toolkit/checks/test-fixtures/degradation/
+  context7-unavailable/    -- simulates Context7 down, expects Reduced tier
+  mcp-timeout/             -- simulates MCP timeout, expects dynamic degradation
+  surrealdb-down/          -- simulates DB unavailable, expects Minimal for DB checks
+  all-external-down/       -- simulates everything down, expects Minimal tier
+```
+
+Each scenario defines the expected tier and verifies the system announces the degradation correctly. Run via `/scott:audit-selftest --chaos` or as part of the standard test fixture suite.
+
+**Rationale (from BOPs Operational Entrainment):** "Test under stress." The degradation tiers are a core safety feature. If they don't work when Context7 goes down or MCP times out, the whole graceful degradation design is theoretical. These tests make it concrete.
 
 ### 5.17 Self-Pruning Checks
 
@@ -401,6 +417,8 @@ The learning loop (Section 6) tracks per-check metrics via `toolkit/checks/metri
 - `false_positive` rate -- how often this check fires on compliant code
 
 Checks that consistently produce false positives or never catch anything get auto-flagged for removal during `/scott:stack-review`. Refinement of noisy checks is prioritized over adding new checks (boosting principle: focus on what's almost working).
+
+**Pruning thresholds (cost-based split):** Live checks (which consume agent tokens) are flagged for removal after 60 days of zero catches. Static checks (which are zero-cost CLI grep operations) are flagged after 90 days. The asymmetry is justified: keeping a free check longer costs nothing, while a useless live check burns tokens every audit.
 
 **Relationship to overlap detection (Section 6.4):** Self-pruning and overlap detection are two views of the same mechanism. Self-pruning evaluates individual check performance. Overlap detection compares pairs of checks for redundancy. Both feed into the `/scott:stack-review` dashboard.
 
@@ -461,21 +479,21 @@ The `fix_attempts` field directly measures suggested fix quality. One attempt = 
 
 This format lets the learning loop compute: checks that always pass (removal candidates), checks that catch real bugs (high value), checks with high false-positive rates (refinement candidates), and checks with poor suggested fixes (high avg_fix_attempts, improvement candidates).
 
-### 5.21 Degradation Stress Tests
+### 5.21 UI/UX Reminder Hook
 
-Test fixtures that simulate degraded conditions to verify the 4 degradation tiers work as designed:
+**Scope:** This is NOT part of the stack audit system. It is a separate, lightweight hook that nudges the developer toward UI/UX quality checks.
 
-```
-toolkit/checks/test-fixtures/degradation/
-  context7-unavailable/    -- simulates Context7 down, expects Reduced tier
-  mcp-timeout/             -- simulates MCP timeout, expects dynamic degradation
-  surrealdb-down/          -- simulates DB unavailable, expects Minimal for DB checks
-  all-external-down/       -- simulates everything down, expects Minimal tier
-```
+**Trigger:** A `PostToolUse` hook fires when `.vue` files are written (created or edited) during a GSD execution phase.
 
-Each scenario defines the expected tier and verifies the system announces the degradation correctly. Run via `/scott:audit-selftest --chaos` or as part of the standard test fixture suite.
+**Behavior:** Displays a one-line reminder: `Consider running /impeccable:audit before closeout.`
 
-**Rationale (from BOPs Operational Entrainment):** "Test under stress." The degradation tiers are a core safety feature. If they don't work when Context7 goes down or MCP times out, the whole graceful degradation design is theoretical. These tests make it concrete.
+**Properties:**
+- Non-blocking (exit code 0, never exit code 2)
+- Fires at most once per phase (tracks state via a temp file to avoid repeating every `.vue` edit)
+- Does not run outside of GSD execution phases
+- Does not run the audit itself, only reminds
+
+**Rationale:** AI is notoriously bad at UI/UX. The /impeccable:audit and /scott:uiux skills already exist but are opt-in. This hook bridges the gap between "exists" and "remembered" without adding enforcement overhead. If the reminder keeps firing and Scott keeps finding bad UI, that's the signal to upgrade to a blocking gate (Option C).
 
 ---
 
@@ -598,9 +616,9 @@ A new CLI tool, `stack-metrics.sh`, runs on demand via `/scott:stack-review`:
 **3. Check health report** -- all checks ranked by value
 - High-value checks (keep, possibly tighten)
 - Noisy checks (refine pattern or remove)
-- Untested checks (never caught anything in 90+ days, removal candidate)
+- Untested checks (never caught anything past pruning threshold, removal candidate. See Section 5.17 for thresholds.)
 - Harmful checks (fix caused problems, immediate attention)
-- High-attempt checks (high avg_fix_attempts, suggested fix needs improvement)
+- Hard-fix checks (high avg_fix_attempts, suggested fix needs improvement)
 
 **4. Refinement candidates** (prioritized over new additions)
 - Checks with high false-positive rates
@@ -609,6 +627,10 @@ A new CLI tool, `stack-metrics.sh`, runs on demand via `/scott:stack-review`:
 **5. Overlap detection** -- manual review
 - At Scott's scale (10-20 checks total), overlap is visible at a glance. The dashboard lists all checks grouped by technology. Scott can spot redundancy by reading the patterns side by side.
 - No automated overlap algorithm for now. File-level overlap (two checks matching the same files) is too coarse a signal, and line-level overlap is complex to implement. Add an algorithm later if the check count grows past 30+.
+
+**Relationship to self-pruning (Section 5.17):** Self-pruning evaluates individual check performance (is this check worth keeping?). Overlap detection compares pairs of checks for redundancy (are these two checks doing the same thing?). Both feed into this dashboard.
+
+**Future: Failure category naming.** As data accumulates, failure categories (e.g., "API rename migration", "schema mismatch", "deprecated API") can be derived from check IDs and added as a sixth dashboard section. This would group related checks for pattern recognition across technologies (e.g., "SurrealDB v3 renames" and "Nuxt 5 renames" are both "API rename migration"). Deferred until the check count and audit history justify the investment (3+ months of production data).
 
 Scott approves or rejects each recommendation. **No automatic promotion.** The system recommends, Scott decides.
 
@@ -758,6 +780,8 @@ After execution, run the **phase_closeout** operation.
 
 **Resolution rule (added to toolkit CLAUDE.md):** Claude's toolkit CLAUDE.md includes the instruction: "When a workflow references an operation name (plan_phase, execute_phase, phase_closeout, etc.), resolve it by reading toolkit/config/interfaces.json and using the command value for that operation." This ensures resolution is explicit for every session, not dependent on individual workflow files including the instruction.
 
+**CLAUDE.md size discipline:** The toolkit's instructions in CLAUDE.md should be as short as possible. Knowledge belongs in check files, Context7, and skills, not in CLAUDE.md. If the toolkit section exceeds ~20 lines, review for consolidation during `/scott:stack-review`.
+
 ### 7.3 What Gets Decoupled
 
 | Category | Operations | Provider |
@@ -813,22 +837,24 @@ These are explicitly out of scope. The 80/20 here is that command renames are th
 
 ## 8. BOPs Alignment
 
-| BOPs Principle | How This Design Applies It |
-|---|---|
-| EIB Protocol | Explicated the broken process, improved each step, then backgroundized via hooks + CLI |
-| Value Stream Mapping | Removed 5 duplications in simplification pass |
-| Hard Rules > Soft Guidelines | Guard hooks block, they don't warn. Learning loop recommends, doesn't auto-promote. |
-| Worst Week Rule | No manual steps required. Hooks fire automatically. Learning loop runs on demand, not on a schedule. Claude suggests tags so Scott doesn't have to remember. |
-| Error Logging | Audit artifacts (Section 5.20) capture all failures in structured JSON for the learning loop |
-| Never Skip Diagnosis | Pre-flight check diagnoses system state before running audit (6 checks including SDK version) |
-| Operational Entrainment | The system is drilled into every phase (planning, executing, closeout). Stress tests (Section 5.21) verify the system works under degraded conditions. |
-| Reduce Coupling | Interface layer (Section 7) isolates toolkit from external tool command names |
-| Explore/Exploit Balance | Learning loop refines existing checks (exploit) before adding new ones (explore). Boosting principle. |
-| Lights Spreadsheet | System health calibration: overall pass rate displayed in stack-review dashboard (Section 6.4). No automated thresholds yet. |
+Full BOPs audit performed against all 10 frameworks from Sebastian Marshall's Background Operations methodology. Result: 8 of 10 frameworks fully aligned, 2 partially aligned (enhancements applied), 0 conflicts, 1 not applicable.
+
+| BOPs Principle | How This Design Applies It | Verdict |
+|---|---|---|
+| EIB Protocol | Explicated the broken process, improved each step, then backgroundized via hooks + CLI | Full alignment |
+| Value Stream Mapping | Removed 5 duplications in simplification pass. Smart dispatch routes checks only to changed technologies. Tool resolution hierarchy puts cheapest tools first. | Full alignment |
+| Hard Rules > Soft Guidelines | Guard hooks block, they don't warn. Learning loop recommends, doesn't auto-promote. Audit scope is hard-bounded. | Full alignment |
+| Worst Week Rule | No manual steps required. Hooks fire automatically. Learning loop runs on demand, not on a schedule. Claude suggests tags so Scott doesn't have to remember. | Full alignment |
+| Error Logging | Audit artifacts (Section 5.20) capture all failures in structured JSON for the learning loop. false_positive field = "log it = safe." | Full alignment |
+| Never Skip Diagnosis | Pre-flight check diagnoses system state before running audit (6 checks including SDK version) | Full alignment |
+| Operational Entrainment | The system is drilled into every phase (planning, executing, closeout). Stress tests (Section 5.16) verify the system works under degraded conditions. | Full alignment |
+| Reduce Coupling | Interface layer (Section 7) isolates toolkit from external tool command names | Full alignment |
+| Explore/Exploit Balance | Learning loop refines existing checks (exploit) before adding new ones (explore). Boosting principle. | Full alignment |
+| Lights Spreadsheet | System health calibration: overall pass rate displayed in stack-review dashboard (Section 6.4). No automated thresholds yet (data needed first). | Partial (data needed) |
 
 ---
 
-## 9. All 53 Design Considerations
+## 9. All 57 Design Considerations
 
 ### Architecture-Defining
 
@@ -871,7 +897,7 @@ These are explicitly out of scope. The 80/20 here is that command renames are th
 | 20 | Golden stack gets stale | Staleness nudge in /scott:resume (30+ days). |
 | 21 | New project friction | Two tiers: full projects (approval flow) vs experiments (auto-generated). |
 | 22 | Stack drift across projects | `/scott:stack-review` dashboard: golden vs all projects at a glance. |
-| 23 | Testing the audit system itself | Test fixtures: known-good and known-bad samples per technology. Auto-triggered on check file edits. Degradation stress tests (Section 5.21). |
+| 23 | Testing the audit system itself | Test fixtures: known-good and known-bad samples per technology. Auto-triggered on check file edits. Degradation stress tests (Section 5.16). |
 | 28 | Toolkit needs its own requirements | `toolkit-requirements.json` validated by setup.sh. |
 | 32 | Scott's cognitive load | Self-contained reports. No memory required. |
 | 34 | Brett's learning path | Explained mode links failures to documentation. |
@@ -911,6 +937,15 @@ These are explicitly out of scope. The 80/20 here is that command renames are th
 | 51 | time_to_fix_ms conflates system quality with human behavior | Replaced with `fix_attempts` (commit count). Clean signal for suggested fix quality. (Section 5.20) |
 | 52 | Automated overlap detection is too coarse at current scale | Manual review for now (10-20 checks). Add algorithm when checks exceed 30+. (Section 6.4) |
 | 53 | No system-level calibration of audit difficulty | Overall pass rate displayed in stack-review. No thresholds yet. (Section 6.4, BOPs Lights Spreadsheet) |
+
+### Added from Cowork v4 + Review Session
+
+| # | Consideration | Resolution |
+|---|---|---|
+| 54 | Audit agents load all check files regardless of relevance | Scoped check file loading: agents only load check files for technologies in the dispatch table. (Section 5.4) |
+| 55 | CLAUDE.md size can grow unbounded | Soft budget: keep as short as possible. If exceeds ~20 lines, review during /scott:stack-review. No hard cap. (Section 7.2) |
+| 56 | Pruning treats all checks equally regardless of cost | Split threshold: 60 days for live checks (token cost), 90 days for static checks (zero cost). (Section 5.17) |
+| 57 | No nudge for UI/UX quality during Vue development | PostToolUse hook reminds "Consider running /impeccable:audit before closeout" when .vue files are written. Non-blocking. (Section 5.21) |
 
 ### Deferred to Future
 
@@ -964,6 +999,21 @@ All 10 questions from the Cowork research pass have been resolved and integrated
 
 ## 12. Changelog
 
+### v3 to v4
+
+| Change | Section | Reason |
+|---|---|---|
+| Scoped check file loading added as hard rule | 5.4 | Audit agents only load check files for technologies in the dispatch table. Irrelevant context increases cost and reduces effectiveness. |
+| Degradation stress tests folded into Section 5.16 | 5.16 | Eliminated standalone section. All test fixture content now in one place. |
+| Pruning threshold split: 60 days live, 90 days static | 5.17 | Cost-based asymmetry. Live checks burn tokens; static checks are free. Keeps free safety nets longer. |
+| CLAUDE.md soft budget (~20 lines) | 7.2 | Prevents unbounded growth without imposing a brittle hard cap. Knowledge belongs in check files and Context7. |
+| "Hard-fix" replaces "High-attempt" naming | 6.4 | Clearer label for checks with high avg_fix_attempts. |
+| Failure category naming documented as future enhancement | 6.4 | Group failures by category (e.g., "API rename migration") when data justifies it. Deferred 3+ months. |
+| BOPs alignment table expanded with verdict column | 8 | Full 10-framework assessment with explicit alignment verdicts. |
+| UI/UX reminder hook added | 5.21 | PostToolUse hook nudges /impeccable:audit when .vue files are written. Non-blocking. Separate from stack audit. |
+| Design considerations #54-57 added | 9 | Scoped loading, CLAUDE.md soft budget, split pruning, UI/UX hook. |
+| System health thresholds NOT added (from Cowork v4) | 6.4 | Rejected. Keep showing the number only until baseline data exists. |
+
 ### v2 to v3
 
 | Change | Section | Reason |
@@ -974,10 +1024,10 @@ All 10 questions from the Cowork research pass have been resolved and integrated
 | `stack-metrics.sh` discovers projects dynamically (narrowed scan) | 6.3 | Scans `~/Sites/` for directories with both stack-lock.json AND .planning/audits/. Ignores projects without audit history. |
 | `fix_attempts` replaces `time_to_fix_ms` in audit artifacts | 5.20 | Wall-clock time conflates system quality with human behavior (breaks, coffee, context switches). Commit count directly measures suggested fix quality. One attempt = good suggestion. |
 | `avg_fix_attempts` replaces `avg_time_to_fix_ms` in metrics.json | 6.3 | Aggregated view of fix quality per check. |
-| "High-attempt checks" in stack-review health report | 6.4 | Checks with high helpful_count but high avg_fix_attempts need better suggested fixes. |
+| Hard-fix checks in stack-review health report | 6.4 | Checks with high helpful_count but high avg_fix_attempts need better suggested fixes. |
 | Overlap detection simplified to manual review | 6.4 | File-level overlap (two checks matching same files) is too coarse. At 10-20 checks, overlap is visible at a glance. Add algorithm when checks exceed 30+. |
 | System health calibration (overall pass rate) added to stack-review | 6.4 | BOPs Lights Spreadsheet: shows Scott whether the system is too easy or too strict. No automated thresholds yet. |
-| Degradation stress tests added | 5.16, 5.21 | BOPs Operational Entrainment: "test under stress." Chaos test fixtures verify degradation tiers work under simulated failures. Added to Step 3 definition of done. |
+| Degradation stress tests added | 5.16 | BOPs Operational Entrainment: "test under stress." Chaos test fixtures verify degradation tiers work under simulated failures. Added to Step 3 definition of done. |
 | `type` field added to interfaces.json operations | 7.1 | Tells health check how to verify: `"command"` = check registration, `"skill"` = check file exists. |
 | interfaces.json resolution rule added to toolkit CLAUDE.md | 7.2 | Makes decoupling explicit for every session. Claude always knows to resolve operation names via interfaces.json. |
 | Migration path updated: step 2 adds CLAUDE.md rule | 7.4 | Ensures resolution works from the moment interfaces.json is created. |
@@ -986,7 +1036,6 @@ All 10 questions from the Cowork research pass have been resolved and integrated
 | BOPs Alignment table updated | 8 | Added Lights Spreadsheet, Operational Entrainment stress tests, Claude-suggested tags to Worst Week Rule. |
 | 3 new design considerations (#51-53) | 9 | fix_attempts over time_to_fix, simplified overlap, system calibration. |
 | Implementation order: ship step 7 before step 6 recommended | 10 | Decoupling protects against renames now. Learning loop needs months of data. |
-| Step 3 includes degradation stress tests in definition of done | 10 | Tiers must be verified under simulated failures before the closeout audit is trusted. |
 
 ### v1 to v2
 
