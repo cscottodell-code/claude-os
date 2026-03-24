@@ -28,8 +28,11 @@ CLAUDE_DIR="$HOME/.claude"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 RULES_DIR="$CLAUDE_DIR/rules"
 SKILLS_DIR="$CLAUDE_DIR/skills"
+CHECKS_DIR="$CLAUDE_DIR/checks"
+TOOLS_DIR="$CLAUDE_DIR/tools"
+CONFIG_DIR="$CLAUDE_DIR/config"
 
-echo "Scott-Toolkit v2 Setup"
+echo "Scott-Toolkit v5 Setup"
 echo "======================"
 echo "Toolkit path: $TOOLKIT_PATH"
 echo "Claude dir:   $CLAUDE_DIR"
@@ -43,7 +46,7 @@ if [ ! -f "$TOOLKIT_PATH/README.md" ]; then
 fi
 
 # --- Create directories ---
-mkdir -p "$HOOKS_DIR" "$RULES_DIR" "$SKILLS_DIR"
+mkdir -p "$HOOKS_DIR" "$RULES_DIR" "$SKILLS_DIR" "$CHECKS_DIR" "$TOOLS_DIR" "$CONFIG_DIR"
 
 # --- 1. Deploy hooks (symlinks) ---
 echo "1. Deploying hooks..."
@@ -170,14 +173,62 @@ for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
   done
 done
 
-# --- 5. Verify deployment ---
+# --- 5. Deploy checks (symlinks) ---
+echo "5. Deploying checks..."
+for check_file in "$TOOLKIT_PATH"/checks/*.json; do
+  check_name="$(basename "$check_file")"
+  target="$CHECKS_DIR/$check_name"
+
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    rm "$target"
+  fi
+
+  ln -s "$check_file" "$target"
+  echo "   -> $check_name"
+done
+
+# --- 6. Deploy tools (symlinks, ensure executable) ---
+echo "6. Deploying tools..."
+for tool_file in "$TOOLKIT_PATH"/tools/*.sh; do
+  tool_name="$(basename "$tool_file")"
+  target="$TOOLS_DIR/$tool_name"
+
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    rm "$target"
+  fi
+
+  ln -s "$tool_file" "$target"
+  chmod +x "$tool_file"
+  echo "   -> $tool_name"
+done
+
+# --- 7. Deploy config (symlinks) ---
+echo "7. Deploying config..."
+if [ -d "$TOOLKIT_PATH/config" ]; then
+  for config_file in "$TOOLKIT_PATH"/config/*; do
+    [ -f "$config_file" ] || continue
+    config_name="$(basename "$config_file")"
+    target="$CONFIG_DIR/$config_name"
+
+    if [ -e "$target" ] || [ -L "$target" ]; then
+      rm "$target"
+    fi
+
+    ln -s "$config_file" "$target"
+    echo "   -> $config_name"
+  done
+else
+  echo "   (no config/ directory yet)"
+fi
+
+# --- 8. Verify deployment ---
 echo ""
-echo "4. Verifying deployment..."
+echo "8. Verifying deployment..."
 
 ERRORS=0
 
 # Check hooks
-for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh guard-phase-completion.sh session-start.sh pre-compact.sh session-end.sh auto-format.sh context-reminders.sh offload-large-output.sh extract-instincts.sh pre-completion-checklist.sh post-commit-skill-triggers.sh; do
+for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh guard-phase-completion.sh session-start.sh pre-compact.sh session-end.sh auto-format.sh context-reminders.sh offload-large-output.sh extract-instincts.sh pre-completion-checklist.sh post-commit-skill-triggers.sh check-file-test-trigger.sh uiux-reminder.sh; do
   if [ -L "$HOOKS_DIR/$hook" ] && [ -e "$HOOKS_DIR/$hook" ]; then
     : # OK
   else
@@ -202,6 +253,25 @@ for skill in scott-new-project scott-resume scott-new-feature scott-phase-closeo
     : # OK
   else
     echo "   WARNING: Skill $skill not deployed"
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+
+# Check v5 directories
+for check in surrealdb.json nuxt.json tailwind.json bun.json hono.json stack-lock.schema.json; do
+  if [ -L "$CHECKS_DIR/$check" ] && [ -e "$CHECKS_DIR/$check" ]; then
+    : # OK
+  else
+    echo "   WARNING: Check file $check not properly linked"
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+
+for tool in stack-detect.sh stack-check.sh stack-preflight.sh; do
+  if [ -L "$TOOLS_DIR/$tool" ] && [ -e "$TOOLS_DIR/$tool" ]; then
+    : # OK
+  else
+    echo "   WARNING: Tool $tool not properly linked"
     ERRORS=$((ERRORS + 1))
   fi
 done

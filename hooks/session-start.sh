@@ -59,6 +59,25 @@ fi
   fi
 } > "$ACTIVE_PROJECTS"
 
+# --- 1b. Stack-lock staleness check ---
+if [ -f "$PROJECT_DIR/stack-lock.json" ]; then
+  LAST_REVIEWED=$(grep -o '"last_reviewed":\s*"[^"]*"' "$PROJECT_DIR/stack-lock.json" 2>/dev/null | sed -E 's/.*"([0-9]{4}-[0-9]{2}-[0-9]{2})".*/\1/' || true)
+  if [ -z "$LAST_REVIEWED" ]; then
+    LAST_REVIEWED=$(grep -o '"locked":\s*"[^"]*"' "$PROJECT_DIR/stack-lock.json" 2>/dev/null | sed -E 's/.*"([0-9]{4}-[0-9]{2}-[0-9]{2})".*/\1/' || true)
+  fi
+  if [ -n "$LAST_REVIEWED" ]; then
+    # Calculate days since last review (macOS date)
+    REVIEW_EPOCH=$(date -j -f "%Y-%m-%d" "$LAST_REVIEWED" "+%s" 2>/dev/null || echo 0)
+    NOW_EPOCH=$(date "+%s")
+    if [ "$REVIEW_EPOCH" -gt 0 ]; then
+      DAYS_AGO=$(( (NOW_EPOCH - REVIEW_EPOCH) / 86400 ))
+      if [ "$DAYS_AGO" -gt 30 ]; then
+        echo "Stack checks last reviewed ${DAYS_AGO} days ago (${LAST_REVIEWED}). Consider running stack-preflight.sh to verify."
+      fi
+    fi
+  fi
+fi
+
 # --- 2. Detect current project state ---
 
 # Check if we're in a project directory
