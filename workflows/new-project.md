@@ -228,14 +228,14 @@ Begin building the first milestone (usually data model + basic CRUD).
 
 ### Steps
 
-1. **Worktree isolation** — `superpowers:using-git-worktrees`
+1. **Worktree isolation** — **git_worktree** operation
    Create a worktree for this milestone, isolating work on a separate branch
 2. Read tasks/todo.md for the milestone tasks
 3. Read tasks/lessons.md (may be empty for first milestone)
-4. **Plan the work** — `/gsd:plan-phase`
+4. **Plan the work** — **plan_phase** operation
    Feed the milestone tasks into GSD for structured task breakdown and dependency tracking
-5. **Execute the plan** — `/gsd:execute-phase`
-   GSD orchestrates execution. TDD discipline from `superpowers:test-driven-development`
+5. **Execute the plan** — **execute_phase** operation
+   GSD orchestrates execution. TDD discipline from the **tdd** operation
    applies to every task (write failing test, implement, refactor).
    Update tasks/todo.md as you go.
    After each execution step, `stack-check.sh` runs static checks on changed files.
@@ -245,13 +245,13 @@ Begin building the first milestone (usually data model + basic CRUD).
 8. For error/edge case hardening on key pages, use `/impeccable:harden`
 9. **Review test coverage** — after all milestone tasks are complete:
     - Run the project's test suite to verify all tests pass
-    - If coverage is thin on critical business logic, use `/gsd:add-tests`
+    - If coverage is thin on critical business logic, use the **add_tests** operation
     - Focus on data model operations and key user flows
-10. **Code review** — `superpowers:requesting-code-review`
+10. **Code review** — **code_review** operation
     Two-stage review (spec compliance + code quality). Fix Critical issues immediately,
     Important issues before proceeding.
-11. **Verify** — `/gsd:verify-work` for UAT against acceptance criteria
-12. **Finish branch** — `superpowers:finishing-a-development-branch`
+11. **Verify** — **verify_work** operation for UAT against acceptance criteria
+12. **Finish branch** — **finish_branch** operation
     Merge the worktree back to main
 13. Check in at the end of the milestone for review
 

@@ -1,20 +1,24 @@
 # Claude Code Behavior Rules
 
-Last updated: 2026-03-22
+Last updated: 2026-03-24
 Loaded automatically for all projects via the rules system.
 
 Three systems handle different concerns. Use the right one for the job.
 
+### Operation Resolution
+
+When a workflow, rule, or skill references an **abstract operation name** (like `plan_phase`, `tdd`, `phase_closeout`), resolve it by reading `config/interfaces.json` in the toolkit directory (`~/Sites/Global/scott-toolkit/config/interfaces.json`) and using the `command` value for that operation. This decouples the toolkit from specific tool versions.
+
 ### Development Methodology (-> Superpowers)
-- TDD: `superpowers:test-driven-development` for all features and bug fixes
+- TDD: **tdd** operation for all features and bug fixes
   - Exception: throwaway experiments (explicitly stated by Scott)
   - Exception: low-criticality UI changes (styling, layout tweaks) can skip TDD with Scott's explicit approval
-- Code review: `superpowers:requesting-code-review` after features, before merges
+- Code review: **code_review** operation after features, before merges
   - Fix Critical issues immediately, Important issues before proceeding
-- Git workflow: `superpowers:using-git-worktrees` for feature development
-- Branch merging: `superpowers:finishing-a-development-branch` when complete
-- Debugging methodology: follow `scott:debug` for Scott's projects (adds lesson capture), `superpowers:systematic-debugging` for non-Scott projects
-- Plan writing: `superpowers:writing-plans` for breaking work into tasks
+- Git workflow: **git_worktree** operation for feature development
+- Branch merging: **finish_branch** operation when complete
+- Debugging methodology: follow **debug** operation for Scott's projects (adds lesson capture), **debug_systematic** operation for non-Scott projects
+- Plan writing: **write_plan** operation for breaking work into tasks
 
 ### Workflow Execution
 - Phases tagged [STOP]: pause and wait for Scott's input before continuing
@@ -25,11 +29,11 @@ Three systems handle different concerns. Use the right one for the job.
 - If an AUTO phase hits an issue requiring Scott's judgment, pause and ask
 
 ### Project Management (-> GSD + Superpowers)
-- **GSD** for all project management: /gsd:plan-phase, /gsd:execute-phase, /gsd:quick, /gsd:debug, /gsd:verify-work, /gsd:add-tests
+- **GSD** for all project management: **plan_phase**, **execute_phase**, **quick_task**, **debug_gsd**, **verify_work**, **add_tests** operations
 - **Superpowers** for execution methodology: TDD, code review, git worktrees, debugging (see Development Methodology above)
-- **Integration pattern:** Superpowers discipline applies DURING GSD execution. When `/gsd:execute-phase` runs, TDD (`superpowers:test-driven-development`) governs how code is written. `superpowers:using-git-worktrees` provides isolation before GSD plans are executed. `superpowers:finishing-a-development-branch` handles merge/PR after GSD verification passes.
+- **Integration pattern:** Superpowers discipline applies DURING GSD execution. When **execute_phase** runs, **tdd** governs how code is written. **git_worktree** provides isolation before GSD plans are executed. **finish_branch** handles merge/PR after GSD verification passes.
 - **Phase closeout (MANDATORY, hook-enforced gate):**
-  After every GSD execution phase, invoke `/scott:phase-closeout`. This single skill runs:
+  After every GSD execution phase, invoke **phase_closeout**. This single skill runs:
   1. **Verify** — test suite must pass
   2. **Review** — code review + fix cycle until clean
   3. **Reflect** — ONE conversation producing error logs, success logs, RETRO.md, and lessons.md
@@ -37,16 +41,22 @@ Three systems handle different concerns. Use the right one for the job.
   The `guard-phase-completion.sh` hook blocks `phase complete` without the marker.
   This cannot be skipped. It cannot be deferred. It replaces the old 5-step sequence that was skipped 3 times.
 
+### Stack Enforcement
+- Projects with `stack-lock.json` get static checks via `tools/stack-check.sh` during execution
+- Phase closeout includes a stack audit (Phase 1.5) that runs technology-specific checks
+- Stack drift (check file changes without lock file updates) is caught by `guard-drift-detection.sh`
+- Lessons tagged with `[stack:<tech>]` feed back into check files via the learning loop
+
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`
   ("Next time, do X instead of Y because Z")
 - Update `tasks/lessons.md` after EVERY completed phase, not just debug sessions. Empty lessons.md at the end of a multi-phase build is a failure mode. Decisions, gotchas, and patterns discovered during the phase belong there.
-- **Error/success/retro logging** is handled by `/scott:phase-closeout` at GSD phase completion.
+- **Error/success/retro logging** is handled by **phase_closeout** at GSD phase completion.
   For mid-session captures outside of GSD phases, use the same patterns:
   - Mistakes: create error log files in `~/Sites/Global/scott-toolkit/errors/`
   - Wins: create success log files in `~/Sites/Global/scott-toolkit/successes/`
-  - The distinction: scott-debug = code is broken, error logs = Claude/toolkit is broken
-- **MUST invoke `/scott:resume`** when:
+  - The distinction: **debug** = code is broken, error logs = Claude/toolkit is broken
+- **MUST invoke the **resume** operation** when:
   - Session-start hook says "AUTO-RESUME" (non-negotiable)
   - Scott says "let's continue", "where were we", "pick up where we left off"
   - A `.claude-resume.md` or `.planning/` directory exists in the project

@@ -105,17 +105,17 @@ Continue from where the project left off, using the appropriate tools.
 2. Pick up the next task from tasks/todo.md
 3. If Scott redirected to something else, update tasks/todo.md accordingly
 
-4. Use `/gsd:execute-phase` to continue the current phase,
-   or `/gsd:plan-phase` if starting a new phase
-5. For quick tasks: Use `/gsd:quick` for ad-hoc work with state tracking
+4. Use the **execute_phase** operation to continue the current phase,
+   or the **plan_phase** operation if starting a new phase
+5. For quick tasks: Use the **quick_task** operation for ad-hoc work with state tracking
 6. Follow the project's CLAUDE.md behavior rules
 7. Work through tasks, checking in as appropriate
 
 **Superpowers discipline applies during execution:**
-- TDD: `superpowers:test-driven-development` for all feature and bug fix tasks
-- Worktrees: `superpowers:using-git-worktrees` for feature branches
-- Code review: `superpowers:requesting-code-review` after completing a feature or phase
-- Branch completion: `superpowers:finishing-a-development-branch` when merging back to main
+- TDD: **tdd** operation for all feature and bug fix tasks
+- Worktrees: **git_worktree** operation for feature branches
+- Code review: **code_review** operation after completing a feature or phase
+- Branch completion: **finish_branch** operation when merging back to main
 
 ### Output
 Progress on the project.

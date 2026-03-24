@@ -40,11 +40,11 @@ Review the entire codebase for quality, consistency, and completeness.
 6. **Type safety:** Fix any `any` types or missing type definitions
 7. **Naming consistency:** File names, variable names, function names
 8. **Component structure:** All components follow the project's conventions
-9. **Superpowers code review:** Run `superpowers:requesting-code-review` for a
+9. **Code review:** Run the **code_review** operation for a
    two-stage review (spec compliance + code quality) of the entire codebase.
    Fix any Critical issues immediately and Important issues before proceeding.
 10. **Test coverage:** Review test suite completeness. If critical business logic
-    lacks tests, use `/gsd:add-tests` to fill gaps before handoff — Gary shouldn't
+    lacks tests, use the **add_tests** operation to fill gaps before handoff — Gary shouldn't
     have to write tests for prototype logic.
 
 ### Output

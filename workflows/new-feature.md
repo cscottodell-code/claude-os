@@ -106,23 +106,23 @@ Implement the feature using GSD for execution and Superpowers for methodology.
 
 Follow this sequence in order. Each step hands off to the next.
 
-1. **Worktree** (Superpowers) — `superpowers:using-git-worktrees`
+1. **Worktree** (Superpowers) — **git_worktree** operation
    Create a feature branch in a worktree for isolation
-2. **Plan** (GSD) — `/gsd:plan-phase`
+2. **Plan** (GSD) — **plan_phase** operation
    Feed the mini-PRD from Phase 3 into GSD for structured task breakdown
-3. **Execute** (GSD) — `/gsd:execute-phase`
-   GSD orchestrates execution. TDD discipline from `superpowers:test-driven-development`
+3. **Execute** (GSD) — **execute_phase** operation
+   GSD orchestrates execution. TDD discipline from the **tdd** operation
    applies to every task (write failing test, implement, refactor). Atomic commits per task.
-4. **Code review** (Superpowers) — `superpowers:requesting-code-review`
+4. **Code review** (Superpowers) — **code_review** operation
    Two-stage review after GSD execution completes. Fix Critical issues immediately,
    Important issues before proceeding.
-5. **Verify** (GSD) — `/gsd:verify-work`
+5. **Verify** (GSD) — **verify_work** operation
    UAT against the mini-PRD's acceptance criteria
-6. **Test gaps** — if coverage is thin on critical logic, use `/gsd:add-tests`
+6. **Test gaps** — if coverage is thin on critical logic, use the **add_tests** operation
 7. **Design review** (if significant UI changes):
    - Run `/impeccable:critique` for visual quality feedback
    - Run `/impeccable:polish` as a final detail pass
-8. **Finish branch** (Superpowers) — `superpowers:finishing-a-development-branch`
+8. **Finish branch** (Superpowers) — **finish_branch** operation
    Merge the worktree back to main or create a PR
 
 ### Output

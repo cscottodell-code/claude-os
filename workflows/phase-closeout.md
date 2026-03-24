@@ -106,7 +106,7 @@ Dispatch a thorough code review of everything changed in this phase.
 1. Determine the diff range:
    - **Base SHA:** The commit before phase execution started (check STATE.md or git log for the `begin-phase` marker)
    - **Head SHA:** Current HEAD
-2. Invoke `superpowers:requesting-code-review` with prompt:
+2. Invoke the **code_review** operation with prompt:
    ```
    Review all changes from this phase. Check for schema alignment, security issues,
    race conditions, cross-module integration, and adherence to the project's tech stack.

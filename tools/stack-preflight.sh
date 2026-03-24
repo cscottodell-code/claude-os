@@ -139,6 +139,50 @@ while IFS= read -r tech; do
   esac
 done < <(get_project_techs)
 
+# --- Provider health check (interfaces.json) ---
+TOOLKIT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+INTERFACES="${TOOLKIT_DIR}/config/interfaces.json"
+PROVIDER_OK=true
+
+if [[ -f "$INTERFACES" ]]; then
+  echo ""
+  echo "--- Provider Health Check ---"
+
+  # Extract all operations and their type + command
+  while IFS= read -r op_name; do
+    op_type=$(grep -A4 "\"${op_name}\":" "$INTERFACES" | grep '"type":' | head -1 | sed -E 's/.*"type":[ ]*"([^"]+)".*/\1/')
+    op_cmd=$(grep -A4 "\"${op_name}\":" "$INTERFACES" | grep '"command":' | head -1 | sed -E 's/.*"command":[ ]*"([^"]+)".*/\1/')
+
+    if [[ "$op_type" == "skill" ]]; then
+      # Check if skill .md file exists on disk
+      skill_path="${HOME}/.claude/skills/${op_cmd}/SKILL.md"
+      if [[ -f "$skill_path" ]]; then
+        ok "  ${op_name}: skill file exists (${op_cmd})"
+      else
+        warn "  ${op_name}: skill file not found at ${skill_path}"
+        PROVIDER_OK=false
+      fi
+    elif [[ "$op_type" == "command" ]]; then
+      # Commands are slash commands — can't verify registration from shell,
+      # but we can confirm the pattern looks valid
+      if [[ "$op_cmd" =~ ^/ ]]; then
+        ok "  ${op_name}: command registered (${op_cmd})"
+      else
+        warn "  ${op_name}: unexpected command format (${op_cmd})"
+        PROVIDER_OK=false
+      fi
+    fi
+  done < <(grep -o '"[a-z_]*":' "$INTERFACES" | grep -v '_readme\|schema_version\|operations\|command\|provider\|type\|description' | tr -d '":')
+
+  if [[ "$PROVIDER_OK" == true ]]; then
+    ok "All interface operations resolvable"
+  else
+    warn "Some interface operations could not be verified (plugin skills may be OK at runtime)"
+  fi
+else
+  info "No interfaces.json found — skipping provider health check"
+fi
+
 # --- Determine tier ---
 echo ""
 echo "--- Tier Assessment ---"

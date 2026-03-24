@@ -1,0 +1,108 @@
+{
+  "_readme": "Maps toolkit operations to external tool commands. Update here when GSD or Superpowers change.",
+  "schema_version": "1.0",
+  "operations": {
+    "plan_phase": {
+      "command": "/gsd:plan-phase",
+      "provider": "gsd",
+      "type": "command",
+      "description": "Create a detailed phase plan"
+    },
+    "execute_phase": {
+      "command": "/gsd:execute-phase",
+      "provider": "gsd",
+      "type": "command",
+      "description": "Execute all plans in a phase"
+    },
+    "verify_work": {
+      "command": "/gsd:verify-work",
+      "provider": "gsd",
+      "type": "command",
+      "description": "Validate built features through UAT"
+    },
+    "quick_task": {
+      "command": "/gsd:quick",
+      "provider": "gsd",
+      "type": "command",
+      "description": "Execute a quick task with GSD guarantees"
+    },
+    "debug_gsd": {
+      "command": "/gsd:debug",
+      "provider": "gsd",
+      "type": "command",
+      "description": "GSD systematic debugging"
+    },
+    "add_tests": {
+      "command": "/gsd:add-tests",
+      "provider": "gsd",
+      "type": "command",
+      "description": "Generate tests for completed phase"
+    },
+    "code_review": {
+      "command": "superpowers:requesting-code-review",
+      "provider": "superpowers",
+      "type": "skill",
+      "description": "Run code review on completed work"
+    },
+    "tdd": {
+      "command": "superpowers:test-driven-development",
+      "provider": "superpowers",
+      "type": "skill",
+      "description": "Test-driven development workflow"
+    },
+    "git_worktree": {
+      "command": "superpowers:using-git-worktrees",
+      "provider": "superpowers",
+      "type": "skill",
+      "description": "Create isolated git worktree for feature work"
+    },
+    "finish_branch": {
+      "command": "superpowers:finishing-a-development-branch",
+      "provider": "superpowers",
+      "type": "skill",
+      "description": "Complete and merge a development branch"
+    },
+    "write_plan": {
+      "command": "superpowers:writing-plans",
+      "provider": "superpowers",
+      "type": "skill",
+      "description": "Write implementation plan before coding"
+    },
+    "debug_systematic": {
+      "command": "superpowers:systematic-debugging",
+      "provider": "superpowers",
+      "type": "skill",
+      "description": "Systematic debugging for non-Scott projects"
+    },
+    "debug": {
+      "command": "/scott:debug",
+      "provider": "toolkit",
+      "type": "command",
+      "description": "Systematic debugging with lesson capture"
+    },
+    "phase_closeout": {
+      "command": "/scott:phase-closeout",
+      "provider": "toolkit",
+      "type": "command",
+      "description": "Mandatory post-execution closeout"
+    },
+    "resume": {
+      "command": "/scott:resume",
+      "provider": "toolkit",
+      "type": "command",
+      "description": "Resume work on existing project"
+    },
+    "new_feature": {
+      "command": "/scott:new-feature",
+      "provider": "toolkit",
+      "type": "command",
+      "description": "Add feature to existing project"
+    },
+    "new_project": {
+      "command": "/scott:new-project",
+      "provider": "toolkit",
+      "type": "command",
+      "description": "Start a new project from scratch"
+    }
+  }
+}
