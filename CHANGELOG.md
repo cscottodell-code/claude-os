@@ -1,5 +1,58 @@
 # Toolkit Changelog
 
+## v5.0.0 - 2026-03-24
+Major rewrite: three new systems (stack enforcement, learning loop, decoupling) plus full toolkit rationalization.
+
+### Stack Enforcement (Steps 1-3)
+- **NEW: `checks/` directory** with technology check files: surrealdb.json, nuxt.json, tailwind.json, bun.json, hono.json
+- **NEW: `checks/stack-lock.schema.json`** -- JSON Schema for validating stack-lock.json files
+- **NEW: `checks/test-fixtures/`** -- good/bad sample files for check validation
+- **NEW: `tools/stack-detect.sh`** -- auto-detect project technologies from package.json
+- **NEW: `tools/stack-check.sh`** -- run static checks from check files against source code
+- **NEW: `tools/stack-preflight.sh`** -- system readiness verification with degradation tiers (full/reduced/minimal)
+- **`workflows/phase-closeout.md` v2.0:** Added Phase 1.5 (Stack Audit) between Verify and Code Review. Lesson tagging with Claude-suggested tags.
+- **NEW: `hooks/check-file-test-trigger.sh`** -- auto-runs test fixtures when check files are edited
+
+### Guard Hooks + Setup (Step 4)
+- **NEW: `hooks/uiux-reminder.sh`** -- nudge to run /impeccable:audit when .vue files change during GSD execution
+- **`hooks/guard-npm-install.sh`:** Extended for stack drift detection
+- **`setup.sh` v5:** Deploys checks/, tools/, config/ directories alongside hooks/rules/skills
+
+### Workflow Integration (Step 5)
+- **`workflows/new-project.md`:** Added stack-lock.json generation in Phase 5 (Create Repository)
+- **`workflows/resume-project.md`:** Added stack-lock staleness check in Phase 1
+
+### Decoupling (Step 6)
+- **NEW: `config/interfaces.json`** -- maps 17 abstract operations to concrete GSD/Superpowers/Toolkit commands
+- **NEW: `tools/toolkit-resolve`** -- shell helper to resolve operation names
+- **`rules/claude-behavior.md`:** Rewrote with abstract operation names + operation resolution rule + stack enforcement section
+- **All workflow files:** Updated to use abstract operation names instead of hardcoded commands
+- **`context/CLAUDE-MD-TEMPLATE.md`:** Updated PM Mode section with abstract operations + resolution reference
+- **`tools/stack-preflight.sh`:** Added provider health check (verifies interfaces.json operations are resolvable)
+
+### Learning Loop (Step 7)
+- **NEW: `tools/stack-metrics.sh`** -- aggregates audit artifacts across all projects into checks/metrics.json
+- **NEW: `skills/scott-stack-review/`** -- 5-section dashboard (system health, check candidates, health report, refinement, overlap)
+- **NEW: `skills/scott-stack-baseline/`** -- first-run audit for existing projects
+- **NEW: `skills/scott-rebuild-metrics/`** -- regenerate metrics.json from audit artifacts
+- **NEW: `.gitignore`** -- excludes checks/metrics.json (computed cache)
+
+### Documentation + Polish (Step 8)
+- **`README.md`:** Rewritten for v5. Updated architecture (four-system), repo structure, contributing rules, learning loop diagram.
+- **`docs/user-guide.md`:** Added stack enforcement skills, updated hooks table, abstract operations in build loop, v5 "What Lives Where" table.
+- **`workflows/toolkit-spa-day.md` v1.1:** Added Phase 6 (Stack Review), replaced knowledge/ with checks/ in audit, added interfaces audit to contradiction scan.
+- **`workflows/toolkit-update.md` v1.3:** Added v5 ripple effect checks (check files, interfaces.json, tools/).
+- **`workflows/handoff-to-gary.md` v1.4:** Added stack-lock.json to handoff checklist.
+- **`rules/code-style.md`:** Added Version Compliance section (stack-lock.json, SurrealDB v3, Tailwind v4 patterns).
+
+### Rationalization (Step 0)
+- **DELETED: `knowledge/` directory** -- all content absorbed into matching skills
+- **Root files cleaned:** about-me.md, conventions.md, gsd-upstream-proposals.md deleted
+- **Files moved:** ADRs to Eleanor, surrealdb-v3-reference to skills, instructions to docs/
+- **Scope notes added** to log-error.md, log-success.md, retro.md
+
+Triggered by: v4 file audit of all 160 toolkit files revealed duplication, misplacement, and the need for stack enforcement after Bresco's code-reading reviews missed 3 real bugs that a live SurrealDB audit caught in minutes.
+
 ## v2.14.0 - 2026-03-22
 - **NEW: `/scott:phase-closeout`** — single unified skill replacing separate log-error, log-success, and retro skills for GSD post-execution. Runs verification, code review, and one reflection interview. Produces error logs, success logs, RETRO.md, and lessons.md in one conversation.
 - **NEW: `guard-phase-completion.sh` hook** — PreToolUse hook that blocks `gsd-tools phase complete` unless `.post-execution-complete` marker file exists. The marker is written by phase-closeout as its final step. This is physical enforcement, not instructions.

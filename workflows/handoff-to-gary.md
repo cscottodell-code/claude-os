@@ -1,9 +1,10 @@
 # Handoff to Gary
 
 ## Metadata
-- Last updated: 2026-03-05
-- Version: 1.3
+- Last updated: 2026-03-24
+- Version: 1.4
 - Changelog:
+  - v1.4: Add stack-lock.json to handoff checklist, use abstract operation names
   - v1.3: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and note that /gsd:add-tests works in both PM modes
   - v1.2: Add test coverage assessment with /gsd:add-tests (Phase 1)
   - v1.1: Add Superpowers two-stage code review to Phase 1, add test verification items to Phase 5 handoff checklist
@@ -130,6 +131,7 @@ Final verification that everything is ready.
 - [ ] ARCHITECTURE.md exists and is accurate
 - [ ] Setup instructions work from scratch
 - [ ] All database schema files are up to date
+- [ ] `stack-lock.json` included with correct versions and `approved_by: "scott"`
 - [ ] All tests pass (`pnpm test`)
 - [ ] Test coverage covers critical business logic
 - [ ] Gary has access to the GitHub repo

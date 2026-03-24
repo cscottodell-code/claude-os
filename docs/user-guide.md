@@ -1,6 +1,6 @@
-# Scott-Toolkit v2 — How to Use It
+# Scott-Toolkit v5 — How to Use It
 
-This is your personal cheat sheet. The toolkit handles context engineering — making sure Claude Code always knows where you left off, what you're building, and what lessons you've learned. It works alongside GSD (project management) and Superpowers (dev methodology).
+This is your personal cheat sheet. The toolkit handles context engineering -- making sure Claude Code always knows where you left off, what you're building, and what lessons you've learned. It also enforces stack-specific correctness and feeds lessons back into reusable checks. It works alongside GSD (project management) and Superpowers (dev methodology).
 
 ---
 
@@ -30,13 +30,21 @@ These are your workflows. Type them and Claude walks you through each one.
 | `/scott:phase-closeout` | After a GSD phase — verify, review, reflect (hook-enforced) |
 | `/scott:handoff` | When a prototype is ready for Gary |
 
+### Stack Enforcement & Learning
+
+| Command | When to use it |
+|---------|---------------|
+| `/scott:stack-review` | Monthly dashboard: check health, promote lessons to checks, refine noisy checks |
+| `/scott:stack-baseline` | First-run audit for existing projects (generates initial audit data) |
+| `/scott:rebuild-metrics` | Regenerate metrics.json from audit artifacts (recovery command) |
+
 ### Learning & Improvement
 
 | Command | When to use it |
 |---------|---------------|
 | `/scott:source-review` | Compare context engineering sources against your toolkit |
 | `/scott:toolkit-update` | When you want to improve the toolkit itself |
-| Toolkit Spa Day | Monthly: consolidate rules/skills, review instinct candidates, remove contradictions |
+| Toolkit Spa Day | Monthly: consolidate rules/skills, review instinct candidates, stack review, remove contradictions |
 
 ### Reference & Knowledge
 
@@ -184,7 +192,11 @@ The setup script uses symlinks, so after `git pull` most changes take effect imm
 | `~/.claude/hooks/` | Deployed hooks (symlinked to toolkit) | `setup.sh` |
 | `~/.claude/rules/` | Behavior rules (symlinked to toolkit) | `setup.sh` |
 | `~/.claude/skills/scott-*/` | Deployed workflow skills | `setup.sh` |
+| `~/.claude/checks/` | Stack enforcement check files | `setup.sh` |
+| `~/.claude/tools/` | CLI tools (stack-detect, stack-check, etc.) | `setup.sh` |
+| `~/.claude/config/` | Toolkit config (interfaces.json) | `setup.sh` |
 | `~/.claude/settings.json` | Hook registrations, plugins | Manual (machine-specific) |
+| `<project>/stack-lock.json` | Locked technology versions for that project | `/scott:new-project` or manual |
 | `<project>/.claude-resume.md` | Resume file for that project | Claude (automatically) |
 | `~/Sites/Global/ACTIVE-PROJECTS.md` | Master project list | Session-start hook (automatically) |
 
@@ -216,7 +228,10 @@ You never create, edit, or delete these files. They're machine-to-machine commun
 | **guard-git-push.sh** | Every time Claude tries to `git push` | Blocks it until you confirm | "Git push blocked" message |
 | **guard-destructive.sh** | Every time Claude tries `rm -rf`, `git reset --hard`, etc. | Blocks it and explains why | "Blocked: [command] would..." message |
 | **guard-claude-md.sh** | Every time Claude tries to edit CLAUDE.md or MEMORY.md | Blocks it until you confirm | "CLAUDE.md modification blocked" message |
-| **guard-npm-install.sh** | Every time Claude tries to install packages | Blocks it and lists the packages | "npm install blocked — packages: ..." message |
+| **guard-npm-install.sh** | Every time Claude tries to install packages | Blocks it and lists the packages | "npm install blocked -- packages: ..." message |
+| **guard-phase-completion.sh** | When GSD tries to mark a phase complete | Blocks without `.post-execution-complete` marker | "Phase closeout required" message |
+| **check-file-test-trigger.sh** | When a check file in `checks/` is edited | Auto-runs test fixtures against the changed check | Test pass/fail results |
+| **uiux-reminder.sh** | After `.vue` files are written during GSD execution | One-line nudge to run `/impeccable:audit` before closeout | "Consider running /impeccable:audit" |
 | **offload-large-output.sh** | After every tool use | Writes tool results >4KB to `.claude/tool-output-overflow/` to prevent context bloat | "Large tool output saved to..." message |
 | **extract-instincts.sh** | Before compaction + session end | Prompts Claude to note session patterns to `~/.claude/instinct-candidates.md` | Claude may write a quick pattern note |
 | **pre-completion-checklist.sh** | When a session ends | Checks for uncommitted changes, stale todo.md, missing resume file, and stale lessons.md. Strong visual warning but doesn't block. | A bordered checklist with item count |
@@ -234,7 +249,7 @@ These rules live in `~/.claude/rules/` and Claude reads them automatically in ev
 
 | Rule | What it tells Claude |
 |------|---------------------|
-| **claude-behavior.md** | Use Superpowers for dev methodology, GSD for project management, toolkit for learning capture. Enter plan mode for complex tasks. Pre-completion verification gate (tests pass, git clean, todo updated, feature works). Task contracts (define completion criteria upfront with immutable tests). Doom-loop detection (3+ edits = re-plan or fresh subagent with contract). Subagent trigger (3+ files = spawn subagent). Subagent iterative retrieval (evaluate results, follow up if incomplete, max 3 cycles). Named agent roles with restricted tool sets (researcher, planner, reviewer, executor). Pattern referencing (point to existing code patterns instead of describing verbally). Checkpoint commits before significant refactors. Context rot monitored by context-reminders hook (60min + 100 tool uses). Post-compaction recovery (re-read resume, snapshot, task, offloaded files). Neutral prompting (avoid sycophancy bias in investigations). |
+| **claude-behavior.md** | Abstract operation resolution via interfaces.json. Stack enforcement (stack-lock.json, stack-check.sh, drift detection). Use Superpowers for dev methodology, GSD for project management, toolkit for learning capture. Pre-completion verification gate. Task contracts. Doom-loop detection. Named agent roles. Checkpoint commits. Context rot monitoring. Post-compaction recovery. Neutral prompting. |
 | **code-style.md** | TypeScript strict mode, Vue 3 Composition API, Tailwind v4, Pinia, 2-space indent, single quotes. |
 | **n8n-sync.md** | Keep local tools-needing-setup file and n8n reminder workflow in sync. |
 
@@ -351,31 +366,29 @@ No tag defaults to `[STOP]` (safe default). AUTO means "don't wait for permissio
 All projects use **GSD + Superpowers** together. They have distinct roles:
 
 **GSD = orchestration engine** (what to do, when, and tracking progress):
-- Project initialization: `/gsd:new-project`
-- Phase planning: `/gsd:plan-phase`, `/gsd:discuss-phase`
-- Phase execution: `/gsd:execute-phase`
-- Verification: `/gsd:verify-work`
+- Phase planning: **plan_phase** operation
+- Phase execution: **execute_phase** operation
+- Verification: **verify_work** operation
 - State tracking: `.planning/` directory (STATE.md, ROADMAP.md, phase plans)
-- Quick tasks: `/gsd:quick`, `/gsd:fast`
-- Test coverage: `/gsd:add-tests`
+- Quick tasks: **quick_task** operation
+- Test coverage: **add_tests** operation
 
 **Superpowers = discipline layer** (how to do it well):
-- Brainstorming: `superpowers:brainstorming` (before creative or architectural work)
-- Git isolation: `superpowers:using-git-worktrees` (feature branches in worktrees)
-- TDD enforcement: `superpowers:test-driven-development` (failing test, implement, refactor)
-- Code review: `superpowers:requesting-code-review`, `superpowers:receiving-code-review`
-- Plan quality: `superpowers:writing-plans` (for non-GSD contexts only, since GSD has its own planning)
-- Branch completion: `superpowers:finishing-a-development-branch` (merge or PR)
-- Verification discipline: `superpowers:verification-before-completion`
+- Git isolation: **git_worktree** operation (feature branches in worktrees)
+- TDD enforcement: **tdd** operation (failing test, implement, refactor)
+- Code review: **code_review** operation
+- Plan quality: **write_plan** operation (for non-GSD contexts only)
+- Branch completion: **finish_branch** operation (merge or PR)
+
+**Operation names** (like `plan_phase`, `tdd`) resolve to concrete commands via `~/Sites/Global/scott-toolkit/config/interfaces.json`. This means if GSD or Superpowers renames a command, only one file changes.
 
 **The build loop** (how they work together):
-1. Brainstorm (Superpowers) -> feeds into GSD planning
-2. Worktree (Superpowers) -> isolation for GSD execution
-3. Plan (GSD) -> structured task breakdown
-4. Execute (GSD) -> TDD discipline from Superpowers applies
-5. Review (Superpowers) -> after GSD execution completes
-6. Verify (GSD) -> UAT against acceptance criteria
-7. Finish branch (Superpowers) -> merge or PR
+1. Worktree -> isolation for GSD execution
+2. Plan -> structured task breakdown
+3. Execute -> TDD discipline applies, stack-check.sh runs on changed files
+4. Review -> after GSD execution completes
+5. Verify -> UAT against acceptance criteria
+6. Finish branch -> merge or PR
 
 ### Proactive Toolkit Usage
 

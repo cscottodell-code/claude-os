@@ -1,9 +1,10 @@
 # Toolkit Spa Day
 
 ## Metadata
-- Last updated: 2026-03-13
-- Version: 1.0
+- Last updated: 2026-03-24
+- Version: 1.1
 - Changelog:
+  - v1.1: Add Phase 6 (Stack Review) for learning loop. Remove knowledge/ references (eliminated in v5). Add interfaces audit to Phase 3.
   - v1.0: Initial workflow
 
 ## Purpose
@@ -23,14 +24,14 @@ degradation that seems related to too many instructions.
 ### Steps
 1. Count all rules files: `~/Sites/Global/scott-toolkit/rules/*.md`
 2. Count all skill files in `~/.claude/skills/*/SKILL.md`
-3. Count all knowledge files: `~/Sites/Global/scott-toolkit/knowledge/active/*.md`
+3. Count all check files: `~/Sites/Global/scott-toolkit/checks/*.json`
 4. Read `~/.claude/instinct-candidates.md` if it exists
 5. Present a summary:
    | Category | Count | Total Lines |
    |----------|-------|-------------|
    | Rules | [n] | [lines] |
    | Skills | [n] | [lines] |
-   | Knowledge | [n] | [lines] |
+   | Check files | [n] | [lines] |
    | Instinct candidates | [n] | [lines] |
 
 ### Done when
@@ -57,12 +58,14 @@ All candidates reviewed. Scott has decided on each one.
 
 ### Steps
 1. Read all rules files
-2. Look for:
+2. Read `config/interfaces.json` -- verify all operations still resolve correctly
+3. Look for:
    - Contradictory guidance (e.g., "always do X" in one file, "never do X" in another)
    - Duplicate rules across files
    - Rules that are now obsolete (solved by Claude Code features)
    - Rules that are too vague to be actionable
-3. Present findings to Scott
+   - Stale operation mappings in interfaces.json (renamed or removed commands)
+4. Present findings to Scott
 
 ### Done when
 Contradiction scan complete. Findings presented.
@@ -92,9 +95,22 @@ All consolidations made and approved.
 ### Done when
 Budget check complete.
 
+## Phase 6: Stack Review [DELEGATE]
+
+### What this phase does
+Run the learning loop dashboard to review check health and promote lessons.
+
+### Steps
+1. Invoke `/scott:stack-review`
+2. The stack-review skill handles everything: aggregation, dashboard, and Scott's approvals
+
+### Done when
+Stack review complete (or skipped if no audit data exists yet).
+
 ## Completion Checklist
 - [ ] Current state audited
 - [ ] Instinct candidates reviewed
 - [ ] Contradictions scanned
 - [ ] Consolidations made
 - [ ] Context budget verified
+- [ ] Stack review completed (or noted as no data)

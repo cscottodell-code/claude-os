@@ -1,11 +1,12 @@
 # Toolkit Update
 
 ## Metadata
-- Last updated: 2026-03-05
-- Version: 1.2
+- Last updated: 2026-03-24
+- Version: 1.3
 - Changelog:
+  - v1.3: Add v5 directory awareness (checks/, tools/, config/) to Phase 2 ripple effects
   - v1.2: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
-  - v1.1: Add Phase 5 — auto-update instructions doc and regenerate PDF after every toolkit change
+  - v1.1: Add Phase 5 -- auto-update instructions doc and regenerate PDF after every toolkit change
   - v1.0: Initial workflow
 
 ## Purpose
@@ -54,6 +55,9 @@ Determine exactly which files need changes.
 3. Check for ripple effects:
    - If a template changes, do workflow skills that reference it need updating?
    - If a reference skill changes, do templates that link to it need updating?
+   - If a check file changes, do test fixtures need updating?
+   - If a command is renamed, does `config/interfaces.json` need updating?
+   - If a new tool is added to `tools/`, does `setup.sh` need to deploy it?
    - Are there cross-references that need to stay consistent?
 
 ### Output

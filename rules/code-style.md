@@ -27,6 +27,13 @@ Standards for TypeScript, Vue, and JavaScript files.
 - CSS-first config: use `@import "tailwindcss"` and `@theme` in CSS (not `tailwind.config.js`)
 - v4 class renames: `shadow-sm` -> `shadow-xs`, `outline-none` -> `outline-hidden`, `ring` -> `ring-3`
 
+## Version Compliance
+- Use APIs and patterns matching the versions in `stack-lock.json` (if the project has one)
+- SurrealDB v3: use `type::record()` (not `type::thing()`), COMPUTED fields (not `<future>`), expect errors on undefined SCHEMAFULL fields
+- Tailwind CSS v4: CSS-first config with `@theme`, updated class names (`shadow-xs`, `outline-hidden`, `ring-3`)
+- Nuxt 4: follow the latest Nuxt 4 conventions
+- When unsure about version-specific syntax, check `~/Sites/Global/scott-toolkit/checks/<technology>.json` for known patterns
+
 ## Code Quality
 - Add comments only for complex logic
 - Use async/await (not .then())
