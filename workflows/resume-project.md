@@ -44,6 +44,12 @@ If the project has a `.planning/` directory (GSD-managed project):
 - Read `.planning/phases/*/VERIFICATION.md` for completed phase results
 - This tells you where the structured build process left off
 
+### Stack-Lock Staleness Check
+If the project has a `stack-lock.json`:
+- Check the `last_reviewed` (or `locked`) date
+- If older than 30 days, mention it to Scott: "Stack checks last reviewed X days ago. Consider running `stack-preflight.sh` to verify your environment is current."
+- This is a nudge, not a blocker. Scott decides whether to act on it.
+
 ### Output
 A mental model of where the project stands — both the human context (CLAUDE.md, PRD)
 and the build state (GSD planning files).
