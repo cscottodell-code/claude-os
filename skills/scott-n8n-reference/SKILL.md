@@ -47,6 +47,7 @@ Use the routing table below to find the right sub-file for your task:
 | **Configure a node** (operations, properties, dependencies) | [node-configuration.md](node-configuration.md) |
 | **Fix a validation error** or understand validation profiles | [validation.md](validation.md) |
 | **Use n8n-mcp tools** (search nodes, create workflows, etc.) | [mcp-tools.md](mcp-tools.md) |
+| **Decide when to use n8n** vs SurrealDB events, Tauri, or Nuxt routes | [n8n-integration-guide.md](n8n-integration-guide.md) |
 
 ## Deep Dive Sub-Files
 
