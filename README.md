@@ -183,7 +183,7 @@ Start project (use toolkit)
   -> [stack]-tagged lessons become check candidates
   -> /scott:stack-review to review and promote
   -> Checks apply to ALL future projects
-  -> /scott:toolkit-update to apply other improvements
+  -> /scott:update-toolkit to apply other improvements
   -> Push to GitHub
   -> Next project starts smarter
 ```

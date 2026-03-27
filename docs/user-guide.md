@@ -43,7 +43,7 @@ These are your workflows. Type them and Claude walks you through each one.
 | Command | When to use it |
 |---------|---------------|
 | `/scott:source-review` | Compare context engineering sources against your toolkit |
-| `/scott:toolkit-update` | When you want to improve the toolkit itself |
+| `/scott:update-toolkit` | When you want to improve the toolkit itself |
 | Toolkit Spa Day | Monthly: consolidate rules/skills, review instinct candidates, stack review, remove contradictions |
 
 ### Reference & Knowledge
@@ -188,7 +188,7 @@ The setup script uses symlinks, so after `git pull` most changes take effect imm
 
 | Location | What's there | Who maintains it |
 |----------|-------------|-----------------|
-| `~/Sites/Global/scott-toolkit/` | The toolkit repo (source of truth) | You + Claude via `/scott:toolkit-update` |
+| `~/Sites/Global/scott-toolkit/` | The toolkit repo (source of truth) | You + Claude via `/scott:update-toolkit` |
 | `~/.claude/hooks/` | Deployed hooks (symlinked to toolkit) | `setup.sh` |
 | `~/.claude/rules/` | Behavior rules (symlinked to toolkit) | `setup.sh` |
 | `~/.claude/skills/scott-*/` | Deployed workflow skills | `setup.sh` |

@@ -91,6 +91,7 @@ When a workflow, rule, or skill references an **abstract operation name** (like 
   - **Reviewer:** Read, Grep, Glob, Bash (for running tests)
   - **Executor:** All tools (full access for implementation work)
   - Match the role to the task. Don't give a research subagent write access.
+- Verify before presenting: when subagents produce findings (audits, reviews, comparisons), verify claims against primary sources before presenting to Scott. Subagents apply rules mechanically without understanding layered design. Never present a finding that hasn't been checked against the actual file.
 
 ### Verification
 - Never mark a task complete without proving it works
