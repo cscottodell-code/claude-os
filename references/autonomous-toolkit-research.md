@@ -1,7 +1,7 @@
 # Autonomous Toolkit Research
 
 **Date:** 2026-03-27
-**Status:** Research complete with verified findings. Multiple assumptions invalidated. Ready for revised design.
+**Status:** ALL RESEARCH COMPLETE. All 5 open questions resolved (2026-03-28). Ready for architecture design.
 **Purpose:** Comprehensive research into making the scott-toolkit support autonomous, unattended project execution with notifications.
 **Research scope:** 21 subagent research runs, 7 verification runs, 3 local tests. ~28 total agents.
 
@@ -206,13 +206,47 @@ Single Session (tmux, interactive)
 
 ---
 
-## OPEN QUESTIONS (Must Test Before Building)
+## OPEN QUESTIONS -- ALL RESOLVED (2026-03-28)
 
-1. Does the iMessage Channels plugin install and work on macOS 26 Tahoe?
-2. Does `-p` with claude.ai auth (no API key) count against Max subscription or bill separately?
-3. Can GSD execute-phase run without AskUserQuestion if we strip it from allowed tools?
-4. What's the real token overhead of loading CLAUDE.md + hooks + skills per fresh `-p` session? (Test showed 56K cache creation tokens for a minimal prompt.)
-5. Does the Telegram `/scott:remind` skill work from within a `-p` session or wrapper script?
+### Q1: Does the iMessage Channels plugin work on macOS 26 Tahoe?
+**Answer: NOT INSTALLED, RISKY.** Plugin exists in marketplace (`~/.claude/plugins/marketplaces/claude-plugins-official/external_plugins/imessage/`) but is not in `installed_plugins.json`. Multiple Tahoe-specific Claude Code bugs documented (ECONNRESET #38977, extension loading #37072, VM boot crashes #36503). Channels itself has known issues (notification delivery #2270, MCP tool unavailability #30717).
+**Decision: Don't depend on Channels. Telegram is the reliable notification path.**
+
+### Q2: Does `-p` with claude.ai auth use Max subscription or bill separately?
+**Answer: USES SUBSCRIPTION QUOTA.** Verified `ANTHROPIC_API_KEY` is not set in env. With claude.ai auth only, `-p` calls count against Max subscription's 5-hour rolling window, not separate API billing.
+**Safety rule: NEVER set ANTHROPIC_API_KEY in shell. The $1,800 incident (GitHub #37686) happened when a Max subscriber's shell inherited an API key.**
+
+### Q3: Can GSD execute-phase run without AskUserQuestion?
+**Answer: YES, FULLY HEADLESS.** Execute-phase core (lines 197-370) has zero AskUserQuestion calls. All 9 instances are in the autonomous wrapper layer, not the executor. Additional findings:
+- `TEXT_MODE` flag converts TUI menus to plain-text numbered lists (system-wide headless support)
+- Regression verification gate is optional, explicitly skippable on first phase or when no prior VERIFICATION.md exists
+- Manager.md contains explicit instructions for background/unattended execution
+**Decision: No GSD modifications needed. Execute-phase is already headless-ready.**
+
+### Q4: What's the real token overhead per fresh `-p` session?
+**Answer: ~53,350 tokens, but 91% is Vercel plugin.**
+| Component | Tokens | % |
+|-----------|--------|---|
+| Vercel ecosystem knowledge graph | ~48,700 | 91% |
+| settings.json config | ~1,700 | 3% |
+| session-start.sh output | ~1,050 | 2% |
+| Hierarchical CLAUDE.md files | ~880 | 2% |
+| Personal CLAUDE.md | ~420 | 1% |
+**For non-Vercel projects (like toolkit work), disabling inject-claude-md.mjs drops overhead to ~4,050 tokens/session.**
+8 phases without Vercel hook: ~32K total overhead. With Vercel hook: ~427K total.
+**Decision: Conditionally disable Vercel hook for non-Vercel projects in autonomous mode.**
+
+### Q5: Does Telegram work from a wrapper script?
+**Answer: YES, TRIVIALLY.** The `/scott:remind` skill is just a curl POST to the Telegram Bot API. No Claude Code dependency:
+```bash
+curl -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+  -H "Content-Type: application/json" \
+  -d '{"chat_id": "8427729948", "text": "MESSAGE", "parse_mode": "Markdown"}'
+```
+- Bot: @BrescoAlertsBot
+- Token: stored in `~/.claude/credentials.md`
+- Works from any bash script, cron job, or tmux session
+**Decision: Extract curl pattern into autonomous-build.sh. No dependency on Claude Code for notifications.**
 
 ---
 
@@ -249,3 +283,10 @@ Single Session (tmux, interactive)
 22. Local test: Bun, Claude Code version, macOS version
 23. Local test: osascript Messages access
 24. Local test: `-p` headless + `--continue` chaining
+
+### Round 5 (Open Question Resolution -- 5 agents, 2026-03-28)
+25. Channels iMessage on Tahoe -- plugin availability, installed status, Tahoe bug catalog
+26. `-p` billing verification -- env var check, auth method, subscription vs API billing
+27. GSD execute-phase headless -- AskUserQuestion distribution, TEXT_MODE, regression gate
+28. Telegram from wrapper -- skill extraction, curl pattern, credentials location
+29. Token overhead measurement -- per-component breakdown, Vercel hook dominance
