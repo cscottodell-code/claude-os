@@ -1,6 +1,26 @@
 {
-  "_readme": "Maps toolkit operations to external tool commands. Update here when GSD or Superpowers change.",
-  "schema_version": "1.0",
+  "_readme": "Maps toolkit operations to external tool commands and catalogs known plugins. Update here when GSD or Superpowers change.",
+  "schema_version": "1.1",
+  "plugins": {
+    "vercel": {
+      "id": "vercel",
+      "provider": "vercel",
+      "required": false,
+      "description": "Vercel ecosystem guidance — Next.js, AI SDK, deployment, storage. ~52K tokens overhead per session."
+    },
+    "superpowers": {
+      "id": "superpowers",
+      "provider": "superpowers",
+      "required": true,
+      "description": "Development methodology — TDD, code review, git worktrees, debugging, planning."
+    },
+    "impeccable": {
+      "id": "impeccable",
+      "provider": "impeccable",
+      "required": true,
+      "description": "UI/UX design quality — critique, polish, audit, animate, normalize."
+    }
+  },
   "operations": {
     "plan_phase": {
       "command": "/gsd:plan-phase",

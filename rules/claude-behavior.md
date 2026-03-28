@@ -9,6 +9,8 @@ Three systems handle different concerns. Use the right one for the job.
 
 When a workflow, rule, or skill references an **abstract operation name** (like `plan_phase`, `tdd`, `phase_closeout`), resolve it by reading `config/interfaces.json` in the toolkit directory (`~/Sites/Global/scott-toolkit/config/interfaces.json`) and using the `command` value for that operation. This decouples the toolkit from specific tool versions.
 
+Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` section of the same `interfaces.json`. The session-start hook uses these to detect plugin/project misalignment.
+
 ### Development Methodology (-> Superpowers)
 - TDD: **tdd** operation for all features and bug fixes
   - Exception: throwaway experiments (explicitly stated by Scott)

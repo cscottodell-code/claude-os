@@ -18,7 +18,8 @@ if [[ $# -lt 1 ]]; then
   echo "Available operations:" >&2
   if [[ -f "$INTERFACES" ]]; then
     # Extract operation names from JSON
-    grep -o '"[a-z_]*":' "$INTERFACES" | grep -v '_readme\|schema_version\|operations\|command\|provider\|type\|description' | tr -d '":' | sed 's/^/  /'
+    # Extract only operation names (keys that have "command" on the next line)
+    grep -B1 '"command":' "$INTERFACES" | grep -o '"[a-z_]*":' | grep -v '"command":' | tr -d '":' | sed 's/^/  /'
   fi
   exit 1
 fi

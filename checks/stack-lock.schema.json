@@ -12,7 +12,7 @@
     },
     "schema_version": {
       "type": "string",
-      "enum": ["1.0"],
+      "enum": ["1.0", "1.1"],
       "description": "Schema version for future migration support"
     },
     "locked": {

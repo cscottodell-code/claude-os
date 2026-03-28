@@ -171,10 +171,19 @@ Set up the project repo with the proper file structure and configuration files.
    - Review the auto-detected technologies with Scott
    - Scott approves or adjusts, then change `approved_by` from "pending" to "scott"
    - Change `tier` from "experiment" to "full" for production projects
-10. Create initial commit
+10. Generate `.claude/settings.json` for plugin tuning:
+   - If the project does NOT use Vercel (no `next`/`vercel` in stack-lock.json technologies):
+     ```json
+     {
+       "enabledPlugins": false
+     }
+     ```
+   - If the project DOES use Vercel, skip this step (all plugins active by default)
+   - This saves ~52K tokens per session on non-Vercel projects
+11. Create initial commit
 
 ### Output
-A fully initialized project repo with CLAUDE.md, PRD.md, stack-lock.json, directory structure, and task tracking files.
+A fully initialized project repo with CLAUDE.md, PRD.md, stack-lock.json, .claude/settings.json (if needed), directory structure, and task tracking files.
 
 ### Done when
 The repo exists, has proper structure, and initial commit is made.

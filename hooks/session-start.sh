@@ -78,6 +78,47 @@ if [ -f "$PROJECT_DIR/stack-lock.json" ]; then
   fi
 fi
 
+# --- 1c. Plugin-project alignment check ---
+# Detect if the Vercel plugin is active but project doesn't use Vercel (or vice versa).
+# Uses stack-lock.json technologies and project path as signals.
+TOOLKIT_DIR="$HOME/Sites/Global/scott-toolkit"
+INTERFACES="${TOOLKIT_DIR}/config/interfaces.json"
+
+if [ -f "$INTERFACES" ]; then
+  # Check if Vercel plugin is active by looking for its settings hook output
+  VERCEL_PLUGIN_ACTIVE=false
+  if [ -f "$HOME/.claude/plugins/vercel/hooks/hooks.json" ] 2>/dev/null; then
+    VERCEL_PLUGIN_ACTIVE=true
+  fi
+
+  # Detect if project uses Vercel (check stack-lock or path-based heuristic)
+  PROJECT_USES_VERCEL=false
+  if [ -f "$PROJECT_DIR/stack-lock.json" ]; then
+    if grep -q '"vercel"\|"nextjs"\|"next"' "$PROJECT_DIR/stack-lock.json" 2>/dev/null; then
+      PROJECT_USES_VERCEL=true
+    fi
+  fi
+  # Path-based fallback: Bresco projects are on Vercel (legacy)
+  case "$PROJECT_DIR" in
+    "$SITES_DIR"/Bresco/*) PROJECT_USES_VERCEL=true ;;
+    "$SITES_DIR"/Advosy/*) PROJECT_USES_VERCEL=true ;;
+  esac
+
+  if [ "$VERCEL_PLUGIN_ACTIVE" = true ] && [ "$PROJECT_USES_VERCEL" = false ] && [ "$PROJECT_DIR" != "$HOME" ]; then
+    echo "PLUGIN MISMATCH: Vercel plugin is active but this project doesn't use Vercel (~52K tokens overhead)."
+    echo "To disable, create $PROJECT_DIR/.claude/settings.json with:"
+    echo '  {'
+    echo '    "enabledPlugins": false'
+    echo '  }'
+  elif [ "$VERCEL_PLUGIN_ACTIVE" = false ] && [ "$PROJECT_USES_VERCEL" = true ] && [ "$PROJECT_DIR" != "$HOME" ]; then
+    echo "PLUGIN MISMATCH: Vercel plugin is disabled but this project uses Vercel."
+    echo "To enable, remove enabledPlugins from $PROJECT_DIR/.claude/settings.json or set:"
+    echo '  {'
+    echo '    "enabledPlugins": ["vercel"]'
+    echo '  }'
+  fi
+fi
+
 # --- 2. Detect current project state ---
 
 # Check if we're in a project directory

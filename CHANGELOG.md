@@ -1,5 +1,16 @@
 # Toolkit Changelog
 
+## v5.1.0 - 2026-03-28
+Plugin tuning: reduce token overhead by detecting plugin/project misalignment.
+
+### Plugin Awareness
+- **`config/interfaces.json`:** Added `plugins` section cataloging Vercel, Superpowers, and Impeccable with `required` flag. Schema version bumped to 1.1.
+- **`hooks/session-start.sh`:** Bidirectional plugin-project alignment check. Warns when Vercel plugin is active on non-Vercel projects (~52K tokens saved) or disabled on Vercel projects. Suggests copy-paste `.claude/settings.json` content.
+- **`workflows/new-project.md`:** Phase 5 now generates `.claude/settings.json` alongside `stack-lock.json` for non-Vercel projects.
+- **`tools/toolkit-resolve`:** Updated exclusion filter to skip `plugins` section entries.
+- **`rules/claude-behavior.md`:** Added plugin ID resolution note under Operation Resolution.
+- **`checks/stack-lock.schema.json`:** Now accepts schema_version 1.1.
+
 ## v5.0.0 - 2026-03-24
 Major rewrite: three new systems (stack enforcement, learning loop, decoupling) plus full toolkit rationalization.
 
