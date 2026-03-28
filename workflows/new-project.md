@@ -175,7 +175,9 @@ Set up the project repo with the proper file structure and configuration files.
    - If the project does NOT use Vercel (no `next`/`vercel` in stack-lock.json technologies):
      ```json
      {
-       "enabledPlugins": false
+       "enabledPlugins": {
+         "vercel@claude-plugins-official": false
+       }
      }
      ```
    - If the project DOES use Vercel, skip this step (all plugins active by default)

@@ -84,37 +84,51 @@ fi
 TOOLKIT_DIR="$HOME/Sites/Global/scott-toolkit"
 INTERFACES="${TOOLKIT_DIR}/config/interfaces.json"
 
-if [ -f "$INTERFACES" ]; then
-  # Check if Vercel plugin is active by looking for its settings hook output
+VERCEL_PLUGIN_ID="vercel@claude-plugins-official"
+
+if [ -f "$INTERFACES" ] && [ "$PROJECT_DIR" != "$HOME" ]; then
+  # Check if Vercel plugin is globally enabled in ~/.claude/settings.json
   VERCEL_PLUGIN_ACTIVE=false
-  if [ -f "$HOME/.claude/plugins/vercel/hooks/hooks.json" ] 2>/dev/null; then
-    VERCEL_PLUGIN_ACTIVE=true
+  if [ -f "$HOME/.claude/settings.json" ]; then
+    if grep -q "\"${VERCEL_PLUGIN_ID}\":\s*true" "$HOME/.claude/settings.json" 2>/dev/null; then
+      VERCEL_PLUGIN_ACTIVE=true
+    fi
   fi
 
-  # Detect if project uses Vercel (check stack-lock or path-based heuristic)
+  # Check if project-level settings override the global setting
+  if [ -f "$PROJECT_DIR/.claude/settings.json" ]; then
+    if grep -q "\"${VERCEL_PLUGIN_ID}\":\s*false" "$PROJECT_DIR/.claude/settings.json" 2>/dev/null; then
+      VERCEL_PLUGIN_ACTIVE=false
+    elif grep -q "\"${VERCEL_PLUGIN_ID}\":\s*true" "$PROJECT_DIR/.claude/settings.json" 2>/dev/null; then
+      VERCEL_PLUGIN_ACTIVE=true
+    fi
+  fi
+
+  # Detect if project uses Vercel (check stack-lock technologies or path-based heuristic)
   PROJECT_USES_VERCEL=false
   if [ -f "$PROJECT_DIR/stack-lock.json" ]; then
-    if grep -q '"vercel"\|"nextjs"\|"next"' "$PROJECT_DIR/stack-lock.json" 2>/dev/null; then
+    # Match technology keys only (top-level keys under "technologies")
+    if grep -q '"vercel"\|"nextjs"' "$PROJECT_DIR/stack-lock.json" 2>/dev/null; then
       PROJECT_USES_VERCEL=true
     fi
   fi
-  # Path-based fallback: Bresco projects are on Vercel (legacy)
+  # Path-based fallback: Bresco and Advosy projects are on Vercel (legacy)
   case "$PROJECT_DIR" in
     "$SITES_DIR"/Bresco/*) PROJECT_USES_VERCEL=true ;;
     "$SITES_DIR"/Advosy/*) PROJECT_USES_VERCEL=true ;;
   esac
 
-  if [ "$VERCEL_PLUGIN_ACTIVE" = true ] && [ "$PROJECT_USES_VERCEL" = false ] && [ "$PROJECT_DIR" != "$HOME" ]; then
+  if [ "$VERCEL_PLUGIN_ACTIVE" = true ] && [ "$PROJECT_USES_VERCEL" = false ]; then
     echo "PLUGIN MISMATCH: Vercel plugin is active but this project doesn't use Vercel (~52K tokens overhead)."
     echo "To disable, create $PROJECT_DIR/.claude/settings.json with:"
     echo '  {'
-    echo '    "enabledPlugins": false'
+    echo "    \"enabledPlugins\": { \"${VERCEL_PLUGIN_ID}\": false }"
     echo '  }'
-  elif [ "$VERCEL_PLUGIN_ACTIVE" = false ] && [ "$PROJECT_USES_VERCEL" = true ] && [ "$PROJECT_DIR" != "$HOME" ]; then
+  elif [ "$VERCEL_PLUGIN_ACTIVE" = false ] && [ "$PROJECT_USES_VERCEL" = true ]; then
     echo "PLUGIN MISMATCH: Vercel plugin is disabled but this project uses Vercel."
-    echo "To enable, remove enabledPlugins from $PROJECT_DIR/.claude/settings.json or set:"
+    echo "To enable, update $PROJECT_DIR/.claude/settings.json:"
     echo '  {'
-    echo '    "enabledPlugins": ["vercel"]'
+    echo "    \"enabledPlugins\": { \"${VERCEL_PLUGIN_ID}\": true }"
     echo '  }'
   fi
 fi
