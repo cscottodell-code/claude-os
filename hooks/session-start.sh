@@ -5,7 +5,7 @@
 # Non-blocking: outputs a suggestion, does not auto-invoke anything.
 
 SITES_DIR="$HOME/Sites"
-ACTIVE_PROJECTS="$SITES_DIR/Global/ACTIVE-PROJECTS.md"
+ACTIVE_PROJECTS="$SITES_DIR/Global/knowledge/ACTIVE-PROJECTS.md"
 PROJECT_DIR="$(pwd)"
 
 # --- 0. Sync down from GitHub ---
@@ -31,7 +31,7 @@ fi
   echo "|---------|-------------|--------|------|"
 
   FOUND_ANY=false
-  for resume_file in "$SITES_DIR"/*/.claude-resume.md "$SITES_DIR"/*/*/.claude-resume.md; do
+  for resume_file in "$SITES_DIR"/*/.claude-resume.md "$SITES_DIR"/*/*/.claude-resume.md "$SITES_DIR"/*/*/*/.claude-resume.md; do
     [ -f "$resume_file" ] || continue
     FOUND_ANY=true
 
@@ -86,10 +86,10 @@ if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
   # Detect project category from path
   CATEGORY=""
   case "$PROJECT_DIR" in
-    "$SITES_DIR"/Global/*)   CATEGORY="Global" ;;
-    "$SITES_DIR"/Personal/*) CATEGORY="Personal" ;;
-    "$SITES_DIR"/Advosy/*)   CATEGORY="Advosy" ;;
-    "$SITES_DIR"/Bresco/*)   CATEGORY="Bresco" ;;
+    "$SITES_DIR"/Global/*|"$SITES_DIR"/Global)     CATEGORY="Global" ;;
+    "$SITES_DIR"/Personal/*|"$SITES_DIR"/Personal)  CATEGORY="Personal" ;;
+    "$SITES_DIR"/Advosy/*|"$SITES_DIR"/Advosy)      CATEGORY="Advosy" ;;
+    "$SITES_DIR"/Bresco/*|"$SITES_DIR"/Bresco)       CATEGORY="Bresco" ;;
   esac
 
   if [ -f "$PROJECT_DIR/.claude-resume.md" ]; then

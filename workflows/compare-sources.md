@@ -136,19 +136,16 @@ protection mechanism**. Instead of loading every file into the main window or th
 subagent's window at once, we build summary manifests that enable progressive loading.
 
 ### Step 1: Build Toolkit Manifest
-Scan these files and write a 1-2 line summary for each:
 
-| Category | Files to scan |
-|----------|--------------|
-| Rules | `~/Sites/Global/scott-toolkit/rules/*.md` |
-| Workflows | `~/Sites/Global/scott-toolkit/workflows/*.md` |
-| Knowledge | `~/Sites/Global/scott-toolkit/knowledge/active/*.md` |
-| Templates | `~/Sites/Global/scott-toolkit/context/*.md` |
-| References | `~/Sites/Global/scott-toolkit/references/*.md` (skip ai-orchestration/) |
-| Hooks | `~/Sites/Global/scott-toolkit/hooks/*.sh` |
-| MEMORY.md | `~/.claude/projects/-Users-scott/memory/MEMORY.md` |
-| CLAUDE.md | `~/.claude/CLAUDE.md` |
-| Existing synthesis | `~/Sites/Global/context-engineering/ce-synthesis.md` (summary only) |
+**Prerequisite:** You should already have toolkit context from running `/scott:toolkit-briefing`
+at the start of this skill. Use that understanding to identify every toolkit file worth
+inventorying. This keeps the manifest current as the toolkit evolves, instead of relying
+on a hardcoded file list.
+
+Scan the toolkit repo at `~/Sites/Global/scott-toolkit/` and any related config files
+(CLAUDE.md, MEMORY.md, existing synthesis in `~/Sites/Global/context-engineering/ce-synthesis.md`).
+Use your toolkit-briefing knowledge to decide what's worth including. Cover at minimum:
+rules, workflows, skills, references, hooks, config, and context files.
 
 For each file, read it and write a brief summary capturing:
 - What the file configures or teaches
