@@ -1,5 +1,23 @@
 # Toolkit Changelog
 
+## v5.1.2 - 2026-03-29
+Context engineering research: agent boundaries, subagent roles, and multi-agent landscape evaluation.
+
+### Template Improvement
+- **`context/CLAUDE-MD-TEMPLATE.md`:** Replaced `Constraints & Rules` section with `Boundaries` using the industry-standard three-tier system (Always/Ask First/Never). Gives Claude a quick mental model of what's off-limits per project while hooks handle enforcement.
+
+### Subagent Roles
+- **`rules/claude-behavior.md`:** Added two new named agent roles:
+  - **Docs Agent:** Read, Grep, Glob, Write (documentation files only). For handoff documentation and README generation.
+  - **Security Auditor:** Read, Grep, Glob only (report-only, no modifications). For pre-deploy security sweeps.
+
+### Research
+- Evaluated Tier 2 multi-agent tools (Vibe Kanban, Gastown, Claude Squad, Agent Teams, Conductor). Decision: no adoption for now. Solo developer on tightly-coupled codebases. Current GSD manager + wave parallelism is sufficient.
+- Compared toolkit against the 4-file pattern (Agent.md, Context.md, Memory.md, Skill.md). Toolkit already implements this with stronger enforcement.
+- Research saved to MEMORY.md for future reference.
+
+Triggered by: Scott watched a video on the 4-file context engineering pattern, wanted to compare against the toolkit and evaluate multi-agent orchestration options.
+
 ## v5.1.1 - 2026-03-29
 Version propagation: auto-detect stale version references after CHANGELOG updates.
 

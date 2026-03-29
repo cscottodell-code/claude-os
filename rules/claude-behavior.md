@@ -92,6 +92,8 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
   - **Planner:** Read, Grep, Glob only
   - **Reviewer:** Read, Grep, Glob, Bash (for running tests)
   - **Executor:** All tools (full access for implementation work)
+  - **Docs Agent:** Read, Grep, Glob, Write (documentation files only)
+  - **Security Auditor:** Read, Grep, Glob only (report-only, no modifications)
   - Match the role to the task. Don't give a research subagent write access.
 - Verify before presenting: when subagents produce findings (audits, reviews, comparisons), verify claims against primary sources before presenting to Scott. Subagents apply rules mechanically without understanding layered design. Never present a finding that hasn't been checked against the actual file.
 

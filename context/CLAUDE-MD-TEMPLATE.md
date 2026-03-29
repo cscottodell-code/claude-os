@@ -119,15 +119,20 @@ embedded SurrealDB → response flows back through the same chain"]
 - **Next up:** [what's next]
 - **Known issues:** [any bugs or problems]
 
-## Constraints & Rules
-<!-- [CUSTOMIZE] Project-specific rules for Claude Code. -->
+## Boundaries
+<!-- [CUSTOMIZE] Three-tier boundary system. Hooks enforce the hard limits,
+     but this section gives Claude a quick mental model per project. -->
 
-**NEVER do these:**
-- [e.g., "Never use SSR in this Tauri project"]
-- [e.g., "Never call SurrealDB directly from components - always go through useDatabase"]
-
-**ALWAYS do these:**
+**Always:**
 - [e.g., "Always use Nuxt UI components before custom HTML"]
 - [e.g., "Always add loading states to async operations"]
+
+**Ask first:**
+- [e.g., "Ask before adding new dependencies"]
+- [e.g., "Ask before changing the database schema"]
+
+**Never:**
+- [e.g., "Never use SSR in this Tauri project"]
+- [e.g., "Never call SurrealDB directly from components - always go through useDatabase"]
 
 <!-- Behavior rules loaded automatically from ~/.claude/rules/claude-behavior.md -->
