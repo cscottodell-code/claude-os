@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scott's Toolkit v5 - Interactive Guide</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface-hover: #222633;
+    --border: #2a2e3a;
+    --text: #e2e4e9;
+    --text-muted: #8b8fa3;
+    --accent: #4f8ff7;
+    --accent-dim: #2a4a7a;
+    --green: #34d399;
+    --green-dim: #1a3d2e;
+    --amber: #fbbf24;
+    --amber-dim: #3d3520;
+    --red: #f87171;
+    --red-dim: #3d1f1f;
+    --purple: #a78bfa;
+    --purple-dim: #2d2450;
+    --teal: #2dd4bf;
+    --teal-dim: #1a3d38;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+
+  /* Tab Navigation */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    margin-bottom: -1px;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Decision Tree */
+  .decision-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .decision-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .decision-node:hover {
+    background: var(--surface-hover);
+    border-color: var(--accent-dim);
+  }
+
+  .decision-node.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-dim);
+  }
+
+  .decision-q {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .decision-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .decision-opt {
+    padding: 8px 16px;
+    font-size: 13px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .decision-opt:hover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .decision-opt.chosen {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .result-card {
+    background: var(--surface);
+    border: 2px solid var(--green);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 16px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .result-card h3 {
+    color: var(--green);
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .result-card .command {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    margin: 12px 0;
+    display: inline-block;
+  }
+
+  .result-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .result-card .then-list {
+    margin-top: 12px;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .result-card .then-list li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .result-card .then-list li::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Workflow Cards */
+  .workflow-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .workflow-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+
+  .workflow-header {
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .workflow-header:hover { background: var(--surface-hover); }
+
+  .workflow-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .workflow-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .workflow-name {
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .workflow-cmd {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .workflow-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-build { background: var(--accent-dim); color: var(--accent); }
+  .badge-maintain { background: var(--green-dim); color: var(--green); }
+  .badge-learn { background: var(--purple-dim); color: var(--purple); }
+  .badge-handoff { background: var(--amber-dim); color: var(--amber); }
+
+  .chevron {
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    font-size: 18px;
+  }
+
+  .chevron.open { transform: rotate(90deg); }
+
+  .workflow-body {
+    padding: 0 20px 20px;
+    display: none;
+  }
+
+  .workflow-body.open { display: block; }
+
+  .phase {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase:last-child { border-bottom: none; }
+
+  .phase-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .phase-stop { background: var(--red-dim); color: var(--red); }
+  .phase-auto { background: var(--green-dim); color: var(--green); }
+  .phase-delegate { background: var(--accent-dim); color: var(--accent); }
+
+  .phase-content { flex: 1; }
+
+  .phase-name {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  .phase-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .phase-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .tag-stop { background: var(--red-dim); color: var(--red); }
+  .tag-auto { background: var(--green-dim); color: var(--green); }
+  .tag-delegate { background: var(--accent-dim); color: var(--accent); }
+
+  /* Architecture */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 700px) {
+    .arch-grid { grid-template-columns: 1fr; }
+  }
+
+  .arch-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .arch-card h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .arch-card .arch-role {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .arch-items {
+    list-style: none;
+    padding: 0;
+  }
+
+  .arch-items li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .arch-items li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .arch-toolkit li::before { background: var(--accent); }
+  .arch-gsd li::before { background: var(--green); }
+  .arch-super li::before { background: var(--purple); }
+  .arch-imp li::before { background: var(--amber); }
+
+  /* Hooks Table */
+  .hooks-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .hooks-table th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .hooks-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .hooks-table tr:last-child td { border-bottom: none; }
+
+  .hooks-table .hook-name {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  .hook-type {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .hook-guard { background: var(--red-dim); color: var(--red); }
+  .hook-session { background: var(--accent-dim); color: var(--accent); }
+  .hook-quality { background: var(--green-dim); color: var(--green); }
+  .hook-context { background: var(--purple-dim); color: var(--purple); }
+
+  /* Learning Loop */
+  .loop-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .loop-step {
+    position: relative;
+    padding: 16px 0 16px 28px;
+    border-left: 2px solid var(--border);
+  }
+
+  .loop-step:last-child { border-left-color: transparent; }
+
+  .loop-step::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 20px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--bg);
+  }
+
+  .loop-step.active::before {
+    background: var(--accent);
+  }
+
+  .loop-step h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .loop-step p {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .loop-arrow {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Entry point highlight */
+  .entry-highlight {
+    background: linear-gradient(135deg, var(--accent-dim), var(--surface));
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .entry-highlight h3 {
+    color: var(--accent);
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .entry-highlight p {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .section-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .hidden { display: none; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in { animation: fadeIn 0.3s ease; }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Scott's Toolkit v5</h1>
+  <p class="subtitle">Interactive guide to every entry point, workflow, and system</p>
+
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-value">10</span><span class="stat-label">Workflows</span></div>
+    <div class="stat"><span class="stat-value">16</span><span class="stat-label">Hooks</span></div>
+    <div class="stat"><span class="stat-value">28+</span><span class="stat-label">Skills</span></div>
+    <div class="stat"><span class="stat-value">5</span><span class="stat-label">Stack Checks</span></div>
+    <div class="stat"><span class="stat-value">4</span><span class="stat-label">Systems</span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('finder')">Where Do I Start?</button>
+    <button class="tab" onclick="showTab('workflows')">All Workflows</button>
+    <button class="tab" onclick="showTab('architecture')">4-System Architecture</button>
+    <button class="tab" onclick="showTab('hooks')">Hooks &amp; Guards</button>
+    <button class="tab" onclick="showTab('loop')">Learning Loop</button>
+  </div>
+
+  <!-- TAB: WHERE DO I START? -->
+  <div id="tab-finder" class="tab-content">
+    <div class="entry-highlight">
+      <h3>You don't always start at /scott:new-project</h3>
+      <p>The toolkit has multiple entry points. Answer the questions below and it'll tell you exactly where to jump in.</p>
+    </div>
+
+    <div class="decision-tree">
+      <div class="decision-node" id="q1-node">
+        <div class="decision-q">What's the situation?</div>
+        <div class="decision-options" id="q1-options">
+          <button class="decision-opt" onclick="answer(1, 'new')">Starting something brand new</button>
+          <button class="decision-opt" onclick="answer(1, 'existing-toolkit')">Resuming a toolkit-built project</button>
+          <button class="decision-opt" onclick="answer(1, 'existing-no-toolkit')">Jumping into a project that wasn't built with the toolkit</button>
+          <button class="decision-opt" onclick="answer(1, 'feature')">Adding a feature to something that exists</button>
+          <button class="decision-opt" onclick="answer(1, 'handoff')">Handing off to Gary</button>
+          <button class="decision-opt" onclick="answer(1, 'maintenance')">Toolkit feels bloated or slow</button>
+          <button class="decision-opt" onclick="answer(1, 'research')">Found new context engineering sources</button>
+        </div>
+      </div>
+
+      <div id="result-area"></div>
+    </div>
+  </div>
+
+  <!-- TAB: ALL WORKFLOWS -->
+  <div id="tab-workflows" class="tab-content hidden">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> STOP - Waits for your input</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> AUTO - Runs then moves on</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> DELEGATE - Hands off to GSD/Superpowers</div>
+    </div>
+
+    <div class="workflow-grid" id="workflow-list"></div>
+  </div>
+
+  <!-- TAB: 4-SYSTEM ARCHITECTURE -->
+  <div id="tab-architecture" class="tab-content hidden">
+    <p class="section-label">Each system owns its lane. The toolkit orchestrates when to call the others.</p>
+    <div class="arch-grid">
+      <div class="arch-card arch-toolkit" style="border-top: 3px solid var(--accent);">
+        <h3 style="color:var(--accent)">Scott-Toolkit</h3>
+        <div class="arch-role">Context Engineering</div>
+        <ul class="arch-items">
+          <li>Session management (start, resume, pause)</li>
+          <li>Templates (PRD, CLAUDE.md, Design Intent)</li>
+          <li>Domain knowledge (SurrealDB, Nuxt, stack refs)</li>
+          <li>Stack enforcement (checks, preflight, lock files)</li>
+          <li>Learning capture (errors, successes, retros)</li>
+          <li>Workflow orchestration (calls GSD + Superpowers at the right time)</li>
+        </ul>
+      </div>
+      <div class="arch-card arch-gsd" style="border-top: 3px solid var(--green);">
+        <h3 style="color:var(--green)">GSD</h3>
+        <div class="arch-role">Project Management</div>
+        <ul class="arch-items">
+          <li>Phase planning (plan-phase)</li>
+          <li>Phase execution (execute-phase)</li>
+          <li>Work verification (verify-work)</li>
+          <li>Quick tasks (quick)</li>
+          <li>Test gap filling (add-tests)</li>
+          <li>Debugging (debug)</li>
+        </ul>
+      </div>
+      <div class="arch-card arch-super" style="border-top: 3px solid var(--purple);">
+        <h3 style="color:var(--purple)">Superpowers</h3>
+        <div class="arch-role">Development Methodology</div>
+        <ul class="arch-items">
+          <li>TDD (test-driven-development)</li>
+          <li>Code review (requesting-code-review)</li>
+          <li>Git worktrees (using-git-worktrees)</li>
+          <li>Branch completion (finishing-a-development-branch)</li>
+          <li>Plan writing (writing-plans)</li>
+          <li>Systematic debugging</li>
+        </ul>
+      </div>
+      <div class="arch-card arch-imp" style="border-top: 3px solid var(--amber);">
+        <h3 style="color:var(--amber)">Impeccable</h3>
+        <div class="arch-role">UI/UX Quality</div>
+        <ul class="arch-items">
+          <li>Design critique (/impeccable:critique)</li>
+          <li>Visual polish (/impeccable:polish)</li>
+          <li>Accessibility audits</li>
+          <li>Triggered by uiux-reminder hook on .vue files</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:24px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px;">
+      <p class="section-label">How they work together (the build loop)</p>
+      <div style="font-family:'SF Mono','Fira Code',monospace; font-size:13px; line-height:2; color:var(--text-muted);">
+        <span style="color:var(--purple)">1. Worktree</span> <span style="color:var(--border)">&rarr;</span>
+        <span style="color:var(--green)">2. Plan</span> <span style="color:var(--border)">&rarr;</span>
+        <span style="color:var(--green)">3. Execute</span> <span style="color:var(--text-muted)">(with</span> <span style="color:var(--purple)">TDD</span><span style="color:var(--text-muted)">)</span> <span style="color:var(--border)">&rarr;</span>
+        <span style="color:var(--purple)">4. Code Review</span> <span style="color:var(--border)">&rarr;</span>
+        <span style="color:var(--green)">5. Verify</span> <span style="color:var(--border)">&rarr;</span>
+        <span style="color:var(--amber)">6. Design Review</span> <span style="color:var(--border)">&rarr;</span>
+        <span style="color:var(--purple)">7. Finish Branch</span>
+      </div>
+      <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">
+        <span style="color:var(--green)">Green = GSD orchestrates</span> &nbsp;
+        <span style="color:var(--purple)">Purple = Superpowers provides discipline</span> &nbsp;
+        <span style="color:var(--amber)">Amber = Impeccable checks quality</span>
+      </p>
+    </div>
+
+    <div style="margin-top:24px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px;">
+      <p class="section-label">Decoupling layer (interfaces.json)</p>
+      <p style="font-size:14px; color:var(--text-muted); margin-bottom:12px;">Toolkit workflows use abstract operation names. One config file maps them to real commands. If GSD renames a command, you update one line, not ten files.</p>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; font-size:13px;">
+        <div style="padding:8px 12px; background:var(--bg); border-radius:6px;"><span style="color:var(--accent);">plan_phase</span> <span style="color:var(--text-muted);">&rarr;</span> /gsd:plan-phase</div>
+        <div style="padding:8px 12px; background:var(--bg); border-radius:6px;"><span style="color:var(--accent);">tdd</span> <span style="color:var(--text-muted);">&rarr;</span> superpowers:test-driven-development</div>
+        <div style="padding:8px 12px; background:var(--bg); border-radius:6px;"><span style="color:var(--accent);">code_review</span> <span style="color:var(--text-muted);">&rarr;</span> superpowers:requesting-code-review</div>
+        <div style="padding:8px 12px; background:var(--bg); border-radius:6px;"><span style="color:var(--accent);">phase_closeout</span> <span style="color:var(--text-muted);">&rarr;</span> /scott:phase-closeout</div>
+        <div style="padding:8px 12px; background:var(--bg); border-radius:6px;"><span style="color:var(--accent);">execute_phase</span> <span style="color:var(--text-muted);">&rarr;</span> /gsd:execute-phase</div>
+        <div style="padding:8px 12px; background:var(--bg); border-radius:6px;"><span style="color:var(--accent);">git_worktree</span> <span style="color:var(--text-muted);">&rarr;</span> superpowers:using-git-worktrees</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: HOOKS & GUARDS -->
+  <div id="tab-hooks" class="tab-content hidden">
+    <div class="entry-highlight" style="background: linear-gradient(135deg, var(--red-dim), var(--surface)); border-color: var(--red);">
+      <h3 style="color:var(--red)">Why hooks matter more than rules</h3>
+      <p>CLAUDE.md instructions are ~80% reliable. Hooks are 100%. If something must happen every time, it's a hook. If it's guidance Claude should consider, it's a rule.</p>
+    </div>
+
+    <table class="hooks-table">
+      <thead>
+        <tr><th>Hook</th><th>Type</th><th>When</th><th>What It Does</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="hook-name">guard-phase-completion.sh</td>
+          <td><span class="hook-type hook-guard">Guard</span></td>
+          <td>PreToolUse</td>
+          <td>Blocks "phase complete" unless closeout marker exists. The most important hook in the toolkit.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">guard-git-push.sh</td>
+          <td><span class="hook-type hook-guard">Guard</span></td>
+          <td>PreToolUse</td>
+          <td>Prevents accidental pushes to protected branches.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">guard-destructive.sh</td>
+          <td><span class="hook-type hook-guard">Guard</span></td>
+          <td>PreToolUse</td>
+          <td>Blocks destructive git operations (reset --hard, clean -f, etc.).</td>
+        </tr>
+        <tr>
+          <td class="hook-name">guard-npm-install.sh</td>
+          <td><span class="hook-type hook-guard">Guard</span></td>
+          <td>PreToolUse</td>
+          <td>Enforces pnpm. Catches stack drift when packages change.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">guard-claude-md.sh</td>
+          <td><span class="hook-type hook-guard">Guard</span></td>
+          <td>PreToolUse</td>
+          <td>Protects CLAUDE.md from accidental overwrites.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">session-start.sh</td>
+          <td><span class="hook-type hook-session">Session</span></td>
+          <td>Session Start</td>
+          <td>Discovers context files, detects project category, triggers AUTO-RESUME if resume file exists.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">session-end.sh</td>
+          <td><span class="hook-type hook-session">Session</span></td>
+          <td>Session End</td>
+          <td>Reminds to update CLAUDE.md, todo.md, lessons.md.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">pre-compact.sh</td>
+          <td><span class="hook-type hook-context">Context</span></td>
+          <td>PreCompact</td>
+          <td>Saves .context-snapshot.md before compaction so nothing is lost.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">extract-instincts.sh</td>
+          <td><span class="hook-type hook-context">Context</span></td>
+          <td>PreCompact / Stop</td>
+          <td>Captures session patterns to instinct-candidates.md for later review.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">context-reminders.sh</td>
+          <td><span class="hook-type hook-context">Context</span></td>
+          <td>PostToolUse</td>
+          <td>Warns at 60min (then every 30min) and 100 tool uses. Catches context rot.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">offload-large-output.sh</td>
+          <td><span class="hook-type hook-context">Context</span></td>
+          <td>PostToolUse</td>
+          <td>Saves tool output >4KB to overflow files instead of filling context window.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">auto-format.sh</td>
+          <td><span class="hook-type hook-quality">Quality</span></td>
+          <td>PostToolUse (Write/Edit)</td>
+          <td>Runs Prettier on .js/.ts/.vue/.css/.json files after every edit.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">pre-completion-checklist.sh</td>
+          <td><span class="hook-type hook-quality">Quality</span></td>
+          <td>Stop</td>
+          <td>Checks for uncommitted changes, stale todo.md, missing resume file.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">uiux-reminder.sh</td>
+          <td><span class="hook-type hook-quality">Quality</span></td>
+          <td>PostToolUse</td>
+          <td>Nudges to run /impeccable:audit when .vue files change during GSD execution.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">check-file-test-trigger.sh</td>
+          <td><span class="hook-type hook-quality">Quality</span></td>
+          <td>PostToolUse</td>
+          <td>Auto-runs test fixtures when check files in checks/ are edited.</td>
+        </tr>
+        <tr>
+          <td class="hook-name">post-commit-skill-triggers.sh</td>
+          <td><span class="hook-type hook-quality">Quality</span></td>
+          <td>Post-Commit</td>
+          <td>Suggests relevant skills after git commits.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TAB: LEARNING LOOP -->
+  <div id="tab-loop" class="tab-content hidden">
+    <div class="entry-highlight" style="background: linear-gradient(135deg, var(--purple-dim), var(--surface)); border-color: var(--purple);">
+      <h3 style="color:var(--purple)">The toolkit gets smarter every time you use it</h3>
+      <p>Lessons from each project feed back into checks that apply to ALL future projects. This is the single most valuable thing in the toolkit, and it needs reps to compound.</p>
+    </div>
+
+    <div class="loop-flow">
+      <div class="loop-step active">
+        <h4>1. Build with the toolkit</h4>
+        <p>Use /scott:new-project, /scott:new-feature, or /scott:resume to start work. GSD + Superpowers handle execution.</p>
+        <span class="loop-arrow">&darr; phase completes</span>
+      </div>
+      <div class="loop-step active">
+        <h4>2. Phase closeout (mandatory, hook-enforced)</h4>
+        <p>Run /scott:phase-closeout. Verify tests pass. Stack audit runs checks. Code review catches issues. Reflection interview captures errors, successes, and lessons.</p>
+        <span class="loop-arrow">&darr; lessons tagged with [stack], [pattern], [prompt], [harness], [project]</span>
+      </div>
+      <div class="loop-step active">
+        <h4>3. Lessons accumulate</h4>
+        <p>Error logs go to errors/. Success logs go to successes/. Retros go to retros/. Lessons go to tasks/lessons.md. The retro index summarizes cross-project patterns.</p>
+        <span class="loop-arrow">&darr; [stack]-tagged lessons become check candidates</span>
+      </div>
+      <div class="loop-step">
+        <h4>4. Stack review dashboard</h4>
+        <p>Run /scott:stack-review. See system health, check candidates (lessons waiting to become checks), health report, refinement suggestions, and overlap detection.</p>
+        <span class="loop-arrow">&darr; Scott approves promotions</span>
+      </div>
+      <div class="loop-step">
+        <h4>5. Lessons become checks</h4>
+        <p>Approved [stack] lessons get promoted into check files (checks/*.json). These checks now run automatically during every future phase closeout's stack audit.</p>
+        <span class="loop-arrow">&darr; next project starts smarter</span>
+      </div>
+      <div class="loop-step">
+        <h4>6. Spa day (monthly cleanup)</h4>
+        <p>Run /scott:toolkit-spa-day. Audit state, review instinct candidates, scan for contradictions, consolidate, verify context budget, run stack review. Keeps the toolkit lean.</p>
+        <span class="loop-arrow">&darr; push to GitHub, every machine benefits</span>
+      </div>
+    </div>
+
+    <div style="margin-top:24px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px;">
+      <p class="section-label">Current stats (where you are now)</p>
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align:center;">
+        <div>
+          <div style="font-size:28px; font-weight:700; color:var(--red);">10</div>
+          <div style="font-size:12px; color:var(--text-muted);">Error Logs</div>
+        </div>
+        <div>
+          <div style="font-size:28px; font-weight:700; color:var(--green);">7</div>
+          <div style="font-size:12px; color:var(--text-muted);">Success Logs</div>
+        </div>
+        <div>
+          <div style="font-size:28px; font-weight:700; color:var(--purple);">4</div>
+          <div style="font-size:12px; color:var(--text-muted);">Retros Completed</div>
+        </div>
+      </div>
+      <p style="font-size:13px; color:var(--text-muted); margin-top:16px; text-align:center;">
+        The flywheel is built. It needs more reps to compound. Build 2-3 more features with full closeout cycles and let the data accumulate.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Tab switching
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.remove('hidden');
+  event.target.classList.add('active');
+}
+
+// Decision tree answers
+const results = {
+  'new': {
+    title: 'Start here: /scott:new-project',
+    command: '/scott:new-project',
+    desc: 'The full 8-phase guided workflow. Brain dump, clarify, PRD, design intent, create repo, design proof, build, milestone review.',
+    steps: [
+      'Phase 1-2: Get the idea out of your head (brain dump + challenge)',
+      'Phase 3-4: Structure it (PRD + design intent)',
+      'Phase 5: Create the repo with CLAUDE.md and stack-lock.json',
+      'Phase 6: Design proof (visual prototype)',
+      'Phase 7: Build with GSD + Superpowers (TDD, worktrees, the whole loop)',
+      'Phase 8: Milestone review and closeout'
+    ]
+  },
+  'existing-toolkit': {
+    title: 'Start here: /scott:resume',
+    command: '/scott:resume',
+    desc: 'Reads .claude-resume.md and .planning/ to re-orient. Summarizes state, confirms direction, then picks up where you left off.',
+    steps: [
+      'Phase 1: Reads CLAUDE.md, PRD, todo.md, lessons.md, git log, GSD state (AUTO)',
+      'Phase 2: Tells you exactly where things stand in plain English (STOP)',
+      'Phase 3: Asks if priorities have changed (STOP)',
+      'Phase 4: Resumes work with GSD + Superpowers (DELEGATE)'
+    ]
+  },
+  'existing-no-toolkit': {
+    title: 'Start here: /scott:stack-baseline',
+    command: '/scott:stack-baseline',
+    desc: 'First-run audit for projects not built with the toolkit. Detects your stack, runs checks, generates stack-lock.json. Like running your validation formulas on a spreadsheet someone else started.',
+    steps: [
+      'Run /scott:stack-baseline to audit the existing codebase',
+      'It generates stack-lock.json (locks your stack versions)',
+      'Write a minimal CLAUDE.md using the CLAUDE-MD-TEMPLATE (5 minutes)',
+      'From here, use /scott:new-feature for adding features',
+      'Use /scott:phase-closeout after each build phase',
+      'You skip PRD and design intent but get stack enforcement + learning loop immediately'
+    ]
+  },
+  'feature': {
+    title: 'Start here: /scott:new-feature',
+    command: '/scott:new-feature',
+    desc: 'Lighter than new-project. Describe the feature, assess impact, write a mini-PRD, then hand off to GSD + Superpowers for the build. Works on any existing project.',
+    steps: [
+      'Phase 1: Describe the feature + clarifying questions (STOP)',
+      'Phase 2: Impact assessment on existing code (STOP)',
+      'Phase 3: Mini-PRD with acceptance criteria (STOP)',
+      'Phase 4: Build with GSD + Superpowers loop (DELEGATE)',
+      'Phase 5: Update CLAUDE.md (AUTO)'
+    ]
+  },
+  'handoff': {
+    title: 'Start here: /scott:handoff',
+    command: '/scott:handoff',
+    desc: 'Prepares a prototype for Gary to productionize. Full code review, documentation, architecture notes, tech debt inventory, and a handoff checklist.',
+    steps: [
+      'Phase 1: Full code review + test coverage check (AUTO)',
+      'Phase 2: Write documentation Gary needs (AUTO)',
+      'Phase 3: Architecture notes and key decisions (STOP)',
+      'Phase 4: Tech debt inventory (AUTO)',
+      'Phase 5: Handoff checklist including stack-lock.json (STOP)'
+    ]
+  },
+  'maintenance': {
+    title: 'Start here: /scott:toolkit-spa-day',
+    command: '/scott:toolkit-spa-day',
+    desc: 'Periodic cleanup. Audits state, reviews instinct candidates, scans for contradictions, consolidates, checks context budget, runs stack review. Monthly or after 3-4 retros.',
+    steps: [
+      'Phase 1: Audit current state (counts everything)',
+      'Phase 2: Review instinct candidates (patterns captured between sessions)',
+      'Phase 3: Scan for contradictions across all rules and skills',
+      'Phase 4: Consolidate (fix contradictions, promote instincts)',
+      'Phase 5: Verify context budget (did the toolkit grow or shrink?)',
+      'Phase 6: Stack review dashboard (learning loop health check)'
+    ]
+  },
+  'research': {
+    title: 'Start here: /scott:compare-sources',
+    command: '/scott:compare-sources',
+    desc: 'Compare new context engineering articles, tweets, repos against your current toolkit. Surfaces what\'s validated, what\'s new, and what conflicts. Uses a subagent for the heavy comparison work.',
+    steps: [
+      'Phase 1: Ingest new sources (paste links, articles, repos)',
+      'Phase 2: Revise sources (cut fluff, keep what matters)',
+      'Phase 3: Build comparison inventory (lightweight index)',
+      'Phase 4: Subagent runs the comparison in its own context window',
+      'Phase 5: Generate review with recommended toolkit updates',
+      'Phase 6: Archive processed sources'
+    ]
+  }
+};
+
+function answer(q, choice) {
+  // Highlight chosen option
+  document.querySelectorAll('#q' + q + '-options .decision-opt').forEach(b => b.classList.remove('chosen'));
+  event.target.classList.add('chosen');
+
+  const r = results[choice];
+  const stepsHtml = r.steps.map(s => '<li>' + s + '</li>').join('');
+
+  document.getElementById('result-area').innerHTML = `
+    <div class="result-card fade-in">
+      <h3>${r.title}</h3>
+      <div class="command">${r.command}</div>
+      <p>${r.desc}</p>
+      <ul class="then-list">${stepsHtml}</ul>
+    </div>
+  `;
+}
+
+// Workflow data
+const workflows = [
+  {
+    name: 'New Project', cmd: '/scott:new-project', badge: 'Build', badgeClass: 'badge-build',
+    icon: '&#x2726;', iconBg: 'var(--accent-dim)', iconColor: 'var(--accent)',
+    phases: [
+      { num: 1, name: 'Brain Dump', tag: 'STOP', desc: 'Get everything out of your head. Raw idea capture.' },
+      { num: 2, name: 'Clarify & Challenge', tag: 'STOP', desc: 'Push back on assumptions. Find the simplest version.' },
+      { num: 3, name: 'PRD', tag: 'STOP', desc: 'Structured product requirements document from the brain dump.' },
+      { num: 4, name: 'Design Intent', tag: 'STOP', desc: 'Visual direction, color, layout, component library choices.' },
+      { num: 5, name: 'Create Repository', tag: 'AUTO', desc: 'Scaffold repo, CLAUDE.md, stack-lock.json, initial commit.' },
+      { num: 6, name: 'Design Proof', tag: 'STOP', desc: 'Clickable prototype. Impeccable critique before building.' },
+      { num: 7, name: 'Build', tag: 'DELEGATE', desc: 'GSD + Superpowers build loop (worktree, plan, execute with TDD, review, verify).' },
+      { num: 8, name: 'Milestone Review', tag: 'STOP', desc: 'Final code review, branch merge, phase closeout.' }
+    ]
+  },
+  {
+    name: 'New Feature', cmd: '/scott:new-feature', badge: 'Build', badgeClass: 'badge-build',
+    icon: '&#x2795;', iconBg: 'var(--accent-dim)', iconColor: 'var(--accent)',
+    phases: [
+      { num: 1, name: 'Feature Description', tag: 'STOP', desc: 'What is it, who needs it, why now? Plus clarifying questions.' },
+      { num: 2, name: 'Impact Assessment', tag: 'STOP', desc: 'What existing code, data models, and pages does this touch?' },
+      { num: 3, name: 'Mini-PRD', tag: 'STOP', desc: 'Lightweight PRD: user flow, data changes, acceptance criteria, edge cases.' },
+      { num: 4, name: 'Build', tag: 'DELEGATE', desc: 'Full GSD + Superpowers build loop. Worktree, plan, execute, review, verify.' },
+      { num: 5, name: 'Update CLAUDE.md', tag: 'AUTO', desc: 'Keep the project docs current with new schema, decisions, status.' }
+    ]
+  },
+  {
+    name: 'Resume Project', cmd: '/scott:resume', badge: 'Build', badgeClass: 'badge-build',
+    icon: '&#x25B6;', iconBg: 'var(--green-dim)', iconColor: 'var(--green)',
+    phases: [
+      { num: 1, name: 'Read Context', tag: 'AUTO', desc: 'Reads CLAUDE.md, PRD, todo, lessons, git log, GSD .planning/ state, stack-lock staleness.' },
+      { num: 2, name: 'Summarize State', tag: 'STOP', desc: 'Plain English summary: what was done, current milestone, what is next.' },
+      { num: 3, name: 'Confirm Direction', tag: 'STOP', desc: 'Have priorities changed? Feedback from Brett or Gary? Pivot or continue?' },
+      { num: 4, name: 'Resume Work', tag: 'DELEGATE', desc: 'Continue with GSD execute-phase or plan a new phase. Superpowers discipline applies.' }
+    ]
+  },
+  {
+    name: 'Phase Closeout', cmd: '/scott:phase-closeout', badge: 'Learn', badgeClass: 'badge-learn',
+    icon: '&#x2714;', iconBg: 'var(--purple-dim)', iconColor: 'var(--purple)',
+    phases: [
+      { num: 1, name: 'Verify', tag: 'AUTO', desc: 'Run full test suite. Zero failures required.' },
+      { num: '1.5', name: 'Stack Audit', tag: 'AUTO', desc: 'Run stack-check.sh on changed files. Live SurrealDB audit if at full tier.' },
+      { num: 2, name: 'Code Review', tag: 'DELEGATE', desc: 'Two-pass code review. Fix critical/important, then re-review until clean.' },
+      { num: 3, name: 'Reflect', tag: 'STOP', desc: 'ONE interview: errors, successes, retro, lessons. Tagged for learning loop.' },
+      { num: 4, name: 'Gate', tag: 'AUTO', desc: 'Write .post-execution-complete marker. Summary of all artifacts.' }
+    ]
+  },
+  {
+    name: 'Stack Baseline', cmd: '/scott:stack-baseline', badge: 'Build', badgeClass: 'badge-build',
+    icon: '&#x1F50D;', iconBg: 'var(--teal-dim)', iconColor: 'var(--teal)',
+    phases: [
+      { num: 1, name: 'Detect Stack', tag: 'AUTO', desc: 'Reads package.json and project files to identify technologies and versions.' },
+      { num: 2, name: 'Run Checks', tag: 'AUTO', desc: 'Runs all matching check files against the existing codebase.' },
+      { num: 3, name: 'Generate stack-lock.json', tag: 'AUTO', desc: 'Locks detected versions. Future checks reference this.' },
+      { num: 4, name: 'Report', tag: 'STOP', desc: 'Shows findings, issues, and recommendations to Scott.' }
+    ]
+  },
+  {
+    name: 'Handoff to Gary', cmd: '/scott:handoff', badge: 'Handoff', badgeClass: 'badge-handoff',
+    icon: '&#x1F4E6;', iconBg: 'var(--amber-dim)', iconColor: 'var(--amber)',
+    phases: [
+      { num: 1, name: 'Code Review', tag: 'AUTO', desc: 'Full codebase review: dead code, console.logs, TODOs, types, naming, test coverage.' },
+      { num: 2, name: 'Documentation', tag: 'AUTO', desc: 'Write docs Gary needs to understand and maintain the codebase.' },
+      { num: 3, name: 'Architecture Notes', tag: 'STOP', desc: 'Key decisions, trade-offs, and the "why" behind the architecture.' },
+      { num: 4, name: 'Tech Debt Inventory', tag: 'AUTO', desc: 'Honest list of shortcuts, known issues, and things to improve.' },
+      { num: 5, name: 'Handoff Checklist', tag: 'STOP', desc: 'Final checklist including stack-lock.json, env vars, deployment steps.' }
+    ]
+  },
+  {
+    name: 'Compare Sources', cmd: '/scott:compare-sources', badge: 'Learn', badgeClass: 'badge-learn',
+    icon: '&#x1F4DA;', iconBg: 'var(--purple-dim)', iconColor: 'var(--purple)',
+    phases: [
+      { num: 1, name: 'Ingest Sources', tag: 'STOP', desc: 'Paste links, articles, repos. Converted to .md in raw-sources/.' },
+      { num: 2, name: 'Revise Sources', tag: 'AUTO', desc: 'Cut fluff, keep only what matters for Claude Code customization.' },
+      { num: 3, name: 'Build Inventory', tag: 'AUTO', desc: 'Lightweight index so the subagent gets clean context.' },
+      { num: 4, name: 'Comparison (Subagent)', tag: 'DELEGATE', desc: 'Fresh subagent runs heavy comparison in its own context window.' },
+      { num: 5, name: 'Review & Act', tag: 'STOP', desc: 'Congruencies, discrepancies, unique ideas. Feeds into /scott:update-toolkit.' },
+      { num: 6, name: 'Archive', tag: 'AUTO', desc: 'Move processed sources to completed/ subfolders.' }
+    ]
+  },
+  {
+    name: 'Toolkit Spa Day', cmd: '/scott:toolkit-spa-day', badge: 'Maintain', badgeClass: 'badge-maintain',
+    icon: '&#x2728;', iconBg: 'var(--green-dim)', iconColor: 'var(--green)',
+    phases: [
+      { num: 1, name: 'Audit State', tag: 'AUTO', desc: 'Count rules, skills, checks, instinct candidates. Show totals.' },
+      { num: 2, name: 'Review Instincts', tag: 'STOP', desc: 'Promote, discard, or skip each auto-captured pattern.' },
+      { num: 3, name: 'Scan Contradictions', tag: 'AUTO', desc: 'Find conflicting rules, duplicates, obsolete guidance, stale operation mappings.' },
+      { num: 4, name: 'Consolidate', tag: 'STOP', desc: 'Fix contradictions, promote instincts, edit files.' },
+      { num: 5, name: 'Verify Budget', tag: 'AUTO', desc: 'Did total lines grow or shrink? Flag if toolkit got bigger.' },
+      { num: 6, name: 'Stack Review', tag: 'DELEGATE', desc: 'Run /scott:stack-review dashboard for learning loop health.' }
+    ]
+  },
+  {
+    name: 'Update Toolkit', cmd: '/scott:update-toolkit', badge: 'Maintain', badgeClass: 'badge-maintain',
+    icon: '&#x1F527;', iconBg: 'var(--green-dim)', iconColor: 'var(--green)',
+    phases: [
+      { num: 1, name: 'Review Pending', tag: 'STOP', desc: 'Check _pending-updates.md from compare-sources or retros.' },
+      { num: 2, name: 'Apply Changes', tag: 'STOP', desc: 'Edit rules, skills, hooks, checks. Scott approves each change.' },
+      { num: 3, name: 'Ripple Check', tag: 'AUTO', desc: 'Verify changes in check files, interfaces.json, tools/ are consistent.' },
+      { num: 4, name: 'Update Changelog', tag: 'AUTO', desc: 'Document what changed and why in CHANGELOG.md.' },
+      { num: 5, name: 'Update Instructions', tag: 'AUTO', desc: 'Regenerate scott-toolkit-instructions and PDF.' }
+    ]
+  },
+  {
+    name: 'Stack Review', cmd: '/scott:stack-review', badge: 'Learn', badgeClass: 'badge-learn',
+    icon: '&#x1F4CA;', iconBg: 'var(--purple-dim)', iconColor: 'var(--purple)',
+    phases: [
+      { num: 1, name: 'System Health', tag: 'AUTO', desc: 'Are tools available? Check files valid? Metrics cache fresh?' },
+      { num: 2, name: 'Check Candidates', tag: 'STOP', desc: '[stack]-tagged lessons waiting to become checks. Scott approves promotions.' },
+      { num: 3, name: 'Health Report', tag: 'AUTO', desc: 'Pass/fail rates per technology across all projects.' },
+      { num: 4, name: 'Refinement', tag: 'STOP', desc: 'Existing checks that might need tuning based on data.' },
+      { num: 5, name: 'Overlap Detection', tag: 'AUTO', desc: 'Checks that duplicate each other or conflict.' }
+    ]
+  }
+];
+
+function renderWorkflows() {
+  const container = document.getElementById('workflow-list');
+  container.innerHTML = workflows.map((w, i) => {
+    const phasesHtml = w.phases.map(p => {
+      const tagClass = p.tag === 'STOP' ? 'tag-stop' : p.tag === 'AUTO' ? 'tag-auto' : 'tag-delegate';
+      const numClass = p.tag === 'STOP' ? 'phase-stop' : p.tag === 'AUTO' ? 'phase-auto' : 'phase-delegate';
+      return `
+        <div class="phase">
+          <div class="phase-num ${numClass}">${p.num}</div>
+          <div class="phase-content">
+            <div class="phase-name">${p.name} <span class="phase-tag ${tagClass}">${p.tag}</span></div>
+            <div class="phase-desc">${p.desc}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="workflow-card">
+        <div class="workflow-header" onclick="toggleWorkflow(${i})">
+          <div class="workflow-title-row">
+            <div class="workflow-icon" style="background:${w.iconBg}; color:${w.iconColor}">${w.icon}</div>
+            <div>
+              <div class="workflow-name">${w.name}</div>
+              <div class="workflow-cmd">${w.cmd}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span class="workflow-badge ${w.badgeClass}">${w.badge}</span>
+            <span class="chevron" id="chev-${i}">&#x276F;</span>
+          </div>
+        </div>
+        <div class="workflow-body" id="wf-body-${i}">
+          ${phasesHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleWorkflow(i) {
+  const body = document.getElementById('wf-body-' + i);
+  const chev = document.getElementById('chev-' + i);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+renderWorkflows();
+</script>
+</body>
+</html>
