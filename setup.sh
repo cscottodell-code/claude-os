@@ -1,5 +1,5 @@
 #!/bin/bash
-# Scott-Toolkit v2 Setup Script
+# Scott-Toolkit v5.1 Setup Script
 # Deploys the toolkit to ~/.claude/ using symlinks where possible.
 # Run after cloning: ./setup.sh
 # On other machines: ./setup.sh --toolkit-path /path/to/scott-toolkit
@@ -32,7 +32,7 @@ CHECKS_DIR="$CLAUDE_DIR/checks"
 TOOLS_DIR="$CLAUDE_DIR/tools"
 CONFIG_DIR="$CLAUDE_DIR/config"
 
-echo "Scott-Toolkit v5 Setup"
+echo "Scott-Toolkit v5.1 Setup"
 echo "======================"
 echo "Toolkit path: $TOOLKIT_PATH"
 echo "Claude dir:   $CLAUDE_DIR"
@@ -228,7 +228,7 @@ echo "8. Verifying deployment..."
 ERRORS=0
 
 # Check hooks
-for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh guard-phase-completion.sh session-start.sh pre-compact.sh session-end.sh auto-format.sh context-reminders.sh offload-large-output.sh extract-instincts.sh pre-completion-checklist.sh post-commit-skill-triggers.sh check-file-test-trigger.sh uiux-reminder.sh; do
+for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh guard-phase-completion.sh session-start.sh pre-compact.sh session-end.sh auto-format.sh context-reminders.sh offload-large-output.sh extract-instincts.sh pre-completion-checklist.sh post-commit-skill-triggers.sh check-file-test-trigger.sh uiux-reminder.sh version-propagate.sh; do
   if [ -L "$HOOKS_DIR/$hook" ] && [ -e "$HOOKS_DIR/$hook" ]; then
     : # OK
   else

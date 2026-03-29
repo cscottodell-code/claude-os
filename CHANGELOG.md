@@ -1,5 +1,14 @@
 # Toolkit Changelog
 
+## v5.1.1 - 2026-03-29
+Version propagation: auto-detect stale version references after CHANGELOG updates.
+
+### Version Propagation
+- **NEW: `hooks/version-propagate.sh`:** PostToolUse hook fires when CHANGELOG.md is edited. Extracts latest version, checks all files in version-manifest.json for stale references, outputs a bordered checklist. Non-blocking reminder (content updates need Claude's reasoning).
+- **NEW: `config/version-manifest.json`:** Lists all files that must reference the current toolkit version, with patterns and descriptions. Used by version-propagate.sh.
+- **`setup.sh`:** Added version-propagate.sh to hook verification list. Version bumped to v5.1.
+- **Documentation updates for v5.1.0:** README.md, user-guide.md, v5-unified-design.md, toolkit-briefing, and claude-behavior.md all updated to reflect plugin awareness features.
+
 ## v5.1.0 - 2026-03-28
 Plugin tuning: reduce token overhead by detecting plugin/project misalignment.
 

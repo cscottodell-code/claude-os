@@ -1,6 +1,6 @@
-# Scott-Toolkit v5 — How to Use It
+# Scott-Toolkit v5.1 — How to Use It
 
-This is your personal cheat sheet. The toolkit handles context engineering -- making sure Claude Code always knows where you left off, what you're building, and what lessons you've learned. It also enforces stack-specific correctness and feeds lessons back into reusable checks. It works alongside GSD (project management) and Superpowers (dev methodology).
+This is your personal cheat sheet. The toolkit handles context engineering -- making sure Claude Code always knows where you left off, what you're building, and what lessons you've learned. It also enforces stack-specific correctness, detects plugin-project misalignment, and feeds lessons back into reusable checks. It works alongside GSD (project management) and Superpowers (dev methodology).
 
 ---
 
@@ -82,6 +82,7 @@ You don't need to memorize these. Just describe what you want to do and Claude w
 ### When you start a session
 - Hook scans for project context files (CLAUDE.md, PRD.md, todo.md, resume file)
 - Hook rebuilds `~/Sites/Global/ACTIVE-PROJECTS.md` from all your project resume files
+- Hook checks plugin-project alignment (e.g., warns if Vercel plugin is active on a non-Vercel project)
 - You see a short summary of what's available
 
 ### When context is about to compact
@@ -195,7 +196,8 @@ The setup script uses symlinks, so after `git pull` most changes take effect imm
 | `~/.claude/checks/` | Stack enforcement check files | `setup.sh` |
 | `~/.claude/tools/` | CLI tools (stack-detect, stack-check, etc.) | `setup.sh` |
 | `~/.claude/config/` | Toolkit config (interfaces.json) | `setup.sh` |
-| `~/.claude/settings.json` | Hook registrations, plugins | Manual (machine-specific) |
+| `~/.claude/settings.json` | Hook registrations, global plugin toggles | Manual (machine-specific) |
+| `<project>/.claude/settings.json` | Per-project plugin overrides (e.g., disable Vercel) | `/scott:new-project` or session-start suggestion |
 | `<project>/stack-lock.json` | Locked technology versions for that project | `/scott:new-project` or manual |
 | `<project>/.claude-resume.md` | Resume file for that project | Claude (automatically) |
 | `~/Sites/Global/ACTIVE-PROJECTS.md` | Master project list | Session-start hook (automatically) |
@@ -222,7 +224,7 @@ You never create, edit, or delete these files. They're machine-to-machine commun
 
 | Hook | When it fires | What it does | What you see |
 |------|--------------|-------------|-------------|
-| **session-start.sh** | Every time you open Claude Code | Scans for resume files, rebuilds active projects list, tells Claude what context exists | A 2-3 line message at the top of your session |
+| **session-start.sh** | Every time you open Claude Code | Scans for resume files, rebuilds active projects list, checks plugin-project alignment, tells Claude what context exists | A 2-3 line message at the top of your session (plus plugin mismatch warning if applicable) |
 | **pre-compact.sh** | When the context window is about to compress | Saves mechanical backup, tells Claude to write the resume file immediately | Claude suddenly writing a file — that's normal |
 | **session-end.sh** | When Claude Code is closing | Reminds Claude to write resume file + update docs | A short checklist reminder |
 | **guard-git-push.sh** | Every time Claude tries to `git push` | Blocks it until you confirm | "Git push blocked" message |
@@ -231,6 +233,7 @@ You never create, edit, or delete these files. They're machine-to-machine commun
 | **guard-npm-install.sh** | Every time Claude tries to install packages | Blocks it and lists the packages | "npm install blocked -- packages: ..." message |
 | **guard-phase-completion.sh** | When GSD tries to mark a phase complete | Blocks without `.post-execution-complete` marker | "Phase closeout required" message |
 | **check-file-test-trigger.sh** | When a check file in `checks/` is edited | Auto-runs test fixtures against the changed check | Test pass/fail results |
+| **version-propagate.sh** | When CHANGELOG.md in the toolkit is edited | Checks all files in version-manifest.json for stale version references | Bordered checklist of files needing updates (or nothing if all current) |
 | **uiux-reminder.sh** | After `.vue` files are written during GSD execution | One-line nudge to run `/impeccable:audit` before closeout | "Consider running /impeccable:audit" |
 | **offload-large-output.sh** | After every tool use | Writes tool results >4KB to `.claude/tool-output-overflow/` to prevent context bloat | "Large tool output saved to..." message |
 | **extract-instincts.sh** | Before compaction + session end | Prompts Claude to note session patterns to `~/.claude/instinct-candidates.md` | Claude may write a quick pattern note |

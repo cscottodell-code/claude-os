@@ -1,11 +1,13 @@
-# Scott-Toolkit v5: Unified Design Document
+# Scott-Toolkit v5.1: Unified Design Document
 
-**Date:** 2026-03-23
-**Status:** Complete design. Ready for implementation planning.
+**Date:** 2026-03-23 (v5.0) | 2026-03-28 (v5.1 plugin awareness)
+**Status:** Implemented. v5.0 delivered 2026-03-24, v5.1 delivered 2026-03-28.
 **Supersedes:** `docs/toolkit-rewrite-design.md` (v4) and `docs/v4-file-audit.md`
 **Purpose:** Single document covering the entire toolkit: what exists, what changes, what's added, and why.
 
 **What v5 means:** The v4 design doc designed three new systems (stack enforcement, learning loop, decoupling) but treated the existing toolkit as a fixed base. A file audit of all 160 existing files revealed duplication, misplacement, and consolidation opportunities. v5 merges both efforts into one unified approach: rationalize the existing toolkit AND add the three new systems simultaneously. One implementation, one delivery.
+
+**What v5.1 adds:** Plugin-project alignment detection. The `plugins` section in `config/interfaces.json` catalogs known plugins (Vercel ~52K tokens, Superpowers, Impeccable) with `required` flags. The session-start hook now checks bidirectionally: warns when an optional plugin is active on a project that doesn't use it (token waste) or disabled on a project that needs it (missing guidance). New projects generate per-project `.claude/settings.json` to disable irrelevant plugins at creation time.
 
 ---
 
@@ -151,7 +153,7 @@ v5 collapses three overlapping knowledge stores into two clean tiers:
 | Directory | Purpose | Loaded when |
 |-----------|---------|-------------|
 | `checks/` | **NEW.** Per-technology enforcement rules (static patterns, live checks, tool references) | During stack audits |
-| `config/` | **NEW.** Decoupling config (abstract operation names to concrete commands) | When resolving operations |
+| `config/` | **NEW.** Decoupling config (abstract operation names to concrete commands) + plugin catalog | When resolving operations or checking plugin alignment |
 | `context/` | Project templates (CLAUDE.md, PRD, Design Intent, Retro) | During project creation |
 | `docs/` | Design documents and user guide | On demand |
 | `errors/` | Logged errors from all projects (learning loop input) | During retros and stack-review |

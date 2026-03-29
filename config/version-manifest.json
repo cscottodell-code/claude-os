@@ -1,0 +1,43 @@
+{
+  "_readme": "Files that must reference the current toolkit version. Used by version-propagate.sh to detect stale references after CHANGELOG.md updates. 'files' are relative to toolkit dir, 'external_files' use ~/Sites/ as base.",
+  "version_source": "CHANGELOG.md",
+  "external_files": [
+    {
+      "path": "Global/context-engineering/compared-sources/toolkit-v5-optimization-brief.md",
+      "description": "Optimization brief from compare-sources review"
+    }
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "pattern": "Toolkit v{VERSION}",
+      "description": "Title heading"
+    },
+    {
+      "path": "docs/user-guide.md",
+      "pattern": "Toolkit v{VERSION}",
+      "description": "Title heading"
+    },
+    {
+      "path": "docs/v5-unified-design.md",
+      "pattern": "Toolkit v{VERSION}",
+      "description": "Design doc title"
+    },
+    {
+      "path": "setup.sh",
+      "pattern": "Toolkit v{VERSION}",
+      "description": "Setup script comment and banner"
+    },
+    {
+      "path": "rules/claude-behavior.md",
+      "pattern": "Last updated:",
+      "check": "date_freshness",
+      "description": "Last updated date should match CHANGELOG date"
+    },
+    {
+      "path": "skills/scott-toolkit-briefing/SKILL.md",
+      "pattern": "CHANGELOG v{MAJOR_MINOR}",
+      "description": "Constraint list should reference latest version"
+    }
+  ]
+}

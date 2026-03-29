@@ -1,6 +1,6 @@
-# Scott's Toolkit v5
+# Scott's Toolkit v5.1
 
-A context engineering toolkit for building apps with Claude Code. Owns session management, templates, domain knowledge, stack enforcement, and learning capture. Delegates project management to GSD and development methodology to Superpowers.
+A context engineering toolkit for building apps with Claude Code. Owns session management, templates, domain knowledge, stack enforcement, plugin awareness, and learning capture. Delegates project management to GSD and development methodology to Superpowers.
 
 Lives at `~/Sites/Global/scott-toolkit/` on all of Scott's machines. Deployed to `~/.claude/` via `setup.sh`.
 
@@ -51,9 +51,9 @@ All workflows are invoked via slash commands:
 
 Toolkit workflows are **orchestrators** -- they call GSD and Superpowers at the right moments. Command names are decoupled via `config/interfaces.json` so renaming a GSD command requires updating one line, not ten files.
 
-## What v5 Adds
+## What v5+ Adds
 
-Three new systems built on top of the existing toolkit:
+Three new systems built on top of the existing toolkit, plus plugin awareness (v5.1):
 
 ### Stack Enforcement
 Technology-specific checks that catch version gotchas at build time. Check files per technology (`checks/*.json`), CLI tools (`tools/stack-detect.sh`, `tools/stack-check.sh`, `tools/stack-preflight.sh`), and integration into phase closeout as a stack audit step.
@@ -63,6 +63,9 @@ Lessons from each project feed back into the toolkit. `[stack]`-tagged lessons b
 
 ### Decoupling
 Abstract operation names (`plan_phase`, `tdd`, `code_review`) mapped to concrete commands via `config/interfaces.json`. Toolkit files reference operations, not tool-specific commands. `tools/toolkit-resolve` resolves them at runtime.
+
+### Plugin Awareness (v5.1)
+Bidirectional plugin-project alignment detection. The `plugins` section in `config/interfaces.json` catalogs known plugins (Vercel, Superpowers, Impeccable) with `required` flags. The session-start hook checks whether active plugins match the project's technology stack and warns about misalignment (e.g., Vercel plugin active on a non-Vercel project wastes ~52K tokens). New projects generate `.claude/settings.json` to disable irrelevant plugins.
 
 ## Repo Structure
 
@@ -83,7 +86,7 @@ scott-toolkit/
 │   └── test-fixtures/                # Good/bad samples for check validation
 │
 ├── config/                           # Toolkit configuration
-│   └── interfaces.json               # Abstract operations -> concrete commands
+│   └── interfaces.json               # Abstract operations -> concrete commands + plugin catalog
 │
 ├── tools/                            # CLI tools (zero-token, shell-based)
 │   ├── stack-detect.sh               # Auto-detect project technologies

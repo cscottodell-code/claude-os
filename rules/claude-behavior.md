@@ -1,6 +1,6 @@
 # Claude Code Behavior Rules
 
-Last updated: 2026-03-24
+Last updated: 2026-03-29
 Loaded automatically for all projects via the rules system.
 
 Three systems handle different concerns. Use the right one for the job.

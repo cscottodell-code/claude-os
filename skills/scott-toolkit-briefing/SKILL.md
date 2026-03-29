@@ -49,7 +49,7 @@ Read these files in order. Do not skip any.
 
 ### Phase 3: Confirm Understanding [STOP]
 
-After reading all six files, confirm understanding of these seven constraints.
+After reading all six files, confirm understanding of these eight constraints.
 State each one back to Scott. Do not paraphrase from memory. Each must be
 grounded in what you just read.
 
@@ -60,6 +60,7 @@ grounded in what you just read.
 5. **Deployment model:** How setup.sh symlinks work, why moving the toolkit breaks things (setup.sh)
 6. **Token budget:** The 250K agent window limit, the ~20 line CLAUDE.md soft budget (v5-unified-design.md)
 7. **Hook enforcement:** Guards cannot be skipped, phase closeout is mandatory and physically enforced (claude-behavior.md, CHANGELOG v2.14)
+8. **Plugin awareness:** How the `plugins` section in interfaces.json catalogs known plugins with `required` flags, how session-start.sh detects plugin-project misalignment bidirectionally, and how new projects generate `.claude/settings.json` to disable irrelevant plugins (config/interfaces.json, session-start.sh, CHANGELOG v5.1)
 
 If Scott is satisfied, proceed with whatever task prompted the briefing.
 If Scott identifies gaps, re-read the relevant file and try again.
