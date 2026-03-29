@@ -1,78 +1,121 @@
 ---
 name: scott:save-tweet
 description: |
-  Extract tweet/thread content from x.com URLs into .md source files for the
-  context-engineering collection. Use when the user shares an x.com or twitter.com
-  URL and wants a source file created. Handles X's scraping blocks automatically.
+  Extract tweet/thread content from x.com URLs into structured .md files. Handles X's
+  scraping blocks automatically using fxtwitter API, Playwright for X Articles, and
+  WebFetch for linked resources. Produces a comprehensive source file with the tweet
+  content, linked resources (GitHub repos, blog posts, docs), and engagement metrics.
+
+  Use when Scott shares an x.com or twitter.com URL and wants the content captured.
+  This is a standalone extraction tool, not tied to any specific downstream workflow.
+  Scott decides where to save it and what to do with it afterward.
 user_invocable: true
-invocation_hint: /scott:save-tweet <url> - Extract a tweet into a context-engineering source file
+invocation_hint: /scott:save-tweet <url> - Extract a tweet into a markdown source file
 input_examples:
   - "/scott:save-tweet https://x.com/anthropic/status/123456789"
-  - "/scott:save-tweet -- extract this tweet thread about context engineering"
+  - "/scott:save-tweet https://x.com/someone/status/987654321"
 ---
 
 # Tweet to Source
 
-Extract an x.com tweet or thread into a `.md` source file saved to `~/Sites/Global/context-engineering/raw-sources/`.
+Extract an x.com tweet or thread into a structured `.md` file.
 
-## Standard Prompt (User's Intent)
+## Step 1: Parse the URL
 
-> "Create a .md file that gives you all of the helpful information from this source to help customize Claude Code later. Update any outdated information with current information. Don't customize the information to any context about the user — stay true to the source, except for the updates. Save to ~/Sites/Global/context-engineering/raw-sources/."
+Extract author handle and tweet ID from the URL. Handle these formats:
+- `https://x.com/[handle]/status/[id]`
+- `https://x.com/[handle]/status/[id]?s=46` (with query params)
+- `https://twitter.com/[handle]/status/[id]` (old domain)
 
-## Extraction Workflow
+## Step 2: Extract Tweet Content
 
-X/Twitter blocks all direct scraping (WebFetch, Firecrawl, browser-based scrapers all fail). Use the fxtwitter API as your primary extraction method.
+### Primary method: fxtwitter API
 
-### Step 1: Identify the Tweet
-
-Parse the URL for author handle and tweet ID. Note them for search queries.
-
-### Step 2: Extract Tweet Content via fxtwitter API
-
-**This is your primary extraction method.** Fetch both API endpoints in parallel using WebFetch:
+Fetch both endpoints in parallel using WebFetch:
 
 ```
 https://api.fxtwitter.com/[handle]/status/[tweet_id]
 https://api.vxtwitter.com/[handle]/status/[tweet_id]
 ```
 
-These return the tweet text, author, date, engagement metrics, media URLs, and article previews. If one fails, the other usually works. Both support threads, quote tweets, and X Articles.
+These return tweet text, author, date, engagement metrics, media URLs, and article
+previews. If one fails, the other usually works. Both support threads, quote tweets,
+and X Articles.
 
-**For X Articles** (long-form posts): The API returns the article title and preview text. The article itself is behind a login wall and can't be fetched. Use the preview text + WebSearch to find the full content (the author usually published it elsewhere as a blog post too).
+### X Articles (long-form posts)
 
-**If both APIs fail** (rare), fall back to WebSearch:
-- `site:x.com [handle] [topic keywords]` - finds the tweet and related thread tweets
-- `[handle] [topic] [year]` - finds blog posts, GitHub repos, or articles the tweet links to
-- `"[exact phrase from snippet]" [handle]` - expands on partial content found in first search
+X Articles are long-form posts embedded in tweets. The fxtwitter API returns the title
+and preview text but not the full article body.
 
-### Step 3: Follow Linked Resources
+**Use Playwright as the primary method for X Articles:**
 
-Tweets often link to GitHub repos, blog posts, or websites. These ARE fetchable with WebFetch. Fetch them - they usually contain the real substance the tweet is promoting. This is where most of your content comes from.
+1. Navigate to the tweet URL with Playwright
+2. Wait 5 seconds for content to load
+3. Take a snapshot to capture the full article text
+4. The article renders inline in the tweet page when you scroll down
 
-If WebFetch returns a redirect notice (e.g., 308 from `anthropic.com` to `claude.com`), re-fetch the redirect URL immediately.
+If Playwright fails (browser not available, Chrome already running):
+- Search for the article title + author name via WebSearch
+- The author often published the same content as a blog post elsewhere
+- Use the fxtwitter preview text as a fallback summary
 
-### Step 4: Cross-Reference and Fill Gaps
+**How to detect an X Article:** The fxtwitter API response will reference an article URL
+like `x.com/i/article/[id]`, or the tweet text will be minimal with the substance in
+a linked article preview.
 
-If the tweet is a thread, search for follow-up tweets by the same author. Use fxtwitter API on any thread tweet URLs found. Fetch any non-X links found.
+### If both fxtwitter endpoints fail (rare)
 
-### Step 5: Update Outdated Information
+Fall back to WebSearch:
+- `site:x.com [handle] [topic keywords]`
+- `[handle] [topic] [year]`
+- `"[exact phrase from snippet]" [handle]`
 
-Search for the current state of any tools, versions, or features mentioned. Note updates in the file but stay true to the source's structure and intent.
+## Step 3: Follow Linked Resources
 
-### Step 6: Write the Source File
+Tweets often link to GitHub repos, blog posts, docs, or websites. These ARE fetchable
+with WebFetch (unlike x.com itself). **Always fetch them.** They usually contain the
+real substance the tweet is promoting.
 
-Use the file template below. Match the naming and formatting conventions of existing files in `~/Sites/Global/context-engineering/raw-sources/`.
+If WebFetch returns a redirect (e.g., 308 from `anthropic.com` to `claude.com`),
+re-fetch the redirect URL immediately.
 
-## File Template
+## Step 4: Cross-Reference and Fill Gaps
 
-Read 1-2 existing files in `~/Sites/Global/context-engineering/raw-sources/` first to match the current formatting conventions. Use this as a starting structure:
+- If the tweet is a thread, search for follow-up tweets by the same author
+- Use fxtwitter API on any thread tweet URLs found in search results
+- Fetch any non-X links discovered during research
+
+## Step 5: Update Outdated Information
+
+Search for the current state of any tools, versions, or features mentioned. Note
+updates in the file but stay true to the source's structure and intent.
+
+## Step 6: Save Location
+
+Save to `~/Sites/Global/research/` by default. No need to ask unless Scott specifies a different path.
+
+## Step 7: Write the Source File
+
+### File Header Convention
+
+Always start with this header:
 
 ```markdown
-# [Title — from tweet or linked resource]
+<!-- Last refreshed: YYYY-MM-DD -->
+**Source:** [Tweet or Article Title](https://x.com/...) by [@handle](https://x.com/handle) — linking to [resource name](url) if applicable
+```
 
-**Source:** [Tweet Title](https://x.com/...) by [@handle](https://x.com/handle) — linking to [resource name](url) if applicable
-**Author:** [Name] — [brief credentials if findable]
-**Version at time of capture:** [version if applicable]
+### File Structure
+
+```markdown
+<!-- Last refreshed: YYYY-MM-DD -->
+**Source:** [Title](tweet URL) by [@handle](profile URL) linking to [resource](url)
+
+# [Title]
+
+**Author:** [Name] (@handle) — [brief credentials if findable]
+**Published:** [date]
+**Repository/Resource:** [URL if applicable]
 **License:** [if applicable]
 
 ---
@@ -82,27 +125,36 @@ Read 1-2 existing files in `~/Sites/Global/context-engineering/raw-sources/` fir
 [Stay true to the source. Don't add personal context or customization.]
 
 ---
+
+## Engagement (as of [month year])
+
+Tweet: [likes] likes, [bookmarks] bookmarks, [views] views
+[Repository: [stars] stars, [forks] forks — if applicable]
+
+---
 ```
 
-## Naming Convention
+### Naming Convention
 
 `[topic-slug]-[author-or-project]-[year].md`
 
-Examples from existing files:
-- `everything-claude-code-mustafa-2026.md`
+Examples:
+- `council-of-high-intelligence-nyk-2026.md`
 - `seeing-like-an-agent-thariq-2026.md`
-- `skill-graphs-arscontexta-heinrich-2025.md`
+- `claude-code-architecture-deep-dive-hitw93-2025.md`
 
 ## What NOT To Do
 
-- Don't use WebFetch, Firecrawl, or browser scraping on x.com/twitter.com - they all fail
-- Don't skip the fxtwitter API and go straight to search - the API is faster and more reliable
-- Don't fabricate tweet text you didn't find via API or search snippets
+- Don't use WebFetch or Firecrawl on x.com/twitter.com directly (they fail)
+- Don't skip the fxtwitter API and go straight to search (API is faster and more reliable)
+- Don't fabricate tweet text you didn't find via API, Playwright, or search snippets
 - Don't add user-specific context or customization to the source content
-- Don't skip linked resources - they're usually the main content
-- Don't create thin files with just a tweet's 280 characters - dig into linked resources for substance
-- Don't overwrite an existing source file without asking - if the canonical filename already exists, ask the user first
+- Don't skip linked resources (they're usually the main content)
+- Don't create thin files with just a tweet's 280 characters (dig into linked resources)
+- Don't overwrite an existing file without asking Scott first
 
 ## When Content Is Too Thin
 
-If searches return very little (single tweet with no thread, no linked resources, no related content), tell the user what you found and ask if they want to proceed with a minimal file or skip it.
+If searches return very little (single tweet with no thread, no linked resources, no
+related content), tell Scott what you found and ask if he wants to proceed with a
+minimal file or skip it.

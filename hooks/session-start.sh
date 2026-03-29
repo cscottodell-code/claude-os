@@ -10,7 +10,11 @@ PROJECT_DIR="$(pwd)"
 
 # --- 0. Sync down from GitHub ---
 if [ -x "$HOME/.claude-config/sync-down.sh" ]; then
-    "$HOME/.claude-config/sync-down.sh" || true
+    "$HOME/.claude-config/sync-down.sh"
+    SYNC_EXIT=$?
+    if [ "$SYNC_EXIT" -eq 2 ]; then
+        echo "SYNC-DIRTY: Local config changes found that aren't in GitHub. Run /scott:sync-up to push them first, or say 'force sync-down' to overwrite."
+    fi
 fi
 
 # --- 0b. Log rotation for bash-commands.log ---

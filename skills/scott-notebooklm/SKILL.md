@@ -1,75 +1,90 @@
 ---
 name: scott:notebooklm
 description: |
-  Create a NotebookLM deep-dive audio overview on any topic. Researches the topic
-  extensively, writes 5-10 focused source documents, creates a NotebookLM notebook,
-  uploads the sources, configures the chat persona, and generates a long deep-dive
-  audio overview with a custom prompt. Use when Scott says "prepare a notebooklm
-  about X", "make me a notebooklm on X", "deep dive audio on X", "podcast about X",
-  or any variation of wanting a NotebookLM audio overview on a topic. Also use when
-  Scott mentions notebooklm, audio overview, or deep dive podcast.
+  Create a NotebookLM deep-dive audio overview on any topic. Two modes:
+
+  1. **From research** (preferred): Receives a RESEARCH.md from /scott:research and converts
+     its 10-lens findings into source documents for NotebookLM. Faster, more rigorous, no
+     duplicate research.
+  2. **Standalone** (quick topics): Does its own lightweight research when full 10-lens
+     research is overkill. Use for topics Scott already understands well.
+
+  Use when Scott says "prepare a notebooklm about X", "make me a notebooklm on X",
+  "deep dive audio on X", "podcast about X", or any variation of wanting a NotebookLM
+  audio overview. Also triggers when Scott passes --notebooklm to /scott:research.
 user_invocable: true
-invocation_hint: /scott:notebooklm <topic> - Research a topic and create a NotebookLM audio deep dive
+invocation_hint: /scott:notebooklm <topic or --from-research path> - Create a NotebookLM audio deep dive
 input_examples:
+  - "/scott:notebooklm --from-research ~/Sites/Global/research/RESEARCH-memberships-2026-03-28.md"
   - "/scott:notebooklm context engineering best practices"
   - "/scott:notebooklm how SurrealDB v3 works"
   - "/scott:notebooklm the scott-toolkit"
-  - "/scott:notebooklm Nuxt 4 app architecture"
 ---
 
 # NotebookLM Deep Dive
 
-Create a comprehensive NotebookLM audio overview on any topic. This skill handles
-everything: research, source document creation, notebook setup, and audio generation.
+Create a comprehensive NotebookLM audio overview on any topic.
+
+Two entry points:
+- **From research**: `--from-research <path>` skips to Phase 2 using an existing RESEARCH.md
+- **Standalone**: does its own lightweight research (original behavior, for quick topics)
 
 ## Prerequisites
 
 - `notebooklm` CLI installed and authenticated (`notebooklm login` if needed)
 - Verify with: `notebooklm status`
 
-## Phase 1: Understand the Topic [STOP]
+## Phase 1: Determine Mode [STOP]
 
-### Steps
+### If --from-research path is provided
+1. Read the RESEARCH.md file
+2. Confirm the topic and lens coverage with Scott
+3. Ask about audience and tone:
+   - "Who's the audience? Just you, or sharing with others?"
+   - "How technical should it be?"
+4. Skip to Phase 2 (no research needed)
+
+### If standalone (no --from-research)
 1. Ask Scott to describe the topic and what angle he wants:
    - "What do you want to learn about or understand better?"
-   - "Any specific angles you want covered? (how it works, comparison to alternatives, history, practical application)"
+   - "Any specific angles you want covered?"
    - "Who's the audience? Just you, or sharing with others?"
-   - "How technical should it be? (high-level overview, moderate depth, deep technical)"
-
-2. Based on answers, identify:
-   - **Core topic**: What's the main subject
-   - **Angles**: 5-10 distinct aspects worth covering
-   - **Sources of truth**: What should be researched (codebase, web, docs, files)
-   - **Tone**: Technical depth and accessibility level
+   - "How technical should it be?"
+2. Suggest: "Want to run `/scott:research` first for more rigorous findings? Or is this a quick topic where lightweight research is fine?"
+3. If Scott wants full research, stop and tell him to run `/scott:research <topic> --notebooklm`
+4. If standalone is fine, proceed with lightweight research below
 
 ### Done when
-Scott confirms the topic scope and angles.
+Scott confirms mode, topic, and tone.
 
-## Phase 2: Research [AUTO]
+## Phase 1.5: Lightweight Research (standalone mode only) [AUTO]
+
+Only runs when NOT using --from-research. This is the original research approach.
 
 ### Steps
 1. **Dispatch parallel research subagents** (up to 3) to cover different aspects:
-   - For **codebase topics** (toolkit, a project, a technology Scott uses): Read the actual files deeply. Every hook, every config, every workflow.
-   - For **external topics** (industry practices, a technology, a concept): Web search for recent articles, official docs, expert opinions, comparisons.
-   - For **hybrid topics**: Combine both. Read Scott's implementation AND research how others approach it.
-
-2. Research should gather:
-   - Facts, architecture, how things work
-   - Real examples and concrete details (not generic descriptions)
-   - Comparisons and context (how does this relate to alternatives or industry norms)
-   - Origin stories and motivations (why was this built/designed this way)
-   - Strengths, weaknesses, and trade-offs
-   - Expert opinions and notable quotes
-
-3. Aim for enough material to write 5-10 substantial source documents.
+   - For **codebase topics**: Read the actual files deeply
+   - For **external topics**: Web search for recent articles, official docs, expert opinions
+   - For **hybrid topics**: Combine both
+2. Research should gather facts, examples, comparisons, motivations, trade-offs
+3. Aim for enough material to write 5-10 substantial source documents
 
 ### Done when
 Research is comprehensive enough to write all planned source documents.
 
-## Phase 3: Plan Source Documents [AUTO]
+## Phase 2: Plan Source Documents [AUTO]
 
-### Steps
-1. Design 5-10 focused source documents. Each should:
+### From research mode
+When working from a RESEARCH.md, map lens sections to source documents:
+- Combine related lenses that are under 1,500 words (e.g., Historical + Academic = one doc)
+- Keep strong lenses (High confidence, 4+ sources) as standalone documents
+- The Research Summary becomes Document 1 (overview)
+- Weak lenses can be folded into related stronger lenses or omitted
+- The Connections section becomes the final comparison/context doc (if present)
+- Target: 5-10 documents, each 1,500-4,000 words
+
+### Standalone mode
+Design 5-10 focused source documents. Each should:
    - Cover one distinct angle of the topic
    - Stand alone as a useful document
    - Cross-reference other documents where relevant
