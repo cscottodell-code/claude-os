@@ -149,3 +149,7 @@ Read this file when you need the full details of any principle, combo, or templa
 | Disruption Hijack | Evolutionary Hijack + Flightiness + Inferiority | Masks lack of discipline as "innovation" |
 | Silo King | Perfect Niche + Self-obsessiveness | Creates monopoly through artificial complexity |
 | Ego Feeder | Suffer Fools + Inside-out + Envy | Studies your vanity, feeds it to extract concessions |
+
+## Escalation to BOPs
+
+If the same learning plateau or growth obstacle keeps recurring, it's a system problem, not a one-off. Suggest running `/scott:bops` to extract a universal rule or entrainment pattern that addresses it systematically.

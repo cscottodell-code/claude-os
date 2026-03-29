@@ -1,6 +1,10 @@
 ---
 name: scott-uiux
-description: UI/UX design system combining usability rules with creative frontend design.
+description: >-
+  UI/UX design system combining usability rules with creative frontend design.
+  This skill is for general UI/UX foundations (spacing, typography, color, layout,
+  interaction cost) — not for Advosy CRM-specific design (use advosy-crm), not for
+  creative frontend code generation from scratch (use impeccable:frontend-design).
   Use when building or reviewing UI components, frontend pages, forms, cards, modals,
   navigation, dashboards, or any user-facing interface. Also use when the user asks
   about spacing, shadows, typography, color choices, interaction cost, layout patterns,

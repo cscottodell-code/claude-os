@@ -23,7 +23,7 @@ score it, identify the biggest gaps, and then produce an improved version. The g
 not to rewrite Scott's voice — it's to sharpen his structure, strengthen his hooks, and
 make the audience feel something.
 
-## Step 1: Receive the Input
+## Step 1: Receive the Input and Diagnose the Goal
 
 Accept the story in any format:
 - Pasted text (most common)
@@ -31,8 +31,16 @@ Accept the story in any format:
 - A verbal summary ("I want to tell a story about the time I...")
 - Bullet points or an outline
 
-If Scott gives bullet points or a summary, ask 2-3 clarifying questions to fill in the
-CART structure (Context, Adversity, Resolution, Takeaway) before proceeding. Focus on:
+**Before analyzing, ask these diagnostic questions:**
+1. "What's the context? (all-hands, sales meeting, interview, networking, 1-on-1, etc.)"
+2. "Who's the audience?" (sales team, leadership, clients, investors, etc.)
+3. "What do you want the audience to feel or do after hearing this?"
+
+These answers shape how every dimension gets scored in Step 3. A sales pitch to clients
+and an all-hands story to your team need different hooks, stakes, and takeaways.
+
+If Scott gives bullet points or a summary, also ask 2-3 clarifying questions to fill in the
+CART structure (Context, Adversity, Resolution, Takeaway). Focus on:
 - What was the specific moment of struggle?
 - What exact words were said (dialogue)?
 - What did you learn or realize?
@@ -134,9 +142,9 @@ End with 2-3 brief delivery tips specific to this story:
 
 ## Context-Specific Adjustments
 
-If Scott mentions the context (all-hands, sales meeting, interview, networking), adjust
-the analysis using the Leadership & Sales Application section (Sec 9) of the framework.
-For sales contexts, also run the Sales Narrative Checklist from the framework.
+Use the context and audience from Step 1 to adjust the analysis using the Leadership &
+Sales Application section (Sec 9) of the framework. For sales contexts, also run the
+Sales Narrative Checklist from the framework.
 
 ## Important Reminders
 

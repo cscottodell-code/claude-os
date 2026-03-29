@@ -153,6 +153,13 @@ Examples:
 - Don't create thin files with just a tweet's 280 characters (dig into linked resources)
 - Don't overwrite an existing file without asking Scott first
 
+## If Extraction Fails
+
+- **Deleted tweet or suspended account:** Tell Scott the tweet is gone. Search for
+  cached versions via `"[tweet URL]"` or `cache:[tweet URL]` before giving up.
+- **Private/protected account:** fxtwitter will fail. Tell Scott the account is private.
+- **Malformed URL:** If the URL doesn't match expected patterns, ask Scott to double-check it.
+
 ## When Content Is Too Thin
 
 If searches return very little (single tweet with no thread, no linked resources, no

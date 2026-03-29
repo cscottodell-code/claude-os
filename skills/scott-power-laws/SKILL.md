@@ -151,3 +151,7 @@ Read this file when you need the full details of any law, combo, or template.
 | Shadow Master | 1 + 24 | Flatters the boss while controlling information flow |
 | Guilt Trip | 33 + 43 | Weaponizes your need to be liked |
 | Unstoppable Juggernaut | 28 + 15 | Moves fast, takes everything before you can respond |
+
+## Escalation to BOPs
+
+If the same dynamic keeps recurring, it's a system problem, not a one-off. Suggest running `/scott:bops` to extract a universal rule or hard rule that prevents re-encountering it.

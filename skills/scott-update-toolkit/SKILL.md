@@ -10,6 +10,8 @@ invocation_hint: /scott:update-toolkit - Update the scott-toolkit with new lesso
 
 # Toolkit Update
 
+**Phases:** 1. Review Trigger [STOP] → 2. Identify Files [AUTO] → 3. Draft Changes [AUTO] → 4. Update CHANGELOG [AUTO] → 5. Update Instructions & PDF [AUTO] → 6. Commit & Push [STOP]
+
 Read the full workflow file: `/Users/scott/Sites/Global/scott-toolkit/workflows/toolkit-update.md`
 and follow it phase by phase, exactly as written.
 

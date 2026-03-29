@@ -148,3 +148,7 @@ Read this file when you need the full details of any strategy, combo, or templat
 | Endless Delay | 26 + 12 | Stalls negotiations to exhaust your resources |
 | Trojan Consultant | 13 + 18 | Maps vulnerabilities, then pitches to hidden fears |
 | System Overload | 33 + 6 + 2 | Constant small disruptions paralyze bureaucracy |
+
+## Escalation to BOPs
+
+If the same resistance pattern keeps recurring, it's a system problem, not a one-off. Suggest running `/scott:bops` to extract a universal rule or hard rule that prevents re-encountering it.

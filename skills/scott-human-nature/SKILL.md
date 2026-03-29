@@ -145,3 +145,7 @@ Read this file when you need the full details of any law, combo, or template.
 | Ideological Faction | 14 + 17 | Generational clique enforces rigid conformity |
 | Righteous Crusader | 9 + 10 | Repressed envy projected as moral outrage |
 | Phantom Expert | 3 + 11 | Confident body language masks lack of actual competence |
+
+## Escalation to BOPs
+
+If the same behavioral pattern keeps recurring across different people, it's a system problem, not a one-off. Suggest running `/scott:bops` to extract a universal rule or hard rule that prevents re-encountering it.

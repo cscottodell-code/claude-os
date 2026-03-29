@@ -2,10 +2,10 @@
 name: scott:automation-guide
 description: |
   Industry best practices for building reliable automations. Use as a companion
-  to scott-n8n-complete when DESIGNING a new automation from scratch — covers
+  to scott-n8n-reference when DESIGNING a new automation from scratch — covers
   reliability principles (idempotency, error handling, validation), performance
   optimization (batching, caching, rate limiting), monitoring/alerting strategy,
-  and testing methodology. While scott-n8n-complete handles n8n-specific syntax
+  and testing methodology. While scott-n8n-reference handles n8n-specific syntax
   and node configuration, THIS skill handles the architectural best practices
   that apply regardless of platform. Use when planning error handling strategy,
   setting up monitoring, writing test plans, or creating documentation templates

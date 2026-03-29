@@ -1,6 +1,11 @@
 ---
 name: scott-rebuild-metrics
-description: Regenerate checks/metrics.json from all audit artifacts across all projects. Use when metrics.json is missing, corrupted, or out of sync. Also use when Scott says "rebuild metrics", "refresh metrics", or "regenerate metrics".
+description: >-
+  Regenerate checks/metrics.json from all audit artifacts across all projects.
+  Use when metrics.json is missing, corrupted, or out of sync. Also use when
+  Scott says "rebuild metrics", "refresh metrics", "regenerate metrics",
+  "metrics.json is wrong", "checks are out of sync", "audit data is stale",
+  "recompute metrics", or "fix metrics".
 ---
 
 # Rebuild Metrics

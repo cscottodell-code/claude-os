@@ -5,8 +5,10 @@ description: |
   constraints, deployment model, and evolution. Use when Scott needs Claude to
   deeply understand the toolkit before making decisions about it, discussing it,
   or working near it. Trigger when Scott says "understand my toolkit",
-  "toolkit briefing", "learn the toolkit", "read the toolkit", or when any
-  conversation involves modifying, moving, or reorganizing toolkit files.
+  "toolkit briefing", "learn the toolkit", "read the toolkit", "explain the
+  toolkit to me", "what does my toolkit do", "toolkit overview", "how does my
+  system work", "how are my skills organized", or when any conversation involves
+  modifying, moving, or reorganizing toolkit files.
 user_invocable: true
 invocation_hint: /scott:toolkit-briefing - Deep-read the toolkit so Claude fully understands it
 ---
