@@ -10,8 +10,6 @@ invocation_hint: /scott:new-feature - Add a feature to the current project with 
 
 # New Feature
 
-**Phases:** 1. Feature Description [STOP] → 2. Impact Assessment [AUTO] → 3. Mini-PRD [STOP] → 4. Build [DELEGATE] → 5. Update CLAUDE.md [AUTO]
-
 Read the full workflow file: `/Users/scott/Sites/Global/scott-toolkit/workflows/new-feature.md`
 and follow it phase by phase, exactly as written.
 

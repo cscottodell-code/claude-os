@@ -10,8 +10,6 @@ invocation_hint: /scott:compare-sources - Compare new sources against your toolk
 
 # Compare Sources
 
-**Phases:** 1. Ingest & Refresh Raw Sources [AUTO] → 2. Revise Sources [STOP] → 3. Build Comparison Inventory [AUTO] → 4. Run Comparison Analysis [DELEGATE] → 5. Generate Review & Act [STOP] → 6. Archive Processed Sources [AUTO]
-
 Read the full workflow file: `/Users/scott/Sites/Global/scott-toolkit/workflows/compare-sources.md`
 and follow it phase by phase, exactly as written.
 
