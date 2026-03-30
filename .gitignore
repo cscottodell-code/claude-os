@@ -1,2 +1,6 @@
 # Computed cache — regenerate with: tools/stack-metrics.sh --full-rebuild
 checks/metrics.json
+
+.DS_Store
+*.tmp
+.~lock.*
