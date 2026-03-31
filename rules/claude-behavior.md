@@ -112,6 +112,7 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
   - What visual/behavioral verification is needed
   - Any other acceptance criteria specific to this task
   - GSD phases already have acceptance criteria in PLAN.md; use those as the contract
+- **Toolkit artifact commits (MANDATORY):** When creating or modifying skills, hooks, workflows, or any file in `~/Sites/Global/scott-toolkit/`, you MUST `git add` + `git commit` before the session ends. Uncommitted toolkit files are silently lost when the next session's sync or deploy runs. This has caused real data loss (scott-research and scott-council skills were lost on 2026-03-28 because they were written but never committed).
 
 ### Bug Fixing
 - When given a bug report, just fix it. Don't ask for permission.
