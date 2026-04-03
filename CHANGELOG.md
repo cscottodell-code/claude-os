@@ -1,5 +1,34 @@
 # Toolkit Changelog
 
+## v5.2.0 - 2026-04-03
+Toolkit coherence and guardrail hardening: eliminated all stale cross-references, standardized hook paths, and added automated coherence detection.
+
+### Stale Path Fixes
+- **`workflows/new-project.md`:** Fixed 4 references from `templates/` to `context/` (directory renamed in v4)
+- **`workflows/retro.md`:** Fixed 8 shorthand `~/scott-toolkit/` paths to canonical `~/Sites/Global/scott-toolkit/`
+- **`workflows/log-error.md`:** Fixed 5 shorthand paths
+- **`workflows/log-success.md`:** Fixed 3 shorthand paths
+- **`workflows/toolkit-update.md`:** Fixed 5 references to `scott-toolkit-instructions.md` (renamed to `docs/user-guide.md` in v5)
+- **`context/CLAUDE-MD-TEMPLATE.md`:** Replaced stale `skills/reference/` section (deleted in v4) with current skill system references
+- **`context/PRD-TEMPLATE.md`:** Fixed `templates/` to `context/`
+- **`context/RETRO-TEMPLATE.md`:** Fixed `templates/` to `context/`
+- **3 project CLAUDE.md files** (d2d-payroll, spotio-cf, life-os): Fixed shorthand toolkit paths
+
+### Hook Infrastructure
+- **`settings.json`:** Standardized all 7 PostToolUse/PreCompact/Stop hooks from direct `$HOME/Sites/Global/scott-toolkit/hooks/` paths to symlink paths (`$HOME/.claude/hooks/`). All hooks now go through the symlink layer for relocatability.
+- **`settings.json`:** Registered `check-file-test-trigger.sh` and `uiux-reminder.sh` (PostToolUse, Edit|Write). These existed on disk and had symlinks but were never registered to actually fire.
+- **`hooks/session-start.sh`:** Changed `TOOLKIT_DIR` assignment to use `SCOTT_TOOLKIT_DIR` env var with fallback for relocatability
+- **`hooks/toolkit-coherence-check.sh`** (NEW): Advisory PostToolUse hook that fires on toolkit file edits and warns about stale cross-references (old shorthand paths, renamed directories, deleted files). Exits 0 always (never blocks).
+
+### Setup Improvements
+- **`setup.sh`:** Verification step now scans directories dynamically instead of hardcoded file lists. Adding new hooks, rules, checks, or tools no longer requires updating setup.sh.
+- **`setup.sh`:** Added `--update-paths /old/path` flag for toolkit relocation. Replaces the old canonical path with the new one in all .md files.
+
+### Dead Code Removal
+- **Deleted `tools/toolkit-resolve`:** Zero runtime invocations found. Claude reads `config/interfaces.json` directly (per `rules/claude-behavior.md` Operation Resolution section). README updated with grep tip for finding operation references.
+
+Triggered by: Exhaustive cross-reference audit found 33+ stale paths, 2 unregistered hooks, 7 inconsistent hook paths, and 1 dead tool across the toolkit.
+
 ## v5.1.4 - 2026-04-02
 SurrealDB guardrail hardening: enforce Context7/reference-first development and live instance verification.
 

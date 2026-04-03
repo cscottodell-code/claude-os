@@ -115,11 +115,11 @@ Keep the user-facing instructions document in sync with the toolkit. This phase
 runs after every toolkit update — no exceptions.
 
 ### Files
-- Source: `scott-toolkit-instructions.md` (in toolkit repo root)
-- Output: `scott-toolkit-instructions.pdf` (same location)
+- Source: `docs/user-guide.md` (in toolkit repo)
+- Output: `docs/user-guide.pdf` (same location)
 
 ### Steps
-1. Read the current `scott-toolkit-instructions.md`
+1. Read the current `docs/user-guide.md`
 2. Review all changes made in Phases 2-4 and determine what sections of the
    instructions need updating:
    - New hooks → update the "Hooks that fire on their own" table
@@ -133,13 +133,13 @@ runs after every toolkit update — no exceptions.
 3. Make the edits to the markdown file
 4. Generate a styled HTML version and convert to PDF:
    ```bash
-   node ~/.claude/tools/pdf-tools/html-to-pdf.js <html-file> scott-toolkit-instructions.pdf
+   node ~/.claude/tools/pdf-tools/html-to-pdf.js <html-file> docs/user-guide.pdf
    ```
 5. Delete the intermediate HTML file
 6. Visually verify the PDF renders correctly (spot-check 1-2 pages)
 
 ### Output
-Updated `scott-toolkit-instructions.md` and freshly generated `scott-toolkit-instructions.pdf`.
+Updated `docs/user-guide.md` and freshly generated `docs/user-guide.pdf`.
 
 ### Done when
 The instructions doc reflects all changes made in this update and the PDF is regenerated.
@@ -166,8 +166,8 @@ Both machines can pull the latest toolkit.
 - [ ] Changes made and approved
 - [ ] File metadata updated (version, date, changelog)
 - [ ] CHANGELOG.md updated
-- [ ] scott-toolkit-instructions.md updated to reflect changes
-- [ ] scott-toolkit-instructions.pdf regenerated
+- [ ] docs/user-guide.md updated to reflect changes
+- [ ] docs/user-guide.pdf regenerated
 - [ ] Changes committed and pushed
 
 - [ ] .claude-resume.md updated (workflow, phase, done, next, decisions)

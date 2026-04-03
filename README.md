@@ -1,4 +1,4 @@
-# Scott's Toolkit v5.1
+# Scott's Toolkit v5.2
 
 A context engineering toolkit for building apps with Claude Code. Owns session management, templates, domain knowledge, stack enforcement, plugin awareness, and learning capture. Delegates project management to GSD and development methodology to Superpowers.
 
@@ -62,7 +62,7 @@ Technology-specific checks that catch version gotchas at build time. Check files
 Lessons from each project feed back into the toolkit. `[stack]`-tagged lessons become check candidates. `tools/stack-metrics.sh` aggregates audit data across all projects. `/scott:stack-review` presents a dashboard for human-approved promotion of lessons to checks.
 
 ### Decoupling
-Abstract operation names (`plan_phase`, `tdd`, `code_review`) mapped to concrete commands via `config/interfaces.json`. Toolkit files reference operations, not tool-specific commands. `tools/toolkit-resolve` resolves them at runtime.
+Abstract operation names (`plan_phase`, `tdd`, `code_review`) mapped to concrete commands via `config/interfaces.json`. Toolkit files reference operations, not tool-specific commands. Claude resolves them by reading `config/interfaces.json` directly (see `rules/claude-behavior.md` Operation Resolution section). To find where an operation is used: `grep -r "operation_name" workflows/ skills/ rules/`.
 
 ### Plugin Awareness (v5.1)
 Bidirectional plugin-project alignment detection. The `plugins` section in `config/interfaces.json` catalogs known plugins (Vercel, Superpowers, Impeccable) with `required` flags. The session-start hook checks whether active plugins match the project's technology stack and warns about misalignment (e.g., Vercel plugin active on a non-Vercel project wastes ~52K tokens). New projects generate `.claude/settings.json` to disable irrelevant plugins.
@@ -92,8 +92,7 @@ scott-toolkit/
 │   ├── stack-detect.sh               # Auto-detect project technologies
 │   ├── stack-check.sh                # Run static checks from check files
 │   ├── stack-preflight.sh            # System readiness + provider health
-│   ├── stack-metrics.sh              # Aggregate audit data for learning loop
-│   └── toolkit-resolve               # Resolve abstract operation names
+│   └── stack-metrics.sh              # Aggregate audit data for learning loop
 │
 ├── context/                          # Templates for new projects
 │   ├── CLAUDE-MD-TEMPLATE.md
@@ -129,7 +128,8 @@ scott-toolkit/
 │   ├── guard-destructive.sh
 │   ├── guard-claude-md.sh
 │   ├── guard-npm-install.sh
-│   └── guard-phase-completion.sh    # Blocks phase complete without closeout
+│   ├── guard-phase-completion.sh    # Blocks phase complete without closeout
+│   └── toolkit-coherence-check.sh   # Stale cross-reference detector (advisory)
 │
 ├── rules/                            # Behavior rules (-> ~/.claude/rules/)
 │   ├── claude-behavior.md           # 3-system delegation + operation resolution

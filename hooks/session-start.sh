@@ -85,7 +85,7 @@ fi
 # --- 1c. Plugin-project alignment check ---
 # Detect if the Vercel plugin is active but project doesn't use Vercel (or vice versa).
 # Uses stack-lock.json technologies and project path as signals.
-TOOLKIT_DIR="$HOME/Sites/Global/scott-toolkit"
+TOOLKIT_DIR="${SCOTT_TOOLKIT_DIR:-$HOME/Sites/Global/scott-toolkit}"
 INTERFACES="${TOOLKIT_DIR}/config/interfaces.json"
 
 VERCEL_PLUGIN_ID="vercel@claude-plugins-official"

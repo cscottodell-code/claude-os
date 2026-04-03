@@ -95,7 +95,7 @@ The trigger is identified and the key factor is clear.
 Create the log file and update the metadata counter.
 
 ### Steps
-1. Read ~/scott-toolkit/successes/_metadata.json to get the next ID
+1. Read ~/Sites/Global/scott-toolkit/successes/_metadata.json to get the next ID
 2. Create the log file using the template below
 3. Increment the counter in _metadata.json
 
@@ -124,7 +124,7 @@ Create the log file and update the metadata counter.
 ```
 
 ### Output
-Log file saved at ~/scott-toolkit/successes/[ID]-[short-description].md (e.g., 008-parallel-agent-strategy.md)
+Log file saved at ~/Sites/Global/scott-toolkit/successes/[ID]-[short-description].md (e.g., 008-parallel-agent-strategy.md)
 
 ### Done when
 Log file is created and metadata is updated.
@@ -133,7 +133,7 @@ Log file is created and metadata is updated.
 - [ ] Success accurately described
 - [ ] Triggering prompt captured verbatim
 - [ ] Key success factor identified
-- [ ] Log file created in ~/scott-toolkit/successes/
+- [ ] Log file created in ~/Sites/Global/scott-toolkit/successes/
 - [ ] Metadata counter incremented
 - [ ] Assessed whether this should become standard practice
 

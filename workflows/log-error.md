@@ -35,7 +35,7 @@ Walk Scott through each phase conversationally. You have access to the current
 conversation, so use it — reference specific messages, prompts, and outputs.
 Be specific, not generic. The goal is a log entry that's useful months from now.
 
-After logging, check if this error matches a previous pattern in ~/scott-toolkit/errors/.
+After logging, check if this error matches a previous pattern in ~/Sites/Global/scott-toolkit/errors/.
 If it does, flag it — recurring patterns need toolkit changes, not just logs.
 
 ## Phase 1: Review Context [STOP]
@@ -102,10 +102,10 @@ The trigger is identified and categorized.
 Create the log file and update the metadata counter.
 
 ### Steps
-1. Read ~/scott-toolkit/errors/_metadata.json to get the next ID
+1. Read ~/Sites/Global/scott-toolkit/errors/_metadata.json to get the next ID
 2. Create the log file using the template below
 3. Increment the counter in _metadata.json
-4. Check ~/scott-toolkit/errors/ for similar past errors — flag any patterns
+4. Check ~/Sites/Global/scott-toolkit/errors/ for similar past errors — flag any patterns
 
 ### Log template
 
@@ -142,7 +142,7 @@ Create the log file and update the metadata counter.
 ```
 
 ### Output
-Log file saved at ~/scott-toolkit/errors/[ID]-[short-description].md (e.g., 011-missed-context-window.md)
+Log file saved at ~/Sites/Global/scott-toolkit/errors/[ID]-[short-description].md (e.g., 011-missed-context-window.md)
 
 ### Done when
 Log file is created and metadata is updated.
@@ -153,7 +153,7 @@ Log file is created and metadata is updated.
 - [ ] Failure categorized (Prompt / Context / Harness)
 - [ ] Rewritten prompt drafted
 - [ ] Prevention steps identified
-- [ ] Log file created in ~/scott-toolkit/errors/
+- [ ] Log file created in ~/Sites/Global/scott-toolkit/errors/
 - [ ] Metadata counter incremented
 - [ ] Checked for recurring patterns
 

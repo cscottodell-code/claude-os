@@ -1,5 +1,5 @@
 #!/bin/bash
-# Scott-Toolkit v5.1 Setup Script
+# Scott-Toolkit v5.2 Setup Script
 # Deploys the toolkit to ~/.claude/ using symlinks where possible.
 # Run after cloning: ./setup.sh
 # On other machines: ./setup.sh --toolkit-path /path/to/scott-toolkit
@@ -9,14 +9,26 @@ set -e
 # --- Parse arguments ---
 TOOLKIT_PATH="$(cd "$(dirname "$0")" && pwd)"
 
+UPDATE_PATHS=false
+OLD_TOOLKIT_PATH=""
+
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     --toolkit-path) TOOLKIT_PATH="$2"; shift ;;
+    --update-paths)
+      UPDATE_PATHS=true
+      OLD_TOOLKIT_PATH="$2"
+      shift
+      ;;
     --help|-h)
-      echo "Usage: ./setup.sh [--toolkit-path /path/to/scott-toolkit]"
+      echo "Usage: ./setup.sh [--toolkit-path /path/to/scott-toolkit] [--update-paths /old/path]"
       echo ""
       echo "Deploys scott-toolkit to ~/.claude/ configuration."
       echo "Default toolkit path: directory containing this script."
+      echo ""
+      echo "Options:"
+      echo "  --toolkit-path PATH   Set toolkit location (default: script directory)"
+      echo "  --update-paths OLD    Replace OLD path with current path in all .md files"
       exit 0
       ;;
     *) echo "Unknown option: $1"; exit 1 ;;
@@ -32,7 +44,7 @@ CHECKS_DIR="$CLAUDE_DIR/checks"
 TOOLS_DIR="$CLAUDE_DIR/tools"
 CONFIG_DIR="$CLAUDE_DIR/config"
 
-echo "Scott-Toolkit v5.1 Setup"
+echo "Scott-Toolkit v5.2 Setup"
 echo "======================"
 echo "Toolkit path: $TOOLKIT_PATH"
 echo "Claude dir:   $CLAUDE_DIR"
@@ -227,51 +239,66 @@ echo "8. Verifying deployment..."
 
 ERRORS=0
 
-# Check hooks
-for hook in guard-git-push.sh guard-destructive.sh guard-claude-md.sh guard-npm-install.sh guard-phase-completion.sh session-start.sh pre-compact.sh session-end.sh auto-format.sh context-reminders.sh offload-large-output.sh extract-instincts.sh pre-completion-checklist.sh post-commit-skill-triggers.sh check-file-test-trigger.sh uiux-reminder.sh version-propagate.sh; do
-  if [ -L "$HOOKS_DIR/$hook" ] && [ -e "$HOOKS_DIR/$hook" ]; then
+# Check hooks (scan directory dynamically)
+for hook_file in "$TOOLKIT_PATH"/hooks/*.sh; do
+  hook_name="$(basename "$hook_file")"
+  if [ -L "$HOOKS_DIR/$hook_name" ] && [ -e "$HOOKS_DIR/$hook_name" ]; then
     : # OK
   else
-    echo "   WARNING: Hook $hook not properly linked"
+    echo "   WARNING: Hook $hook_name not properly linked"
     ERRORS=$((ERRORS + 1))
   fi
 done
 
-# Check rules
-for rule in claude-behavior.md code-style.md; do
-  if [ -L "$RULES_DIR/$rule" ] && [ -e "$RULES_DIR/$rule" ]; then
+# Check rules (scan directory dynamically)
+for rule_file in "$TOOLKIT_PATH"/rules/*.md; do
+  rule_name="$(basename "$rule_file")"
+  if [ -L "$RULES_DIR/$rule_name" ] && [ -e "$RULES_DIR/$rule_name" ]; then
     : # OK
   else
-    echo "   WARNING: Rule $rule not properly linked"
+    echo "   WARNING: Rule $rule_name not properly linked"
     ERRORS=$((ERRORS + 1))
   fi
 done
 
-# Check skills
-for skill in scott-new-project scott-resume scott-new-feature scott-phase-closeout scott-handoff scott-update-toolkit scott-compare-sources scott-bypass; do
-  if [ -f "$SKILLS_DIR/$skill/SKILL.md" ]; then
+# Check skills (scan deployed skills)
+for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
+  skill_name="$(basename "$skill_dir")"
+  if [ -f "$SKILLS_DIR/$skill_name/SKILL.md" ]; then
     : # OK
   else
-    echo "   WARNING: Skill $skill not deployed"
+    echo "   WARNING: Skill $skill_name not deployed"
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+# Also check workflow-generated skills
+for workflow_skill in scott-new-project scott-resume scott-new-feature scott-phase-closeout scott-handoff scott-update-toolkit scott-compare-sources; do
+  if [ -f "$SKILLS_DIR/$workflow_skill/SKILL.md" ]; then
+    : # OK
+  else
+    echo "   WARNING: Workflow skill $workflow_skill not deployed"
     ERRORS=$((ERRORS + 1))
   fi
 done
 
-# Check v5 directories
-for check in surrealdb.json nuxt.json tailwind.json bun.json hono.json stack-lock.schema.json; do
-  if [ -L "$CHECKS_DIR/$check" ] && [ -e "$CHECKS_DIR/$check" ]; then
+# Check check files (scan directory dynamically)
+for check_file in "$TOOLKIT_PATH"/checks/*.json; do
+  check_name="$(basename "$check_file")"
+  if [ -L "$CHECKS_DIR/$check_name" ] && [ -e "$CHECKS_DIR/$check_name" ]; then
     : # OK
   else
-    echo "   WARNING: Check file $check not properly linked"
+    echo "   WARNING: Check file $check_name not properly linked"
     ERRORS=$((ERRORS + 1))
   fi
 done
 
-for tool in stack-detect.sh stack-check.sh stack-preflight.sh; do
-  if [ -L "$TOOLS_DIR/$tool" ] && [ -e "$TOOLS_DIR/$tool" ]; then
+# Check tools (scan directory dynamically)
+for tool_file in "$TOOLKIT_PATH"/tools/*.sh; do
+  tool_name="$(basename "$tool_file")"
+  if [ -L "$TOOLS_DIR/$tool_name" ] && [ -e "$TOOLS_DIR/$tool_name" ]; then
     : # OK
   else
-    echo "   WARNING: Tool $tool not properly linked"
+    echo "   WARNING: Tool $tool_name not properly linked"
     ERRORS=$((ERRORS + 1))
   fi
 done
@@ -280,6 +307,21 @@ if [ $ERRORS -eq 0 ]; then
   echo "   All checks passed!"
 else
   echo "   $ERRORS warnings found. Review above."
+fi
+
+# --- 9. Update paths (if --update-paths was used) ---
+if [ "$UPDATE_PATHS" = true ] && [ -n "$OLD_TOOLKIT_PATH" ]; then
+  echo ""
+  echo "9. Updating paths: $OLD_TOOLKIT_PATH -> $TOOLKIT_PATH"
+  COUNT=0
+  while IFS= read -r -d '' md_file; do
+    if grep -q "$OLD_TOOLKIT_PATH" "$md_file" 2>/dev/null; then
+      sed -i '' "s|$OLD_TOOLKIT_PATH|$TOOLKIT_PATH|g" "$md_file"
+      echo "   -> $(basename "$md_file")"
+      COUNT=$((COUNT + 1))
+    fi
+  done < <(find "$TOOLKIT_PATH" -name "*.md" -print0)
+  echo "   Updated $COUNT files."
 fi
 
 echo ""

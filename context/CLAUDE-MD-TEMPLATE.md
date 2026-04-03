@@ -46,17 +46,14 @@ are the same for every project.
 ## External References (Toolkit)
 <!-- [CUSTOMIZE] List which skill files are relevant to THIS project. -->
 
-Before starting work, read the relevant skills from ~/scott-toolkit/skills/
-Specific skills for this project:
-- ~/scott-toolkit/skills/reference/surrealdb-v3.md
-- ~/scott-toolkit/skills/reference/surrealql.md
-<!-- Add more as needed: -->
-<!-- - ~/scott-toolkit/skills/reference/tauri-nuxt.md        (for desktop projects) -->
-<!-- - ~/scott-toolkit/skills/reference/nuxt-ui-v4.md         (for UI-heavy projects) -->
-<!-- - ~/scott-toolkit/skills/reference/rust-tauri-commands.md (for desktop projects) -->
-<!-- - ~/scott-toolkit/skills/reference/n8n-integration.md     (if using n8n) -->
-<!-- - ~/scott-toolkit/skills/reference/error-handling.md      (for polish phase) -->
-<!-- - ~/scott-toolkit/skills/reference/frontend-design.md     (for design work) -->
+Skills are discovered via the skill system (type `/scott:` to see available skills).
+Skills live in `~/.claude/skills/` (symlinked from the toolkit's `skills/` directory).
+<!-- [CUSTOMIZE] List which skills are relevant to THIS project: -->
+<!-- - scott-surrealdb (for SurrealDB/SurrealQL projects) -->
+<!-- - scott-n8n-reference (if using n8n) -->
+<!-- - scott-uiux (for UI-heavy projects) -->
+<!-- - advosy-crm (for Advosy CRM work) -->
+<!-- - advosy-claimsforce (for Claimsforce/EspoCRM work) -->
 
 ## Project Architecture
 <!-- [CUSTOMIZE] How this specific project is structured. -->

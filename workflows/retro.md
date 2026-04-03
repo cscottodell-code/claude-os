@@ -48,8 +48,8 @@ and how it went.
 2. PRD.md (to compare what was planned vs what was built)
 3. tasks/lessons.md (mistakes and corrections already captured)
 4. Recent git log (to see the build progression)
-5. ~/scott-toolkit/errors/ — any error logs captured during this project
-6. ~/scott-toolkit/successes/ — any success logs captured during this project
+5. ~/Sites/Global/scott-toolkit/errors/ — any error logs captured during this project
+6. ~/Sites/Global/scott-toolkit/successes/ — any success logs captured during this project
 7. GSD artifacts (if `.planning/` directory exists):
    - `.planning/STATE.md` — phase progress and overall project state
    - `.planning/ROADMAP.md` — the full plan structure
@@ -106,12 +106,12 @@ Scott has reflected on all areas and is satisfied with the captured insights.
 Create the formal retro file using the RETRO-TEMPLATE.md format.
 
 ### Steps
-1. Read ~/scott-toolkit/templates/RETRO-TEMPLATE.md
+1. Read ~/Sites/Global/scott-toolkit/templates/RETRO-TEMPLATE.md
 2. Fill in all sections using the answers from Phase 2
 3. Save in TWO locations:
    a. Project repo: `RETRO.md` (or `retros/YYYY-MM-milestone-name.md` if multiple milestones)
-   b. Toolkit: `~/scott-toolkit/retros/YYYY-MM-project-name.md`
-4. Update `~/scott-toolkit/retros/_retro-index.md` with a summary entry
+   b. Toolkit: `~/Sites/Global/scott-toolkit/retros/YYYY-MM-project-name.md`
+4. Update `~/Sites/Global/scott-toolkit/retros/_retro-index.md` with a summary entry
 
 ### Output
 Retro document saved in both locations.
@@ -126,7 +126,7 @@ The most important phase. Based on the lessons learned, propose specific changes
 to toolkit files.
 
 ### Steps
-1. Review error logs in ~/scott-toolkit/errors/ for recurring patterns that suggest a skill or template change
+1. Review error logs in ~/Sites/Global/scott-toolkit/errors/ for recurring patterns that suggest a skill or template change
 2. Review Section 5 (Toolkit Updates Needed) from the retro document
 3. For each proposed update:
    a. Identify the specific file to change
@@ -152,7 +152,7 @@ Make the approved changes to the toolkit files.
    b. Make the change
    c. Update the file's metadata (Last updated, Version, Changelog)
    d. Show the change to Scott
-2. Update ~/scott-toolkit/CHANGELOG.md with a new entry describing all changes
+2. Update ~/Sites/Global/scott-toolkit/CHANGELOG.md with a new entry describing all changes
 3. Commit all changes to the toolkit repo
 
 ### Output
@@ -165,7 +165,7 @@ All approved changes are applied and committed.
 - [ ] Project context reviewed
 - [ ] Reflection questions answered
 - [ ] Retro document saved in project repo
-- [ ] Retro document saved in ~/scott-toolkit/retros/
+- [ ] Retro document saved in ~/Sites/Global/scott-toolkit/retros/
 - [ ] Retro index updated
 - [ ] Toolkit updates identified and approved
 - [ ] Toolkit updates applied

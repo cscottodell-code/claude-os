@@ -38,6 +38,21 @@
       "path": "skills/scott-toolkit-briefing/SKILL.md",
       "pattern": "CHANGELOG v{MAJOR_MINOR}",
       "description": "Constraint list should reference latest version"
+    },
+    {
+      "path": "hooks/toolkit-coherence-check.sh",
+      "pattern": "none",
+      "check": "exists",
+      "description": "Coherence check hook must exist"
     }
-  ]
+  ],
+  "cross_reference_patterns": {
+    "_readme": "Known stale patterns to watch for. toolkit-coherence-check.sh enforces these.",
+    "banned": [
+      { "pattern": "~/scott-toolkit/", "replacement": "~/Sites/Global/scott-toolkit/", "reason": "Old shorthand path" },
+      { "pattern": "templates/", "context": "path references", "replacement": "context/", "reason": "Directory renamed in v4" },
+      { "pattern": "scott-toolkit-instructions.md", "replacement": "docs/user-guide.md", "reason": "File renamed in v5" },
+      { "pattern": "skills/reference/", "replacement": "~/.claude/skills/ (skill system)", "reason": "Directory deleted in v4" }
+    ]
+  }
 }

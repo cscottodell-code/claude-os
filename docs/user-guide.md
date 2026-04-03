@@ -1,4 +1,4 @@
-# Scott-Toolkit v5.1 — How to Use It
+# Scott-Toolkit v5.2 — How to Use It
 
 This is your personal cheat sheet. The toolkit handles context engineering -- making sure Claude Code always knows where you left off, what you're building, and what lessons you've learned. It also enforces stack-specific correctness, detects plugin-project misalignment, and feeds lessons back into reusable checks. It works alongside GSD (project management) and Superpowers (dev methodology).
 

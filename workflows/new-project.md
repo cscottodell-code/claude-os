@@ -99,12 +99,12 @@ Scott has answered all clarifying questions and no major gaps remain.
 ## Phase 3: Draft PRD [STOP]
 
 ### What this phase does
-Load the PRD template from ~/Sites/Global/scott-toolkit/templates/PRD-TEMPLATE.md and walk through
+Load the PRD template from ~/Sites/Global/scott-toolkit/context/PRD-TEMPLATE.md and walk through
 it section by section, using the brain dump answers as the starting material.
 
 ### How to do it
 
-1. Read ~/Sites/Global/scott-toolkit/templates/PRD-TEMPLATE.md
+1. Read ~/Sites/Global/scott-toolkit/context/PRD-TEMPLATE.md
 2. For each section (1-11):
    a. Explain what this section is about (use the template's guidance comments)
    b. Draft the content using the brain dump and clarification answers
@@ -155,9 +155,9 @@ Set up the project repo with the proper file structure and configuration files.
    - Advosy → ~/Sites/Advosy/[project-name]
    - Bresco → ~/Sites/Bresco/[project-name]
 2. Initialize git
-3. Read ~/Sites/Global/scott-toolkit/templates/FILE-STRUCTURE-TEMPLATE.md
+3. Read ~/Sites/Global/scott-toolkit/context/FILE-STRUCTURE-TEMPLATE.md
 4. Create the directory structure matching the deployment target (web/desktop/both)
-5. Generate CLAUDE.md from ~/Sites/Global/scott-toolkit/templates/CLAUDE-MD-TEMPLATE.md:
+5. Generate CLAUDE.md from ~/Sites/Global/scott-toolkit/context/CLAUDE-MD-TEMPLATE.md:
    - Fill in project context from the PRD
    - Fill in tech stack (standard + any project-specific additions)
    - List relevant toolkit skill files in External References

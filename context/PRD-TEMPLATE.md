@@ -359,7 +359,7 @@ captures the visual direction: what the app should look and feel like.
 
 HOW TO USE:
 1. Create a separate Design Intent document using the DESIGN-INTENT-TEMPLATE.md
-   from the toolkit (/templates/DESIGN-INTENT-TEMPLATE.md)
+   from the toolkit (/context/DESIGN-INTENT-TEMPLATE.md)
 2. Fill it out (reference examples, colors, typography, layout preferences)
 3. Link it here
 
