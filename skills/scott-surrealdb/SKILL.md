@@ -13,6 +13,9 @@ invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and
 
 **Version:** SurrealDB v3 server + JS SDK surrealdb@2.0.x (npm)
 **Deep reference:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-reference.md`
+**Master reference:** `~/Sites/Global/scott-toolkit/references/surrealdb-v3-master-reference.md` (DEFINE API, auth, permissions, full-text search, HNSW, events, functions catalog, SurrealQL language, JS SDK 2.0 complete API)
+**Functions catalog:** `~/Sites/Global/scott-toolkit/references/surrealdb-v3-functions-catalog.md` (325+ built-in functions)
+**Language reference:** `~/Sites/Global/scott-toolkit/references/surrealql-language-reference.md` (control flow, closures, operators, types, transactions)
 **Context7 library:** `/surrealdb/docs.surrealdb.com`
 
 ## Project Versions (don't mix these up)
