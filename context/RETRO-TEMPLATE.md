@@ -128,13 +128,13 @@ PROMPTING QUESTIONS:
 FORMAT: Be specific about what file needs what change.
 
 EXAMPLE:
-  - UPDATE skills/reference/tauri-nuxt.md: Add section about Tauri v2
+  - UPDATE ~/.claude/skills/scott-surrealdb/SKILL.md: Add section about Tauri v2
     capabilities/permissions system. We hit this during Milestone 2 and had
     to research it from scratch.
   - UPDATE context/PRD-TEMPLATE.md: Add a question in the Data Model section
     about graph edges vs record links, since this decision affected our query
     patterns significantly.
-  - NEW skills/reference/pinia-patterns.md: We ended up needing complex Pinia
+  - NEW ~/.claude/skills/scott-pinia-patterns/SKILL.md: We ended up needing complex Pinia
     store patterns that aren't documented anywhere in the toolkit.
 -->
 

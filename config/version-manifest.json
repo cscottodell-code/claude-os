@@ -47,12 +47,22 @@
     }
   ],
   "cross_reference_patterns": {
-    "_readme": "Known stale patterns to watch for. toolkit-coherence-check.sh enforces these.",
+    "_readme": "Single source of truth for stale patterns. Read by toolkit-coherence-check.sh (real-time) and toolkit-lint.sh (batch). When renaming files or directories, add an entry here instead of hunting references manually.",
     "banned": [
       { "pattern": "~/scott-toolkit/", "replacement": "~/Sites/Global/scott-toolkit/", "reason": "Old shorthand path" },
-      { "pattern": "templates/", "context": "path references", "replacement": "context/", "reason": "Directory renamed in v4" },
+      { "pattern": "scott-toolkit/templates/", "replacement": "scott-toolkit/context/", "reason": "Directory renamed in v4" },
+      { "pattern": "toolkit/templates/", "replacement": "toolkit/context/", "reason": "Directory renamed in v4 (short form)" },
       { "pattern": "scott-toolkit-instructions.md", "replacement": "docs/user-guide.md", "reason": "File renamed in v5" },
       { "pattern": "skills/reference/", "replacement": "~/.claude/skills/ (skill system)", "reason": "Directory deleted in v4" }
-    ]
+    ],
+    "scan_paths": {
+      "_readme": "Paths to scan during full lint. Relative to ~/Sites/.",
+      "toolkit": "Global/scott-toolkit",
+      "external_claude_md": [
+        "Advosy/*/CLAUDE.md",
+        "Bresco/*/CLAUDE.md",
+        "Personal/*/CLAUDE.md"
+      ]
+    }
   }
 }

@@ -1,5 +1,26 @@
 # Toolkit Changelog
 
+## v5.2.1 - 2026-04-03
+Stability infrastructure: single source of truth for banned patterns, batch lint scanner, pre-commit gate, and setup.sh improvements.
+
+### Single Source of Truth
+- **`hooks/toolkit-coherence-check.sh`:** Rewritten to read banned patterns from `config/version-manifest.json` instead of hardcoding them. One place to update when patterns change.
+- **`config/version-manifest.json`:** Added `scan_paths` section for external CLAUDE.md globs. Tightened `templates/` pattern to `scott-toolkit/templates/` to avoid false positives on project directories like `n8n-templates/`.
+
+### Batch Lint Scanner
+- **`tools/toolkit-lint.sh`** (NEW): Full-repo scanner that checks all toolkit .md files AND external project CLAUDE.md files for stale cross-references. Reads patterns from version-manifest.json. Supports `--fix` for auto-remediation (skips patterns needing human judgment). Exits 1 if stale refs found (works as a gate).
+- Skips historical docs (v4-file-audit.md, v5-comparison-table.md, v5-unified-design.md) that legitimately reference old names.
+
+### Pre-commit Gate
+- **`tools/pre-commit-hook.sh`** (NEW): Git pre-commit hook that runs toolkit-lint.sh before commits. Symlinked to `.git/hooks/pre-commit`. Blocks commits with stale references.
+
+### Setup Improvements
+- **`setup.sh --verify-only`:** Lightweight health check mode that skips deployment and only runs verification. For quick "is everything linked?" checks.
+- **`setup.sh` SCOTT_TOOLKIT_DIR check:** Prints recommendation to add env var to shell profile if unset, or warns if set to wrong path.
+
+### Additional Stale Path Fixes
+- Fixed `workflows/retro.md` (templates/ -> context/), `context/RETRO-TEMPLATE.md` (skills/reference/ -> skill system), `d2d-payroll/CLAUDE.md` and `life-os/CLAUDE.md` (skills/reference/ -> skill system).
+
 ## v5.2.0 - 2026-04-03
 Toolkit coherence and guardrail hardening: eliminated all stale cross-references, standardized hook paths, and added automated coherence detection.
 

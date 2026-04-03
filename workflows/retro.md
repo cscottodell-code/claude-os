@@ -106,7 +106,7 @@ Scott has reflected on all areas and is satisfied with the captured insights.
 Create the formal retro file using the RETRO-TEMPLATE.md format.
 
 ### Steps
-1. Read ~/Sites/Global/scott-toolkit/templates/RETRO-TEMPLATE.md
+1. Read ~/Sites/Global/scott-toolkit/context/RETRO-TEMPLATE.md
 2. Fill in all sections using the answers from Phase 2
 3. Save in TWO locations:
    a. Project repo: `RETRO.md` (or `retros/YYYY-MM-milestone-name.md` if multiple milestones)

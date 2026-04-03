@@ -11,6 +11,7 @@ TOOLKIT_PATH="$(cd "$(dirname "$0")" && pwd)"
 
 UPDATE_PATHS=false
 OLD_TOOLKIT_PATH=""
+VERIFY_ONLY=false
 
 while [[ "$#" -gt 0 ]]; do
   case $1 in
@@ -20,8 +21,11 @@ while [[ "$#" -gt 0 ]]; do
       OLD_TOOLKIT_PATH="$2"
       shift
       ;;
+    --verify-only)
+      VERIFY_ONLY=true
+      ;;
     --help|-h)
-      echo "Usage: ./setup.sh [--toolkit-path /path/to/scott-toolkit] [--update-paths /old/path]"
+      echo "Usage: ./setup.sh [--toolkit-path /path/to/scott-toolkit] [--update-paths /old/path] [--verify-only]"
       echo ""
       echo "Deploys scott-toolkit to ~/.claude/ configuration."
       echo "Default toolkit path: directory containing this script."
@@ -29,6 +33,7 @@ while [[ "$#" -gt 0 ]]; do
       echo "Options:"
       echo "  --toolkit-path PATH   Set toolkit location (default: script directory)"
       echo "  --update-paths OLD    Replace OLD path with current path in all .md files"
+      echo "  --verify-only         Skip deployment, only run verification checks"
       exit 0
       ;;
     *) echo "Unknown option: $1"; exit 1 ;;
@@ -56,6 +61,8 @@ if [ ! -f "$TOOLKIT_PATH/README.md" ]; then
   echo "       Expected to find README.md. Check your --toolkit-path."
   exit 1
 fi
+
+if [ "$VERIFY_ONLY" != true ]; then
 
 # --- Create directories ---
 mkdir -p "$HOOKS_DIR" "$RULES_DIR" "$SKILLS_DIR" "$CHECKS_DIR" "$TOOLS_DIR" "$CONFIG_DIR"
@@ -233,8 +240,13 @@ else
   echo "   (no config/ directory yet)"
 fi
 
+fi # end VERIFY_ONLY skip
+
 # --- 8. Verify deployment ---
-echo ""
+if [ "$VERIFY_ONLY" = true ]; then
+  echo "Verify-only mode — skipping deployment"
+  echo ""
+fi
 echo "8. Verifying deployment..."
 
 ERRORS=0
@@ -310,7 +322,7 @@ else
 fi
 
 # --- 9. Update paths (if --update-paths was used) ---
-if [ "$UPDATE_PATHS" = true ] && [ -n "$OLD_TOOLKIT_PATH" ]; then
+if [ "$VERIFY_ONLY" != true ] && [ "$UPDATE_PATHS" = true ] && [ -n "$OLD_TOOLKIT_PATH" ]; then
   echo ""
   echo "9. Updating paths: $OLD_TOOLKIT_PATH -> $TOOLKIT_PATH"
   COUNT=0
@@ -331,6 +343,17 @@ echo "NOTE: settings.json hooks must be configured separately."
 echo "The hook scripts are deployed, but settings.json registration"
 echo "is machine-specific and should be done manually or via sync."
 echo ""
+
+# --- Check SCOTT_TOOLKIT_DIR environment variable ---
+if [ -z "$SCOTT_TOOLKIT_DIR" ]; then
+  echo "Recommended: Add to your shell profile (~/.zshrc):"
+  echo "  export SCOTT_TOOLKIT_DIR=\"$TOOLKIT_PATH\""
+  echo ""
+elif [ "$SCOTT_TOOLKIT_DIR" != "$TOOLKIT_PATH" ]; then
+  echo "WARNING: SCOTT_TOOLKIT_DIR is set to $SCOTT_TOOLKIT_DIR but toolkit is at $TOOLKIT_PATH"
+  echo ""
+fi
+
 echo "Next steps:"
 echo "  1. Verify hooks work: start a new Claude Code session"
 echo "  2. Test a workflow: /scott:resume or /scott:new-feature"
