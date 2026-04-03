@@ -238,6 +238,8 @@ Hardcoded commands being decoupled:
 
 Current: ~60 lines visible, ~120 total. 4 phases: Verify, Code Review, Reflect, Gate.
 
+**Note (v5.1.3):** Phase 2 was further enhanced with specialist review lenses (schema + security) dispatched as parallel subagents before general code review. See CHANGELOG v5.1.3 and workflows/phase-closeout.md v2.1.
+
 Changes:
 1. **Insert Phase 1.5: Stack Audit** between Verify (Phase 1) and Code Review (Phase 2):
    - Run `stack-preflight.sh` to determine degradation tier
