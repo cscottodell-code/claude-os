@@ -46,8 +46,20 @@ if [ "$MATCH" = true ] && [ -f "$SKILL_FILE" ]; then
   # Strip frontmatter and output as additionalContext
   CONTENT=$(sed -n '/^---$/,/^---$/!p' "$SKILL_FILE" | tail -n +1)
 
-  # Output JSON with additionalContext
-  jq -n --arg content "$CONTENT" '{
-    "additionalContext": ("[SurrealDB Skill Auto-Loaded] " + $content)
-  }'
+  # Check if SurrealDB server is reachable (non-blocking, 2s timeout)
+  HEALTH_WARNING=""
+  if ! curl -s --max-time 2 "http://localhost:8000/health" &>/dev/null; then
+    HEALTH_WARNING="[WARNING] SurrealDB server is NOT running on localhost:8000. Start it with: ~/Sites/Global/scott-toolkit/start-surreal.sh — All SurrealDB code MUST be verified against a live instance before committing."
+  fi
+
+  # Build additionalContext with skill + optional health warning
+  if [ -n "$HEALTH_WARNING" ]; then
+    jq -n --arg content "$CONTENT" --arg health "$HEALTH_WARNING" '{
+      "additionalContext": ($health + "\n\n[SurrealDB Skill Auto-Loaded] " + $content)
+    }'
+  else
+    jq -n --arg content "$CONTENT" '{
+      "additionalContext": ("[SurrealDB Skill Auto-Loaded] " + $content)
+    }'
+  fi
 fi

@@ -48,6 +48,7 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
 - Phase closeout includes a stack audit (Phase 1.5) that runs technology-specific checks
 - Stack drift (check file changes without lock file updates) is caught by `guard-drift-detection.sh`
 - Lessons tagged with `[stack:<tech>]` feed back into check files via the learning loop
+- **SurrealDB knowledge rule:** NEVER write SurrealQL from general SQL knowledge or LLM training data. Always verify syntax against Context7 (`/surrealdb/docs.surrealdb.com`), the skill traps list, or reference files before writing any query. The `inject-surrealdb-skill.sh` hook enforces this by auto-loading the skill on first SurrealDB file touch and checking that the live instance is running on `localhost:8000`.
 
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`

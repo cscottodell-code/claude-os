@@ -19,6 +19,16 @@ invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and
 **Deep reference:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-reference.md`
 **Context7 library:** `/surrealdb/docs.surrealdb.com`
 
+## MANDATORY: No General Knowledge for SurrealQL
+
+**NEVER write SurrealQL from general SQL knowledge or LLM training data.** SurrealQL looks like SQL but diverges in critical ways that will silently produce wrong results or hard errors. Before writing ANY query, schema definition, or SDK call:
+
+1. **Check the traps list below first** (covers the most common mistakes)
+2. **Look up syntax in Context7** (`/surrealdb/docs.surrealdb.com`) or the reference files listed above
+3. **Verify against a live SurrealDB instance** using MCP tools before committing
+
+If you cannot verify a syntax pattern against Context7 or the reference files, do NOT guess. Ask Scott or flag it as unverified.
+
 ## CRITICAL: Known Traps (live-tested, will cause errors if ignored)
 - `time_now()` DOES NOT EXIST -- use `time::now()`
 - `math::round(val, 2)` DOES NOT WORK -- use `math::fixed(val, 2)`

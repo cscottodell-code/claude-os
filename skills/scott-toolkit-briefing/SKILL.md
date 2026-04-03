@@ -63,6 +63,7 @@ grounded in what you just read.
 6. **Token budget:** The 250K agent window limit, the ~20 line CLAUDE.md soft budget (v5-unified-design.md)
 7. **Hook enforcement:** Guards cannot be skipped, phase closeout is mandatory and physically enforced (claude-behavior.md, CHANGELOG v2.14)
 8. **Plugin awareness:** How the `plugins` section in interfaces.json catalogs known plugins with `required` flags, how session-start.sh detects plugin-project misalignment bidirectionally, and how new projects generate `.claude/settings.json` to disable irrelevant plugins (config/interfaces.json, session-start.sh, CHANGELOG v5.1)
+9. **SurrealDB knowledge guardrails:** The three-layer enforcement system: (1) skill auto-injection via `inject-surrealdb-skill.sh` hook with live instance health check, (2) "no general knowledge" rule requiring Context7/reference verification before writing any SurrealQL, (3) schema lens at phase closeout validating every query against SCHEMAFULL definitions (claude-behavior.md, checks/surrealdb.json, interfaces.json lenses section, CHANGELOG v5.1.4)
 
 If Scott is satisfied, proceed with whatever task prompted the briefing.
 If Scott identifies gaps, re-read the relevant file and try again.

@@ -6,11 +6,21 @@
   "context7_id": "/surrealdb/docs.surrealdb.com",
   "file_patterns": ["*.surql", "**/db/**", "**/schemas/**"],
   "content_patterns": ["db\\.query", "db\\.create", "db\\.select", "db\\.update", "db\\.delete", "surrealdb"],
+  "knowledge_sources": [
+    { "type": "context7", "id": "/surrealdb/docs.surrealdb.com", "for": "SurrealQL syntax and docs", "priority": 1 },
+    { "type": "context7", "id": "/surrealdb/surrealdb.js", "for": "JS SDK API reference", "priority": 2 },
+    { "type": "reference", "path": "references/surrealdb-v3-master-reference.md", "for": "comprehensive v3 reference", "priority": 3 },
+    { "type": "skill", "path": "skills/scott-surrealdb/SKILL.md", "for": "traps and quick patterns", "priority": 4 }
+  ],
+  "knowledge_rule": "NEVER write SurrealQL from general SQL knowledge or LLM training data. Always verify syntax against knowledge_sources (in priority order) before writing queries.",
   "tools": [
     { "type": "cli", "command": "surreal validate", "for": "schema validation" },
     { "type": "mcp", "server": "surrealdb", "for": "live queries" },
     { "type": "context7", "id": "/surrealdb/docs.surrealdb.com", "for": "doc reference" }
   ],
+  "live_instance_required": true,
+  "health_endpoint": "http://localhost:8000/health",
+  "start_command": "~/Sites/Global/scott-toolkit/start-surreal.sh",
   "checks": {
     "static": [
       {

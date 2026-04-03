@@ -1,5 +1,14 @@
 # Toolkit Changelog
 
+## v5.1.4 - 2026-04-02
+SurrealDB guardrail hardening: enforce Context7/reference-first development and live instance verification.
+
+### SurrealDB Guardrails
+- **`skills/scott-surrealdb/SKILL.md`:** Added "MANDATORY: No General Knowledge for SurrealQL" section between the reference links and the traps list. Explicitly prohibits writing SurrealQL from general SQL knowledge or LLM training data. Requires checking traps, Context7, or reference files before writing any query, and verifying against a live instance before committing.
+- **`hooks/inject-surrealdb-skill.sh`:** Added live SurrealDB health check (2s timeout, non-blocking) on first injection. If `localhost:8000/health` is unreachable, injects a WARNING into additionalContext with the start command. Ensures Claude is immediately aware when the server is down, before any SurrealDB code gets written.
+
+Triggered by: Guardrail audit found two gaps: (1) no explicit rule preventing general-knowledge SurrealQL, and (2) no automated check that SurrealDB is running during development.
+
 ## v5.1.3 - 2026-04-02
 Specialist review lenses: parallel domain-specific code review during phase closeout.
 
