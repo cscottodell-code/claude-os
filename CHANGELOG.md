@@ -1,5 +1,15 @@
 # Toolkit Changelog
 
+## v5.1.3 - 2026-04-02
+Specialist review lenses: parallel domain-specific code review during phase closeout.
+
+### Specialist Lenses
+- **`config/interfaces.json`:** Added `lenses` section with two initial lenses: `schema` (SurrealDB SCHEMAFULL compliance) and `security` (OWASP Top 10 + injection patterns). Each lens defines `applies_when` conditions, restricted `context_files`, `file_patterns`, and a focused review prompt.
+- **`workflows/phase-closeout.md` v2.1:** Phase 2 (Code Review) now dispatches applicable specialist lenses as parallel Reviewer subagents before the general code review. Each lens agent has restricted scope ("blinders") and returns typed findings. Findings are merged, deduplicated, and presented before the fix cycle. Lenses skip when fewer than 5 files changed to avoid overhead on small phases.
+- **`rules/claude-behavior.md`:** Updated phase closeout description to reference specialist lens dispatch.
+
+Inspired by: GStack framework's "perspective constraint" pattern (specialist roles with restricted scope). Adopted the one pattern with evidence (focused SurrealDB audit caught 3 bugs generalist review missed in Bresco). Architecture and UX flow lenses deferred until evidence justifies them.
+
 ## v5.1.2 - 2026-03-29
 Context engineering research: agent boundaries, subagent roles, and multi-agent landscape evaluation.
 

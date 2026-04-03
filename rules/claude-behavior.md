@@ -37,7 +37,7 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
 - **Phase closeout (MANDATORY, hook-enforced gate):**
   After every GSD execution phase, invoke **phase_closeout**. This single skill runs:
   1. **Verify** — test suite must pass
-  2. **Review** — code review + fix cycle until clean
+  2. **Review** — specialist lens dispatch (parallel, scoped) + general code review + fix cycle until clean
   3. **Reflect** — ONE conversation producing error logs, success logs, RETRO.md, and lessons.md
   4. **Gate** — writes `.post-execution-complete` marker
   The `guard-phase-completion.sh` hook blocks `phase complete` without the marker.

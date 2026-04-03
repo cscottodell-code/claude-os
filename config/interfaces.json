@@ -18,6 +18,23 @@
       "description": "UI/UX design quality — critique, polish, audit, animate, normalize."
     }
   },
+  "lenses": {
+    "_readme": "Specialist review lenses dispatched during phase-closeout Phase 2. Each lens restricts scope to one concern. The base code_review still runs for general quality. Add new lenses here as evidence justifies them.",
+    "schema": {
+      "description": "SurrealDB field-by-field SCHEMAFULL compliance",
+      "applies_when": ["surrealdb"],
+      "context_files": ["checks/surrealdb.json", "stack-lock.json"],
+      "file_patterns": ["*.surql", "**/db/**", "**/*.ts"],
+      "prompt": "Compare every db.query(), db.create(), db.update(), and db.select() call against the SCHEMAFULL table definitions. Flag: missing required fields, extra undefined fields, wrong field types, use of type::thing() (v2 only), missing ASSERT constraints. Ignore files outside the diff range."
+    },
+    "security": {
+      "description": "OWASP Top 10 + injection patterns",
+      "applies_when": ["always"],
+      "context_files": [],
+      "file_patterns": ["**/*.ts", "**/*.vue", "**/api/**", "**/server/**"],
+      "prompt": "Check for: SQL/SurrealQL injection via string concatenation, XSS in rendered output, missing auth checks on API routes, hardcoded secrets, insecure direct object references. Only review files in the diff range."
+    }
+  },
   "operations": {
     "plan_phase": {
       "command": "/gsd:plan-phase",

@@ -1,9 +1,10 @@
 # Phase Closeout
 
 ## Metadata
-- Last updated: 2026-03-22
-- Version: 2.0
+- Last updated: 2026-04-02
+- Version: 2.1
 - Changelog:
+  - v2.1: Add specialist review lenses to Phase 2 (Code Review). Schema and security lenses dispatch as parallel subagents with restricted scope before general review. Lenses skip when fewer than 5 files changed.
   - v2.0: Add Phase 1.5 (Stack Audit) between Verify and Code Review. Add lesson tagging to Reflect. Update phase numbering.
   - v1.0: Initial workflow. Replaces separate log-error, log-success, and retro workflows for GSD post-execution.
 
@@ -100,27 +101,69 @@ Static checks pass (0 errors). Live audit passes or was skipped with logged reas
 ## Phase 2: Code Review [DELEGATE]
 
 ### What this phase does
-Dispatch a thorough code review of everything changed in this phase.
+Dispatch specialist review lenses in parallel for deep domain-specific review,
+then run a general code review for overall quality. Each lens agent has restricted
+scope ("blinders") to go deep on one concern.
 
 ### Steps
+
+**Step 1: Determine scope**
 1. Determine the diff range:
    - **Base SHA:** The commit before phase execution started (check STATE.md or git log for the `begin-phase` marker)
    - **Head SHA:** Current HEAD
-2. Invoke the **code_review** operation with prompt:
-   ```
-   Review all changes from this phase. Check for schema alignment, security issues,
-   race conditions, cross-module integration, and adherence to the project's tech stack.
-   ```
-3. Fix all **Critical** issues immediately
-4. Fix all **Important** issues before proceeding
-5. After fixes: run a SECOND review pass on just the fix commits
-6. Only proceed when the second pass returns no Critical or Important issues
+2. Count changed files in the diff range
+3. **If fewer than 5 changed files:** Skip lenses, go directly to Step 3 (general review)
+4. Read `config/interfaces.json` -> `lenses` section
+5. Read the project's `stack-lock.json` for technology list
+6. Filter lenses by `applies_when`:
+   - `"always"` -> always include
+   - Technology names (e.g., `"surrealdb"`) -> include if in stack-lock
+7. If no lenses apply after filtering: skip to Step 3
+
+**Step 2: Dispatch specialist lenses (parallel)**
+For each applicable lens, spawn a **Reviewer** subagent (Read, Grep, Glob, Bash only):
+- Pass it ONLY the files matching `file_patterns` within the diff range
+- Pass it ONLY the `context_files` listed for that lens
+- Pass it the lens `prompt`
+- Each agent returns findings as:
+  ```
+  | Severity | File:Line | Finding | Lens |
+  |----------|-----------|---------|------|
+  ```
+
+All lens agents run in parallel. Do NOT run them sequentially.
+
+After all lenses return:
+1. Collect all findings
+2. Deduplicate (same file:line + same concern = one finding, keep highest severity)
+3. Present the merged table to Scott, grouped by severity
+
+**Step 3: General code review**
+Invoke the **code_review** operation with prompt:
+```
+Review all changes from this phase for general code quality: readability,
+naming, duplication, error handling patterns, cross-module integration, and
+project conventions. Specialist concerns (schema compliance, security) have
+already been reviewed separately -- focus on what they don't cover.
+```
+If lenses were skipped (Step 1), use the original broader prompt instead:
+```
+Review all changes from this phase. Check for schema alignment, security issues,
+race conditions, cross-module integration, and adherence to the project's tech stack.
+```
+
+**Step 4: Fix cycle**
+1. Fix all **Critical** issues immediately (from any source: lenses or general review)
+2. Fix all **Important** issues before proceeding
+3. After fixes: run a SECOND pass. Re-dispatch only the lenses that found issues,
+   plus re-run general review on fix commits only.
+4. Only proceed when the second pass returns no Critical or Important issues
 
 ### Output
-Review findings table. If fixes were needed, second-pass confirmation.
+Merged findings table (lenses + general). If fixes were needed, second-pass confirmation.
 
 ### Done when
-Code review is clean (no Critical/Important remaining after second pass).
+No Critical/Important findings remaining after second pass.
 
 ## Phase 3: Reflect [STOP]
 
