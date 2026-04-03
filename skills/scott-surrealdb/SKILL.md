@@ -27,6 +27,7 @@ invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and
 - BREAK and CONTINUE DO work in FOR loops
 - `$input` IS available in DEFINE EVENT handlers
 - DEFINE API works WITHOUT experimental flags on v3.0.2
+- `type::is::record()` RENAMED -- use `type::is_record()` (underscore, not double colon). Same for all type checks: `type::is_string()`, `type::is_number()`, `type::is_bool()`, `type::is_array()`, `type::is_object()`, `type::is_datetime()`, `type::is_none()`
 
 ## Project Versions (don't mix these up)
 
@@ -47,6 +48,7 @@ invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and
 | `<future> { expr }` | `COMPUTED expr` |
 | `UPDATE` creates if missing | `UPDATE` returns `[]`, use `UPSERT` |
 | `module::function()` | `module_function()` (both work) |
+| `type::is::record()` | `type::is_record()` (underscore) |
 | `ws://host:8000/rpc` | `ws://host:8000` |
 
 ## Essential Patterns
@@ -195,47 +197,39 @@ await db.query<[Msg[]]>('SELECT * FROM messages WHERE conversation = $conv', { c
 | `SELECT * FROM table` when only 2 fields needed | `SELECT *.{ field1, field2 } FROM table` |
 | Multiple sequential queries for one record + relations | Graph traversal or multi-statement with LET |
 
-## SurrealDB MCP Server (live testing)
+## Verification Workflow (MCP first, curl for edge cases)
 
-The SurrealDB MCP server is available in Claude Code sessions. Use it to **test queries before writing code**:
-- `mcp__surrealdb__connect_endpoint` — connect to Eleanor's DB or a test instance
-- `mcp__surrealdb__query` — run SurrealQL directly (test COMPUTED fields, EVENTs, indexes, new syntax)
-- `mcp__surrealdb__create`, `select`, `update`, `delete`, `relate` — CRUD operations
+**Default: Use MCP tools for 85% of verification.**
+- `mcp__surrealdb__query` — test SurrealQL directly (fastest, structured results, stateful)
+- `mcp__surrealdb__create/select/update/delete/relate` — CRUD operations
+- `mcp__surrealdb__use_namespace/use_database` — switch context without re-specifying
 
-**When to use it:**
-- Before writing a new migration: test the SurrealQL against the real server
-- When debugging a query error: run it directly instead of guessing
-- When adopting a new v3 feature: verify the syntax works with the actual server version
-- When validating mini-PRD examples: test them before implementing
+**Switch to curl when:**
+- You need exact HTTP status codes or response headers
+- You're testing authentication or CORS behavior
+- You need network timing data (`curl -w`)
+- MCP error is unclear and might be HTTP-layer
 
-## When to Read the Full Reference
+## Architecture Decisions (settled, do not revisit)
 
-Read `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-reference.md` when you need:
-- Vector search / HNSW index setup
-- AI agent memory schemas
-- Graph + vector combo queries
-- JS SDK 2.0 query builder, expressions API, streaming
-- Changefeed / audit trail patterns
-- Time-series modeling
-- Connection pattern decision tree
-- Embedded/edge deployment options
-- Full function rename map
+**DEFINE API vs Nuxt Routes:** Use Nuxt API routes as the default for all public-facing endpoints. DEFINE API only for internal read-only metrics behind Coolify's private network. Reason: Nuxt handles validation (Zod), external services (email, webhooks), error control, and is more learnable. DEFINE API can't call external APIs, send emails, upload files, or do rate limiting.
 
-## Context7 Libraries (live docs, always current)
+**Array Record IDs for time-series:** Use compound IDs like `metric:['rep_alice', '2026-04-02']` for time-series data (sales metrics, activity logs) where you need range queries. Use auto-generated IDs for batch data (payroll). Only deploy on v3 JS SDK projects (eleanor, advosy-sales). Don't retrofit into v2 WASM projects.
 
-Use Context7 to verify syntax before writing SurrealDB code:
-- **JS SDK:** `/surrealdb/surrealdb.js` (87 snippets, query builder, live queries, type-safe patterns)
-- **SurrealQL:** `/surrealdb/docs.surrealdb.com` (8588 snippets, COMPUTED, HNSW, events, destructuring, graph)
+**Spectron (ADOPTED):** SurrealDB's official AI agent memory layer. 5 memory types: working, semantic, episodic, procedural, preference. Runs on same SurrealDB instance. Use for Eleanor's persistent memory. See `~/Sites/Global/scott-toolkit/references/surrealdb-v3-spectron.md` for schemas and patterns.
 
-Query these when:
-- You're unsure about SDK 2.0 method signatures
-- You need the exact syntax for a v3 feature (HNSW dimensions, CHANGEFEED duration, ENFORCED relations)
-- The local reference file doesn't cover a specific feature
-- You want to verify current best practices haven't changed
+## Deep References (read on-demand, not auto-loaded)
 
-## Eleanor-Specific Patterns
-
-Eleanor's db.ts is pre-configured. When working on Eleanor:
-- Read the project's CLAUDE.md "SurrealDB Patterns" section (loaded every session)
-- Read `tasks/lessons.md` for the JS SDK 2.0 AVOID/PREFER examples
-- Read `docs/mini-prd-bops-power-laws.md` Section 6 for the full v3 optimization roadmap
+| Need | File |
+|------|------|
+| Vector search / HNSW | `references/surrealdb-v3-vector-search.md` |
+| AI/RAG/agent patterns + Spectron | `references/surrealdb-v3-ai-patterns.md` |
+| Events, changefeeds, live queries | `references/surrealdb-v3-realtime.md` |
+| Function rename map (v2→v3) | `references/surrealdb-v3-functions-map.md` |
+| Troubleshooting errors | `references/surrealdb-v3-troubleshooting.md` |
+| Full architectural reference | `references/surrealdb-v3-reference.md` |
+| Complete master reference | `~/Sites/Global/scott-toolkit/references/surrealdb-v3-master-reference.md` |
+| SurrealQL language spec | `~/Sites/Global/scott-toolkit/references/surrealql-language-reference.md` |
+| Context7 JS SDK | `/surrealdb/surrealdb.js` (87 snippets) |
+| Context7 SurrealQL | `/surrealdb/docs.surrealdb.com` (8588 snippets) |
+| Eleanor-specific patterns | Eleanor's CLAUDE.md + tasks/lessons.md |

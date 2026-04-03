@@ -5,6 +5,23 @@
 > Server version: v3.0.2 (latest stable: v3.0.5). JS SDK: surrealdb@2.0.x (npm).
 > This is the definitive reference for building SurrealDB-centered applications.
 
+## File Index (Topic-Specific References)
+
+This master reference contains everything in one file. For focused reading, these topic-specific files were extracted from this document:
+
+| File | Topics Covered |
+|---|---|
+| [`surrealdb-v3-vector-search.md`](surrealdb-v3-vector-search.md) | HNSW indexes, KNN search, embedding patterns, vector functions, graph+vector combo |
+| [`surrealdb-v3-ai-patterns.md`](surrealdb-v3-ai-patterns.md) | RAG schemas, agent memory patterns, graph+vector traversal, LangChain/CrewAI integration |
+| [`surrealdb-v3-realtime.md`](surrealdb-v3-realtime.md) | DEFINE EVENT, changefeeds, LIVE SELECT, webhooks, audit trails, Pinia integration |
+| [`surrealdb-v3-functions-map.md`](surrealdb-v3-functions-map.md) | v2-to-v3 function renames, function families index, DEFINE FUNCTION patterns |
+| [`surrealdb-v3-spectron.md`](surrealdb-v3-spectron.md) | Spectron agent memory: 5 memory types, bi-temporal versioning, connection discovery, multi-agent, Eleanor integration |
+| [`surrealdb-v3-troubleshooting.md`](surrealdb-v3-troubleshooting.md) | Error message solutions: function errors, connection errors, auth errors, type mismatches, Bun SDK issues |
+
+**Note:** The master reference is preserved intact. The split files are additive, not destructive. Each split file is self-contained with its own context.
+
+---
+
 ## What SurrealDB v3 Replaces
 
 | Capability | Traditional Tool | SurrealDB v3 Feature |
