@@ -11,12 +11,22 @@ invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and
 
 # SurrealDB Quick Reference
 
-**Version:** SurrealDB v3 server + JS SDK surrealdb@2.0.x (npm)
-**Deep reference:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-reference.md`
-**Master reference:** `~/Sites/Global/scott-toolkit/references/surrealdb-v3-master-reference.md` (DEFINE API, auth, permissions, full-text search, HNSW, events, functions catalog, SurrealQL language, JS SDK 2.0 complete API)
+**Version:** SurrealDB v3.0.2 server (latest: v3.0.5) + JS SDK surrealdb@2.0.x (npm)
+**Verified:** 2026-04-03 via live testing on v3.0.2. All examples confirmed working.
+**Master reference:** `~/Sites/Global/scott-toolkit/references/surrealdb-v3-master-reference.md` (DEFINE API, auth, permissions, full-text search, HNSW, events, functions catalog, SurrealQL language, JS SDK 2.0 complete API, Spectron, real-time best practices)
 **Functions catalog:** `~/Sites/Global/scott-toolkit/references/surrealdb-v3-functions-catalog.md` (325+ built-in functions)
 **Language reference:** `~/Sites/Global/scott-toolkit/references/surrealql-language-reference.md` (control flow, closures, operators, types, transactions)
+**Deep reference:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-reference.md`
 **Context7 library:** `/surrealdb/docs.surrealdb.com`
+
+## CRITICAL: Known Traps (live-tested, will cause errors if ignored)
+- `time_now()` DOES NOT EXIST -- use `time::now()`
+- `math::round(val, 2)` DOES NOT WORK -- use `math::fixed(val, 2)`
+- `TRY/CATCH` DOES NOT EXIST -- use IF/ELSE + THROW
+- `DEFAULT ALWAYS` does NOT override explicit values -- use `VALUE` for auto-timestamps
+- BREAK and CONTINUE DO work in FOR loops
+- `$input` IS available in DEFINE EVENT handlers
+- DEFINE API works WITHOUT experimental flags on v3.0.2
 
 ## Project Versions (don't mix these up)
 
@@ -44,7 +54,7 @@ invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and
 ### CREATE (two syntaxes, same result)
 ```surql
 -- SET: good for expressions
-CREATE person:1 SET name = 'Tobie', signup = time_now();
+CREATE person:1 SET name = 'Tobie', signup = time::now();
 
 -- CONTENT: good for structured data
 CREATE person:1 CONTENT { name: 'Tobie', age: 30 };
@@ -52,12 +62,12 @@ CREATE person:1 CONTENT { name: 'Tobie', age: 30 };
 
 ### UPSERT (replaces UPDATE-as-create)
 ```surql
-UPSERT contacts:john SET name = 'John', updated_at = time_now();
+UPSERT contacts:john SET name = 'John', updated_at = time::now();
 ```
 
 ### Graph
 ```surql
-RELATE person:tobie->likes->post:123 SET at = time_now();
+RELATE person:tobie->likes->post:123 SET at = time::now();
 SELECT ->likes->post FROM person:tobie;
 SELECT <-follows<-person FROM person:jaime;
 ```

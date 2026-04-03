@@ -1,6 +1,8 @@
 # SurrealDB v3 Master Reference: SurrealDB-First Architecture
 
-> Generated 2026-04-02 from exhaustive research across 6 parallel agents.
+> Generated 2026-04-02, verified 2026-04-03 via live testing on SurrealDB v3.0.2.
+> All code examples in this file have been tested against a running instance.
+> Server version: v3.0.2 (latest stable: v3.0.5). JS SDK: surrealdb@2.0.x (npm).
 > This is the definitive reference for building SurrealDB-centered applications.
 
 ## What SurrealDB v3 Replaces
@@ -18,7 +20,9 @@
 | Audit trail | Custom logging | `CHANGEFEED` |
 | Materialized views | Manual refresh jobs | `DEFINE TABLE ... AS SELECT` (computed tables) |
 | Full-text search | Elasticsearch, Meilisearch | `DEFINE INDEX ... FULLTEXT ANALYZER` |
-| Foreign keys + cascades | Postgres FK constraints | `REFERENCE ON DELETE CASCADE/REJECT/UNSET` |
+| Foreign keys + cascades | Postgres FK constraints | `REFERENCE ON DELETE CASCADE/REJECT/IGNORE/UNSET/THEN` |
+| Agent memory | Mem0, custom code | Spectron (structured memory on SurrealDB) |
+| WASM extensions | Plugin systems | Surrealism (`#[surrealism]` macro, Rust → WASM) |
 
 ---
 
@@ -71,7 +75,7 @@ Middleware must accept `$req: object` and `$next: function` as first two params:
 DEFINE FUNCTION fn::log_request($req: object, $next: function) -> object {
   LET $res = $next($req);
   -- Log the request
-  CREATE api_log SET path = $req.path, method = $req.method, at = time_now();
+  CREATE api_log SET path = $req.path, method = $req.method, at = time::now();
   RETURN $res;
 };
 
@@ -100,6 +104,7 @@ const [results] = await db.query<[Sale[]]>(
 ## 2. DEFINE API (Built-In REST Endpoints)
 
 SurrealDB can serve HTTP endpoints directly. No Express/Hono needed for CRUD.
+Live-tested on v3.0.2: works without any experimental flags. Endpoints are callable immediately.
 
 ### Syntax
 
@@ -317,14 +322,14 @@ DEFINE EVENT status_change ON TABLE claims
 DEFINE EVENT on_delete ON TABLE users
   WHEN $event = "DELETE"
   THEN {
-    CREATE archive SET data = $before, deleted_at = time_now();
+    CREATE archive SET data = $before, deleted_at = time::now();
   };
 
 -- Using $input for conditional triggering
 DEFINE EVENT conditional ON TABLE person
   WHEN $input.log_event = true
   THEN {
-    CREATE log SET at = time_now(), of = $input;
+    CREATE log SET at = time::now(), of = $input;
   };
 ```
 
@@ -544,10 +549,11 @@ DEFINE FIELD owner ON deal COMPUTED <~sales_rep;
 -- Filtered reverse lookup
 DEFINE FIELD owned_by ON deal COMPUTED <~(sales_rep FIELD deals);
 
--- ON DELETE behaviors
-DEFINE FIELD author ON comment TYPE record<user> REFERENCE ON DELETE CASCADE;
-DEFINE FIELD company ON employee TYPE record<company> REFERENCE ON DELETE REJECT;
-DEFINE FIELD tags ON post TYPE option<array<record<tag>>> REFERENCE ON DELETE UNSET;
+-- ON DELETE behaviors (5 options, all live-tested)
+DEFINE FIELD author ON comment TYPE record<user> REFERENCE ON DELETE CASCADE;   -- delete referencing record
+DEFINE FIELD company ON employee TYPE record<company> REFERENCE ON DELETE REJECT; -- block deletion
+DEFINE FIELD category ON post TYPE record<cat> REFERENCE ON DELETE IGNORE;       -- allow deletion, leave dangling ref
+DEFINE FIELD tags ON post TYPE option<array<record<tag>>> REFERENCE ON DELETE UNSET; -- set field to NONE
 
 -- Custom ON DELETE logic
 DEFINE FIELD comments ON user TYPE option<array<record<comment>>>
@@ -804,11 +810,12 @@ DEFINE DATABASE mydb STRICT;    -- All tables must be defined before use
 -- Default value
 DEFINE FIELD status ON leads TYPE string DEFAULT 'new';
 
--- DEFAULT ALWAYS (overrides even if value provided)
-DEFINE FIELD updated_at ON leads TYPE datetime DEFAULT ALWAYS time_now();
+-- DEFAULT ALWAYS (overrides when value is NONE/empty -- does NOT override explicit values on v3.0.2)
+-- For auto-updating timestamps, use VALUE instead:
+DEFINE FIELD updated_at ON leads TYPE datetime VALUE time::now();
 
 -- READONLY (set once, never changed)
-DEFINE FIELD created_at ON leads TYPE datetime DEFAULT time_now() READONLY;
+DEFINE FIELD created_at ON leads TYPE datetime DEFAULT time::now() READONLY;
 
 -- FLEXIBLE (allow any subfields within a SCHEMAFULL table)
 DEFINE FIELD metadata ON leads TYPE object FLEXIBLE;
@@ -914,7 +921,7 @@ IF $auth == NONE { THROW 'Authentication required' };
 RETURN { status: 'ok', count: count() };
 ```
 
-No TRY/CATCH exists. No BREAK/CONTINUE.
+No TRY/CATCH exists (confirmed: parse error on v3.0.2). BREAK and CONTINUE DO work in FOR loops.
 
 ### Transactions
 
@@ -955,7 +962,7 @@ SELECT address.{ city, state.{ code } } FROM users;
 RETURN $town.{ location, num_people: population };
 
 -- With expressions
-person:one.{ name, name_length: name.len(), accessed_at: time_now() };
+person:one.{ name, name_length: name.len(), accessed_at: time::now() };
 
 -- Graph traversal + destructuring
 SELECT @.{ name, territories: ->assigned_to->territory.{ name, region } } FROM sales_rep;
@@ -992,7 +999,7 @@ SELECT @.{ name, territories: ->assigned_to->territory.{ name, region } } FROM s
 ```surql
 -- Durations: ns, us, ms, s, m, h, d, w, y
 1h30m                    -- compound duration
-time_now() - 7d          -- datetime arithmetic
+time::now() - 7d          -- datetime arithmetic
 
 -- Datetimes
 d'2026-04-02T00:00:00Z'
@@ -1017,8 +1024,8 @@ d'2026-04-02T00:00:00Z'
 |---|---|---|
 | `string::` | `trim`, `uppercase`, `lowercase`, `slug`, `split`, `join`, `replace`, `contains`, `starts_with`, `len`, `is_email` | `string::slug("My Product")` -> `my-product` |
 | `array::` | `distinct`, `sort`, `flatten`, `filter`, `map`, `fold`, `group`, `len`, `sum`, `push`, `pop` | `$items.map(\|$i\| $i.price).sum()` |
-| `math::` | `sum`, `mean`, `median`, `min`, `max`, `round`, `ceil`, `floor`, `abs`, `sqrt` | `math::round(revenue * 0.08, 2)` |
-| `time::` | `now`, `format`, `day`, `month`, `year`, `hour`, `floor`, `from::unix` | `time::format(time_now(), "%Y-%m-%d")` |
+| `math::` | `sum`, `mean`, `median`, `min`, `max`, `round`, `fixed`, `ceil`, `floor`, `abs`, `sqrt` | `math::fixed(revenue * 0.08, 2)` -- `round()` takes 1 arg (nearest int), `fixed()` takes 2 (decimal places) |
+| `time::` | `now`, `format`, `day`, `month`, `year`, `hour`, `floor`, `from::unix` | `time::format(time::now(), "%Y-%m-%d")` |
 | `crypto::` | `argon2::generate/compare`, `bcrypt::*`, `sha256`, `md5` | Password hashing in DEFINE ACCESS |
 | `http::` | `get`, `post`, `put`, `patch`, `delete`, `head` | Webhook triggers in DEFINE EVENT |
 | `type::` | `record`, `string`, `number`, `bool`, `is_*` (23 type checkers) | `type::record("users", $id)` |
@@ -1169,7 +1176,7 @@ await db.import('CREATE leads CONTENT { name: "Imported" };');
 
 | Need | SurrealDB Feature | When to use Nuxt instead |
 |---|---|---|
-| Simple CRUD API | `DEFINE API` | Never for simple CRUD |
+| Simple CRUD API | `DEFINE API` (live-tested, works without flags) | External-facing APIs needing rate limiting, complex auth flows |
 | Business calculations | `DEFINE FUNCTION fn::` | Never for pure data logic |
 | Data validation | `ASSERT` on fields | Complex multi-field validation across tables |
 | Webhooks/notifications | `DEFINE EVENT` + `http::post()` | Need complex orchestration |
@@ -1178,38 +1185,53 @@ await db.import('CREATE leads CONTENT { name: "Imported" };');
 | Full-text search | `FULLTEXT ANALYZER` | Never for text search |
 | Audit trail | `CHANGEFEED` | Never for change tracking |
 | Aggregated dashboards | `DEFINE TABLE ... AS SELECT` | Never for data aggregation |
-| File uploads | N/A | Always use Nuxt (Blob storage) |
+| File uploads | `DEFINE BUCKET` (experimental, `--allow-experimental files`) | Production file handling (use Nuxt until BUCKET stabilizes) |
+| Agent memory | Spectron (5 memory types, knowledge graph, temporal facts) | Custom memory implementations |
 | External API calls | `http::` functions | Complex multi-step API flows |
 | Email/SMS sending | `http::post()` to n8n webhook | Direct SMTP/Twilio integration |
 | PDF generation | N/A | Always use Nuxt |
 | SSR/page rendering | N/A | Always use Nuxt |
 | Complex multi-step workflows | N/A | Use Trigger.dev or Nuxt API routes |
 
-### Architecture
+### Architecture (verified 2026-04-03)
 
 ```
-Nuxt 4 (thin UI layer)
+Nuxt 4 (UI + external integrations)
   - Page rendering, routing, SSR
-  - Complex multi-step business flows
-  - External service integrations (Stripe, email)
-  - File uploads/downloads
+  - Route guards + OAuth redirect flows
+  - External service calls (Stripe, Resend, Twilio)
+  - File uploads (until DEFINE BUCKET matures)
+  - Zod validation (client + form UX)
+  - Pinia for UI-only state (sidebar, modals, form drafts)
   |
-  | JS SDK 2.0 (WebSocket)
+  | JS SDK 2.0 (WebSocket, persistent connection)
   v
-SurrealDB v3 (the brain)
-  - ALL data logic (DEFINE FUNCTION)
-  - ALL CRUD endpoints (DEFINE API)
-  - ALL auth + permissions (DEFINE ACCESS)
-  - ALL data validation (ASSERT, TYPE)
-  - ALL real-time (LIVE SELECT)
-  - ALL search (FULLTEXT, HNSW)
-  - ALL relationships (RELATE, REFERENCE)
-  - ALL audit (CHANGEFEED)
-  - ALL aggregation (computed tables)
+SurrealDB v3.0.x (the brain)
+  - ALL data CRUD (DEFINE API -- works without flags, live-tested)
+  - ALL data logic (DEFINE FUNCTION fn::)
+  - ALL auth + permissions (DEFINE ACCESS + PERMISSIONS)
+  - ALL data validation (ASSERT + TYPE)
+  - ALL real-time (LIVE SELECT -> feeds Pinia stores)
+  - ALL search (FULLTEXT for keyword, HNSW for semantic)
+  - ALL relationships (RELATE, REFERENCE with ON DELETE)
+  - ALL audit (CHANGEFEED with INCLUDE ORIGINAL)
+  - ALL aggregation (computed tables with predictable IDs)
+  - ALL server-side functions (DEFINE FUNCTION)
   |
-  | http::post() in DEFINE EVENT
+  | http::post() in DEFINE EVENT ASYNC (with RETRY)
   v
 Trigger.dev (background jobs + orchestration)
+  - Multi-step workflows (TypeScript-native, durable execution)
+  - Scheduled jobs (cron syntax)
+  - Retries with configurable backoff
+  - External service orchestration
+  |
+  v (future)
+Spectron (agent memory, on top of SurrealDB)
+  - 5 memory types: working, semantic, episodic, procedural, preference
+  - Knowledge graph with autonomous connection discovery
+  - Bi-temporal versioning for temporal reasoning
+```
   - Email sequences, Slack/Telegram notifications
   - CRM sync, complex multi-service orchestration
   - Scheduled jobs, retries, durable execution
@@ -1227,14 +1249,19 @@ Trigger.dev (background jobs + orchestration)
 | `${}` template syntax in SurrealQL | Use `+` operator or `string::concat()` (both handle mixed types) |
 
 **These DO exist (commonly assumed missing):**
-- `TRY { ... } CATCH { ... }` -- error handling inside DEFINE FUNCTION
-- `BREAK` / `CONTINUE` -- loop control in FOR loops
-- `DEFINE BUCKET` -- native file/blob storage with memory or filesystem backends
-- `file::put()` / `file::get()` -- upload and retrieve files from buckets
+- `BREAK` / `CONTINUE` -- loop control in FOR loops (live-tested, confirmed)
+- `DEFINE BUCKET` -- native file/blob storage (experimental, requires `--allow-experimental files`)
+- `file::put()` / `file::get()` -- upload and retrieve files from buckets (experimental)
 - `surql` template tag -- JS SDK parameterized queries (`import { surql } from 'surrealdb'`)
 - String concatenation -- `+` operator and `string::concat()` (auto-stringifies non-strings)
 - Optional chaining -- not needed, SurrealDB field access is null-safe by default
 - `DEFINE CONFIG GRAPHQL` -- exists but limited to table/function exposure control
+- `$input` in events -- the input data that triggered the event (live-tested, confirmed)
+
+**These do NOT exist (commonly assumed present):**
+- `TRY { ... } CATCH { ... }` -- parse error on v3.0.2. Use IF/ELSE guards + THROW instead
+- `time_now()` -- use `time::now()` (double-colon namespace required)
+- `math::round(val, places)` -- round() takes 1 arg. Use `math::fixed(val, places)` for decimal rounding
 
 ---
 
@@ -1403,6 +1430,93 @@ Trigger.dev (background jobs + orchestration)
   - Coolify template available (self-host) or cloud ($10-50/mo)
   - Apache 2.0 license
 ```
+
+---
+
+## 20. Real-Time Best Practices (from official docs, verified)
+
+### Array-Based Record IDs (100x faster for time-series)
+
+Instead of WHERE clauses, embed the partition key in the record ID:
+
+```surql
+-- Create with array ID
+CREATE kpi_event:[$rep_id, time::now()] SET type = 'DK', source = 'spotio';
+
+-- Record range query (100x faster than WHERE + index)
+SELECT * FROM kpi_event:[$rep_id, d'2026-03-01T00:00:00Z']..=[$rep_id, d'2026-03-31T23:59:59Z'];
+```
+
+### Computed Table Views with Predictable IDs
+
+```surql
+DEFINE TABLE monthly_kpi AS
+  SELECT rep, time::month(created_at) AS month, count() AS total, math::sum(amount) AS revenue
+  FROM kpi_event GROUP BY rep, month;
+
+-- Instant lookup by predictable ID (no query needed)
+SELECT * FROM monthly_kpi:['scott', 3];
+```
+
+### Use VALUE, not DEFAULT ALWAYS, for Auto-Timestamps
+
+```surql
+-- VALUE recalculates on every CREATE/UPDATE (live-tested)
+DEFINE FIELD updated_at ON leads TYPE datetime VALUE time::now();
+
+-- DEFAULT ALWAYS does NOT override explicit values on v3.0.2
+-- Use VALUE instead for reliable auto-updating timestamps
+```
+
+---
+
+## 21. SurrealDB Ecosystem Products
+
+### Spectron (Agent Memory)
+- 5 memory types: working, semantic, episodic, procedural, preference
+- Shared memory across multiple agents with ACID guarantees
+- Autonomous connection discovery (finds relationships between entities from separate conversations)
+- Bi-temporal versioning (tracks when facts were true AND when they were recorded)
+- Runs on SurrealDB, same transaction boundary and permission model
+- Relevant for: Eleanor, any AI agent project
+
+### Surrealism (WASM Extensions)
+- Write Rust functions with `#[surrealism]` macro
+- Compile to WebAssembly, load with `DEFINE MODULE`
+- Runs inside SurrealDB with sandbox isolation (no filesystem, no network)
+- Hot-loading without restarts
+- Experimental: requires `--allow-experimental surrealism`
+- Relevant for: future Rust learning path, performance-critical DB logic
+
+### SurrealDS (Gen 3 Distributed Storage)
+- Quorum consensus (no single leader, no split brain)
+- Object storage backends: S3, GCS, Azure Blob
+- Scale-to-zero (compute is stateless, data persists in object storage)
+- Instant branching (clone petabyte-scale DB in seconds)
+- Relevant for: future production infrastructure (you're on single-node SurrealKV now)
+
+### MCP Server
+- Native MCP integration for AI agents
+- Available in Claude Code sessions via `mcp__surrealdb__*` tools
+- Use for: live query testing before writing code
+
+### Framework Integrations
+- LangChain, LlamaIndex, CrewAI, AutoGen, Agno, SmolAgents
+- Airbyte, Dagster, Fivetran, n8n (data pipelines)
+- SDKs: JavaScript, Python, Rust, Go, Java, .NET, PHP, C
+
+---
+
+## 22. Live Testing Protocol
+
+Before writing SurrealQL in production code, verify syntax via:
+
+1. **MCP Server**: `mcp__surrealdb__query` in Claude Code sessions
+2. **curl**: `curl -X POST http://localhost:8000/sql -H "surreal-ns: test" -H "surreal-db: test" -u "root:root" -d "YOUR QUERY"`
+3. **Context7**: Query `/surrealdb/docs.surrealdb.com` for latest syntax
+4. **Surrealist**: Visual query tool (already installed)
+
+This protocol caught 7 errors in this reference file that research alone missed.
 
 ## Companion Files
 

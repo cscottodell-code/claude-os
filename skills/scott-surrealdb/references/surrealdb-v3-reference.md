@@ -29,7 +29,7 @@ Target stack: SurrealDB v3 server + JS SDK surrealdb@2.0.x (npm) + Nuxt 4 + Type
 CREATE person:tobie SET
     name = 'Tobie',
     age = 30,
-    signup = time_now();
+    signup = time::now();
 
 -- CONTENT syntax (good for structured data from app code)
 CREATE person:100 CONTENT {
@@ -54,7 +54,7 @@ SELECT *, name.uppercase() FROM person;  -- method chaining
 ### UPDATE (does NOT create missing records)
 ```sql
 UPDATE person:tobie SET age = 31;
-UPDATE person SET active = true WHERE signup < time_now() - 30d;
+UPDATE person SET active = true WHERE signup < time::now() - 30d;
 -- Returns [] if record doesn't exist
 ```
 
@@ -73,7 +73,7 @@ DELETE person:tobie RETURN BEFORE;
 
 ### RELATE (graph edges)
 ```sql
-RELATE person:tobie->likes->post:123 SET at = time_now();
+RELATE person:tobie->likes->post:123 SET at = time::now();
 RELATE person:tobie->follows->person:jaime;
 
 -- Traverse graph
@@ -134,7 +134,7 @@ DEFINE FIELD email ON person TYPE string ASSERT string_is::email($value);
 DEFINE FIELD nickname ON person TYPE option<string>;
 
 -- With default value
-DEFINE FIELD created ON person TYPE datetime VALUE time_now();
+DEFINE FIELD created ON person TYPE datetime VALUE time::now();
 
 -- Computed field (replaces futures)
 DEFINE FIELD full_name ON person COMPUTED name.first + ' ' + name.last;
@@ -176,7 +176,7 @@ DEFINE EVENT log_update ON person WHEN $before != $after THEN {
     CREATE log SET
         table = 'person',
         record = $after.id,
-        changed_at = time_now(),
+        changed_at = time::now(),
         before = $before,
         after = $after;
 };
@@ -285,7 +285,7 @@ await session.use({ namespace: 'other_ns', database: 'other_db' });
 | `string::join()` | `string_join()` | `" ".join(a, b)` | joins strings with separator |
 | `string::uppercase()` | `string_uppercase()` | `name.uppercase()` | method chaining drops module prefix |
 | `string::is::alphanum()` | `string_is_alphanum()` | `val.is_alphanum()` | |
-| `time::now()` | `time_now()` | no | returns current datetime |
+| `time::now()` | `time::now()` | no | returns current datetime |
 | `crypto::argon2::generate()` | `crypto_argon2_generate()` | no | password hashing |
 | `crypto::argon2::compare()` | `crypto_argon2_compare()` | no | password verification |
 
@@ -348,7 +348,7 @@ Use compound IDs for any data naturally partitioned by category, location, or ti
 ### Time-Series with Compound IDs + Event Alerts
 ```sql
 -- Sensor reading with [sensor_ref, timestamp] as compound ID
-CREATE reading:[sensor:one, time_now()] SET pressure = 600;
+CREATE reading:[sensor:one, time::now()] SET pressure = 600;
 
 -- Event that aggregates recent readings and generates alerts
 DEFINE EVENT alert_from_create ON reading WHEN $event = 'CREATE' THEN {
@@ -364,7 +364,7 @@ DEFINE EVENT alert_from_create ON reading WHEN $event = 'CREATE' THEN {
             equipment = $source,
             severity = 'high',
             message = 'Pressure drop: ' + <string>$drop + ' PSI',
-            triggered_at = time_now();
+            triggered_at = time::now();
     };
 };
 ```
@@ -593,7 +593,7 @@ DEFINE FIELD agent_id ON conversation TYPE string;
 DEFINE FIELD role ON conversation TYPE string;  -- user | assistant | tool
 DEFINE FIELD content ON conversation TYPE string;
 DEFINE FIELD embedding ON conversation TYPE option<array>;
-DEFINE FIELD created ON conversation TYPE datetime VALUE time_now();
+DEFINE FIELD created ON conversation TYPE datetime VALUE time::now();
 DEFINE INDEX conv_vec ON conversation FIELDS embedding HNSW DIMENSION 1536 DIST COSINE;
 
 -- Entity memory (extracted from conversations)
@@ -721,7 +721,7 @@ SHOW CHANGES FOR TABLE reading SINCE 0 LIMIT 10;
 ### Time-Series Modeling
 ```sql
 -- Compound ID with location + sensor + timestamp
-CREATE sensor_readings:[location:MainHall, sensor:Temp01, time_now()] CONTENT {
+CREATE sensor_readings:[location:MainHall, sensor:Temp01, time::now()] CONTENT {
     temperature_celsius: 22.5
 };
 
@@ -758,7 +758,7 @@ DEFINE EVENT table_audit ON TABLE person
             user_id = $auth.id ?? 'system',
             before_data = $before ?? {},
             after_data = $after ?? {},
-            timestamp = time_now()
+            timestamp = time::now()
     );
 ```
 
@@ -793,7 +793,7 @@ SELECT <-won<-person.* FROM award WHERE category = 'Chemistry';
 SELECT * FROM person:1..1000;
 
 -- Time-based range with compound IDs
-SELECT * FROM temperature:['London', NONE]..=['London', time_now()];
+SELECT * FROM temperature:['London', NONE]..=['London', time::now()];
 SELECT * FROM temperature:['London', '2022-08-29T08:03:39']..['London', '2022-08-29T08:09:31'];
 ```
 

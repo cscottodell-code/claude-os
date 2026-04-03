@@ -74,7 +74,23 @@ FOR $person IN (SELECT VALUE id FROM person WHERE age >= 18) {
 
 **Scope limitation:** Variables declared outside a FOR loop are readable inside it, but cannot be modified. Use `array::fold()` or `array::reduce()` for accumulation patterns.
 
-**BREAK / CONTINUE:** Not documented as available in SurrealQL FOR loops as of v3. Use `.filter()` or conditional logic inside the loop body instead.
+**BREAK / CONTINUE:** Both exist and work in FOR loops (live-tested on v3.0.2):
+
+```surql
+-- BREAK: exit loop entirely
+FOR $item IN [1, 2, 3, 4, 5] {
+    IF $item = 3 { BREAK; };
+    CREATE test SET val = $item;
+};
+-- Creates records for 1 and 2 only
+
+-- CONTINUE: skip to next iteration
+FOR $item IN [1, 2, 3, 4, 5] {
+    IF $item = 3 { CONTINUE; };
+    CREATE test SET val = $item;
+};
+-- Creates records for 1, 2, 4, 5 (skips 3)
+```
 
 ### THROW
 
@@ -103,11 +119,13 @@ COMMIT TRANSACTION;
 
 ### TRY / CATCH
 
-**Does NOT exist in SurrealQL.** Error handling is done via:
-- THROW to raise errors
+**Does NOT exist in SurrealQL (live-tested on v3.0.2: parse error).** Error handling is done via:
+- THROW to raise errors (inside DEFINE FUNCTION with IF/ELSE guards)
 - IF/ELSE for conditional guards before operations
 - ASSERT on field definitions for validation
 - Transaction rollback (CANCEL) for atomic failure
+
+Note: Some SDK documentation shows TRY/CATCH examples, but the SurrealQL parser rejects the syntax as of v3.0.2.
 
 ### RETURN
 
@@ -1085,14 +1103,26 @@ SELECT *, ->purchased->product.* AS products FROM customer FETCH products;
 
 ---
 
-## 18. Quick Reference: What Does NOT Exist in SurrealQL
+## 18. Quick Reference: What Does NOT Exist in SurrealQL (verified v3.0.2)
 
 | Feature | Status | Alternative |
 |---------|--------|-------------|
-| TRY/CATCH | Does not exist | IF/ELSE guards, THROW, transaction rollback |
-| BREAK/CONTINUE | Not documented | .filter() on arrays, IF inside FOR |
+| TRY/CATCH | Does not exist (parse error) | IF/ELSE guards, THROW, transaction rollback |
 | Ternary `? :` | Does not exist | IF/ELSE as expression |
-| String interpolation | Does not exist | `+` concatenation, `string::join()`, `string::concat()` |
+| String interpolation `${}` | Does not exist | `+` concatenation, `string::join()`, `string::concat()` |
+| `time_now()` | Does not exist | `time::now()` (double-colon namespace required) |
+| `math::round(val, places)` | round() takes 1 arg only | `math::fixed(val, places)` for decimal rounding |
 | Optional chaining `?.` | Not needed | Field access is null-safe by default |
 | Stored closures | Removed in v3 | Compute at query time |
 | `type::thing()` | v2 only | `type::record()` in v3 |
+
+**These DO exist (commonly assumed missing):**
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| BREAK / CONTINUE | Exist, live-tested | Work in FOR loops |
+| `$input` in events | Exists, live-tested | The input data that triggered the event |
+| `??` nullish coalescing | Exists | Returns right side only if left is NULL/NONE |
+| `?:` truthy coalescing | Exists | Returns right side if left is falsy (0, "", [], {}) |
+| DEFINE API | Exists, works without flags | Built-in REST endpoints |
+| Destructuring `obj.{ a, b }` | Exists, live-tested | Select specific fields from objects |
