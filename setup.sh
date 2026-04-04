@@ -98,14 +98,22 @@ done
 
 # --- 3. Deploy workflow skills ---
 echo "3. Deploying workflow skills..."
+# Generates SKILL.md stubs for workflows that don't have standalone skill dirs.
+# If a skill already exists in skills/, step 4 will overwrite with the standalone version.
+# Only list workflows here that do NOT have a standalone skill dir yet.
 
-# Map of workflow file -> skill folder name
 deploy_workflow_skill() {
   local workflow_file="$1"
   local skill_name="$2"
   local description="$3"
   local invocation="$4"
   local skill_dir="$SKILLS_DIR/$skill_name"
+
+  # Skip if standalone skill exists (step 4 will handle it)
+  if [[ -d "$TOOLKIT_PATH/skills/$skill_name" ]]; then
+    echo "   -> $skill_name (standalone exists, skipping workflow stub)"
+    return
+  fi
 
   mkdir -p "$skill_dir"
 
@@ -129,47 +137,11 @@ SKILLEOF
   echo "   -> $skill_name"
 }
 
-deploy_workflow_skill "new-project.md" "scott-new-project" \
-  "Start a new project from scratch using the scott-toolkit workflow.
-  Walks Scott through 8 phases: Brain Dump, Clarify, Draft PRD, Finalize PRD,
-  Create Repo, Design Proof, Build Milestone 1, and Milestone Review." \
-  "Start a new project with the guided 8-phase workflow"
-
-deploy_workflow_skill "resume-project.md" "scott-resume" \
-  "Resume work on an existing project using the scott-toolkit workflow.
-  Walks through 4 phases: Read Context, Summarize State, Confirm Direction,
-  and Resume Work. Delegates to GSD for .planning/ state recovery." \
-  "Pick up where you left off on a project"
-
-deploy_workflow_skill "new-feature.md" "scott-new-feature" \
-  "Add a new feature to an existing project using the scott-toolkit workflow.
-  Walks through 5 phases: Feature Description, Impact Assessment, Mini-PRD,
-  Build (delegated to GSD + Superpowers), and Update CLAUDE.md." \
-  "Add a feature to the current project with guided workflow"
-
 deploy_workflow_skill "phase-closeout.md" "scott-phase-closeout" \
   "Mandatory post-execution closeout for GSD phases. Runs verification, code review,
   and a single reflection interview that produces error logs, success logs, RETRO.md,
   and lessons.md. Hook-enforced gate — phase cannot be marked complete without it." \
   "Run the mandatory phase closeout (verify, review, reflect, gate)"
-
-deploy_workflow_skill "handoff-to-gary.md" "scott-handoff" \
-  "Prepare a project for handoff to Gary (production developer) using the
-  scott-toolkit workflow. Walks through 5 phases: Code Review, Documentation,
-  Architecture Summary, Setup Instructions, and Handoff Checklist." \
-  "Prepare project for handoff to Gary"
-
-deploy_workflow_skill "toolkit-update.md" "scott-update-toolkit" \
-  "Update the scott-toolkit itself using the guided workflow.
-  Walks through 6 phases: Review Trigger, Identify Files, Draft Changes,
-  Update CHANGELOG, Update Instructions & PDF, and Commit & Push." \
-  "Update the scott-toolkit with new lessons or patterns"
-
-deploy_workflow_skill "compare-sources.md" "scott-compare-sources" \
-  "Compare context engineering sources against the current toolkit configuration.
-  Walks through 6 phases: Ingest & Refresh Raw Sources, Revise Sources, Build Comparison
-  Inventory, Run Comparison Analysis (subagent), Generate Review & Act, and Archive Processed Sources." \
-  "Compare new sources against your toolkit and surface what's actionable"
 
 # --- 4. Deploy standalone skills (symlinks) ---
 echo "4. Deploying standalone skills..."

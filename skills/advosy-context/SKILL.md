@@ -40,21 +40,24 @@ The Leadership Team oversees ALL companies under Advosy.
 | **Visionary** | Brett Ray | brett@selectadjusters.com | 480-466-4472 | Founder, majority owner |
 | **Integrator** | Gary Fenn | gary@advosy.com | 480-221-6959 | Lead developer, branding, owns Panda Promo |
 | **Finance** | Wesley Hathcock | wesley@advosy.com | 480-528-2500 | Majority owner |
-| **Sales** | Scott O'Dell | scott@advosyenergy.com | 480-213-2760 | Training & development |
+| **Sales** | Scott O'Dell | scott@advosyenergy.com | 480-213-2760 | Head of Sales, owns Sales L10 |
 | **Marketing** | Chandler Ricks | chandler@advosy.com | 480-613-8024 | GoHighLevel specialist |
 | **Operations** | Melissa Lunt | melissa@advosy.com | 480-613-8003 | Gary's sister, often remote from UT |
 | **HR** | Kris Davis | kris@advosy.com | 480-613-8003 | |
 
 ---
 
-## Sales Leadership
+## Sales L10 (Reports to Scott O'Dell)
 
-Reports to Scott O'Dell. Covers sales for ALL companies.
+Covers sales for ALL companies under Advosy.
 
-| Role | Name | Email | Phone | Scope |
+| Seat | Name | Email | Phone | Scope |
 |------|------|-------|-------|-------|
-| **Direct Sales** | Brandon Cruz | Brandon@advosyenergy.com | 602-806-1486 | D2C for all companies |
-| **B2B Sales** | Josh Williamson | josh@advosy.com | 480-400-9876 | Affiliates/referral partners |
+| **Head of D2D** | Brandon Cruz | Brandon@advosyenergy.com | 602-806-1486 | D2C for all companies |
+| **Head of B2B** | Josh Williamson | josh@advosy.com | 480-400-9876 | Affiliates/referral partners |
+| **Head of Construction Meetings** | Moises Morales | mo@selectadjusters.com | | Roofing now, expanding to other service lines |
+| **Head of Everest Air Sales** | Neil Chrisney | neil@everestairllc.com | | Scott proposed "Head of Technician Sales" (pending) |
+| **Head of Sales Recruiting & Training** | Sarah Wawerski | sarah@advosy.com | | New seat, not official yet |
 
 ---
 
@@ -83,7 +86,7 @@ Reports to Scott O'Dell. Covers sales for ALL companies.
 |------|------|-------|
 | Owner | Mark Brimley | mark@everestairllc.com |
 | Operations | Luke Palmer | luke@everestairllc.com |
-| Sales | Neil Chrisney | neil@everestairllc.com |
+| Sales | Neil Chrisney | neil@everestairllc.com | <!-- Also on Sales L10 -->
 
 ### Bloque Restoration
 | Role | Name | Email |
@@ -107,10 +110,10 @@ Reports to Scott O'Dell. Covers sales for ALL companies.
 
 | Role | Name | Email | Notes |
 |------|------|-------|-------|
-| Construction Meeting | Mo Morales | mo@selectadjusters.com | Minority owner |
 | IT Support | Jeramy Hubbard | jeramy@advosy.com | Built Claimsforce & Homeforce |
-| Recruiter | Sarah Wawerski | sarah@advosy.com | |
 | Employee Experience | Lisa LaToure | lisa@advosy.com | |
+
+<!-- Mo Morales and Sarah Wawerski moved to Sales L10 above -->
 
 ---
 
