@@ -70,6 +70,7 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
   1. .claude-resume.md and .context-snapshot.md (written by pre-compact hook)
   2. The current task from tasks/todo.md
   3. Any relevant offloaded files from .claude/tool-output-overflow/
+  4. ~/.claude/instinct-candidates.md (session learnings captured by extract-instincts hook)
   Do NOT continue work based on assumptions about what was in context before compaction.
 
 ### Planning
@@ -97,6 +98,12 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
   - **Security Auditor:** Read, Grep, Glob only (report-only, no modifications)
   - Match the role to the task. Don't give a research subagent write access.
 - Verify before presenting: when subagents produce findings (audits, reviews, comparisons), verify claims against primary sources before presenting to Scott. Subagents apply rules mechanically without understanding layered design. Never present a finding that hasn't been checked against the actual file.
+- Subagent briefing checklist (include all 5 in every subagent prompt):
+  1. **Objective**: One sentence. What "done" looks like.
+  2. **Files**: Specific paths to read (not "explore the codebase")
+  3. **Constraints**: Tool restrictions, what NOT to do
+  4. **Output**: Expected format (JSON, prose, checklist)
+  5. **Prior knowledge**: "I already know X" (prevents re-discovery, saves tokens)
 
 ### Verification
 - Never mark a task complete without proving it works

@@ -1,5 +1,38 @@
 # Toolkit Changelog
 
+## v5.3.0 - 2026-04-04
+Context engineering overhaul: tool consolidation, token budget optimization, and harness improvements based on deep research of modern context engineering practices (40+ sources, April 2026).
+
+### Tool Consolidation
+- **7 plugins disabled globally:** vercel, firebase, playwright, rust-analyzer-lsp, coderabbit, code-review, frontend-design. Kept: superpowers, impeccable, typescript-lsp, explanatory-output-style, firecrawl. Saves ~3,500 tokens/turn in skill descriptions alone. Re-enable per-project when needed.
+- **2 MCP servers removed:** exa (replaced by Firecrawl + WebSearch), workspace-mcp (120 tools, replaced by lighter cloud MCPs). Saves ~1,700 tokens/turn in tool schemas.
+- **Cloud MCPs disconnected:** Canva, Figma, Gamma, Notion, Vibe Prospecting, Calendly, n8n, Gmail, Google Calendar removed from claude.ai account connections. Context7 cloud duplicate also removed (local copy kept).
+- **Overlap resolution:** 6 overlaps identified and resolved: Context7 duplicate, Gmail/Calendar duplicate (workspace-mcp vs cloud), 3 code review systems (kept Superpowers), 2 frontend-design skills (kept Impeccable), Firecrawl/Exa/WebSearch (kept Firecrawl + built-in), cloud MCPs unused during coding.
+
+### Hook Consolidation
+- **NEW: `hooks/bash-pretooluse-router.sh`:** Single entry point replacing 7 separate Bash PreToolUse hooks (logging, guard-git-push, guard-destructive, guard-npm-install, guard-phase-completion, inject-surrealdb-skill, gsd-validate-commit). Reads stdin once, dispatches by pattern matching. Reduces 7 subprocess spawns to 1 per Bash call.
+- **`settings.json`:** Bash PreToolUse reduced from 7 entries to 1 router + kept SurrealDB injection for non-Bash tools (Read|Edit|Write).
+
+### Context Engineering Improvements
+- **NEW: `~/.claudeignore`:** Global ignore file preventing Claude from reading build artifacts (node_modules, .nuxt, .output, dist, lock files, binaries, .git internals).
+- **`CLAUDE.md`:** Added Context Routing table mapping 9 common needs to skills with auto-trigger indicators. Trimmed Quick References.
+- **`rules/claude-behavior.md`:** Added `~/.claude/instinct-candidates.md` to post-compaction recovery checklist (was written by extract-instincts hook but not re-read after compaction). Added 5-field subagent briefing checklist (Objective, Files, Constraints, Output, Prior knowledge).
+- **Memory staleness:** Added `last_verified: 2026-04-04` to all 17 memory file frontmatter blocks. Enables spa-day staleness detection (>60 days = flagged for review).
+- **`config/interfaces.json` v1.2:** Added `mcp_servers` section cataloging context7 and surrealdb with `required_when` conditions and estimated token costs. Mirrors the plugins pattern.
+
+### Maintenance Improvements
+- **`workflows/toolkit-spa-day.md` v1.2:** Added Phase 7 (Token Budget Audit: count plugins, MCP servers, estimate always-on overhead) and Phase 8 (Permissions Pruning: flag one-offs, embedded secrets, removed MCP tools in settings.local.json). Added memory staleness check to Phase 1.
+- **`settings.local.json`:** Pruned 103 allow rules (23 /tmp one-offs, 3 loop fragments, 17 embedded API keys/JWTs, 43 removed MCP tool permissions, 17 other one-offs). 591 rules reduced to 488. File size: 42KB to 28KB.
+
+### Estimated Token Savings
+- Plugin skill descriptions: ~3,500 tokens/turn
+- MCP tool schemas: ~1,700 tokens/turn
+- MCP server instructions: ~400 tokens/turn
+- Eliminated Vercel false-positive context injections (observed firing on unrelated keywords like "bootstrap", "workflow", "verification", "ppr")
+- Total: ~7,100 tokens/turn reduction (~41% of always-on overhead)
+
+Triggered by: Deep research session comparing toolkit against 40+ context engineering sources (April 2026). Audit revealed 260+ deferred tools, 6 major overlaps, 12 enabled plugins (7 unnecessary), and unmeasured hook latency from 7 Bash PreToolUse subprocesses per command.
+
 ## v5.2.1 - 2026-04-03
 Stability infrastructure: single source of truth for banned patterns, batch lint scanner, pre-commit gate, and setup.sh improvements.
 

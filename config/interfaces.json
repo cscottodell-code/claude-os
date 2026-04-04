@@ -1,6 +1,6 @@
 {
-  "_readme": "Maps toolkit operations to external tool commands and catalogs known plugins. Update here when GSD or Superpowers change.",
-  "schema_version": "1.1",
+  "_readme": "Maps toolkit operations to external tool commands, catalogs known plugins, and tracks MCP servers. Update here when GSD or Superpowers change.",
+  "schema_version": "1.2",
   "plugins": {
     "vercel": {
       "claude_id": "vercel@claude-plugins-official",
@@ -16,6 +16,23 @@
       "claude_id": "impeccable@impeccable",
       "required": true,
       "description": "UI/UX design quality — critique, polish, audit, animate, normalize."
+    }
+  },
+  "mcp_servers": {
+    "_readme": "Catalogs MCP servers with per-project relevance. Session-start hook checks alignment like plugins. Servers not needed for a project waste tokens on tool schema registration.",
+    "context7": {
+      "config_name": "context7",
+      "required": true,
+      "description": "Documentation lookups via Context7. Used by all projects for version-aware doc queries.",
+      "estimated_tools": 2,
+      "estimated_tokens": 200
+    },
+    "surrealdb": {
+      "config_name": "surrealdb",
+      "required_when": ["surrealdb"],
+      "description": "SurrealDB MCP — live queries, schema ops, namespace management. Only needed for SurrealDB projects.",
+      "estimated_tools": 20,
+      "estimated_tokens": 500
     }
   },
   "lenses": {

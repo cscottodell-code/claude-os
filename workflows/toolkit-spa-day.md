@@ -1,9 +1,10 @@
 # Toolkit Spa Day
 
 ## Metadata
-- Last updated: 2026-03-24
-- Version: 1.1
+- Last updated: 2026-04-04
+- Version: 1.2
 - Changelog:
+  - v1.2: Add Phase 7 (Token Budget Audit) and Phase 8 (Permissions Pruning). Add memory staleness check to Phase 1.
   - v1.1: Add Phase 6 (Stack Review) for learning loop. Remove knowledge/ references (eliminated in v5). Add interfaces audit to Phase 3.
   - v1.0: Initial workflow
 
@@ -26,13 +27,15 @@ degradation that seems related to too many instructions.
 2. Count all skill files in `~/.claude/skills/*/SKILL.md`
 3. Count all check files: `~/Sites/Global/scott-toolkit/checks/*.json`
 4. Read `~/.claude/instinct-candidates.md` if it exists
-5. Present a summary:
+5. Check memory staleness: read all files in `~/.claude/projects/-Users-scott/memory/` and flag any with `last_verified` older than 60 days
+6. Present a summary:
    | Category | Count | Total Lines |
    |----------|-------|-------------|
    | Rules | [n] | [lines] |
    | Skills | [n] | [lines] |
    | Check files | [n] | [lines] |
    | Instinct candidates | [n] | [lines] |
+   | Stale memories (>60 days) | [n] | [list] |
 
 ### Done when
 Summary presented. No approval needed.
@@ -107,10 +110,53 @@ Run the learning loop dashboard to review check health and promote lessons.
 ### Done when
 Stack review complete (or skipped if no audit data exists yet).
 
+## Phase 7: Token Budget Audit [AUTO]
+
+### What this phase does
+Measure the always-on token overhead to identify bloat and optimization opportunities.
+
+### Steps
+1. Count enabled plugins in `~/.claude/settings.json` (each adds skill descriptions + potential MCP tools)
+2. Count MCP servers in `~/.claude-config/mcp-servers.json`
+3. Estimate always-on overhead:
+   | Source | Est. Tokens |
+   |--------|-------------|
+   | CLAUDE.md + MEMORY.md + rules | [measure] |
+   | Skill descriptions (count * ~40) | [measure] |
+   | MCP tool names (count * ~13) | [measure] |
+   | MCP server instructions | [measure] |
+   | **Total** | **[sum]** |
+4. Compare to previous spa-day (if data exists)
+5. Flag any plugins or MCP servers that are enabled globally but only used on specific projects
+
+### Done when
+Token budget presented. Optimization opportunities flagged.
+
+## Phase 8: Permissions Pruning [STOP]
+
+### What this phase does
+Clean up accumulated one-off allow rules in settings.local.json.
+
+### Steps
+1. Count total allow rules in `~/.claude-config/settings.local.json`
+2. Identify and flag:
+   - Rules referencing `/tmp/` scripts (one-offs)
+   - Rules containing embedded API keys or JWTs (`eyJ`, `AIza`, `API_KEY=`, `TOKEN=`, `SECRET=`)
+   - Rules referencing removed MCP tools (servers no longer in mcp-servers.json)
+   - Loop fragment rules (`for`, `do`, `done`)
+   - Rules starting with `Bash(# ` (comments, not commands)
+3. Present flagged rules to Scott for bulk removal
+4. Remove approved rules
+
+### Done when
+Permissions pruned. No embedded secrets in allow rules.
+
 ## Completion Checklist
-- [ ] Current state audited
+- [ ] Current state audited (with memory staleness check)
 - [ ] Instinct candidates reviewed
 - [ ] Contradictions scanned
 - [ ] Consolidations made
 - [ ] Context budget verified
 - [ ] Stack review completed (or noted as no data)
+- [ ] Token budget audited
+- [ ] Permissions pruned
