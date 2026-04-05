@@ -91,6 +91,41 @@ for hook_file in "$TOOLKIT_PATH"/hooks/*.sh; do
   echo "   -> $hook_name"
 done
 
+# Deploy TypeScript hooks
+for hook_file in "$TOOLKIT_PATH"/hooks/*.ts; do
+  [ -f "$hook_file" ] || continue
+  hook_name="$(basename "$hook_file")"
+  target="$HOOKS_DIR/$hook_name"
+
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    rm "$target"
+  fi
+
+  ln -s "$hook_file" "$target"
+  echo "   -> $hook_name"
+done
+
+# Deploy hook subdirectories (lib/, guards/)
+for subdir in lib guards; do
+  src_dir="$TOOLKIT_PATH/hooks/$subdir"
+  [ -d "$src_dir" ] || continue
+  deploy_dir="$HOOKS_DIR/$subdir"
+  mkdir -p "$deploy_dir"
+
+  for ts_file in "$src_dir"/*.ts; do
+    [ -f "$ts_file" ] || continue
+    ts_name="$(basename "$ts_file")"
+    target="$deploy_dir/$ts_name"
+
+    if [ -e "$target" ] || [ -L "$target" ]; then
+      rm "$target"
+    fi
+
+    ln -s "$ts_file" "$target"
+    echo "   -> $subdir/$ts_name"
+  done
+done
+
 # --- 2. Deploy rules (symlinks) ---
 echo "2. Deploying rules..."
 for rule_file in "$TOOLKIT_PATH"/rules/*.md; do
