@@ -1,0 +1,17 @@
+{
+  "name": "scott-toolkit",
+  "version": "6.0.0",
+  "type": "module",
+  "private": true,
+  "description": "AI orchestration toolkit: hooks, tools, skills, and workflows for Claude Code",
+  "scripts": {
+    "lint": "bun run tools/toolkit-lint.ts",
+    "check": "bun run tools/stack-check.ts",
+    "detect": "bun run tools/stack-detect.ts",
+    "preflight": "bun run tools/stack-preflight.ts",
+    "metrics": "bun run tools/stack-metrics.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

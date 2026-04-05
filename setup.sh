@@ -41,6 +41,15 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
+# --- Check prerequisites ---
+if ! command -v bun >/dev/null 2>&1; then
+  echo ""
+  echo "WARNING: Bun is not installed."
+  echo "  TypeScript tools require Bun. Install: https://bun.sh"
+  echo "  Shell fallbacks will be used where available."
+  echo ""
+fi
+
 CLAUDE_DIR="$HOME/.claude"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 RULES_DIR="$CLAUDE_DIR/rules"
@@ -181,6 +190,21 @@ done
 # --- 6. Deploy tools (symlinks, ensure executable) ---
 echo "6. Deploying tools..."
 for tool_file in "$TOOLKIT_PATH"/tools/*.sh; do
+  tool_name="$(basename "$tool_file")"
+  target="$TOOLS_DIR/$tool_name"
+
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    rm "$target"
+  fi
+
+  ln -s "$tool_file" "$target"
+  chmod +x "$tool_file"
+  echo "   -> $tool_name"
+done
+
+# Deploy TypeScript tools (post-M1)
+for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
+  [ -f "$tool_file" ] || continue
   tool_name="$(basename "$tool_file")"
   target="$TOOLS_DIR/$tool_name"
 
