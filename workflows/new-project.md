@@ -6,6 +6,7 @@ description: >-
   Create Repo, Design Proof, Build Milestone 1, and Milestone Review.
 user_invocable: true
 invocation_hint: /scott:new-project - Start a new project with the guided 8-phase workflow
+section: project
 ---
 
 # New Project

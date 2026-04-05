@@ -8,6 +8,7 @@ description: |
   EspoCRM, Select Adjusters CRM, claims management, or sa.claimsforce.net.
 user_invocable: true
 invocation_hint: /advosy:claimsforce - Get Claimsforce automation context (workflows, placeholders, webhooks)
+section: business
 ---
 
 # Claimsforce Skill

@@ -12,6 +12,7 @@ description: |
   automating a process and n8n is Scott's automation tool, this skill applies.
 user_invocable: true
 invocation_hint: /scott:n8n-reference - Complete n8n workflow reference (patterns, code nodes, expressions, validation)
+section: reference
 ---
 
 # n8n Complete Reference

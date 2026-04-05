@@ -22,55 +22,68 @@ These are your workflows. Type them and Claude walks you through each one.
 
 ### Project Workflows
 
+<!-- AUTO:commands-project -->
 | Command | When to use it |
 |---------|---------------|
-| `/scott:new-project` | Starting something from scratch |
-| `/scott:new-feature` | Adding a feature to an existing project |
-| `/scott:resume-project` | Picking up a project after time away |
-| `/scott:phase-closeout` | After a GSD phase — verify, review, reflect (hook-enforced) |
+| `/scott:new-feature` | Add a feature to the current project with guided workflow |
+| `/scott:new-project` | Start a new project with the guided 8-phase workflow |
+| `/scott:phase-closeout` | Run the mandatory phase closeout (verify, review, reflect, gate) |
+| `/scott:resume` | Pick up where you left off on a project |
+<!-- /AUTO:commands-project -->
 
 ### Stack Enforcement & Learning
 
+<!-- AUTO:commands-stack -->
 | Command | When to use it |
 |---------|---------------|
-| `/scott:stack-review` | Monthly dashboard: check health, promote lessons to checks, refine noisy checks |
-| `/scott:stack-baseline` | First-run audit for existing projects (generates initial audit data) |
-| `/scott:rebuild-metrics` | Regenerate metrics.json from audit artifacts (recovery command) |
+| `/scott:rebuild-metrics` | Regenerate metrics.json from audit artifacts |
+| `/scott:stack-baseline` | First-run stack audit for existing projects |
+| `/scott:stack-review` | Monthly stack health dashboard (check metrics, learning loop) |
+<!-- /AUTO:commands-stack -->
 
 ### Learning & Improvement
 
+<!-- AUTO:commands-learning -->
 | Command | When to use it |
 |---------|---------------|
-| `/scott:source-review` | Compare context engineering sources against your toolkit |
-| `/scott:update-toolkit` | When you want to improve the toolkit itself |
-| Toolkit Spa Day | Monthly: consolidate rules/skills, review instinct candidates, stack review, remove contradictions |
+| `/scott:compare-sources` | Compare new sources against your toolkit and surface what's actionable |
+| `/scott:update-toolkit` | Update the scott-toolkit with new lessons or patterns |
+<!-- /AUTO:commands-learning -->
 
 ### Reference & Knowledge
 
+<!-- AUTO:commands-reference -->
 | Command | When to use it |
 |---------|---------------|
-| `/scott:debug` | Structured 5-phase debugging workflow |
-| `/scott:surrealdb` | SurrealDB syntax, schema patterns, query optimization |
-| `/scott:n8n-reference` | Comprehensive n8n automation reference |
-| `/scott:automation-guide` | Best practices for reliable automations |
-| `/scott:save-tweet` | Extract tweet/thread content into source files |
+| `/scott:debug` | Debug a problem with structured diagnosis |
+| `/scott:n8n-reference` | Complete n8n workflow reference (patterns, code nodes, expressions, validation) |
+| `/scott:surrealdb` | SurrealDB query patterns, schema design, and connection setup |
+<!-- /AUTO:commands-reference -->
 
 ### Tools & Utilities
 
+<!-- AUTO:commands-tools -->
 | Command | When to use it |
 |---------|---------------|
-| `/scott:remind` | Send a Telegram reminder |
-| `/scott:sync` | Sync config and code between machines |
-| `/scott:pdf` | Recreate a PDF in HTML/CSS, convert to fillable PDF |
-| `/scott:bypass` | A guard hook blocked something you approved — bypass it |
+| `/scott:council` | Deliberate a decision from multiple perspectives |
+| `/scott:research` | Multi-lens research skill that dispatches 10 parallel subagents to investigat.. |
+| `/scott:bypass` | Temporarily bypass a guard hook to run a blocked action |
+| `/scott:notebooklm` | Create a NotebookLM audio deep dive |
+| `/scott:pause` | Generate a resume prompt for picking up later |
+| `/scott:presentation` | Analyze and improve a presentation or story |
+| `/scott:save-tweet` | Extract a tweet into a markdown source file |
+| `/scott:toolkit-briefing` | Deep-read the toolkit so Claude fully understands it |
+<!-- /AUTO:commands-tools -->
 
 ### Business Context (Advosy)
 
+<!-- AUTO:commands-business -->
 | Command | When to use it |
 |---------|---------------|
-| `/advosy:context` | Company structure, leadership, subsidiaries, contacts |
-| `/advosy:claimsforce` | Claimsforce (EspoCRM) workflows, webhooks, n8n patterns |
-| `/advosy:crm` | Advosy CRM design system, layout patterns, mockup-building |
+| `/advosy:context` | Get Advosy company context (leadership, subsidiaries, contacts) |
+| `/advosy:claimsforce` | Get Claimsforce automation context (workflows, placeholders, webhooks) |
+| `/advosy:crm` | CRM design system, mockup patterns, and page prototyping context |
+<!-- /AUTO:commands-business -->
 
 You don't need to memorize these. Just describe what you want to do and Claude will suggest the right one.
 

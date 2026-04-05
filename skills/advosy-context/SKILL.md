@@ -6,7 +6,8 @@ description: |
   abbreviation like CF, PA, SA, VRZA, EOS, Claimsforce, Select Adjusters, Everest Air,
   Bloque, Pestkee, Southwest Packout, or Homeforce. Also use for contact info lookups.
 user_invocable: true
-invocation_hint: /advosy:advosy-context - Get Advosy company context (leadership, subsidiaries, contacts)
+invocation_hint: /advosy:context - Get Advosy company context (leadership, subsidiaries, contacts)
+section: business
 ---
 
 # Advosy Company Context

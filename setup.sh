@@ -126,55 +126,10 @@ for rule_file in "$TOOLKIT_PATH"/rules/*.md; do
   echo "   -> $rule_name"
 done
 
-# --- 3. Deploy workflow skills ---
-echo "3. Deploying workflow skills..."
-# Generates SKILL.md stubs for workflows that don't have standalone skill dirs.
-# If a skill already exists in skills/, step 4 will overwrite with the standalone version.
-# Only list workflows here that do NOT have a standalone skill dir yet.
-
-deploy_workflow_skill() {
-  local workflow_file="$1"
-  local skill_name="$2"
-  local description="$3"
-  local invocation="$4"
-  local skill_dir="$SKILLS_DIR/$skill_name"
-
-  # Skip if standalone skill exists (step 4 will handle it)
-  if [[ -d "$TOOLKIT_PATH/skills/$skill_name" ]]; then
-    echo "   -> $skill_name (standalone exists, skipping workflow stub)"
-    return
-  fi
-
-  mkdir -p "$skill_dir"
-
-  cat > "$skill_dir/SKILL.md" << SKILLEOF
----
-name: ${skill_name/scott-/scott:}
-description: |
-  $description
-user_invocable: true
-invocation_hint: /${skill_name/scott-/scott:} - $invocation
----
-
-# $(head -1 "$TOOLKIT_PATH/workflows/$workflow_file" | sed 's/^# //')
-
-Read the full workflow file: \`$TOOLKIT_PATH/workflows/$workflow_file\`
-and follow it phase by phase, exactly as written.
-
-Also read the current project's CLAUDE.md and tasks/lessons.md for context.
-SKILLEOF
-
-  echo "   -> $skill_name"
-}
-
-deploy_workflow_skill "phase-closeout.md" "scott-phase-closeout" \
-  "Mandatory post-execution closeout for GSD phases. Runs verification, code review,
-  and a single reflection interview that produces error logs, success logs, RETRO.md,
-  and lessons.md. Hook-enforced gate — phase cannot be marked complete without it." \
-  "Run the mandatory phase closeout (verify, review, reflect, gate)"
-
-# --- 4. Deploy standalone skills (symlinks) ---
-echo "4. Deploying standalone skills..."
+# --- 3. Deploy skills (symlinks) ---
+# All skills (including workflow-backed ones) live in skills/ as either
+# direct SKILL.md files or symlinks to workflow files. No more stub generation.
+echo "3. Deploying skills..."
 for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
   skill_name="$(basename "$skill_dir")"
   target_dir="$SKILLS_DIR/$skill_name"
@@ -194,8 +149,8 @@ for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
   done
 done
 
-# --- 5. Deploy checks (symlinks) ---
-echo "5. Deploying checks..."
+# --- 4. Deploy checks (symlinks) ---
+echo "4. Deploying checks..."
 for check_file in "$TOOLKIT_PATH"/checks/*.json; do
   check_name="$(basename "$check_file")"
   target="$CHECKS_DIR/$check_name"
@@ -209,7 +164,7 @@ for check_file in "$TOOLKIT_PATH"/checks/*.json; do
 done
 
 # --- 6. Deploy tools (symlinks, ensure executable) ---
-echo "6. Deploying tools..."
+echo "5. Deploying tools..."
 for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
   [ -f "$tool_file" ] || continue
   tool_name="$(basename "$tool_file")"
@@ -225,7 +180,7 @@ for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
 done
 
 # --- 7. Deploy config (symlinks) ---
-echo "7. Deploying config..."
+echo "6. Deploying config..."
 if [ -d "$TOOLKIT_PATH/config" ]; then
   for config_file in "$TOOLKIT_PATH"/config/*; do
     [ -f "$config_file" ] || continue
@@ -250,7 +205,7 @@ if [ "$VERIFY_ONLY" = true ]; then
   echo "Verify-only mode — skipping deployment"
   echo ""
 fi
-echo "8. Verifying deployment..."
+echo "7. Verifying deployment..."
 
 ERRORS=0
 
@@ -288,7 +243,7 @@ for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
   fi
 done
 # Also check workflow-generated skills
-for workflow_skill in scott-new-project scott-resume scott-new-feature scott-phase-closeout scott-update-toolkit scott-compare-sources; do
+for workflow_skill in scott-compare-sources scott-new-feature scott-new-project scott-phase-closeout scott-resume scott-update-toolkit; do
   if [ -f "$SKILLS_DIR/$workflow_skill/SKILL.md" ]; then
     : # OK
   else

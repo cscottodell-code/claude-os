@@ -10,6 +10,7 @@
     "detect": "bun run tools/stack-detect.ts",
     "preflight": "bun run tools/stack-preflight.ts",
     "metrics": "bun run tools/stack-metrics.ts",
+    "sync": "bun run tools/toolkit-sync.ts",
     "graph": "bun run tools/toolkit-graph.ts",
     "graph:rebuild": "bun run tools/toolkit-graph.ts rebuild",
     "graph:impact": "bun run tools/toolkit-graph.ts impact",

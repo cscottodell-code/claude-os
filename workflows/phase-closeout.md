@@ -1,3 +1,14 @@
+---
+name: scott:phase-closeout
+description: >-
+  Mandatory post-execution closeout for GSD phases. Runs verification, code review,
+  and a single reflection interview that produces error logs, success logs, RETRO.md,
+  and lessons.md. Hook-enforced gate -- phase cannot be marked complete without it.
+user_invocable: true
+invocation_hint: /scott:phase-closeout - Run the mandatory phase closeout (verify, review, reflect, gate)
+section: project
+---
+
 # Phase Closeout
 
 ## Metadata

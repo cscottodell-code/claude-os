@@ -1,6 +1,9 @@
 ---
 name: scott-stack-review
 description: Stack health dashboard showing check metrics, new check candidates, and refinement opportunities. Run monthly (aligned with toolkit-spa-day) or after completing a major milestone. Use when Scott says "stack review", "check health", "how are my checks doing", or "learning loop".
+user_invocable: true
+invocation_hint: /scott:stack-review - Monthly stack health dashboard (check metrics, learning loop)
+section: stack
 ---
 
 # Stack Review Dashboard

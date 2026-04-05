@@ -6,6 +6,7 @@ description: >-
   Update CHANGELOG, Update Instructions & PDF, and Commit & Push.
 user_invocable: true
 invocation_hint: /scott:update-toolkit - Update the scott-toolkit with new lessons or patterns
+section: learning
 ---
 
 # Toolkit Update

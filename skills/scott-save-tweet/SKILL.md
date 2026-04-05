@@ -14,6 +14,7 @@ invocation_hint: /scott:save-tweet <url> - Extract a tweet into a markdown sourc
 input_examples:
   - "/scott:save-tweet https://x.com/anthropic/status/123456789"
   - "/scott:save-tweet https://x.com/someone/status/987654321"
+section: tools
 ---
 
 # Tweet to Source

@@ -11,6 +11,7 @@ description: |
   setting up monitoring, writing test plans, or creating documentation templates
   for automations.
 user_invocable: false
+section: reference
 ---
 
 # Automation Best Practices

@@ -7,6 +7,7 @@ description: |
   record links, events, indexes, or query optimization.
 user_invocable: true
 invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and connection setup
+section: reference
 ---
 
 # SurrealDB Quick Reference

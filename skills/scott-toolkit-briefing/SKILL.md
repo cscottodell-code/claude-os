@@ -11,6 +11,7 @@ description: |
   modifying, moving, or reorganizing toolkit files.
 user_invocable: true
 invocation_hint: /scott:toolkit-briefing - Deep-read the toolkit so Claude fully understands it
+section: tools
 ---
 
 # Toolkit Briefing

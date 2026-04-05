@@ -6,6 +6,9 @@ description: >-
   Scott says "rebuild metrics", "refresh metrics", "regenerate metrics",
   "metrics.json is wrong", "checks are out of sync", "audit data is stale",
   "recompute metrics", or "fix metrics".
+user_invocable: true
+invocation_hint: /scott:rebuild-metrics - Regenerate metrics.json from audit artifacts
+section: stack
 ---
 
 # Rebuild Metrics

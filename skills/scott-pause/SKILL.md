@@ -9,7 +9,8 @@ description: |
   "let's pick this up later", or any variation of ending a session. Also use when
   Scott seems to be wrapping up but hasn't explicitly asked to pause.
 user_invocable: true
-invocation_hint: /pause - Generate a resume prompt for picking up later
+invocation_hint: /scott:pause - Generate a resume prompt for picking up later
+section: tools
 ---
 
 # Pause & Generate Resume Prompt

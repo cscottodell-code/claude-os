@@ -8,7 +8,8 @@ description: |
   This skill knows the exact colors, spacing, component patterns, and panel terminology
   Gary uses, so mockups match the real app pixel-for-pixel.
 user_invocable: true
-invocation_hint: /advosy-crm - CRM design system, mockup patterns, and page prototyping context
+invocation_hint: /advosy:crm - CRM design system, mockup patterns, and page prototyping context
+section: business
 ---
 
 # Advosy CRM — Design System & Mockup Patterns

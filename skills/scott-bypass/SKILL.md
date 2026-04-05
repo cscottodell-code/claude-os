@@ -9,6 +9,7 @@ description: |
   and Scott has given explicit permission to proceed.
 user_invocable: true
 invocation_hint: /scott:bypass - Temporarily bypass a guard hook to run a blocked action
+section: tools
 ---
 
 # Bypass Guard Hook

@@ -20,6 +20,7 @@ input_examples:
   - "/scott:council --triad architecture monorepo or polyrepo for Bresco?"
   - "/scott:council --from-research ~/Sites/Global/research/RESEARCH-memberships-2026-03-28.md"
   - "/scott:council --triad product what pricing model for Advosy memberships?"
+section: tools
 ---
 
 # Council Deliberation

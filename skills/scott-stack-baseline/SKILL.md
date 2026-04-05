@@ -1,6 +1,9 @@
 ---
 name: scott-stack-baseline
 description: First-run stack audit for existing projects that have a stack-lock but no audit history. Generates initial audit data so the project appears in stack-metrics. Use when onboarding a project into the stack enforcement system or when Scott says "baseline this project" or "add this to stack tracking".
+user_invocable: true
+invocation_hint: /scott:stack-baseline - First-run stack audit for existing projects
+section: stack
 ---
 
 # Stack Baseline Audit

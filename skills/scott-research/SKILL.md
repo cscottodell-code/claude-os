@@ -21,6 +21,7 @@ input_examples:
   - "/scott:research SurrealDB v3 migration strategies"
   - "/scott:research membership pricing models for home services --notebooklm"
   - "/scott:research background operations methodology --council strategy"
+section: tools
 ---
 
 # Multi-Lens Research

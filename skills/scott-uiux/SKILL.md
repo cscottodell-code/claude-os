@@ -12,6 +12,7 @@ description: >-
   writing HTML, CSS, or component templates that a user will see and interact with,
   even if the user doesn't explicitly ask for "design help." If you're generating
   frontend code, these rules apply.
+section: reference
 ---
 
 # UI/UX Design System

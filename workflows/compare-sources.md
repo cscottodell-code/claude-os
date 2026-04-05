@@ -6,6 +6,7 @@ description: >-
   Inventory, Run Comparison Analysis (subagent), Generate Review & Act, and Archive Processed Sources.
 user_invocable: true
 invocation_hint: /scott:compare-sources - Compare new sources against your toolkit and surface what's actionable
+section: learning
 ---
 
 # Compare Sources

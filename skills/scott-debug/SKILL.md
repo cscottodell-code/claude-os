@@ -17,6 +17,7 @@ invocation_hint: /scott:debug - Debug a problem with structured diagnosis
 input_examples:
   - "/scott:debug -- the page is showing a blank screen after I merged the feature branch"
   - "/scott:debug -- API returns 500 but only on the production server"
+section: reference
 ---
 
 # Debug Skill

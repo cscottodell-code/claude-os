@@ -22,6 +22,7 @@ description: >-
   weekly meeting structure, 90-day planning, or scaling a home services company.
   Applies primarily to Advosy but relevant across all of Scott's leadership
   contexts.
+section: reference
 ---
 
 # EOS - Entrepreneurial Operating System Skill

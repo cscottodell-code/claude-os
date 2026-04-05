@@ -29,6 +29,17 @@ Audit remediation phase 2: narrow audience, remove dead workflows, clean up acti
 - All 4 graph commands preserved: rebuild, impact, check, stats
 - Bumped package.json version to 6.1.0
 
+### M5: Auto-Sync System
+- New `tools/toolkit-sync.ts` reads skill frontmatter as source of truth and auto-updates README command table, user-guide command tables, and setup.sh verification list
+- Marker comments (`<!-- AUTO:commands -->`) delimit generated sections in docs
+- Added `section:` frontmatter to all skills for user-guide grouping (project, stack, learning, reference, tools, business)
+- Added `user_invocable: true` + `invocation_hint` to stack-review, stack-baseline, rebuild-metrics
+- Fixed invocation hints: advosy-context, advosy-crm, scott-pause
+- Converted phase-closeout to symlinked skill (same pattern as other 5 workflow skills)
+- Removed `deploy_workflow_skill()` stub generator from setup.sh (all skills now in skills/ directory)
+- Pre-commit hook runs sync -> lint -> graph rebuild (docs auto-update on every commit)
+- Renumbered setup.sh deploy steps (7 steps, down from 8)
+
 ## v6.0.0 - 2026-04-05
 Full audit remediation: independent audit graded toolkit C+, identified 22 real issues. Fixed all across 4 milestones. Toolkit is now TypeScript/Bun throughout, with enforcement gates, expanded stack checks, and leaner skills.
 

@@ -9,6 +9,7 @@ description: >
   use when Scott asks to "make this more compelling", "punch up this story",
   "help me with my talk", or wants feedback on how he's telling something. Triggers
   on any storytelling, presentation, or public speaking context.
+section: tools
 ---
 
 # Presentation & Story Analyzer

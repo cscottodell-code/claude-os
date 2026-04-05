@@ -19,6 +19,7 @@ input_examples:
   - "/scott:notebooklm context engineering best practices"
   - "/scott:notebooklm how SurrealDB v3 works"
   - "/scott:notebooklm the scott-toolkit"
+section: tools
 ---
 
 # NotebookLM Deep Dive

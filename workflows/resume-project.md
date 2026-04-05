@@ -6,6 +6,7 @@ description: >-
   and Resume Work. Delegates to GSD for .planning/ state recovery.
 user_invocable: true
 invocation_hint: /scott:resume - Pick up where you left off on a project
+section: project
 ---
 
 # Resume Project
