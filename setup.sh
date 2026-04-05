@@ -78,20 +78,6 @@ mkdir -p "$HOOKS_DIR" "$RULES_DIR" "$SKILLS_DIR" "$CHECKS_DIR" "$TOOLS_DIR" "$CO
 
 # --- 1. Deploy hooks (symlinks) ---
 echo "1. Deploying hooks..."
-for hook_file in "$TOOLKIT_PATH"/hooks/*.sh; do
-  hook_name="$(basename "$hook_file")"
-  target="$HOOKS_DIR/$hook_name"
-
-  # Remove existing file/symlink
-  if [ -e "$target" ] || [ -L "$target" ]; then
-    rm "$target"
-  fi
-
-  ln -s "$hook_file" "$target"
-  echo "   -> $hook_name"
-done
-
-# Deploy TypeScript hooks
 for hook_file in "$TOOLKIT_PATH"/hooks/*.ts; do
   [ -f "$hook_file" ] || continue
   hook_name="$(basename "$hook_file")"
@@ -224,20 +210,6 @@ done
 
 # --- 6. Deploy tools (symlinks, ensure executable) ---
 echo "6. Deploying tools..."
-for tool_file in "$TOOLKIT_PATH"/tools/*.sh; do
-  tool_name="$(basename "$tool_file")"
-  target="$TOOLS_DIR/$tool_name"
-
-  if [ -e "$target" ] || [ -L "$target" ]; then
-    rm "$target"
-  fi
-
-  ln -s "$tool_file" "$target"
-  chmod +x "$tool_file"
-  echo "   -> $tool_name"
-done
-
-# Deploy TypeScript tools (post-M1)
 for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
   [ -f "$tool_file" ] || continue
   tool_name="$(basename "$tool_file")"
@@ -282,8 +254,9 @@ echo "8. Verifying deployment..."
 
 ERRORS=0
 
-# Check hooks (scan directory dynamically)
-for hook_file in "$TOOLKIT_PATH"/hooks/*.sh; do
+# Check hooks (scan directory dynamically — .ts files post-M2)
+for hook_file in "$TOOLKIT_PATH"/hooks/*.ts; do
+  [ -f "$hook_file" ] || continue
   hook_name="$(basename "$hook_file")"
   if [ -L "$HOOKS_DIR/$hook_name" ] && [ -e "$HOOKS_DIR/$hook_name" ]; then
     : # OK
@@ -335,8 +308,9 @@ for check_file in "$TOOLKIT_PATH"/checks/*.json; do
   fi
 done
 
-# Check tools (scan directory dynamically)
-for tool_file in "$TOOLKIT_PATH"/tools/*.sh; do
+# Check tools (scan directory dynamically — .ts files post-M1)
+for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
+  [ -f "$tool_file" ] || continue
   tool_name="$(basename "$tool_file")"
   if [ -L "$TOOLS_DIR/$tool_name" ] && [ -e "$TOOLS_DIR/$tool_name" ]; then
     : # OK
