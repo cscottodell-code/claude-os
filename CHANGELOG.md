@@ -16,6 +16,12 @@ Audit remediation phase 2: narrow audience, remove dead workflows, clean up acti
 - Added `category: knowledge` frontmatter to 5 knowledge skills: scott-power-laws, scott-war-strategies, scott-human-nature, scott-mastery, scott-bops
 - These skills will migrate to Eleanor's knowledge module (M3) as source records. The category tag marks them for future extraction.
 
+### M3: Stub Skill Elimination
+- Eliminated 5 stub skills that were thin wrappers around workflow files (scott-new-project, scott-new-feature, scott-resume, scott-update-toolkit, scott-compare-sources)
+- Added YAML frontmatter directly to the 5 workflow files (name, description, user_invocable, invocation_hint)
+- Replaced stub SKILL.md files with symlinks to workflow files (e.g., `skills/scott-new-project/SKILL.md → ../../workflows/new-project.md`)
+- Single source of truth: the workflow file IS the skill now, no more indirection
+
 ## v6.0.0 - 2026-04-05
 Full audit remediation: independent audit graded toolkit C+, identified 22 real issues. Fixed all across 4 milestones. Toolkit is now TypeScript/Bun throughout, with enforcement gates, expanded stack checks, and leaner skills.
 
