@@ -49,16 +49,24 @@ MAJOR_MINOR=$(echo "$LATEST_VERSION" | sed -E 's/([0-9]+\.[0-9]+)\..*/\1/')
 CHANGELOG_DATE=$(grep -m1 '^## v' "$CHANGELOG" | sed -E 's/^## v[0-9.]+ - ([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
 
 # Use python3 to reliably parse the manifest and check each file
-RESULT=$(python3 -c "
+# Pass values via env vars to prevent shell injection in Python code
+RESULT=$(TOOLKIT_DIR="$TOOLKIT_DIR" \
+  SITES_DIR="$HOME/Sites" \
+  CHECK_VERSION="$LATEST_VERSION" \
+  CHECK_MAJOR_MINOR="$MAJOR_MINOR" \
+  CHECK_DATE="$CHANGELOG_DATE" \
+  MANIFEST_PATH="$MANIFEST" \
+  python3 << 'PYEOF'
 import json, re, sys, os
 
-toolkit = '$TOOLKIT_DIR'
-sites = os.path.expanduser('~/Sites')
-version = '$LATEST_VERSION'
-major_minor = '$MAJOR_MINOR'
-changelog_date = '$CHANGELOG_DATE'
+toolkit = os.environ['TOOLKIT_DIR']
+sites = os.environ['SITES_DIR']
+version = os.environ['CHECK_VERSION']
+major_minor = os.environ['CHECK_MAJOR_MINOR']
+changelog_date = os.environ.get('CHECK_DATE', '')
+manifest_path = os.environ['MANIFEST_PATH']
 
-with open('$MANIFEST') as f:
+with open(manifest_path) as f:
     manifest = json.load(f)
 
 def check_file(full_path, display_path, desc, check_type):
@@ -117,7 +125,8 @@ if stale:
         print(line)
 else:
     print('OK')
-" 2>&1)
+PYEOF
+)
 
 # Parse result
 if [[ "$RESULT" == "OK" ]]; then

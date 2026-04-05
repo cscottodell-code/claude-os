@@ -41,6 +41,15 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
+# --- Check prerequisites ---
+if ! command -v bun >/dev/null 2>&1; then
+  echo ""
+  echo "WARNING: Bun is not installed."
+  echo "  TypeScript tools require Bun. Install: https://bun.sh"
+  echo "  Shell fallbacks will be used where available."
+  echo ""
+fi
+
 CLAUDE_DIR="$HOME/.claude"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 RULES_DIR="$CLAUDE_DIR/rules"
@@ -193,6 +202,21 @@ for tool_file in "$TOOLKIT_PATH"/tools/*.sh; do
   echo "   -> $tool_name"
 done
 
+# Deploy TypeScript tools (post-M1)
+for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
+  [ -f "$tool_file" ] || continue
+  tool_name="$(basename "$tool_file")"
+  target="$TOOLS_DIR/$tool_name"
+
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    rm "$target"
+  fi
+
+  ln -s "$tool_file" "$target"
+  chmod +x "$tool_file"
+  echo "   -> $tool_name"
+done
+
 # --- 7. Deploy config (symlinks) ---
 echo "7. Deploying config..."
 if [ -d "$TOOLKIT_PATH/config" ]; then
@@ -297,10 +321,13 @@ fi
 if [ "$VERIFY_ONLY" != true ] && [ "$UPDATE_PATHS" = true ] && [ -n "$OLD_TOOLKIT_PATH" ]; then
   echo ""
   echo "9. Updating paths: $OLD_TOOLKIT_PATH -> $TOOLKIT_PATH"
+  # Escape sed-special characters in paths (& and \ in replacement string)
+  ESCAPED_OLD=$(printf '%s\n' "$OLD_TOOLKIT_PATH" | sed 's/[&/\]/\\&/g')
+  ESCAPED_NEW=$(printf '%s\n' "$TOOLKIT_PATH" | sed 's/[&/\]/\\&/g')
   COUNT=0
   while IFS= read -r -d '' md_file; do
     if grep -q "$OLD_TOOLKIT_PATH" "$md_file" 2>/dev/null; then
-      sed -i '' "s|$OLD_TOOLKIT_PATH|$TOOLKIT_PATH|g" "$md_file"
+      sed -i '' "s|${ESCAPED_OLD}|${ESCAPED_NEW}|g" "$md_file"
       echo "   -> $(basename "$md_file")"
       COUNT=$((COUNT + 1))
     fi

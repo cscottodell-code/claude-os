@@ -7,3 +7,7 @@ checks/metrics.json
 
 # Settings backups (machine-specific, not portable)
 backups/
+
+# Bun/Node
+node_modules/
+bun.lock

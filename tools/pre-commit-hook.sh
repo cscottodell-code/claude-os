@@ -1,18 +1,7 @@
-#!/usr/bin/env bash
-# pre-commit-hook.sh — Git pre-commit hook for the scott-toolkit repo.
-# Symlink to .git/hooks/pre-commit:
-#   ln -sf ../../tools/pre-commit-hook.sh .git/hooks/pre-commit
-
-set -euo pipefail
-
-TOOLKIT_DIR="${SCOTT_TOOLKIT_DIR:-$HOME/Sites/Global/scott-toolkit}"
-
-echo "[pre-commit] Running toolkit-lint.sh..."
-if ! "$TOOLKIT_DIR/tools/toolkit-lint.sh"; then
-  echo ""
-  echo "[pre-commit] BLOCKED: Stale cross-references found."
-  echo "Run: tools/toolkit-lint.sh --fix  to auto-fix simple patterns."
-  exit 1
-fi
-
-echo "[pre-commit] Lint passed."
+#!/bin/bash
+# Backward-compat wrapper — delegates to TypeScript version
+# Will be removed in M2 after settings.json references are updated
+# Resolve through symlinks (this file is symlinked from .git/hooks/pre-commit)
+REAL_PATH="$(python3 -c "import os; print(os.path.realpath('$0'))")"
+SCRIPT_DIR="$(dirname "$REAL_PATH")"
+exec bun run "$SCRIPT_DIR/pre-commit-hook.ts" "$@"
