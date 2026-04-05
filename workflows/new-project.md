@@ -1,9 +1,10 @@
 # New Project
 
 ## Metadata
-- Last updated: 2026-03-14
-- Version: 1.7
+- Last updated: 2026-04-05
+- Version: 1.9
 - Changelog:
+  - v1.9: Split Phase 3 into 3a/3b/3c (draft, approve, resolve conflicts). Add clear entry/exit criteria per sub-phase.
   - v1.8: Align Phase 7 to GSD+Superpowers integration pattern (GSD orchestrates, Superpowers provides discipline)
   - v1.7: Add follow-up clarifying questions to Phase 1 (from 2026-03-14 source review)
   - v1.6: Add API key model access verification to Phase 1 (from Eleanor M1 retro)
@@ -96,21 +97,17 @@ A cleaned-up version of the brain dump with gaps filled and contradictions resol
 ### Done when
 Scott has answered all clarifying questions and no major gaps remain.
 
-## Phase 3: Draft PRD [STOP]
+## Phase 3a: Draft PRD [AUTO]
 
 ### What this phase does
-Load the PRD template from ~/Sites/Global/scott-toolkit/context/PRD-TEMPLATE.md and walk through
-it section by section, using the brain dump answers as the starting material.
+Load the PRD template and draft all sections using the brain dump answers.
 
-### How to do it
+### Steps
 
 1. Read ~/Sites/Global/scott-toolkit/context/PRD-TEMPLATE.md
 2. For each section (1-11):
-   a. Explain what this section is about (use the template's guidance comments)
-   b. Draft the content using the brain dump and clarification answers
-   c. Present the draft to Scott
-   d. Get Scott's approval or make changes
-   e. Move to the next section
+   a. Draft the content using the brain dump and clarification answers
+   b. Use the template's guidance comments to inform each section
 3. Pay special attention to:
    - Section 3 (Features): Push Scott to prioritize ruthlessly
    - Section 4 (User Flows): Make these concrete and step-by-step
@@ -121,7 +118,51 @@ it section by section, using the brain dump answers as the starting material.
 A complete PRD draft with all 11 sections filled in.
 
 ### Done when
+All 11 sections have been drafted.
+
+## Phase 3b: Approve PRD [STOP]
+
+### What this phase does
+Present the PRD draft to Scott for section-by-section review and approval.
+
+### Steps
+
+1. Present each section to Scott, one at a time
+2. For each section:
+   a. Explain what this section covers and why it matters
+   b. Show the drafted content
+   c. Get Scott's approval or make changes
+   d. Move to the next section
+3. If Scott wants changes, revise and re-present that section before moving on
+
+### Output
+A Scott-approved PRD with all 11 sections confirmed.
+
+### Done when
 Scott has approved every section of the PRD.
+
+## Phase 3c: Resolve Conflicts [AUTO]
+
+### What this phase does
+If an existing PRD.md exists in the project directory (e.g., from a prior attempt or
+a different branch), reconcile it with the newly approved PRD.
+
+### Steps
+
+1. Check if a PRD.md already exists in the target project directory
+2. **If no existing PRD:** Skip this phase (nothing to resolve)
+3. **If existing PRD found:**
+   a. Diff the existing PRD against the new one
+   b. Identify conflicts (sections that differ substantively)
+   c. For each conflict, prefer the newly approved version unless the existing one has information the new one lacks
+   d. Merge any unique content from the old PRD into the new one
+   e. Present the merged result to Scott for a final check
+
+### Output
+A single, reconciled PRD.md ready to be saved.
+
+### Done when
+PRD conflicts resolved (or skipped if no existing PRD).
 
 ## Phase 4: Finalize PRD [STOP]
 
@@ -304,8 +345,10 @@ Scott confirms the milestone is acceptable and gives direction for what's next.
 ## Completion Checklist
 - [ ] Brain dump captured
 - [ ] Clarifying questions answered
-- [ ] PRD complete (all 11 sections)
-- [ ] PRD reviewed for consistency
+- [ ] PRD drafted (all 11 sections) (Phase 3a)
+- [ ] PRD approved by Scott (Phase 3b)
+- [ ] PRD conflicts resolved or skipped (Phase 3c)
+- [ ] PRD reviewed for consistency (Phase 4)
 - [ ] Project repo created with proper structure
 - [ ] CLAUDE.md generated and populated
 - [ ] tasks/todo.md created with Milestone 1 tasks
