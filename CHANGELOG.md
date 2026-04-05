@@ -40,6 +40,11 @@ Audit remediation phase 2: narrow audience, remove dead workflows, clean up acti
 - Pre-commit hook runs sync -> lint -> graph rebuild (docs auto-update on every commit)
 - Renumbered setup.sh deploy steps (7 steps, down from 8)
 
+### M6: Cleanup + Polish
+- Updated README repo structure tree (removed db.ts, added toolkit-sync.ts + toolkit-graph.ts, noted symlinked skills)
+- Updated docs/architecture.md: dependency graph section (SurrealDB -> JSON), removed SurrealDB from prerequisites, updated pre-commit description
+- Committed file permission normalization (6 tool files: 644 -> 755)
+
 ## v6.0.0 - 2026-04-05
 Full audit remediation: independent audit graded toolkit C+, identified 22 real issues. Fixed all across 4 milestones. Toolkit is now TypeScript/Bun throughout, with enforcement gates, expanded stack checks, and leaner skills.
 

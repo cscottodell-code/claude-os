@@ -152,8 +152,9 @@ Tools are TypeScript scripts run via `bun run`. They're deployed as symlinks fro
 | `stack-preflight.ts` | Verify system readiness | `bun run tools/stack-preflight.ts <project-path>` |
 | `stack-metrics.ts` | Aggregate audit data | `bun run tools/stack-metrics.ts` |
 | `toolkit-lint.ts` | Toolkit integrity checker | `bun run tools/toolkit-lint.ts [--section=X] [--fix]` |
-| `toolkit-graph.ts` | Dependency graph (SurrealDB) | `bun run tools/toolkit-graph.ts rebuild\|impact\|check\|stats` |
-| `pre-commit-hook.ts` | Git pre-commit gate | Runs automatically on `git commit` |
+| `toolkit-sync.ts` | Auto-sync docs from skill frontmatter | `bun run tools/toolkit-sync.ts [--check]` |
+| `toolkit-graph.ts` | Dependency graph (JSON-backed) | `bun run tools/toolkit-graph.ts rebuild\|impact\|check\|stats` |
+| `pre-commit-hook.ts` | Git pre-commit: sync -> lint -> graph | Runs automatically on `git commit` |
 
 All tools import from `src/` for shared utilities (JSON parsing, path resolution, exec).
 
@@ -242,18 +243,16 @@ This means:
 
 ---
 
-## Dependency Graph (SurrealDB)
+## Dependency Graph (JSON)
 
-The toolkit tracks all file relationships in a SurrealDB graph database. This answers the question: "If I change file X, what else needs updating?"
+The toolkit tracks all file relationships in `config/toolkit-graph.json`. This answers the question: "If I change file X, what else needs updating?"
 
-**Requires:** SurrealDB running on localhost:8000 (started via `start-surreal.sh`)
+**No external dependencies.** The graph is a JSON file rebuilt automatically by the pre-commit hook.
 
-**Schema:** `config/toolkit-graph.surql` (namespace: `toolkit`, database: `graph`)
-
-### Three tables:
-- **`file`** - every toolkit file with path, type, content hash
-- **`references`** - directed edges: "file A references file B" (imports, doc mentions, settings commands)
-- **`settings_entry`** - hook registrations from settings.json
+### Three data arrays:
+- **`files`** — every toolkit file with path, type, content hash
+- **`references`** — directed edges: "file A references file B" (imports, doc mentions, settings commands)
+- **`settingsEntries`** — hook registrations from settings.json
 
 ### Usage:
 
@@ -294,7 +293,7 @@ Settings.json registration:
 - After adding/removing/renaming files
 - After merging branches with structural changes
 - If `toolkit-graph.ts check` reports inconsistencies
-- The graph auto-rebuilds are NOT hooked in (manual rebuild keeps it predictable)
+- The graph auto-rebuilds on every commit (pre-commit hook runs sync -> lint -> graph)
 
 ---
 
@@ -341,14 +340,11 @@ The `guard-phase-completion.ts` guard blocks GSD `phase complete` commands unles
 | Requirement | Version | Purpose |
 |-------------|---------|---------|
 | **Bun** | 1.x+ | Runtime for all .ts hooks and tools |
-| **SurrealDB** | 3.x | Dependency graph, toolkit self-awareness |
 | **Git** | Any | Version control, pre-commit hooks |
 | **Python 3** | Any | Used only by `setup.sh` for symlink resolution |
 | **Claude Code** | Latest | The host environment |
 
 Install Bun: `curl -fsSL https://bun.sh/install | bash`
-Install SurrealDB: `curl -sSf https://install.surrealdb.com | sh`
-Start SurrealDB: `~/Sites/Global/scott-toolkit/start-surreal.sh`
 
 ---
 

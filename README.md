@@ -90,7 +90,7 @@ Bidirectional plugin-project alignment detection. The `plugins` section in `conf
 scott-toolkit/
 ├── README.md
 ├── CHANGELOG.md
-├── package.json                      # Bun project config (no runtime deps)
+├── package.json                      # Bun project config (zero runtime deps)
 ├── tsconfig.json                     # Strict TS, ES2022 target
 ├── setup.sh                          # One-command deploy to ~/.claude/ (stays bash)
 │
@@ -102,34 +102,22 @@ scott-toolkit/
 │
 ├── hooks/                            # Claude Code hooks (TypeScript, -> ~/.claude/hooks/)
 │   ├── lib/                          #   Shared hook utilities
-│   │   ├── stdin.ts                  #     JSON stdin reading, field extraction
-│   │   └── platform.ts              #     Cross-platform hash, stat, date
 │   ├── guards/                       #   PreToolUse guard modules
-│   │   ├── git-push.ts, destructive.ts, npm-install.ts
-│   │   ├── phase-completion.ts, claude-md.ts, surrealdb-inject.ts
-│   │   └── workflow-gates.ts
 │   ├── pretooluse-router.ts          #   Main Bash command dispatcher
-│   ├── session-start.ts              #   SessionStart: sync, state detection
-│   ├── session-end.ts, pre-compact.ts, extract-instincts.ts
-│   ├── pre-completion-checklist.ts   #   Stop: verification checklist
-│   ├── auto-format.ts, context-reminders.ts, offload-large-output.ts
-│   ├── post-commit-triggers.ts, version-propagate.ts
-│   ├── check-file-test-trigger.ts, uiux-reminder.ts
-│   └── toolkit-coherence-check.ts
+│   ├── session-start.ts, session-end.ts, pre-compact.ts
+│   ├── pre-completion-checklist.ts, context-reminders.ts
+│   └── (13 more hooks)              #   See docs/architecture.md for full list
 │
 ├── tools/                            # CLI tools (TypeScript, -> ~/.claude/tools/)
-│   ├── stack-detect.ts               #   Auto-detect project technologies
-│   ├── stack-check.ts                #   Run static checks from check files
-│   ├── stack-preflight.ts            #   System readiness + provider health
-│   ├── stack-metrics.ts              #   Aggregate audit data for learning loop
+│   ├── toolkit-sync.ts               #   Auto-sync docs from skill frontmatter
+│   ├── toolkit-graph.ts              #   Dependency graph (JSON-backed)
 │   ├── toolkit-lint.ts               #   Toolkit integrity checker
-│   ├── validate-stack-lock.ts        #   Stack-lock schema + staleness validator
-│   └── pre-commit-hook.ts            #   Git pre-commit gate
+│   ├── pre-commit-hook.ts            #   Git pre-commit: sync -> lint -> graph
+│   ├── stack-detect.ts, stack-check.ts, stack-preflight.ts
+│   ├── stack-metrics.ts              #   Aggregate audit data for learning loop
+│   └── validate-stack-lock.ts        #   Stack-lock schema + staleness validator
 │
-├── checks/                           # Stack enforcement check files
-│   ├── surrealdb.json, nuxt.json, tailwind.json, bun.json, hono.json
-│   ├── typescript.json, zod.json, pinia.json
-│   ├── vercel-ai.json, trigger-dev.json, pnpm.json
+├── checks/                           # Stack enforcement check files (11 technologies)
 │   ├── stack-lock.schema.json
 │   └── fixtures/                     #   Good/bad samples for check validation
 │
@@ -137,10 +125,11 @@ scott-toolkit/
 │   ├── interfaces.json               #   Abstract operations -> concrete commands
 │   └── version-manifest.json         #   Version tracking + banned patterns
 │
-├── workflows/                        # Interactive step-by-step processes (12 files)
+├── workflows/                        # Interactive step-by-step processes (10 files)
 ├── context/                          # Templates for new projects
 ├── rules/                            # Behavior rules (-> ~/.claude/rules/)
-├── skills/                           # Skill files (-> ~/.claude/skills/, 30+)
+├── skills/                           # Skill files (-> ~/.claude/skills/, 32 skills)
+│   └── (some SKILL.md files are symlinks to workflows/)
 ├── references/                       # Business context (loaded on demand)
 ├── docs/                             # Design documents and guides
 │   ├── architecture.md               #   HOW THE TOOLKIT WORKS (start here)
