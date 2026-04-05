@@ -1,9 +1,10 @@
 # Phase Closeout
 
 ## Metadata
-- Last updated: 2026-04-02
-- Version: 2.1
+- Last updated: 2026-04-05
+- Version: 3.0
 - Changelog:
+  - v3.0: Split Phase 2 into 2a/2b/2c (stack audit, lens review, general review). Add context_files validation for lens dispatch. Add shared context template reference for cross-session reflect. Renumber Phase 1.5 to Phase 2a.
   - v2.1: Add specialist review lenses to Phase 2 (Code Review). Schema and security lenses dispatch as parallel subagents with restricted scope before general review. Lenses skip when fewer than 5 files changed.
   - v2.0: Add Phase 1.5 (Stack Audit) between Verify and Code Review. Add lesson tagging to Reflect. Update phase numbering.
   - v1.0: Initial workflow. Replaces separate log-error, log-success, and retro workflows for GSD post-execution.
@@ -50,7 +51,7 @@ pnpm test — 245 pass, 0 fail, 0 skip
 ### Done when
 All tests pass (0 fail). Skip count noted but acceptable if pre-existing.
 
-## Phase 1.5: Stack Audit [AUTO]
+## Phase 2a: Stack Audit [AUTO]
 
 ### What this phase does
 Run stack compliance checks on all files changed in this phase. This is the final
@@ -58,17 +59,17 @@ gate before code review, catching version-specific correctness issues (wrong API
 names, deprecated patterns, SDK mismatches).
 
 ### Steps
-1. Run `stack-preflight.sh` on the project directory to determine the degradation tier
+1. Run `stack-preflight.ts` on the project directory to determine the degradation tier
 2. Announce the tier: "Stack audit running in [FULL/REDUCED/MINIMAL] mode."
-3. Run `stack-check.sh` on all files changed in this phase:
+3. Run `stack-check.ts` on all files changed in this phase:
    ```bash
    # Get changed files since phase start
-   git diff --name-only <base-sha> HEAD | xargs stack-check.sh --project-dir .
+   git diff --name-only <base-sha> HEAD | xargs bun run tools/stack-check.ts --project-dir .
    ```
-4. **If PASS:** Continue to Phase 2.
+4. **If PASS:** Continue to Phase 2b.
 5. **If FAIL (errors):** Show the failure report. Fix all errors before proceeding.
    Each failure includes: what failed, why it's required, file:line, and suggested fix.
-6. **If WARN only:** Show warnings, continue to Phase 2 (warnings don't block).
+6. **If WARN only:** Show warnings, continue to Phase 2b (warnings don't block).
 7. **At Full tier with SurrealDB:** Dispatch a live audit agent:
    - Create temp namespace: `audit_<project>_<branch>_<timestamp>`
    - Apply all schemas in dependency order
@@ -98,12 +99,11 @@ Audit results shown to Scott. PASS/FAIL/WARN with details.
 ### Done when
 Static checks pass (0 errors). Live audit passes or was skipped with logged reason.
 
-## Phase 2: Code Review [DELEGATE]
+## Phase 2b: Specialist Lens Review [AUTO]
 
 ### What this phase does
-Dispatch specialist review lenses in parallel for deep domain-specific review,
-then run a general code review for overall quality. Each lens agent has restricted
-scope ("blinders") to go deep on one concern.
+Dispatch specialist review lenses in parallel for deep domain-specific review.
+Each lens agent has restricted scope ("blinders") to go deep on one concern.
 
 ### Steps
 
@@ -112,18 +112,25 @@ scope ("blinders") to go deep on one concern.
    - **Base SHA:** The commit before phase execution started (check STATE.md or git log for the `begin-phase` marker)
    - **Head SHA:** Current HEAD
 2. Count changed files in the diff range
-3. **If fewer than 5 changed files:** Skip lenses, go directly to Step 3 (general review)
+3. **If fewer than 5 changed files:** Skip this phase entirely, go to Phase 2c
 4. Read `config/interfaces.json` -> `lenses` section
 5. Read the project's `stack-lock.json` for technology list
 6. Filter lenses by `applies_when`:
    - `"always"` -> always include
    - Technology names (e.g., `"surrealdb"`) -> include if in stack-lock
-7. If no lenses apply after filtering: skip to Step 3
+7. If no lenses apply after filtering: skip to Phase 2c
 
-**Step 2: Dispatch specialist lenses (parallel)**
+**Step 2: Validate context_files**
+For each applicable lens, before dispatching:
+1. Check every file in the lens's `context_files` array exists on disk
+2. **Missing file:** Log a warning ("Lens [name]: skipping context file [path] — not found"), remove it from the list passed to the agent
+3. **All context_files missing:** Log warning and skip this lens entirely
+4. This prevents lens agents from crashing on stale file references
+
+**Step 3: Dispatch specialist lenses (parallel)**
 For each applicable lens, spawn a **Reviewer** subagent (Read, Grep, Glob, Bash only):
 - Pass it ONLY the files matching `file_patterns` within the diff range
-- Pass it ONLY the `context_files` listed for that lens
+- Pass it ONLY the validated `context_files` (from Step 2)
 - Pass it the lens `prompt`
 - Each agent returns findings as:
   ```
@@ -133,12 +140,25 @@ For each applicable lens, spawn a **Reviewer** subagent (Read, Grep, Glob, Bash 
 
 All lens agents run in parallel. Do NOT run them sequentially.
 
-After all lenses return:
-1. Collect all findings
+**Step 4: Collect and deduplicate**
+1. Collect all findings from all lenses
 2. Deduplicate (same file:line + same concern = one finding, keep highest severity)
 3. Present the merged table to Scott, grouped by severity
 
-**Step 3: General code review**
+### Output
+Merged lens findings table grouped by severity. Or "Lenses skipped" with reason.
+
+### Done when
+Lens findings presented (or skipped with reason). Proceed to Phase 2c.
+
+## Phase 2c: General Code Review [STOP]
+
+### What this phase does
+Run a general code review for overall quality, then fix all Critical/Important issues.
+
+### Steps
+
+**Step 1: General code review**
 Invoke the **code_review** operation with prompt:
 ```
 Review all changes from this phase for general code quality: readability,
@@ -146,13 +166,13 @@ naming, duplication, error handling patterns, cross-module integration, and
 project conventions. Specialist concerns (schema compliance, security) have
 already been reviewed separately -- focus on what they don't cover.
 ```
-If lenses were skipped (Step 1), use the original broader prompt instead:
+If lenses were skipped (Phase 2b), use the original broader prompt instead:
 ```
 Review all changes from this phase. Check for schema alignment, security issues,
 race conditions, cross-module integration, and adherence to the project's tech stack.
 ```
 
-**Step 4: Fix cycle**
+**Step 2: Fix cycle**
 1. Fix all **Critical** issues immediately (from any source: lenses or general review)
 2. Fix all **Important** issues before proceeding
 3. After fixes: run a SECOND pass. Re-dispatch only the lenses that found issues,
@@ -160,7 +180,7 @@ race conditions, cross-module integration, and adherence to the project's tech s
 4. Only proceed when the second pass returns no Critical or Important issues
 
 ### Output
-Merged findings table (lenses + general). If fixes were needed, second-pass confirmation.
+General review findings + fix confirmation. If fixes were needed, second-pass confirmation.
 
 ### Done when
 No Critical/Important findings remaining after second pass.
@@ -258,6 +278,8 @@ Same quality, one interview instead of three.
 
 **Part C: Retrospective + Lessons**
 
+**Context check:** If this conversation does NOT have full phase context (e.g., cross-session closeout), first read `~/Sites/Global/scott-toolkit/context/_gather-project-context.md` and gather all listed files.
+
 1. Create or update `RETRO.md` in the project root using this structure:
 
    ```markdown
@@ -343,8 +365,9 @@ Marker file exists and summary shown.
 
 ## Completion Checklist
 - [ ] Tests pass (Phase 1)
-- [ ] Stack audit pass or degraded with logged reason (Phase 1.5)
-- [ ] Code review clean — no Critical/Important (Phase 2)
+- [ ] Stack audit pass or degraded with logged reason (Phase 2a)
+- [ ] Lens review complete or skipped with reason (Phase 2b)
+- [ ] General code review clean — no Critical/Important (Phase 2c)
 - [ ] Errors captured or confirmed none (Phase 3A)
 - [ ] Successes captured or confirmed none (Phase 3B)
 - [ ] RETRO.md created/updated (Phase 3C)

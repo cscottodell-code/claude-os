@@ -1,0 +1,39 @@
+{
+  "technology": "zod",
+  "golden_version": "3.x",
+  "sdk": null,
+  "dependencies": ["typescript"],
+  "context7_id": null,
+  "file_patterns": [],
+  "content_patterns": ["from ['\"]zod['\"]", "z\\.object", "z\\.string"],
+  "tools": [],
+  "checks": {
+    "static": [
+      {
+        "id": "zod-no-z-infer-input-confusion",
+        "pattern": "z\\.infer<typeof \\w+Input",
+        "message": "Use z.input<> for input types (pre-transform) and z.infer<> or z.output<> for output types (post-transform). Mixing them causes silent type mismatches.",
+        "severity": "warning"
+      },
+      {
+        "id": "zod-no-bare-parse",
+        "pattern": "\\.parse\\([^)]+\\)(?!\\s*;?\\s*\\/\\/\\s*(?:validated|trusted))",
+        "message": "Prefer .safeParse() over .parse() at system boundaries. .parse() throws on invalid input, which can crash request handlers.",
+        "severity": "warning"
+      },
+      {
+        "id": "zod-no-passthrough-api",
+        "pattern": "\\.passthrough\\(\\)",
+        "message": "z.passthrough() allows unexpected fields through validation. Use .strict() for API input schemas to reject unknown fields.",
+        "severity": "warning"
+      },
+      {
+        "id": "zod-coerce-awareness",
+        "pattern": "z\\.coerce\\.",
+        "message": "z.coerce transforms input before validation (e.g., z.coerce.number() turns '' into 0). Ensure coercion behavior matches your intent.",
+        "severity": "info"
+      }
+    ],
+    "live": []
+  }
+}

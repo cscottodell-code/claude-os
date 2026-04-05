@@ -1,9 +1,10 @@
 # Toolkit Update
 
 ## Metadata
-- Last updated: 2026-03-24
-- Version: 1.3
+- Last updated: 2026-04-05
+- Version: 1.4
 - Changelog:
+  - v1.4: Add .changes-drafted file-system gate after Phase 3 (Draft Changes)
   - v1.3: Add v5 directory awareness (checks/, tools/, config/) to Phase 2 ripple effects
   - v1.2: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.1: Add Phase 5 -- auto-update instructions doc and regenerate PDF after every toolkit change
@@ -91,6 +92,8 @@ Updated files with metadata changes.
 
 ### Done when
 All changes are made and approved.
+
+**Gate:** Write `.changes-drafted` marker in the toolkit root after changes approved.
 
 ## Phase 4: Update CHANGELOG.md [AUTO]
 

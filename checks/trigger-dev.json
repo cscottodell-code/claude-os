@@ -1,0 +1,41 @@
+{
+  "technology": "trigger-dev",
+  "golden_version": "3.x",
+  "sdk": "@trigger.dev/sdk",
+  "dependencies": ["typescript"],
+  "context7_id": null,
+  "file_patterns": ["trigger/**/*.ts", "jobs/**/*.ts", "trigger.config.ts"],
+  "content_patterns": ["from ['\"]@trigger.dev", "task\\(", "schedules\\.task"],
+  "tools": [
+    { "type": "cli", "command": "npx trigger.dev whoami", "for": "auth check" }
+  ],
+  "checks": {
+    "static": [
+      {
+        "id": "trigger-no-v2-patterns",
+        "pattern": "new TriggerClient|defineJob|eventTrigger",
+        "message": "v2 API detected. v3 uses task() and schedules.task() instead of defineJob/TriggerClient/eventTrigger.",
+        "severity": "error"
+      },
+      {
+        "id": "trigger-retry-config",
+        "pattern": "task\\(\\{[^}]*(?!retry)[^}]*\\}\\)",
+        "message": "Task defined without explicit retry config. Add retry: { maxAttempts: N } to prevent infinite retries on transient failures.",
+        "severity": "warning"
+      },
+      {
+        "id": "trigger-idempotency-key",
+        "pattern": "\\.trigger\\(\\{(?!.*idempotencyKey)[^}]*\\}\\)",
+        "message": "Task trigger without idempotencyKey. For operations with side effects (emails, payments), add an idempotencyKey to prevent duplicate execution.",
+        "severity": "warning"
+      },
+      {
+        "id": "trigger-no-long-running-sync",
+        "pattern": "task\\(\\{[\\s\\S]*?run:\\s*async[\\s\\S]*?await\\s+new\\s+Promise\\(.*setTimeout",
+        "message": "Avoid long setTimeout delays inside tasks. Use wait.for() or schedules for delayed execution.",
+        "severity": "warning"
+      }
+    ],
+    "live": []
+  }
+}

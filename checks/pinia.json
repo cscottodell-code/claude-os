@@ -1,0 +1,39 @@
+{
+  "technology": "pinia",
+  "golden_version": "2.x",
+  "sdk": null,
+  "dependencies": ["typescript"],
+  "context7_id": null,
+  "file_patterns": ["stores/**/*.ts", "stores/**/*.js"],
+  "content_patterns": ["defineStore", "from ['\"]pinia['\"]"],
+  "tools": [],
+  "checks": {
+    "static": [
+      {
+        "id": "pinia-no-options-api",
+        "pattern": "defineStore\\(['\"]\\w+['\"],\\s*\\{\\s*state:",
+        "message": "Options API store detected. Use Composition API (setup function) for consistency: defineStore('id', () => { ... }).",
+        "severity": "warning"
+      },
+      {
+        "id": "pinia-no-direct-state-mutation",
+        "pattern": "store\\.\\$state\\s*=",
+        "message": "Direct $state assignment bypasses reactivity tracking. Use store.$patch() or action methods instead.",
+        "severity": "error"
+      },
+      {
+        "id": "pinia-no-stale-destructure",
+        "pattern": "const\\s*\\{[^}]+\\}\\s*=\\s*use\\w+Store\\(\\)",
+        "message": "Destructuring a Pinia store loses reactivity. Use storeToRefs() for reactive destructuring, or access properties directly on the store.",
+        "severity": "error"
+      },
+      {
+        "id": "pinia-store-naming",
+        "pattern": "defineStore\\(['\"](?!\\w+)['\"]",
+        "message": "Store ID should be a descriptive camelCase name matching the file (e.g., 'userProfile' in userProfile.ts).",
+        "severity": "warning"
+      }
+    ],
+    "live": []
+  }
+}
