@@ -21,7 +21,15 @@ if [[ ! -d "$(pwd)/.planning" ]]; then
 fi
 
 # Fire at most once per phase (use a temp marker)
-MARKER="/tmp/uiux-reminder-$(pwd | md5sum 2>/dev/null | cut -c1-8 || echo 'default')"
+# Cross-platform hash: md5 on macOS, md5sum on Linux
+if command -v md5 >/dev/null 2>&1; then
+  DIR_HASH=$(pwd | md5 -q | cut -c1-8)
+elif command -v md5sum >/dev/null 2>&1; then
+  DIR_HASH=$(pwd | md5sum | cut -c1-8)
+else
+  DIR_HASH="default"
+fi
+MARKER="/tmp/uiux-reminder-${DIR_HASH}"
 if [[ -f "$MARKER" ]]; then
   exit 0
 fi

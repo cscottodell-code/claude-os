@@ -297,10 +297,13 @@ fi
 if [ "$VERIFY_ONLY" != true ] && [ "$UPDATE_PATHS" = true ] && [ -n "$OLD_TOOLKIT_PATH" ]; then
   echo ""
   echo "9. Updating paths: $OLD_TOOLKIT_PATH -> $TOOLKIT_PATH"
+  # Escape sed-special characters in paths (& and \ in replacement string)
+  ESCAPED_OLD=$(printf '%s\n' "$OLD_TOOLKIT_PATH" | sed 's/[&/\]/\\&/g')
+  ESCAPED_NEW=$(printf '%s\n' "$TOOLKIT_PATH" | sed 's/[&/\]/\\&/g')
   COUNT=0
   while IFS= read -r -d '' md_file; do
     if grep -q "$OLD_TOOLKIT_PATH" "$md_file" 2>/dev/null; then
-      sed -i '' "s|$OLD_TOOLKIT_PATH|$TOOLKIT_PATH|g" "$md_file"
+      sed -i '' "s|${ESCAPED_OLD}|${ESCAPED_NEW}|g" "$md_file"
       echo "   -> $(basename "$md_file")"
       COUNT=$((COUNT + 1))
     fi

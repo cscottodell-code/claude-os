@@ -204,8 +204,15 @@ if [[ "$SECTION" == "all" || "$SECTION" == "hooks" ]]; then
   if [[ -f "$SETTINGS" ]]; then
     REGISTERED_HOOKS=$(jq -r '.. | .command? // empty' "$SETTINGS" | grep -oE '[^/]+\.sh"?$' | tr -d '"' | sort -u || true)
 
+    # Hooks dispatched by bash-pretooluse-router.sh — not registered individually
+    ROUTER_DISPATCHED="guard-git-push.sh guard-destructive.sh guard-npm-install.sh guard-phase-completion.sh gsd-validate-commit.sh inject-surrealdb-skill.sh"
+
     for hook_file in "$TOOLKIT_DIR"/hooks/*.sh; do
       hook_name=$(basename "$hook_file")
+      # Skip hooks that are dispatched through the router
+      if echo "$ROUTER_DISPATCHED" | grep -qwF "$hook_name"; then
+        continue
+      fi
       if ! echo "$REGISTERED_HOOKS" | grep -qF "$hook_name"; then
         issue "hook" "Hook '$hook_name' exists on disk but is NOT registered in settings.json"
       fi
@@ -218,6 +225,8 @@ if [[ "$SECTION" == "all" || "$SECTION" == "hooks" ]]; then
       [[ -z "$hook_name" ]] && continue
       # Skip non-toolkit hooks (GSD js files, osascript, jq commands, etc.)
       echo "$cmd" | grep -qE '\.claude/hooks/.*\.sh' || continue
+      # Skip GSD-owned hooks — managed by GSD plugin, not toolkit
+      [[ "$hook_name" == gsd-* ]] && continue
       if [[ ! -f "$TOOLKIT_DIR/hooks/$hook_name" && ! -f "$HOOKS_SYMLINK_DIR/$hook_name" ]]; then
         issue "hook" "settings.json references '$hook_name' but it doesn't exist on disk"
       fi
