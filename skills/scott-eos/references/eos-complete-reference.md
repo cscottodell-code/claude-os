@@ -517,4 +517,101 @@ For a home services company owner: let your operations manager actually run oper
 
 ---
 
+## Workshop: Creating and Unfolding Rocks
+
+### Creating Company Rocks (Quarterly Rock-Setting Session)
+
+1. **Check prerequisites.** Ask: Do you have a 1-Year Plan with 3-7 goals? If not, Rocks will feel arbitrary.
+
+2. **Brainstorm everything.** Have Scott list every initiative, project, and priority. 15, 20, 50 items is fine at this stage.
+
+3. **Filter against the 1-Year Plan.** For each item: "Does completing this directly move us toward one of our annual goals?" Items that don't connect go to the Issues List.
+
+4. **Force-rank to 3-7.** "If we could only accomplish THREE things this quarter, what would they be?" Start there. Add up to 4 more. Stop at 7. Everything else goes on the Issues List.
+
+5. **Assign one owner per Rock.** Not a committee. One name.
+
+6. **Validate each Rock against SMART criteria:**
+   - Specific? (not "improve sales" but "close 12 new roofing contracts")
+   - Measurable? (binary: done or not done, no gray area)
+   - Attainable? (challenging but realistic in 90 days)
+   - Clear completion date? (end of the quarter)
+
+7. **Produce the Rock Sheet:**
+
+| # | Rock | Owner | Due Date | Status |
+|---|------|-------|----------|--------|
+| 1 | [Specific, measurable description] | [One name] | [Quarter end] | Not started |
+
+### Unfolding Rocks (Company to Departments to Individuals)
+
+1. Start with company Rocks (already set by leadership team)
+2. Each leadership team member carries their owned company Rock(s) onto their personal Rock list, then fills remaining slots (up to 7) with department-specific priorities
+3. Share company Rocks with the whole organization in a state-of-the-company meeting
+4. Each department runs the same Rock-setting process within their team
+5. Every employee gets 1-3 individual Rocks for the quarter
+6. **Validate the line of sight**: Individual Rock -> Department Rock -> Company Rock -> 1-Year Plan -> 3-Year Picture -> 10-Year Target
+
+## Workshop: Building and Managing Scorecards
+
+### Creating a Scorecard from Scratch
+
+1. **Run the Desert Island exercise.** "Imagine you're stranded on a desert island. Once a week, someone slides a single sheet of paper under your door with a handful of numbers on it. What 5-15 numbers must be on that paper to tell you whether your business is healthy?"
+
+2. **Filter for activity-based numbers.** Replace trailing indicators with upstream activities:
+
+   | Trailing (Bad) | Activity-Based (Good) |
+   |---|---|
+   | Monthly revenue | Weekly proposals sent, appointments scheduled |
+   | Customer churn rate | Post-service survey scores this week |
+   | Total overtime paid | Daily jobs completed per technician |
+   | Quarterly close rate | Weekly demos/estimates booked |
+
+3. **Assign one owner per number.** The functional leader accountable for that metric.
+
+4. **Set weekly goals.** Tie to 1-Year Plan. Work backward from annual targets.
+
+5. **Build the template:**
+
+| Owner | Measurable | Goal | W1 | W2 | W3 | ... | W13 |
+|-------|-----------|------|----|----|----|-----|-----|
+| [Name] | [Activity-based metric] | [Weekly target] | | | | | |
+
+6. **Expect evolution.** First cut is ~85% right. Allow 3 months to mature.
+
+### Managing the Scorecard Week Over Week
+
+- Review weekly in L10 (5 minutes, no discussion). On track or off track.
+- Display 13 weeks at a glance for pattern recognition.
+- Red-flag misses visually. Creates focus and urgency.
+- Consistently off-track numbers drop to IDS for root cause analysis.
+- Replace measurables that don't give an accurate pulse.
+
+## Workshop: V/TO to Execution
+
+### Turning the V/TO into Reality
+
+The V/TO creates a line of sight from the 10-year vision down to what someone does this Tuesday:
+
+```
+10-Year Target (the destination)
+  -> 3-Year Picture (what the company looks like on the way)
+    -> 1-Year Plan (3-7 goals for this year to stay on track)
+      -> Quarterly Rocks (3-7 priorities for the next 90 days)
+        -> Weekly L10 Meeting (Rock Review + IDS + 7-day To-Dos)
+          -> Daily execution (each person's number + their Rock)
+```
+
+**The key insight:** If you are on track for the week, you are on track for the quarter. If on track for the quarter, on track for the year. And so on up to the 10-Year Target.
+
+Steps to turn a V/TO into action:
+
+1. **Validate the 1-Year Plan.** Are the 3-7 annual goals specific and measurable?
+2. **Set Q1 Rocks.** Use the Rock-setting workshop above.
+3. **Build the Scorecard.** Weekly numbers that track activities driving Rock completion.
+4. **Launch the L10 Meeting.** Weekly accountability connecting Rocks to execution.
+5. **Check alignment.** Every To-Do from L10 should trace back up the chain.
+
+---
+
 *Sources: Traction by Gino Wickman. Rocket Fuel by Gino Wickman and Mark C. Winters.*
