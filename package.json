@@ -1,6 +1,6 @@
 {
   "name": "scott-toolkit",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "type": "module",
   "private": true,
   "description": "AI orchestration toolkit: hooks, tools, skills, and workflows for Claude Code",
@@ -19,7 +19,5 @@
   "devDependencies": {
     "@types/bun": "latest"
   },
-  "dependencies": {
-    "surrealdb": "^2.0.3"
-  }
+  "dependencies": {}
 }

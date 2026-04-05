@@ -24,6 +24,16 @@ async function main() {
   }
 
   console.log("Lint clean — commit allowed.");
+
+  // Auto-rebuild dependency graph so impact analysis stays current
+  const graphResult = await exec(
+    `bun run ${toolkitPath("tools", "toolkit-graph.ts")} rebuild`,
+    { timeout: 15_000 }
+  );
+  if (graphResult.ok) {
+    console.log("Graph rebuilt.");
+  }
+
   process.exit(0);
 }
 

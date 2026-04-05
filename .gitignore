@@ -1,5 +1,6 @@
-# Computed cache — regenerate with: tools/stack-metrics.sh --full-rebuild
+# Computed cache — regenerate with respective tools
 checks/metrics.json
+config/toolkit-graph.json
 
 .DS_Store
 *.tmp

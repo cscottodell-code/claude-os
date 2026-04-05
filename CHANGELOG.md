@@ -22,6 +22,13 @@ Audit remediation phase 2: narrow audience, remove dead workflows, clean up acti
 - Replaced stub SKILL.md files with symlinks to workflow files (e.g., `skills/scott-new-project/SKILL.md → ../../workflows/new-project.md`)
 - Single source of truth: the workflow file IS the skill now, no more indirection
 
+### M4: SurrealDB Dependency Removal
+- Rewrote `tools/toolkit-graph.ts` to use `config/toolkit-graph.json` instead of SurrealDB
+- Deleted `src/db.ts` (SurrealDB connection helper) and `config/toolkit-graph.surql` (schema)
+- Removed `surrealdb` npm dependency (toolkit now has zero runtime dependencies)
+- All 4 graph commands preserved: rebuild, impact, check, stats
+- Bumped package.json version to 6.1.0
+
 ## v6.0.0 - 2026-04-05
 Full audit remediation: independent audit graded toolkit C+, identified 22 real issues. Fixed all across 4 milestones. Toolkit is now TypeScript/Bun throughout, with enforcement gates, expanded stack checks, and leaner skills.
 
