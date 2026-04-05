@@ -1,5 +1,33 @@
 # Toolkit Changelog
 
+## v6.0.0 - 2026-04-05
+Full audit remediation: independent audit graded toolkit C+, identified 22 real issues. Fixed all across 4 milestones. Toolkit is now TypeScript/Bun throughout, with enforcement gates, expanded stack checks, and leaner skills.
+
+### M1: Critical Fixes + Bun Foundation
+- Fixed 4 critical bash bugs (fail-open guards, macOS crashes, injection risks, fragile JSON parsing)
+- Created Bun project foundation (package.json, tsconfig.json, shared utilities in src/)
+- Rewrote 6 tools from bash to TypeScript (stack-check, stack-detect, stack-preflight, stack-metrics, toolkit-lint, pre-commit-hook)
+
+### M2: Hook Migration + Security Hardening
+- Consolidated PreToolUse router + 6 guards into TypeScript
+- Migrated 13 standalone hooks from bash to TypeScript
+- Migrated settings.json to reference .ts files
+- Removed all .sh hook files (setup.sh stays bash)
+- Added SurrealDB dependency graph (toolkit-graph.ts)
+
+### M3: Workflow & Enforcement Hardening
+- **File-system gates**: 5 new workflow gates (.project-scaffolded, .design-approved, .handoff-ready, .changes-drafted, .reflection-complete) with advisory mode (WORKFLOW_GATES_BLOCK=1 for enforcement)
+- **Split god-phases**: phase-closeout Phase 2 -> 2a/2b/2c (stack audit, lens review with context_files validation, general review). new-project Phase 3 -> 3a/3b/3c (draft, approve, resolve conflicts)
+- **Shared context template**: context/_gather-project-context.md used by retro, resume-project, and phase-closeout
+- **Definitions file**: context/_definitions.md (Design Proof, Stack Lock Staleness, Verify Execution)
+- **6 new check files**: typescript, zod, pinia, vercel-ai, trigger-dev, pnpm (25 new static checks)
+- **Stack-lock validator**: tools/validate-stack-lock.ts (schema validation, staleness detection, check file coverage)
+
+### M4: Skill Cleanup + Polish
+- **5 skill splits**: skill-creator (479->52), scott-research (442->85), scott-eos (331->86), scott-council (312->102), scott-notebooklm (266->63). Heavy logic moved to references/ files.
+- **Banned patterns**: version-manifest.json now catches stale .sh references from pre-v6 toolkit
+- **README updated**: repo structure reflects new guards, tools, and check files
+
 ## v5.3.0 - 2026-04-04
 Context engineering overhaul: tool consolidation, token budget optimization, and harness improvements based on deep research of modern context engineering practices (40+ sources, April 2026).
 

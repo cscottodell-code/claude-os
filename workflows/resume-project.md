@@ -41,7 +41,7 @@ Get fully up to speed on the project's current state by reading all relevant fil
 ### Stack-Lock Staleness Check
 If the project has a `stack-lock.json`:
 - Check the `last_reviewed` (or `locked`) date
-- If older than 30 days, mention it to Scott: "Stack checks last reviewed X days ago. Consider running `stack-preflight.sh` to verify your environment is current."
+- If older than 30 days, mention it to Scott: "Stack checks last reviewed X days ago. Consider running `stack-preflight.ts` to verify your environment is current."
 - This is a nudge, not a blocker. Scott decides whether to act on it.
 
 ### Output

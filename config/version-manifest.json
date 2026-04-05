@@ -53,7 +53,12 @@
       { "pattern": "scott-toolkit/templates/", "replacement": "scott-toolkit/context/", "reason": "Directory renamed in v4" },
       { "pattern": "toolkit/templates/", "replacement": "toolkit/context/", "reason": "Directory renamed in v4 (short form)" },
       { "pattern": "scott-toolkit-instructions.md", "replacement": "docs/user-guide.md", "reason": "File renamed in v5" },
-      { "pattern": "skills/reference/", "replacement": "~/.claude/skills/ (skill system)", "reason": "Directory deleted in v4" }
+      { "pattern": "skills/reference/", "replacement": "~/.claude/skills/ (skill system)", "reason": "Directory deleted in v4" },
+      { "pattern": "stack-check.sh", "replacement": "stack-check.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
+      { "pattern": "stack-detect.sh", "replacement": "stack-detect.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
+      { "pattern": "stack-preflight.sh", "replacement": "stack-preflight.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
+      { "pattern": "toolkit-lint.sh", "replacement": "toolkit-lint.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
+      { "pattern": "guard-phase-completion.sh", "replacement": "guards/phase-completion.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" }
     ],
     "scan_paths": {
       "_readme": "Paths to scan during full lint. Relative to ~/Sites/.",

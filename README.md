@@ -95,6 +95,7 @@ scott-toolkit/
 │   ├── guards/                       #   PreToolUse guard modules
 │   │   ├── git-push.ts, destructive.ts, npm-install.ts
 │   │   ├── phase-completion.ts, claude-md.ts, surrealdb-inject.ts
+│   │   └── workflow-gates.ts
 │   ├── pretooluse-router.ts          #   Main Bash command dispatcher
 │   ├── session-start.ts              #   SessionStart: sync, state detection
 │   ├── session-end.ts, pre-compact.ts, extract-instincts.ts
@@ -110,10 +111,13 @@ scott-toolkit/
 │   ├── stack-preflight.ts            #   System readiness + provider health
 │   ├── stack-metrics.ts              #   Aggregate audit data for learning loop
 │   ├── toolkit-lint.ts               #   Toolkit integrity checker
+│   ├── validate-stack-lock.ts        #   Stack-lock schema + staleness validator
 │   └── pre-commit-hook.ts            #   Git pre-commit gate
 │
 ├── checks/                           # Stack enforcement check files
 │   ├── surrealdb.json, nuxt.json, tailwind.json, bun.json, hono.json
+│   ├── typescript.json, zod.json, pinia.json
+│   ├── vercel-ai.json, trigger-dev.json, pnpm.json
 │   ├── stack-lock.schema.json
 │   └── fixtures/                     #   Good/bad samples for check validation
 │

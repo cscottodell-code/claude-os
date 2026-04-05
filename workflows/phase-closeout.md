@@ -25,7 +25,7 @@ invocations with gaps between them.
 
 ## Instructions for Claude Code
 This is a GATE workflow. The phase CANNOT be marked complete without it.
-A hook (`guard-phase-completion.sh`) blocks `gsd-tools phase complete` unless
+A hook (`guard-phase-completion.ts`) blocks `gsd-tools phase complete` unless
 the `.post-execution-complete` marker file exists. This workflow writes that marker
 as its final step.
 
@@ -343,7 +343,7 @@ Write the completion marker and summarize all artifacts created.
    ```bash
    touch "${PHASE_DIR}/.post-execution-complete"
    ```
-   (The `guard-phase-completion.sh` hook checks for this file and blocks `phase complete` without it.)
+   (The `guard-phase-completion.ts` hook checks for this file and blocks `phase complete` without it.)
 
 2. Present summary:
    ```
