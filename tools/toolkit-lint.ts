@@ -243,6 +243,15 @@ async function checkHookIntegrity() {
       cmd.includes(hookName)
     );
     if (!isRegistered) {
+      // During migration: .ts file is OK if its .sh counterpart is registered
+      // (e.g., pretooluse-router.ts exists while bash-pretooluse-router.sh is still in settings)
+      if (hookName.endsWith(".ts")) {
+        const shName = hookName.replace(/\.ts$/, ".sh");
+        const shRegistered = registeredCommands.some(
+          (cmd) => cmd.includes(shName) || cmd.includes(`bash-${shName}`)
+        );
+        if (shRegistered) continue;
+      }
       issue(
         "hooks",
         `Hook '${hookName}' exists on disk but is NOT registered in settings.json`
