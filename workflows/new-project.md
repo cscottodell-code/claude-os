@@ -207,8 +207,8 @@ Set up the project repo with the proper file structure and configuration files.
 6. Save the finalized PRD as PRD.md
 7. Create tasks/todo.md with Milestone 1 tasks
 8. Create tasks/lessons.md (empty, with header)
-9. Generate `stack-lock.json` using `stack-detect.sh`:
-   - Run `~/Sites/Global/scott-toolkit/tools/stack-detect.sh .`
+9. Generate `stack-lock.json` using `stack-detect.ts`:
+   - Run `bun run ~/Sites/Global/scott-toolkit/tools/stack-detect.ts .`
    - Review the auto-detected technologies with Scott
    - Scott approves or adjusts, then change `approved_by` from "pending" to "scott"
    - Change `tier` from "experiment" to "full" for production projects
@@ -294,7 +294,7 @@ Begin building the first milestone (usually data model + basic CRUD).
    GSD orchestrates execution. TDD discipline from the **tdd** operation
    applies to every task (write failing test, implement, refactor).
    Update tasks/todo.md as you go.
-   After each execution step, `stack-check.sh` runs static checks on changed files.
+   After each execution step, `stack-check.ts` runs static checks on changed files.
    Fix any errors before proceeding to the next step.
 6. Work autonomously on implementation — don't ask Scott for permission to fix bugs or write code
 7. When building pages with significant UI, use `/impeccable:frontend-design` for high-quality output
