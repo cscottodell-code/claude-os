@@ -1,0 +1,39 @@
+{
+  "technology": "vercel-ai",
+  "golden_version": "4.x",
+  "sdk": "ai",
+  "dependencies": ["typescript"],
+  "context7_id": null,
+  "file_patterns": [],
+  "content_patterns": ["from ['\"]ai['\"]", "streamText", "generateText", "generateObject"],
+  "tools": [],
+  "checks": {
+    "static": [
+      {
+        "id": "ai-no-deprecated-stream",
+        "pattern": "OpenAIStream|AnthropicStream|StreamingTextResponse",
+        "message": "Legacy stream helpers are deprecated in AI SDK v4. Use streamText() with result.toDataStreamResponse() instead.",
+        "severity": "error"
+      },
+      {
+        "id": "ai-provider-import",
+        "pattern": "from ['\"]ai/(openai|anthropic|google)['\"]",
+        "message": "Provider imports moved to separate packages in v4. Use '@ai-sdk/openai', '@ai-sdk/anthropic', or '@ai-sdk/google'.",
+        "severity": "error"
+      },
+      {
+        "id": "ai-no-raw-fetch-llm",
+        "pattern": "fetch\\(['\"]https://(api\\.openai|api\\.anthropic|generativelanguage\\.googleapis)",
+        "message": "Raw fetch to LLM API detected. Use the AI SDK provider functions for consistent error handling, streaming, and type safety.",
+        "severity": "warning"
+      },
+      {
+        "id": "ai-model-config-location",
+        "pattern": "(?:model|modelId):\\s*['\"](?:gpt|claude|gemini)",
+        "message": "Hardcoded model ID found. Consider centralizing model configuration so it can be changed in one place.",
+        "severity": "info"
+      }
+    ],
+    "live": []
+  }
+}

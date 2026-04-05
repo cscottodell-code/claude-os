@@ -1,0 +1,45 @@
+{
+  "technology": "pnpm",
+  "golden_version": "9.x",
+  "sdk": null,
+  "dependencies": [],
+  "context7_id": null,
+  "file_patterns": ["pnpm-workspace.yaml", "pnpm-lock.yaml", ".npmrc"],
+  "content_patterns": [],
+  "tools": [
+    { "type": "cli", "command": "pnpm --version", "for": "version check" }
+  ],
+  "checks": {
+    "static": [
+      {
+        "id": "pnpm-no-npm-lockfile",
+        "pattern": "package-lock\\.json",
+        "message": "npm lockfile found alongside pnpm project. Remove package-lock.json to avoid dependency confusion. Use pnpm-lock.yaml only.",
+        "severity": "error",
+        "file_patterns": [".gitignore", "package.json"]
+      },
+      {
+        "id": "pnpm-no-npm-scripts",
+        "pattern": "\"(preinstall|postinstall)\":\\s*\"npm ",
+        "message": "npm command in lifecycle script. Replace with pnpm equivalent.",
+        "severity": "warning",
+        "file_patterns": ["package.json"]
+      },
+      {
+        "id": "pnpm-shamefully-hoist",
+        "pattern": "shamefully-hoist\\s*=\\s*true",
+        "message": "shamefully-hoist=true defeats pnpm's strict dependency isolation. Remove it and fix any phantom dependency issues by adding missing deps explicitly.",
+        "severity": "warning",
+        "file_patterns": [".npmrc"]
+      },
+      {
+        "id": "pnpm-phantom-dep",
+        "pattern": "from ['\"](?!\\.|@/|~/|#)",
+        "message": "Potential phantom dependency. Verify this package is listed in package.json dependencies (pnpm enforces strict node_modules).",
+        "severity": "info",
+        "note": "High false positive rate. Only flag when the import fails to resolve."
+      }
+    ],
+    "live": []
+  }
+}

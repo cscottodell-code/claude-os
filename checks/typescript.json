@@ -1,0 +1,48 @@
+{
+  "technology": "typescript",
+  "golden_version": "5.x",
+  "sdk": null,
+  "dependencies": [],
+  "context7_id": null,
+  "file_patterns": ["tsconfig.json", "tsconfig.*.json"],
+  "content_patterns": ["lang=\"ts\"", "from ['\"].*\\.ts['\"]"],
+  "tools": [
+    { "type": "cli", "command": "npx tsc --version", "for": "version check" }
+  ],
+  "checks": {
+    "static": [
+      {
+        "id": "ts-strict-mode",
+        "pattern": "\"strict\":\\s*false",
+        "message": "TypeScript strict mode is disabled. Enable \"strict\": true in tsconfig.json.",
+        "severity": "error",
+        "file_patterns": ["tsconfig.json", "tsconfig.*.json"]
+      },
+      {
+        "id": "ts-no-any",
+        "pattern": ":\\s*any[\\s;,)]",
+        "message": "Explicit 'any' type found. Use 'unknown' if the type is truly unknown, or define a proper type.",
+        "severity": "warning"
+      },
+      {
+        "id": "ts-no-ts-ignore",
+        "pattern": "@ts-ignore",
+        "message": "Use @ts-expect-error with a description instead of @ts-ignore. It will error when the suppression is no longer needed.",
+        "severity": "warning"
+      },
+      {
+        "id": "ts-no-non-null-assertion",
+        "pattern": "\\w+!\\.",
+        "message": "Non-null assertion (!) found. Prefer optional chaining (?.) or proper null checks.",
+        "severity": "warning"
+      },
+      {
+        "id": "ts-path-alias-consistency",
+        "pattern": "from ['\"]\\.\\./(\\.\\./)+(\\.\\./)\\w",
+        "message": "Deep relative import (3+ levels). Consider using path aliases (e.g., ~/components or @/utils).",
+        "severity": "warning"
+      }
+    ],
+    "live": []
+  }
+}
