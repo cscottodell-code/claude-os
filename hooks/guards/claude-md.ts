@@ -7,7 +7,15 @@
 import { readStdin, getFilePath } from "../lib/stdin.js";
 
 async function main() {
-  const input = await readStdin();
+  const result = await readStdin();
+
+  // Fail closed: if we received data but couldn't parse it, block
+  if (!result.ok) {
+    console.log("guard-claude-md: stdin parse failed — blocking (fail-closed).");
+    process.exit(2);
+  }
+
+  const input = result.input;
   if (!input) process.exit(0);
 
   // Only check Edit and Write tools

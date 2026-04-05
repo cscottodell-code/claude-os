@@ -6,7 +6,14 @@ export interface ExecResult {
   ok: boolean;
 }
 
-/** Run a shell command with optional timeout (default 30s) */
+/**
+ * Run a shell command with optional timeout (default 30s).
+ *
+ * TRUST BOUNDARY: String commands are passed to bash -c. Only call with
+ * toolkit-controlled strings, never with user input or Claude-generated content.
+ * Prefer the array form (e.g., ["git", "status"]) when the command is simple
+ * enough to avoid shell interpretation.
+ */
 export async function exec(
   command: string | string[],
   options: { timeout?: number; cwd?: string } = {}

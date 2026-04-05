@@ -1033,7 +1033,7 @@ d'2026-04-02T00:00:00Z'
 
 ## 14. Built-In Functions (325+ total)
 
-23 function families. Full catalog in `references/surrealdb-v3-functions-catalog.md`.
+23 function families. Full catalog in `surrealdb-v3-functions-catalog.md` (same directory).
 
 ### Most Useful for Business Apps
 
@@ -1537,7 +1537,7 @@ This protocol caught 7 errors in this reference file that research alone missed.
 
 ## Companion Files
 
-- `references/surrealdb-v3-functions-catalog.md` - Complete 325+ function catalog
-- `references/surrealql-language-reference.md` - Full SurrealQL language features
-- `references/surrealdb-v3-reference.md` - Original quick reference (still valid)
+- `surrealdb-v3-functions-catalog.md` - Complete 325+ function catalog
+- `surrealql-language-reference.md` - Full SurrealQL language features
+- `surrealdb-v3-reference.md` - Original quick reference (still valid)
 - `skills/scott-surrealdb/SKILL.md` - Session-loaded quick reference

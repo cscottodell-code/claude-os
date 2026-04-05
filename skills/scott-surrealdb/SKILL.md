@@ -14,9 +14,9 @@ section: reference
 
 **Version:** SurrealDB v3.0.2 server (latest: v3.0.5) + JS SDK surrealdb@2.0.x (npm)
 **Verified:** 2026-04-03 via live testing on v3.0.2. All examples confirmed working.
-**Master reference:** `~/Sites/Global/scott-toolkit/references/surrealdb-v3-master-reference.md` (DEFINE API, auth, permissions, full-text search, HNSW, events, functions catalog, SurrealQL language, JS SDK 2.0 complete API, Spectron, real-time best practices)
-**Functions catalog:** `~/Sites/Global/scott-toolkit/references/surrealdb-v3-functions-catalog.md` (325+ built-in functions)
-**Language reference:** `~/Sites/Global/scott-toolkit/references/surrealql-language-reference.md` (control flow, closures, operators, types, transactions)
+**Master reference:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-master-reference.md` (DEFINE API, auth, permissions, full-text search, HNSW, events, functions catalog, SurrealQL language, JS SDK 2.0 complete API, Spectron, real-time best practices)
+**Functions catalog:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-functions-catalog.md` (325+ built-in functions)
+**Language reference:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealql-language-reference.md` (control flow, closures, operators, types, transactions)
 **Deep reference:** `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-reference.md`
 **Context7 library:** `/surrealdb/docs.surrealdb.com`
 
@@ -227,20 +227,20 @@ await db.query<[Msg[]]>('SELECT * FROM messages WHERE conversation = $conv', { c
 
 **Array Record IDs for time-series:** Use compound IDs like `metric:['rep_alice', '2026-04-02']` for time-series data (sales metrics, activity logs) where you need range queries. Use auto-generated IDs for batch data (payroll). Only deploy on v3 JS SDK projects (eleanor, advosy-sales). Don't retrofit into v2 WASM projects.
 
-**Spectron (ADOPTED):** SurrealDB's official AI agent memory layer. 5 memory types: working, semantic, episodic, procedural, preference. Runs on same SurrealDB instance. Use for Eleanor's persistent memory. See `~/Sites/Global/scott-toolkit/references/surrealdb-v3-spectron.md` for schemas and patterns.
+**Spectron (ADOPTED):** SurrealDB's official AI agent memory layer. 5 memory types: working, semantic, episodic, procedural, preference. Runs on same SurrealDB instance. Use for Eleanor's persistent memory. See `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-spectron.md` for schemas and patterns.
 
 ## Deep References (read on-demand, not auto-loaded)
 
 | Need | File |
 |------|------|
-| Vector search / HNSW | `references/surrealdb-v3-vector-search.md` |
-| AI/RAG/agent patterns + Spectron | `references/surrealdb-v3-ai-patterns.md` |
-| Events, changefeeds, live queries | `references/surrealdb-v3-realtime.md` |
-| Function rename map (v2→v3) | `references/surrealdb-v3-functions-map.md` |
-| Troubleshooting errors | `references/surrealdb-v3-troubleshooting.md` |
-| Full architectural reference | `references/surrealdb-v3-reference.md` |
-| Complete master reference | `~/Sites/Global/scott-toolkit/references/surrealdb-v3-master-reference.md` |
-| SurrealQL language spec | `~/Sites/Global/scott-toolkit/references/surrealql-language-reference.md` |
+| Vector search / HNSW | `skills/scott-surrealdb/references/surrealdb-v3-vector-search.md` |
+| AI/RAG/agent patterns + Spectron | `skills/scott-surrealdb/references/surrealdb-v3-ai-patterns.md` |
+| Events, changefeeds, live queries | `skills/scott-surrealdb/references/surrealdb-v3-realtime.md` |
+| Function rename map (v2→v3) | `skills/scott-surrealdb/references/surrealdb-v3-functions-map.md` |
+| Troubleshooting errors | `skills/scott-surrealdb/references/surrealdb-v3-troubleshooting.md` |
+| Full architectural reference | `skills/scott-surrealdb/references/surrealdb-v3-reference.md` |
+| Complete master reference | `skills/scott-surrealdb/references/surrealdb-v3-master-reference.md` |
+| SurrealQL language spec | `skills/scott-surrealdb/references/surrealql-language-reference.md` |
 | Context7 JS SDK | `/surrealdb/surrealdb.js` (87 snippets) |
 | Context7 SurrealQL | `/surrealdb/docs.surrealdb.com` (8588 snippets) |
 | Eleanor-specific patterns | Eleanor's CLAUDE.md + tasks/lessons.md |

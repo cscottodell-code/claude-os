@@ -11,4 +11,3 @@ backups/
 
 # Bun/Node
 node_modules/
-bun.lock

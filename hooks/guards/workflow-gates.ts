@@ -2,7 +2,7 @@
  * workflow-gates.ts — File-system gates for workflow phase enforcement.
  *
  * Each gate checks for a marker file that proves a prerequisite phase completed.
- * Gates are advisory (warn) in v1. Set WORKFLOW_GATES_BLOCK=1 to make them blocking.
+ * Gates block by default. Set WORKFLOW_GATES_ADVISORY=1 to warn instead of block.
  *
  * Pattern: same as phase-completion guard (.post-execution-complete marker).
  */
@@ -15,7 +15,7 @@ interface GateResult {
   message?: string;
 }
 
-const BLOCK_MODE = process.env.WORKFLOW_GATES_BLOCK === "1";
+const ADVISORY_MODE = process.env.WORKFLOW_GATES_ADVISORY === "1";
 
 function gate(
   markerFile: string,
@@ -30,14 +30,15 @@ function gate(
     return { allow: true };
   }
 
-  const msg = `⚠️ ${workflow}: ${blockedPhase} requires ${prerequisitePhase} to complete first (missing ${markerFile}).`;
+  const msg = `${workflow}: ${blockedPhase} requires ${prerequisitePhase} to complete first (missing ${markerFile}).`;
 
-  if (BLOCK_MODE) {
-    return { allow: false, message: msg + " Blocked." };
+  if (ADVISORY_MODE) {
+    // Advisory mode: warn but allow
+    return { allow: true, message: msg + " (advisory — set WORKFLOW_GATES_ADVISORY=0 to enforce)" };
   }
 
-  // Advisory mode: warn but allow
-  return { allow: true, message: msg };
+  // Default: block
+  return { allow: false, message: msg + " Blocked. Use /scott:bypass to override." };
 }
 
 /** new-project Phase 5 must complete before Phase 6+ */

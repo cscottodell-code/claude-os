@@ -9,7 +9,7 @@
   "knowledge_sources": [
     { "type": "context7", "id": "/surrealdb/docs.surrealdb.com", "for": "SurrealQL syntax and docs", "priority": 1 },
     { "type": "context7", "id": "/surrealdb/surrealdb.js", "for": "JS SDK API reference", "priority": 2 },
-    { "type": "reference", "path": "references/surrealdb-v3-master-reference.md", "for": "comprehensive v3 reference", "priority": 3 },
+    { "type": "reference", "path": "skills/scott-surrealdb/references/surrealdb-v3-master-reference.md", "for": "comprehensive v3 reference", "priority": 3 },
     { "type": "skill", "path": "skills/scott-surrealdb/SKILL.md", "for": "traps and quick patterns", "priority": 4 }
   ],
   "knowledge_rule": "NEVER write SurrealQL from general SQL knowledge or LLM training data. Always verify syntax against knowledge_sources (in priority order) before writing queries.",

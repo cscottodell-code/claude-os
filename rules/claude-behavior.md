@@ -40,15 +40,15 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
   2. **Review** — specialist lens dispatch (parallel, scoped) + general code review + fix cycle until clean
   3. **Reflect** — ONE conversation producing error logs, success logs, RETRO.md, and lessons.md
   4. **Gate** — writes `.post-execution-complete` marker
-  The `guard-phase-completion.sh` hook blocks `phase complete` without the marker.
+  The `guards/phase-completion.ts` hook blocks `phase complete` without the marker.
   This cannot be skipped. It cannot be deferred. It replaces the old 5-step sequence that was skipped 3 times.
 
 ### Stack Enforcement
-- Projects with `stack-lock.json` get static checks via `tools/stack-check.sh` during execution
+- Projects with `stack-lock.json` get static checks via `tools/stack-check.ts` during execution
 - Phase closeout includes a stack audit (Phase 1.5) that runs technology-specific checks
-- Stack drift (check file changes without lock file updates) is caught by `guard-drift-detection.sh`
+- Stack drift (installing packages that conflict with stack-lock.json) is caught by the npm-install guard in `guards/npm-install.ts`
 - Lessons tagged with `[stack:<tech>]` feed back into check files via the learning loop
-- **SurrealDB knowledge rule:** NEVER write SurrealQL from general SQL knowledge or LLM training data. Always verify syntax against Context7 (`/surrealdb/docs.surrealdb.com`), the skill traps list, or reference files before writing any query. The `inject-surrealdb-skill.sh` hook enforces this by auto-loading the skill on first SurrealDB file touch and checking that the live instance is running on `localhost:8000`.
+- **SurrealDB knowledge rule:** NEVER write SurrealQL from general SQL knowledge or LLM training data. Always verify syntax against Context7 (`/surrealdb/docs.surrealdb.com`), the skill traps list, or reference files before writing any query. The `guards/surrealdb-inject.ts` hook enforces this by auto-loading the skill on first SurrealDB file touch and checking that the live instance is running on `localhost:8000`.
 
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`

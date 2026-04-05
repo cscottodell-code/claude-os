@@ -24,13 +24,23 @@ import {
 } from "./guards/workflow-gates.js";
 
 async function main() {
-  const input = await readStdin();
+  const stdinResult = await readStdin();
+
+  // Fail closed: if we received data but couldn't parse it, block
+  if (!stdinResult.ok) {
+    console.log(
+      "pretooluse-router: stdin parse failed — blocking (fail-closed)."
+    );
+    process.exit(2);
+  }
+
+  const input = stdinResult.input;
   const command = input ? getCommand(input) : null;
   const filePath = input ? getFilePath(input) : null;
   const rawInput = input ? JSON.stringify(input) : "";
 
-  // If no command could be parsed, allow (not a Bash tool or empty)
-  if (!command && !rawInput) {
+  // No input at all (empty stdin) — not a Bash tool, allow
+  if (!input) {
     process.exit(0);
   }
 

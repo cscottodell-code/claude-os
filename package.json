@@ -5,6 +5,7 @@
   "private": true,
   "description": "AI orchestration toolkit: hooks, tools, skills, and workflows for Claude Code",
   "scripts": {
+    "test": "bun test",
     "lint": "bun run tools/toolkit-lint.ts",
     "check": "bun run tools/stack-check.ts",
     "detect": "bun run tools/stack-detect.ts",
@@ -18,7 +19,7 @@
     "graph:stats": "bun run tools/toolkit-graph.ts stats"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "1.3.11"
   },
   "dependencies": {}
 }

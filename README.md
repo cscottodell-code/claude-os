@@ -155,7 +155,7 @@ bun install                           # Update dependencies (if package.json cha
 - All new hooks and tools must be TypeScript (no new .sh files)
 - Hooks import shared utilities from `hooks/lib/`, tools from `src/`
 - Guards go in `hooks/guards/` and are imported by the router
-- Each skill lives in its own subfolder: `skills/<name>/SKILL.md` (max 200 lines)
+- Each skill lives in its own subfolder: `skills/<name>/SKILL.md` (max 200 lines for standalone skills; workflow-backed skills symlink to workflow files which may exceed this — the full workflow is needed for multi-phase orchestration)
 - Check files go in `checks/<technology>.json` following the schema in `checks/stack-lock.schema.json`
 - Abstract operation names go in `config/interfaces.json`, not hardcoded in workflows
 - Run `bun run tools/toolkit-lint.ts` before committing (pre-commit hook enforces this)

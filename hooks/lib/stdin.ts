@@ -14,15 +14,28 @@ export interface HookInput {
   tool_output?: string;
 }
 
-/** Read and parse JSON from stdin. Returns null on failure. */
-export async function readStdin(): Promise<HookInput | null> {
+/** Result of reading stdin: parsed input, empty (no data), or error (had data but couldn't parse) */
+export type StdinResult =
+  | { ok: true; input: HookInput }
+  | { ok: true; input: null }   // empty stdin, not a failure
+  | { ok: false; raw: string }; // had data but parse failed
+
+/** Read and parse JSON from stdin. Distinguishes "no input" from "parse failure". */
+export async function readStdin(): Promise<StdinResult> {
   try {
     const text = await Bun.stdin.text();
-    if (!text.trim()) return null;
-    return JSON.parse(text) as HookInput;
+    if (!text.trim()) return { ok: true, input: null };
+    return { ok: true, input: JSON.parse(text) as HookInput };
   } catch {
-    return null;
+    return { ok: false, raw: "(parse error)" };
   }
+}
+
+/** Convenience: read stdin and return just the input (null on empty or error). Legacy compat. */
+export async function readStdinSimple(): Promise<HookInput | null> {
+  const result = await readStdin();
+  if (!result.ok) return null;
+  return result.input;
 }
 
 /** Get the file path from hook input (handles both field names) */

@@ -1,13 +1,19 @@
 import { readFile, writeFile } from "fs/promises";
+import { existsSync } from "fs";
 
-/** Read and parse a JSON file. Returns null if file doesn't exist or is invalid. */
+/** Read and parse a JSON file. Returns null if file doesn't exist. Logs and returns null if JSON is corrupted. */
 export async function readJson<T = unknown>(
   path: string
 ): Promise<T | null> {
   try {
     const content = await readFile(path, "utf-8");
     return JSON.parse(content) as T;
-  } catch {
+  } catch (err) {
+    // Distinguish "file missing" (silent) from "file corrupted" (loud)
+    if (existsSync(path)) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`[toolkit] JSON parse error in ${path}: ${msg}`);
+    }
     return null;
   }
 }
