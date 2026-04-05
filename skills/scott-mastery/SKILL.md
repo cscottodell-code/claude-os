@@ -12,6 +12,7 @@ description: >-
   onboarding new hires, deliberate practice, creative blocks, prototype iteration,
   or any "how do I get better at this" question. Applies across Eleanor, Advosy,
   and Bresco contexts.
+category: knowledge
 ---
 
 # Mastery - Personal & Professional Development Skill

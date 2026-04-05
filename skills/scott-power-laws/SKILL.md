@@ -14,6 +14,7 @@ description: >-
   alliance building, or any "what's really going on here" question. Integrates
   with bops weekly review and daily check-ins. Applies across Eleanor, Advosy,
   and Bresco contexts.
+category: knowledge
 ---
 
 # Power Laws - Strategic Awareness Skill

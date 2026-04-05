@@ -12,6 +12,7 @@ description: >-
   frustrated, an emotional reaction he regrets, groupthink in a meeting, someone's
   mask slipping, toxic colleague, envy or jealousy dynamics, or any "why is this
   person doing this" question. Applies across Eleanor, Advosy, and Bresco contexts.
+category: knowledge
 ---
 
 # Human Nature - Behavioral Intelligence Skill

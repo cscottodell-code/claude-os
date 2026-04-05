@@ -13,6 +13,7 @@ description: >-
   to change, competitive threats, turf wars, a stalled initiative, team
   motivation problems, change management, adoption resistance, or any "how do I
   get this through" question. Applies across Eleanor, Advosy, and Bresco contexts.
+category: knowledge
 ---
 
 # War Strategies - Tactical Execution Skill

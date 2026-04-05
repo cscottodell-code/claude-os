@@ -12,6 +12,10 @@ Audit remediation phase 2: narrow audience, remove dead workflows, clean up acti
 - **Updated claude-behavior.md** verification prompt (removed Gary reference)
 - Historical docs (retros, design specs, changelogs) left untouched
 
+### M2: Knowledge Skill Category Tags
+- Added `category: knowledge` frontmatter to 5 knowledge skills: scott-power-laws, scott-war-strategies, scott-human-nature, scott-mastery, scott-bops
+- These skills will migrate to Eleanor's knowledge module (M3) as source records. The category tag marks them for future extraction.
+
 ## v6.0.0 - 2026-04-05
 Full audit remediation: independent audit graded toolkit C+, identified 22 real issues. Fixed all across 4 milestones. Toolkit is now TypeScript/Bun throughout, with enforcement gates, expanded stack checks, and leaner skills.
 

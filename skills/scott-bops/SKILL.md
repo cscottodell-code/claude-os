@@ -13,6 +13,7 @@ description: >
   Think of this as the meta-layer over everything Scott does. Also trigger on keywords like
   productivity, habits, keystone, hard rules, EIB, explicate, backgroundize, explore/exploit,
   value stream, waste elimination, entrainment, weekly review, or process optimization.
+category: knowledge
 ---
 
 # Background Operations
