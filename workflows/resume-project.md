@@ -1,9 +1,10 @@
 # Resume Project
 
 ## Metadata
-- Last updated: 2026-03-05
-- Version: 2.1
+- Last updated: 2026-04-05
+- Version: 2.3
 - Changelog:
+  - v2.3: Replace inline context file list with shared _gather-project-context.md template
   - v2.2: Add Superpowers discipline note to Phase 4 (GSD+Superpowers integration)
   - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v2.0: Slim to orchestrator — delegate GSD state recovery, keep Scott-specific summary + direction
@@ -29,20 +30,13 @@ the direction. Priorities may have changed since the last session.
 ### What this phase does
 Get fully up to speed on the project's current state by reading all relevant files.
 
-### Files to read (in this order)
-1. **CLAUDE.md** — especially the Current Status section
-2. **PRD.md** — to remember the project's goals
-3. **tasks/todo.md** — to see what tasks remain
-4. **tasks/lessons.md** — to review past mistakes
-5. **Recent git log** — to see what was last committed
-6. **Any open issues or pending work**
+### Files to read
 
-### GSD State Recovery
-If the project has a `.planning/` directory (GSD-managed project):
-- Read `.planning/STATE.md` to understand GSD phase progress
+**Standard context:** Read `~/Sites/Global/scott-toolkit/context/_gather-project-context.md` and gather all listed files (including GSD context if `.planning/` exists).
+
+**Resume-specific additions:**
 - Read any `.planning/phases/*/PLAN.md` for active phase details
-- Read `.planning/phases/*/VERIFICATION.md` for completed phase results
-- This tells you where the structured build process left off
+- Check for open issues or pending work not captured in todo.md
 
 ### Stack-Lock Staleness Check
 If the project has a `stack-lock.json`:

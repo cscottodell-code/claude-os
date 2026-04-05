@@ -1,9 +1,10 @@
 # Phase Closeout
 
 ## Metadata
-- Last updated: 2026-04-02
-- Version: 2.1
+- Last updated: 2026-04-05
+- Version: 3.0
 - Changelog:
+  - v3.0: Split Phase 2 into 2a/2b/2c (stack audit, lens review, general review). Add context_files validation for lens dispatch. Add shared context template reference for cross-session reflect. Renumber Phase 1.5 to Phase 2a.
   - v2.1: Add specialist review lenses to Phase 2 (Code Review). Schema and security lenses dispatch as parallel subagents with restricted scope before general review. Lenses skip when fewer than 5 files changed.
   - v2.0: Add Phase 1.5 (Stack Audit) between Verify and Code Review. Add lesson tagging to Reflect. Update phase numbering.
   - v1.0: Initial workflow. Replaces separate log-error, log-success, and retro workflows for GSD post-execution.
@@ -257,6 +258,8 @@ Same quality, one interview instead of three.
 4. If Scott says there are no successes to log: confirm and move on.
 
 **Part C: Retrospective + Lessons**
+
+**Context check:** If this conversation does NOT have full phase context (e.g., cross-session closeout), first read `~/Sites/Global/scott-toolkit/context/_gather-project-context.md` and gather all listed files.
 
 1. Create or update `RETRO.md` in the project root using this structure:
 

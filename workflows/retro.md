@@ -1,9 +1,10 @@
 # Retrospective
 
 ## Metadata
-- Last updated: 2026-03-05
-- Version: 1.1
+- Last updated: 2026-04-05
+- Version: 1.3
 - Changelog:
+  - v1.3: Replace inline context file list with shared _gather-project-context.md template
   - v1.2: Add GSD artifacts (.planning/STATE.md, ROADMAP.md, VERIFICATION.md) to Phase 1 context gathering
   - v1.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
   - v1.0: Initial workflow
@@ -44,17 +45,12 @@ Claude Code reviews the project artifacts to build a summary of what was built
 and how it went.
 
 ### Files to read
-1. Project's CLAUDE.md (especially Current Status and Key Decisions Log)
-2. PRD.md (to compare what was planned vs what was built)
-3. tasks/lessons.md (mistakes and corrections already captured)
-4. Recent git log (to see the build progression)
-5. ~/Sites/Global/scott-toolkit/errors/ — any error logs captured during this project
-6. ~/Sites/Global/scott-toolkit/successes/ — any success logs captured during this project
-7. GSD artifacts (if `.planning/` directory exists):
-   - `.planning/STATE.md` — phase progress and overall project state
-   - `.planning/ROADMAP.md` — the full plan structure
-   - `.planning/phases/*/VERIFICATION.md` — verification results for completed phases
-   These show how the structured build process went, what was verified, and where gaps appeared.
+
+**Standard context:** Read `~/Sites/Global/scott-toolkit/context/_gather-project-context.md` and gather all listed files.
+
+**Retro-specific additions:**
+- `~/Sites/Global/scott-toolkit/errors/` — any error logs captured during this project
+- `~/Sites/Global/scott-toolkit/successes/` — any success logs captured during this project
 
 ### Output
 A brief summary presented to Scott:
