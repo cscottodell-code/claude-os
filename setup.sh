@@ -58,7 +58,7 @@ CHECKS_DIR="$CLAUDE_DIR/checks"
 TOOLS_DIR="$CLAUDE_DIR/tools"
 CONFIG_DIR="$CLAUDE_DIR/config"
 
-echo "Scott-Toolkit v5.2 Setup"
+echo "Scott-Toolkit v6.0 Setup"
 echo "======================"
 echo "Toolkit path: $TOOLKIT_PATH"
 echo "Claude dir:   $CLAUDE_DIR"
