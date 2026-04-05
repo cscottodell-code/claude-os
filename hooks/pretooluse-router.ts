@@ -16,6 +16,13 @@ import { guardDestructive } from "./guards/destructive.js";
 import { guardNpmInstall } from "./guards/npm-install.js";
 import { guardPhaseCompletion } from "./guards/phase-completion.js";
 import { guardSurrealdbInject } from "./guards/surrealdb-inject.js";
+import {
+  guardProjectScaffolded,
+  guardDesignApproved,
+  guardHandoffReady,
+  guardChangesDrafted,
+  guardReflectionComplete,
+} from "./guards/workflow-gates.js";
 
 async function main() {
   const input = await readStdin();
@@ -106,7 +113,29 @@ async function main() {
     }
   }
 
-  // --- Guard 6: SurrealDB skill injection (advisory, non-blocking) ---
+  // --- Guard 6: Workflow gates (advisory by default) ---
+  // Detect marker file writes (touch .project-scaffolded, etc.) and workflow phase transitions.
+  // Gates check that prerequisite phases completed before allowing later phases.
+  if (command) {
+    const cwd = process.cwd();
+    const gates = [
+      { pattern: /design.proof|phase.6|impeccable.*teach/i, fn: () => guardProjectScaffolded(cwd) },
+      { pattern: /build.milestone|phase.7|gsd.*execute/i, fn: () => guardDesignApproved(cwd) },
+      { pattern: /handoff.checklist|phase.5.*handoff/i, fn: () => guardHandoffReady(cwd) },
+      { pattern: /changelog|phase.4.*toolkit/i, fn: () => guardChangesDrafted(cwd) },
+      { pattern: /generate.retro|phase.3.*retro/i, fn: () => guardReflectionComplete(cwd) },
+    ];
+
+    for (const g of gates) {
+      if (g.pattern.test(command) || g.pattern.test(rawInput)) {
+        const result = g.fn();
+        if (result.message) console.log(result.message);
+        if (!result.allow) process.exit(2);
+      }
+    }
+  }
+
+  // --- Guard 7: SurrealDB skill injection (advisory, non-blocking) ---
   if (
     (command &&
       /surreal|surrealdb|surql|localhost:800[0-9]/i.test(command)) ||

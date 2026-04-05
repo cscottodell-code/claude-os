@@ -1,9 +1,10 @@
 # Handoff to Gary
 
 ## Metadata
-- Last updated: 2026-03-24
-- Version: 1.4
+- Last updated: 2026-04-05
+- Version: 1.5
 - Changelog:
+  - v1.5: Add .handoff-ready file-system gate after Phase 4 (Setup Instructions)
   - v1.4: Add stack-lock.json to handoff checklist, use abstract operation names
   - v1.3: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE]) and note that /gsd:add-tests works in both PM modes
   - v1.2: Add test coverage assessment with /gsd:add-tests (Phase 1)
@@ -117,6 +118,8 @@ Setup instructions in README.md or SETUP.md.
 
 ### Done when
 The instructions work when followed from scratch.
+
+**Gate:** Write `.handoff-ready` marker in the project root after setup verified.
 
 ## Phase 5: Handoff Checklist [STOP]
 

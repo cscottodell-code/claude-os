@@ -231,6 +231,8 @@ A fully initialized project repo with CLAUDE.md, PRD.md, stack-lock.json, .claud
 ### Done when
 The repo exists, has proper structure, and initial commit is made.
 
+**Gate:** Write `.project-scaffolded` marker in the project root after initial commit.
+
 ## Phase 6: Design Proof [STOP]
 
 ### What this phase does
@@ -272,6 +274,8 @@ Before building any features, establish the visual design. This prevents buildin
 
 ### Done when
 Scott approves the visual design of the representative page.
+
+**Gate:** Write `.design-approved` marker in the project root after Scott approves.
 
 ## Phase 7: Build Milestone 1 [DELEGATE]
 

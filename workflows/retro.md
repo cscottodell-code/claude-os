@@ -96,6 +96,8 @@ Answers to all reflection questions, drafted into retro template format.
 ### Done when
 Scott has reflected on all areas and is satisfied with the captured insights.
 
+**Gate:** Write `.reflection-complete` marker in the project root after reflection done.
+
 ## Phase 3: Generate Retro Document [AUTO]
 
 ### What this phase does
