@@ -244,11 +244,22 @@ async function checkHookIntegrity() {
     );
     if (!isRegistered) {
       // During migration: .ts file is OK if its .sh counterpart is registered
-      // (e.g., pretooluse-router.ts exists while bash-pretooluse-router.sh is still in settings)
+      // Handles exact name match, bash- prefix, and known renames
       if (hookName.endsWith(".ts")) {
-        const shName = hookName.replace(/\.ts$/, ".sh");
-        const shRegistered = registeredCommands.some(
-          (cmd) => cmd.includes(shName) || cmd.includes(`bash-${shName}`)
+        const baseName = hookName.replace(/\.ts$/, "");
+        const shVariants = [
+          `${baseName}.sh`,
+          `bash-${baseName}.sh`,
+        ];
+        // Known renames during M2 migration
+        const RENAMES: Record<string, string> = {
+          "post-commit-triggers": "post-commit-skill-triggers",
+        };
+        const renamed = RENAMES[baseName];
+        if (renamed) shVariants.push(`${renamed}.sh`);
+
+        const shRegistered = shVariants.some((sh) =>
+          registeredCommands.some((cmd) => cmd.includes(sh))
         );
         if (shRegistered) continue;
       }
