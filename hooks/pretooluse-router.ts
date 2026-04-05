@@ -19,7 +19,6 @@ import { guardSurrealdbInject } from "./guards/surrealdb-inject.js";
 import {
   guardProjectScaffolded,
   guardDesignApproved,
-  guardHandoffReady,
   guardChangesDrafted,
   guardReflectionComplete,
 } from "./guards/workflow-gates.js";
@@ -121,7 +120,6 @@ async function main() {
     const gates = [
       { pattern: /design.proof|phase.6|impeccable.*teach/i, fn: () => guardProjectScaffolded(cwd) },
       { pattern: /build.milestone|phase.7|gsd.*execute/i, fn: () => guardDesignApproved(cwd) },
-      { pattern: /handoff.checklist|phase.5.*handoff/i, fn: () => guardHandoffReady(cwd) },
       { pattern: /changelog|phase.4.*toolkit/i, fn: () => guardChangesDrafted(cwd) },
       { pattern: /generate.retro|phase.3.*retro/i, fn: () => guardReflectionComplete(cwd) },
     ];

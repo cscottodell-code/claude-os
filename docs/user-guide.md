@@ -28,7 +28,6 @@ These are your workflows. Type them and Claude walks you through each one.
 | `/scott:new-feature` | Adding a feature to an existing project |
 | `/scott:resume-project` | Picking up a project after time away |
 | `/scott:phase-closeout` | After a GSD phase — verify, review, reflect (hook-enforced) |
-| `/scott:handoff` | When a prototype is ready for Gary |
 
 ### Stack Enforcement & Learning
 
@@ -60,7 +59,7 @@ These are your workflows. Type them and Claude walks you through each one.
 
 | Command | When to use it |
 |---------|---------------|
-| `/scott:remind` | Send a Telegram reminder to Scott or Brett |
+| `/scott:remind` | Send a Telegram reminder |
 | `/scott:sync` | Sync config and code between machines |
 | `/scott:pdf` | Recreate a PDF in HTML/CSS, convert to fillable PDF |
 | `/scott:bypass` | A guard hook blocked something you approved — bypass it |
@@ -177,8 +176,6 @@ cd ~/Sites/Global/scott-toolkit && git pull
 # If hooks/rules/skills seem off — re-deploy
 ./setup.sh
 
-# On Brett's machine (different path)
-./setup.sh --toolkit-path /path/to/scott-toolkit
 ```
 
 The setup script uses symlinks, so after `git pull` most changes take effect immediately without re-running setup. Re-run setup only if new hooks or skills were added.
@@ -403,7 +400,6 @@ Claude suggests the next skill automatically after completing each one:
 | `/scott:new-feature` (build) | Phase closeout -> Finish branch |
 | `/scott:debug` (fix applied) | Resume interrupted work |
 | `/scott:phase-closeout` | Update toolkit if improvements found |
-| `/scott:handoff` | Phase closeout (project wrap-up) |
 | `/gsd:execute-phase` | Phase closeout (auto-invoked, hook-enforced) |
 | `/gsd:verify-work` (passes) | Finish branch |
 | Code review passes | Finish branch |

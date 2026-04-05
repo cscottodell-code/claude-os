@@ -112,7 +112,7 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
   2. No uncommitted changes (git status clean)
   3. tasks/todo.md updated (completed items checked off)
   4. The feature actually works (demonstrate it)
-- Ask: "Would Gary be comfortable productionizing this?"
+- Ask: "Is this production-ready?"
 - After code review fixes, ALWAYS run a second verification pass before declaring complete. One review pass is never enough for production code. The first pass catches surface patterns; the second catches schema alignment, business logic edge cases, and end-to-end user story gaps.
 - "Tests pass" does NOT mean "code is correct." Tests verify mock behavior. Schema compliance, race conditions, and timezone bugs require end-to-end walkthrough review.
 - Task contracts: for non-trivial tasks, define completion criteria upfront:

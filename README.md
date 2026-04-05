@@ -1,4 +1,4 @@
-# Scott's Toolkit v6.0
+# Scott's Toolkit v6.1
 
 A context engineering toolkit for building apps with Claude Code. Owns session management, templates, domain knowledge, stack enforcement, plugin awareness, and learning capture. Delegates project management to GSD and development methodology to Superpowers.
 
@@ -8,8 +8,7 @@ Lives at `~/Sites/Global/scott-toolkit/` on all of Scott's machines. Deployed to
 
 ## Who It's For
 
-- **Scott O'Dell** - AI orchestrator building prototypes with Claude Code
-- **Brett (Arrington)** - Partner on Bresco, vibe coder
+- **Scott O'Dell** — AI orchestrator building prototypes with Claude Code (MacBook Air + Mac Studio)
 
 ## Quick Start
 
@@ -22,9 +21,6 @@ git clone git@github.com:cscottodell-code/scott-toolkit.git ~/Sites/Global/scott
 
 # Install dev dependencies and deploy to ~/.claude/
 cd ~/Sites/Global/scott-toolkit && bun install && ./setup.sh
-
-# On Brett's machine (different path):
-./setup.sh --toolkit-path /path/to/scott-toolkit
 ```
 
 The setup script creates symlinks from `~/.claude/` to the repo. Update the repo once, every machine benefits after `git pull && ./setup.sh`.
@@ -39,7 +35,6 @@ All workflows are invoked via slash commands:
 | `/scott:new-feature` | Add a feature to an existing project |
 | `/scott:resume` | Pick up where you left off on a project |
 | `/scott:phase-closeout` | Mandatory post-execution: verify, review, reflect, gate (hook-enforced) |
-| `/scott:handoff` | Prepare a project for Gary to productionize |
 | `/scott:update-toolkit` | Update the toolkit itself |
 | `/scott:compare-sources` | Compare context engineering sources against your toolkit |
 | `/scott:stack-review` | Stack health dashboard (learning loop) |

@@ -1,5 +1,17 @@
 # Toolkit Changelog
 
+## v6.1.0 - 2026-04-05
+
+Audit remediation phase 2: narrow audience, remove dead workflows, clean up active docs.
+
+### M1: Audience Narrowing + Handoff Removal
+- **Audience narrowed to Scott only** (MacBook Air + Mac Studio). Removed Brett references from README and user-guide.
+- **Deleted handoff-to-gary workflow** (`workflows/handoff-to-gary.md`) and skill (`skills/scott-handoff/`). No replacement needed.
+- **Removed handoff guard** (`guardHandoffReady`) from workflow-gates.ts and pretooluse-router.ts
+- **Updated setup.sh** to remove scott-handoff from workflow skill verification
+- **Updated claude-behavior.md** verification prompt (removed Gary reference)
+- Historical docs (retros, design specs, changelogs) left untouched
+
 ## v6.0.0 - 2026-04-05
 Full audit remediation: independent audit graded toolkit C+, identified 22 real issues. Fixed all across 4 milestones. Toolkit is now TypeScript/Bun throughout, with enforcement gates, expanded stack checks, and leaner skills.
 

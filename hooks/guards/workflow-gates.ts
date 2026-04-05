@@ -62,17 +62,6 @@ export function guardDesignApproved(projectDir: string): GateResult {
   );
 }
 
-/** handoff-to-gary Phase 4 must complete before Phase 5 */
-export function guardHandoffReady(projectDir: string): GateResult {
-  return gate(
-    ".handoff-ready",
-    projectDir,
-    "handoff-to-gary",
-    "Phase 4 (Setup Instructions)",
-    "Phase 5 (Handoff Checklist)"
-  );
-}
-
 /** toolkit-update Phase 3 must complete before Phase 4+ */
 export function guardChangesDrafted(projectDir: string): GateResult {
   return gate(
