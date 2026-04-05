@@ -207,17 +207,7 @@ async function checkHookIntegrity() {
 
   const hooksDir = claudePath("hooks");
 
-  // Hooks dispatched by router — not registered individually
-  const routerDispatched = new Set([
-    "guard-git-push.sh",
-    "guard-destructive.sh",
-    "guard-npm-install.sh",
-    "guard-phase-completion.sh",
-    "gsd-validate-commit.sh",
-    "inject-surrealdb-skill.sh",
-  ]);
-
-  // 3a. Check hooks on disk are registered (skip router-dispatched)
+  // 3a. Check hooks on disk are registered
   // Extract all command strings from the nested hooks structure
   const registeredCommands: string[] = [];
   for (const groups of Object.values(settings.hooks)) {
@@ -231,6 +221,7 @@ async function checkHookIntegrity() {
     }
   }
 
+  // Scan top-level .ts hooks (guards/ and lib/ are sub-modules, not standalone hooks)
   const hooksOnDisk = existsSync(toolkitPath("hooks"))
     ? readdirSync(toolkitPath("hooks")).filter(
         (f) => f.endsWith(".sh") || f.endsWith(".ts")
@@ -238,7 +229,6 @@ async function checkHookIntegrity() {
     : [];
 
   for (const hookName of hooksOnDisk) {
-    if (routerDispatched.has(hookName)) continue;
     const isRegistered = registeredCommands.some((cmd) =>
       cmd.includes(hookName)
     );

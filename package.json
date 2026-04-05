@@ -9,9 +9,17 @@
     "check": "bun run tools/stack-check.ts",
     "detect": "bun run tools/stack-detect.ts",
     "preflight": "bun run tools/stack-preflight.ts",
-    "metrics": "bun run tools/stack-metrics.ts"
+    "metrics": "bun run tools/stack-metrics.ts",
+    "graph": "bun run tools/toolkit-graph.ts",
+    "graph:rebuild": "bun run tools/toolkit-graph.ts rebuild",
+    "graph:impact": "bun run tools/toolkit-graph.ts impact",
+    "graph:check": "bun run tools/toolkit-graph.ts check",
+    "graph:stats": "bun run tools/toolkit-graph.ts stats"
   },
   "devDependencies": {
     "@types/bun": "latest"
+  },
+  "dependencies": {
+    "surrealdb": "^2.0.3"
   }
 }

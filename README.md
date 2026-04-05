@@ -1,6 +1,8 @@
-# Scott's Toolkit v5.2
+# Scott's Toolkit v6.0
 
 A context engineering toolkit for building apps with Claude Code. Owns session management, templates, domain knowledge, stack enforcement, plugin awareness, and learning capture. Delegates project management to GSD and development methodology to Superpowers.
+
+**Runtime:** Bun (TypeScript). All hooks and tools are `.ts` files.
 
 Lives at `~/Sites/Global/scott-toolkit/` on all of Scott's machines. Deployed to `~/.claude/` via `setup.sh`.
 
@@ -12,17 +14,20 @@ Lives at `~/Sites/Global/scott-toolkit/` on all of Scott's machines. Deployed to
 ## Quick Start
 
 ```bash
+# Install Bun (required for v6.0+)
+curl -fsSL https://bun.sh/install | bash
+
 # Clone the repo
 git clone git@github.com:cscottodell-code/scott-toolkit.git ~/Sites/Global/scott-toolkit
 
-# Deploy to ~/.claude/
-cd ~/Sites/Global/scott-toolkit && ./setup.sh
+# Install dev dependencies and deploy to ~/.claude/
+cd ~/Sites/Global/scott-toolkit && bun install && ./setup.sh
 
 # On Brett's machine (different path):
 ./setup.sh --toolkit-path /path/to/scott-toolkit
 ```
 
-That's it. The setup script creates symlinks from `~/.claude/` to the repo. Update the repo once, every machine benefits after `git pull`.
+The setup script creates symlinks from `~/.claude/` to the repo. Update the repo once, every machine benefits after `git pull && ./setup.sh`.
 
 ## How to Use It
 
@@ -51,15 +56,15 @@ All workflows are invoked via slash commands:
 
 Toolkit workflows are **orchestrators** -- they call GSD and Superpowers at the right moments. Command names are decoupled via `config/interfaces.json` so renaming a GSD command requires updating one line, not ten files.
 
-## What v5+ Adds
+## Key Systems (v5+)
 
-Three new systems built on top of the existing toolkit, plus plugin awareness (v5.1):
+Three systems built on top of the base toolkit, plus plugin awareness:
 
 ### Stack Enforcement
-Technology-specific checks that catch version gotchas at build time. Check files per technology (`checks/*.json`), CLI tools (`tools/stack-detect.sh`, `tools/stack-check.sh`, `tools/stack-preflight.sh`), and integration into phase closeout as a stack audit step.
+Technology-specific checks that catch version gotchas at build time. Check files per technology (`checks/*.json`), CLI tools (`tools/stack-detect.ts`, `tools/stack-check.ts`, `tools/stack-preflight.ts`), and integration into phase closeout as a stack audit step.
 
 ### Learning Loop
-Lessons from each project feed back into the toolkit. `[stack]`-tagged lessons become check candidates. `tools/stack-metrics.sh` aggregates audit data across all projects. `/scott:stack-review` presents a dashboard for human-approved promotion of lessons to checks.
+Lessons from each project feed back into the toolkit. `[stack]`-tagged lessons become check candidates. `tools/stack-metrics.ts` aggregates audit data across all projects. `/scott:stack-review` presents a dashboard for human-approved promotion of lessons to checks.
 
 ### Decoupling
 Abstract operation names (`plan_phase`, `tdd`, `code_review`) mapped to concrete commands via `config/interfaces.json`. Toolkit files reference operations, not tool-specific commands. Claude resolves them by reading `config/interfaces.json` directly (see `rules/claude-behavior.md` Operation Resolution section). To find where an operation is used: `grep -r "operation_name" workflows/ skills/ rules/`.
@@ -73,107 +78,83 @@ Bidirectional plugin-project alignment detection. The `plugins` section in `conf
 scott-toolkit/
 ├── README.md
 ├── CHANGELOG.md
-├── setup.sh                          # One-command deploy to ~/.claude/
-├── .gitignore                        # Excludes checks/metrics.json (computed cache)
+├── package.json                      # Bun project config (no runtime deps)
+├── tsconfig.json                     # Strict TS, ES2022 target
+├── setup.sh                          # One-command deploy to ~/.claude/ (stays bash)
+│
+├── src/                              # Shared TypeScript utilities
+│   ├── paths.ts                      #   Path resolution (TOOLKIT_DIR, CLAUDE_DIR)
+│   ├── json.ts                       #   Safe JSON read/write with generics
+│   ├── semver.ts                     #   Version parsing and comparison
+│   └── exec.ts                       #   Shell execution with timeout (Bun.spawn)
+│
+├── hooks/                            # Claude Code hooks (TypeScript, -> ~/.claude/hooks/)
+│   ├── lib/                          #   Shared hook utilities
+│   │   ├── stdin.ts                  #     JSON stdin reading, field extraction
+│   │   └── platform.ts              #     Cross-platform hash, stat, date
+│   ├── guards/                       #   PreToolUse guard modules
+│   │   ├── git-push.ts, destructive.ts, npm-install.ts
+│   │   ├── phase-completion.ts, claude-md.ts, surrealdb-inject.ts
+│   ├── pretooluse-router.ts          #   Main Bash command dispatcher
+│   ├── session-start.ts              #   SessionStart: sync, state detection
+│   ├── session-end.ts, pre-compact.ts, extract-instincts.ts
+│   ├── pre-completion-checklist.ts   #   Stop: verification checklist
+│   ├── auto-format.ts, context-reminders.ts, offload-large-output.ts
+│   ├── post-commit-triggers.ts, version-propagate.ts
+│   ├── check-file-test-trigger.ts, uiux-reminder.ts
+│   └── toolkit-coherence-check.ts
+│
+├── tools/                            # CLI tools (TypeScript, -> ~/.claude/tools/)
+│   ├── stack-detect.ts               #   Auto-detect project technologies
+│   ├── stack-check.ts                #   Run static checks from check files
+│   ├── stack-preflight.ts            #   System readiness + provider health
+│   ├── stack-metrics.ts              #   Aggregate audit data for learning loop
+│   ├── toolkit-lint.ts               #   Toolkit integrity checker
+│   └── pre-commit-hook.ts            #   Git pre-commit gate
 │
 ├── checks/                           # Stack enforcement check files
-│   ├── surrealdb.json
-│   ├── nuxt.json
-│   ├── tailwind.json
-│   ├── bun.json
-│   ├── hono.json
-│   ├── stack-lock.schema.json        # JSON Schema for stack-lock.json
-│   └── test-fixtures/                # Good/bad samples for check validation
+│   ├── surrealdb.json, nuxt.json, tailwind.json, bun.json, hono.json
+│   ├── stack-lock.schema.json
+│   └── fixtures/                     #   Good/bad samples for check validation
 │
 ├── config/                           # Toolkit configuration
-│   └── interfaces.json               # Abstract operations -> concrete commands + plugin catalog
+│   ├── interfaces.json               #   Abstract operations -> concrete commands
+│   └── version-manifest.json         #   Version tracking + banned patterns
 │
-├── tools/                            # CLI tools (zero-token, shell-based)
-│   ├── stack-detect.sh               # Auto-detect project technologies
-│   ├── stack-check.sh                # Run static checks from check files
-│   ├── stack-preflight.sh            # System readiness + provider health
-│   └── stack-metrics.sh              # Aggregate audit data for learning loop
-│
+├── workflows/                        # Interactive step-by-step processes (12 files)
 ├── context/                          # Templates for new projects
-│   ├── CLAUDE-MD-TEMPLATE.md
-│   ├── PRD-TEMPLATE.md
-│   └── DESIGN-INTENT-TEMPLATE.md
-│
-├── workflows/                        # Interactive step-by-step processes
-│   ├── new-project.md               # 8-phase orchestrator
-│   ├── resume-project.md            # Session start (delegates to GSD)
-│   ├── new-feature.md               # Feature workflow (delegates build to GSD)
-│   ├── phase-closeout.md            # Verify + stack audit + review + reflect
-│   ├── retro.md
-│   ├── handoff-to-gary.md
-│   ├── toolkit-update.md
-│   ├── toolkit-spa-day.md
-│   ├── log-success.md
-│   ├── log-error.md
-│   └── compare-sources.md
-│
-├── hooks/                            # Automated session management
-│   ├── session-start.sh             # Context file discovery + AUTO-RESUME
-│   ├── session-end.sh               # Close reminder
-│   ├── pre-compact.sh               # State snapshot before compaction
-│   ├── pre-completion-checklist.sh  # Verification checklist at session end
-│   ├── post-commit-skill-triggers.sh # Skill nudges after git commits
-│   ├── context-reminders.sh         # Session health (duration/tool count)
-│   ├── auto-format.sh               # Prettier on Write/Edit
-│   ├── offload-large-output.sh      # Large output management
-│   ├── extract-instincts.sh         # Pattern capture before compaction
-│   ├── check-file-test-trigger.sh   # Auto-test on check file edits
-│   ├── uiux-reminder.sh             # UI/UX quality nudge for .vue files
-│   ├── guard-git-push.sh
-│   ├── guard-destructive.sh
-│   ├── guard-claude-md.sh
-│   ├── guard-npm-install.sh
-│   ├── guard-phase-completion.sh    # Blocks phase complete without closeout
-│   └── toolkit-coherence-check.sh   # Stale cross-reference detector (advisory)
-│
 ├── rules/                            # Behavior rules (-> ~/.claude/rules/)
-│   ├── claude-behavior.md           # 3-system delegation + operation resolution
-│   └── code-style.md               # TypeScript/Vue/Tailwind standards
-│
-├── skills/                           # Skill files (-> ~/.claude/skills/)
-│   ├── scott-stack-review/          # Stack health dashboard
-│   ├── scott-stack-baseline/        # First-run project audit
-│   ├── scott-rebuild-metrics/       # Metrics cache recovery
-│   └── [30+ other skills]
-│
+├── skills/                           # Skill files (-> ~/.claude/skills/, 30+)
 ├── references/                       # Business context (loaded on demand)
-│   ├── project-catalog.md
-│   ├── bresco-context.md
-│   └── hetzner-surrealdb-setup.md
-│
 ├── docs/                             # Design documents and guides
-│   ├── user-guide.md
-│   └── v5-unified-design.md         # THE v5 design document
-│
-├── retros/                           # Retrospective outputs
-│   └── _retro-index.md
-├── errors/                           # Error logs
-│   └── _metadata.json
-└── successes/                        # Success logs
-    └── _metadata.json
+│   ├── architecture.md               #   HOW THE TOOLKIT WORKS (start here)
+│   └── user-guide.md
+├── retros/, errors/, successes/      # Learning capture outputs
+└── backups/                          # Settings snapshots (gitignored)
 ```
+
+> **For the full architecture guide:** see `docs/architecture.md`. It covers how hooks work, how to add/modify components safely, deployment mechanics, and troubleshooting.
 
 ## Multi-Machine Sync
 
-```
+```bash
 git pull                              # Get latest from GitHub
-./setup.sh                            # Re-deploy (symlinks update automatically)
+bun install                           # Update dependencies (if package.json changed)
+./setup.sh                            # Re-deploy symlinks
 ```
 
 ## Contributing Rules
 
 - Always update CHANGELOG.md when modifying hooks or skills
-- Do not modify settings.json directly (use the `update-config` skill)
-- Each skill lives in its own subfolder: `skills/<name>/SKILL.md`
-- Hook scripts must be executable (`chmod +x`)
-- Test changes by verifying the hook/skill loads correctly in a new session
+- Do not modify `~/.claude/settings.json` directly during a session (use the `update-config` skill)
+- All new hooks and tools must be TypeScript (no new .sh files)
+- Hooks import shared utilities from `hooks/lib/`, tools from `src/`
+- Guards go in `hooks/guards/` and are imported by the router
+- Each skill lives in its own subfolder: `skills/<name>/SKILL.md` (max 200 lines)
 - Check files go in `checks/<technology>.json` following the schema in `checks/stack-lock.schema.json`
 - Abstract operation names go in `config/interfaces.json`, not hardcoded in workflows
+- Run `bun run tools/toolkit-lint.ts` before committing (pre-commit hook enforces this)
+- See `docs/architecture.md` for the full "how to change things safely" guide
 
 ## How It Improves Over Time
 
