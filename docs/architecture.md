@@ -78,7 +78,7 @@ scott-toolkit/
 │   └── code-style.md              #   TypeScript/Vue/Tailwind coding standards
 │
 ├── skills/                         # Skill files (-> ~/.claude/skills/)
-│   └── [30+ skill directories, each with SKILL.md]
+│   └── [21 skill directories, each with SKILL.md]
 │
 ├── workflows/                      # Interactive step-by-step processes
 │   └── [12 workflow .md files]

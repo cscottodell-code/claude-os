@@ -123,7 +123,7 @@ scott-toolkit/
 ├── workflows/                        # Interactive step-by-step processes (10 files)
 ├── context/                          # Templates for new projects
 ├── rules/                            # Behavior rules (-> ~/.claude/rules/)
-├── skills/                           # Skill files (-> ~/.claude/skills/, 32 skills)
+├── skills/                           # Skill files (-> ~/.claude/skills/, 21 skills)
 │   └── (some SKILL.md files are symlinks to workflows/)
 ├── references/                       # Business context (loaded on demand)
 ├── docs/                             # Design documents and guides
