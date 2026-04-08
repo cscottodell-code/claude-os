@@ -1,5 +1,37 @@
 # Toolkit Changelog
 
+## v6.2.0 - 2026-04-08
+
+Audit round 2: close the learning loop, fix stale references, consolidate skills, standardize error files.
+
+### Learning Loop
+- **NEW: `hooks/guards/lessons-inject.ts`:** Advisory guard that injects `[stack:*]` tagged lessons from `tasks/lessons.md` into Claude's context at session start. Filters by project technologies from `stack-lock.json`. Deduplicates per session via /tmp marker. Closes the gap where lessons were captured but never re-read (type::record() was relearned 3 times across 3 phases).
+- **NEW: `tests/lessons-inject.test.ts`:** 9 design contract tests for lesson extraction and injection logic.
+- Wired into `pretooluse-router.ts` as Guard 8 with JSON additionalContext output.
+
+### Stale Reference Fixes
+- **`skills/scott-bypass/SKILL.md`:** Updated guard table from .sh filenames to .ts modules. Updated bypass procedure from chmod to mv-rename pattern.
+- **`skills/scott-rebuild-metrics/SKILL.md`:** Fixed `stack-metrics.sh` reference to `stack-metrics.ts`.
+- **`config/version-manifest.json`:** Added 5 banned patterns for migrated .sh guard/tool filenames.
+
+### Skill Consolidation (21 -> 18 skills)
+- **Deleted `scott-rebuild-metrics`:** Recovery command absorbed into `scott-stack-review` SKILL.md.
+- **Deleted `scott-bypass`:** Bypass procedure moved to `docs/architecture.md` under "How to Bypass a Guard".
+- **Deleted `scott-automation-guide`:** Platform-agnostic reliability patterns extracted to `skills/scott-n8n-reference/references/reliability-patterns.md`.
+
+### Error File Standardization
+- **Renamed error files 001-007** from `error-NNN.md` to `NNN-description.md` format matching 008-028.
+- **Added `resolved` frontmatter field** to error logs. Marks errors whose root cause has been fixed by a check/guard.
+- **Added archival strategy:** `errors/archive/` and `successes/archive/` directories. Phase 9 in `toolkit-spa-day.md` archives resolved errors older than 90 days.
+- Marked 4 of 7 oldest errors as resolved (002, 003, 004, 005).
+
+### Knowledge Skill Extraction (32 -> 21 skills, pre-consolidation)
+- **Extracted 11 knowledge/productivity skills** to `~/Sites/Personal/scott-knowledge/`: scott-power-laws, scott-war-strategies, scott-human-nature, scott-mastery, scott-bops, scott-eos, scott-council, scott-notebooklm, scott-presentation, scott-save-tweet, scott-research.
+- Skills remain available via `~/.claude/skills/` symlinks from scott-knowledge's `setup.sh`.
+- Updated project-catalog.md with scott-knowledge entry.
+
+Triggered by: Independent audit (round 2) identified broken learning loop, stale .sh references, marginal skills, inconsistent error naming, and no archival strategy.
+
 ## v6.1.0 - 2026-04-05
 
 Audit remediation phase 2: narrow audience, remove dead workflows, clean up active docs.
