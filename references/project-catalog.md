@@ -33,6 +33,7 @@ Every org follows the same pattern:
 | life os, life, habits, reviews, bops | Life OS | Personal | ~/Sites/Personal/code/life-os/ | Bug fixes only (Eleanor replacing) |
 | toolkit, skills, hooks, rules | Scott Toolkit | Global | ~/Sites/Global/scott-toolkit/ | Active |
 | context engineering, ce, synthesis | Context Engineering | Global | ~/Sites/Global/context-engineering/ | Complete (reference) |
+| knowledge skills, books, research, council | Scott Knowledge | Personal | ~/Sites/Personal/scott-knowledge/ | Active (bridge to Eleanor M3) |
 
 ## Knowledge Folders (non-code context per org)
 
