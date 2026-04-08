@@ -65,13 +65,8 @@ These are your workflows. Type them and Claude walks you through each one.
 <!-- AUTO:commands-tools -->
 | Command | When to use it |
 |---------|---------------|
-| `/scott:council` | Deliberate a decision from multiple perspectives |
-| `/scott:research` | Multi-lens research skill that dispatches 10 parallel subagents to investigat.. |
 | `/scott:bypass` | Temporarily bypass a guard hook to run a blocked action |
-| `/scott:notebooklm` | Create a NotebookLM audio deep dive |
 | `/scott:pause` | Generate a resume prompt for picking up later |
-| `/scott:presentation` | Analyze and improve a presentation or story |
-| `/scott:save-tweet` | Extract a tweet into a markdown source file |
 | `/scott:toolkit-briefing` | Deep-read the toolkit so Claude fully understands it |
 <!-- /AUTO:commands-tools -->
 
