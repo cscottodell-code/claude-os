@@ -162,7 +162,9 @@ async function main() {
   // --- Guard 8: Lessons injection (advisory, once per session) ---
   const lessonsResult = await guardLessonsInject(process.cwd());
   if (lessonsResult.additionalContext) {
-    console.log(lessonsResult.additionalContext);
+    console.log(
+      JSON.stringify({ additionalContext: lessonsResult.additionalContext })
+    );
   }
 
   process.exit(0);
