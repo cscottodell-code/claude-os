@@ -28,7 +28,7 @@ the computed cache gets out of sync with the source data.
 
 ### Phase 1: Rebuild [AUTO]
 
-1. Run: `~/Sites/Global/scott-toolkit/tools/stack-metrics.sh --full-rebuild`
+1. Run: `bun run ~/Sites/Global/scott-toolkit/tools/stack-metrics.ts`
 2. Show the output to Scott
 
 ### Phase 2: Verify [AUTO]
