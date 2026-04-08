@@ -1,3 +1,6 @@
+---
+resolved: true
+---
 # Error #002: SurrealDB SDK Methods Fail Silently Under Bun Runtime
 **Date:** 2026-03-22
 **Project:** Eleanor (M4 Phase 1: Hono on Bun)

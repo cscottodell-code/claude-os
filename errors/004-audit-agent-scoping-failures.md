@@ -1,3 +1,6 @@
+---
+resolved: true
+---
 # Error #004: Audit Agent Scoping Failures (Context Limits + Blind Spots)
 
 **Date:** 2026-03-22

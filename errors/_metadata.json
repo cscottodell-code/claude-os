@@ -1,1 +1,8 @@
-{"next_id":29,"description":"Counter for error log IDs. Incremented by /scott:phase-closeout reflect phase.","naming":"NNN-short-description.md (e.g., 011-missed-context-window.md). Existing files not renamed."}
+{
+  "next_id": 29,
+  "description": "Counter for error log IDs. Incremented by /scott:phase-closeout reflect phase.",
+  "naming": "NNN-short-description.md (e.g., 011-missed-context-window.md).",
+  "fields": {
+    "resolved": "Boolean frontmatter field. Set to true when the root cause has been fixed and a check/guard prevents recurrence. Resolved errors older than 90 days are archived during toolkit-spa-day."
+  }
+}

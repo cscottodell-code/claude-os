@@ -2,8 +2,9 @@
 
 ## Metadata
 - Last updated: 2026-04-04
-- Version: 1.2
+- Version: 1.3
 - Changelog:
+  - v1.3: Add Phase 9 (Archive Resolved Logs) with 90-day retention policy.
   - v1.2: Add Phase 7 (Token Budget Audit) and Phase 8 (Permissions Pruning). Add memory staleness check to Phase 1.
   - v1.1: Add Phase 6 (Stack Review) for learning loop. Remove knowledge/ references (eliminated in v5). Add interfaces audit to Phase 3.
   - v1.0: Initial workflow
@@ -151,6 +152,23 @@ Clean up accumulated one-off allow rules in settings.local.json.
 ### Done when
 Permissions pruned. No embedded secrets in allow rules.
 
+## Phase 9: Archive Resolved Logs [AUTO]
+
+### What this phase does
+Move resolved error and success logs older than 90 days to archive subdirectories.
+Keeps the active directories focused on current, actionable items.
+
+### Steps
+1. Scan `~/Sites/Global/scott-toolkit/errors/` for files with `resolved: true` in YAML frontmatter AND last modified > 90 days ago
+2. Move matching files to `errors/archive/`
+3. Scan `~/Sites/Global/scott-toolkit/successes/` for files last modified > 90 days ago
+4. Move matching files to `successes/archive/`
+5. Update `_metadata.json` if needed (next_id doesn't change)
+6. Report: "Archived N error logs and N success logs"
+
+### Done when
+Active directories contain only current, unresolved items.
+
 ## Completion Checklist
 - [ ] Current state audited (with memory staleness check)
 - [ ] Instinct candidates reviewed
@@ -160,3 +178,4 @@ Permissions pruned. No embedded secrets in allow rules.
 - [ ] Stack review completed (or noted as no data)
 - [ ] Token budget audited
 - [ ] Permissions pruned
+- [ ] Resolved logs archived (90-day retention)

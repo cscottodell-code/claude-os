@@ -1,3 +1,6 @@
+---
+resolved: true
+---
 # Error #005: lessons.md Still Empty After Third Session
 
 **Date:** 2026-03-22

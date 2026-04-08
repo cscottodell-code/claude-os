@@ -1,3 +1,6 @@
+---
+resolved: true
+---
 # Error #003: Doom-Loop on Bun mock.module (6+ Failed Attempts)
 
 **Date:** 2026-03-22
