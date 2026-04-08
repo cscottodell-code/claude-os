@@ -16,6 +16,7 @@ import { guardDestructive } from "./guards/destructive.js";
 import { guardNpmInstall } from "./guards/npm-install.js";
 import { guardPhaseCompletion } from "./guards/phase-completion.js";
 import { guardSurrealdbInject } from "./guards/surrealdb-inject.js";
+import { guardLessonsInject } from "./guards/lessons-inject.js";
 import {
   guardProjectScaffolded,
   guardDesignApproved,
@@ -156,6 +157,12 @@ async function main() {
         JSON.stringify({ additionalContext: result.additionalContext })
       );
     }
+  }
+
+  // --- Guard 8: Lessons injection (advisory, once per session) ---
+  const lessonsResult = await guardLessonsInject(process.cwd());
+  if (lessonsResult.additionalContext) {
+    console.log(lessonsResult.additionalContext);
   }
 
   process.exit(0);
