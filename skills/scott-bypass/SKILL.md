@@ -20,18 +20,20 @@ When Scott says `/scott:bypass` or tells you to bypass a hook, follow these step
 
 Look at the most recent hook error in the conversation. It will look like:
 ```
-PreToolUse:Bash hook error: [~/.claude/hooks/guard-XXXX.sh]: ...
+PreToolUse hook error: guard blocked [guard-name]: ...
 ```
 
 Extract the hook path. If there's no recent hook error, ask Scott which action to bypass.
 
-Known guard hooks:
-| Hook | What it blocks |
-|------|---------------|
-| `guard-git-push.sh` | `git push` commands |
-| `guard-destructive.sh` | `rm -rf`, `git reset --hard`, etc. |
-| `guard-claude-md.sh` | Edits to CLAUDE.md or MEMORY.md |
-| `guard-npm-install.sh` | `npm install` commands |
+Known guards (all routed through `pretooluse-router.ts`):
+| Guard | What it blocks | Module |
+|-------|---------------|--------|
+| git-push | `git push` commands | `hooks/guards/git-push.ts` |
+| destructive | `rm -rf`, `git reset --hard`, etc. | `hooks/guards/destructive.ts` |
+| claude-md | Edits to CLAUDE.md or MEMORY.md | `hooks/guards/claude-md.ts` |
+| npm-install | `npm/pnpm/bun install` commands | `hooks/guards/npm-install.ts` |
+| phase-completion | GSD phase complete without closeout | `hooks/guards/phase-completion.ts` |
+| workflow-gates | Workflow phase prerequisites | `hooks/guards/workflow-gates.ts` |
 
 ## 2. Confirm with Scott
 
@@ -41,19 +43,21 @@ Only proceed if Scott has clearly approved the action. If ambiguous, ask.
 
 ## 3. Execute the bypass
 
-Run these three commands in sequence:
+Since guards are TypeScript modules routed through `pretooluse-router.ts`,
+bypass by temporarily renaming the guard file:
+
 ```bash
-# Disable the hook
-chmod -x [hook-path]
+# Disable the guard
+mv ~/.claude/hooks/guards/[guard-name].ts ~/.claude/hooks/guards/[guard-name].ts.disabled
 
 # Run the blocked command
 [the exact command that was blocked]
 
-# Re-enable the hook
-chmod +x [hook-path]
+# Re-enable the guard
+mv ~/.claude/hooks/guards/[guard-name].ts.disabled ~/.claude/hooks/guards/[guard-name].ts
 ```
 
-**CRITICAL:** Always re-enable the hook, even if the command fails. If the command fails, still run `chmod +x` before reporting the error.
+**CRITICAL:** Always re-enable the guard, even if the command fails.
 
 ## 4. Confirm
 
