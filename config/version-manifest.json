@@ -58,7 +58,12 @@
       { "pattern": "stack-detect.sh", "replacement": "stack-detect.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
       { "pattern": "stack-preflight.sh", "replacement": "stack-preflight.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
       { "pattern": "toolkit-lint.sh", "replacement": "toolkit-lint.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
-      { "pattern": "guard-phase-completion.sh", "replacement": "guards/phase-completion.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" }
+      { "pattern": "guard-phase-completion.sh", "replacement": "guards/phase-completion.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" },
+      { "pattern": "stack-metrics.sh", "replacement": "stack-metrics.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
+      { "pattern": "guard-git-push.sh", "replacement": "hooks/guards/git-push.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" },
+      { "pattern": "guard-destructive.sh", "replacement": "hooks/guards/destructive.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" },
+      { "pattern": "guard-claude-md.sh", "replacement": "hooks/guards/claude-md.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" },
+      { "pattern": "guard-npm-install.sh", "replacement": "hooks/guards/npm-install.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" }
     ],
     "scan_paths": {
       "_readme": "Paths to scan during full lint. Relative to ~/Sites/.",
