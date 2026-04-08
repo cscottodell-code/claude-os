@@ -36,7 +36,6 @@ These are your workflows. Type them and Claude walks you through each one.
 <!-- AUTO:commands-stack -->
 | Command | When to use it |
 |---------|---------------|
-| `/scott:rebuild-metrics` | Regenerate metrics.json from audit artifacts |
 | `/scott:stack-baseline` | First-run stack audit for existing projects |
 | `/scott:stack-review` | Monthly stack health dashboard (check metrics, learning loop) |
 <!-- /AUTO:commands-stack -->
@@ -65,7 +64,6 @@ These are your workflows. Type them and Claude walks you through each one.
 <!-- AUTO:commands-tools -->
 | Command | When to use it |
 |---------|---------------|
-| `/scott:bypass` | Temporarily bypass a guard hook to run a blocked action |
 | `/scott:pause` | Generate a resume prompt for picking up later |
 | `/scott:toolkit-briefing` | Deep-read the toolkit so Claude fully understands it |
 <!-- /AUTO:commands-tools -->

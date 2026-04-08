@@ -105,3 +105,11 @@ If Scott approved any changes (new checks, removals, refinements):
 - [ ] Scott reviewed recommendations
 - [ ] Approved changes applied to check files
 - [ ] Metrics refreshed after changes
+
+## Recovery: Rebuild Metrics
+
+If `checks/metrics.json` is missing, corrupted, or out of sync:
+
+1. Run: `bun run ~/Sites/Global/scott-toolkit/tools/stack-metrics.ts`
+2. Verify the output JSON has valid structure
+3. Report: "Metrics rebuilt. Found N projects, N audit files, N checks tracked."

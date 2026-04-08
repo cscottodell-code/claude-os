@@ -139,6 +139,17 @@ All hooks follow these rules:
 
 **Security model:** Guards fail closed by default. If stdin can't be parsed, the guard blocks.
 
+### How to Bypass a Guard
+
+When Scott explicitly approves a blocked action:
+
+1. Identify the guard from the hook error message (e.g., `PreToolUse:Bash hook error`)
+2. Temporarily rename it: `mv ~/.claude/hooks/guards/[name].ts ~/.claude/hooks/guards/[name].ts.disabled`
+3. Run the blocked command
+4. Re-enable: `mv ~/.claude/hooks/guards/[name].ts.disabled ~/.claude/hooks/guards/[name].ts`
+
+**Always re-enable the guard, even if the command fails.**
+
 ---
 
 ## How Tools Work

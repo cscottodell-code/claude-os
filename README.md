@@ -35,10 +35,8 @@ All workflows are invoked via slash commands:
 | `/advosy:context` | Get Advosy company context (leadership, subsidiaries, contacts) |
 | `/advosy:claimsforce` | Get Claimsforce automation context (workflows, placeholders, webhooks) |
 | `/advosy:crm` | CRM design system, mockup patterns, and page prototyping context |
-| `/scott:rebuild-metrics` | Regenerate metrics.json from audit artifacts |
 | `/scott:stack-baseline` | First-run stack audit for existing projects |
 | `/scott:stack-review` | Monthly stack health dashboard (check metrics, learning loop) |
-| `/scott:bypass` | Temporarily bypass a guard hook to run a blocked action |
 | `/scott:compare-sources` | Compare new sources against your toolkit and surface what's actionable |
 | `/scott:debug` | Debug a problem with structured diagnosis |
 | `/scott:n8n-reference` | Complete n8n workflow reference (patterns, code nodes, expressions, validation) |
