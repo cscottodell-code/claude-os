@@ -12,6 +12,8 @@ Retire the git-push guard. Claude Code's built-in permission prompt already gate
 ### Bug Fixes
 - **Fixed workflow gate blocking routine git commands:** The `/changelog/i` regex in `pretooluse-router.ts` matched any command containing "CHANGELOG" (e.g., `git add CHANGELOG.md`), not just toolkit-update workflow actions. Narrowed to only match explicit phase references.
 - **Fixed GSD hook relative paths in `settings.json`:** `gsd-validate-commit.sh` and `gsd-workflow-guard.js` used relative paths (`.claude/hooks/...`) that failed when cwd wasn't `$HOME`. Changed to `$HOME/.claude/hooks/...`.
+- **Removed broken changelog workflow gate:** The `guardChangesDrafted` gate only ran on Bash commands but CHANGELOG.md is edited via the Edit tool, so it never caught real out-of-order edits. Only produced false positives on `git add CHANGELOG.md`.
+- **Removed stale `/scott:bypass` references:** `workflow-gates.ts` and `phase-completion.ts` still referenced the bypass skill deleted in v6.2.0. Replaced with manual disable/enable methodology.
 
 ## v6.2.0 - 2026-04-08
 

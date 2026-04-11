@@ -20,7 +20,6 @@ import { guardLessonsInject } from "./guards/lessons-inject.js";
 import {
   guardProjectScaffolded,
   guardDesignApproved,
-  guardChangesDrafted,
   guardReflectionComplete,
 } from "./guards/workflow-gates.js";
 
@@ -127,7 +126,8 @@ async function main() {
     const gates = [
       { pattern: /design.proof|phase.6|impeccable.*teach/i, fn: () => guardProjectScaffolded(cwd) },
       { pattern: /build.milestone|phase.7|gsd.*execute/i, fn: () => guardDesignApproved(cwd) },
-      { pattern: /phase.4.*toolkit|update.changelog.*phase/i, fn: () => guardChangesDrafted(cwd) },
+      // guardChangesDrafted removed v6.2.1: gate only ran on Bash commands but CHANGELOG
+      // is edited via Edit tool, so it never caught real out-of-order edits — only false positives.
       { pattern: /generate.retro|phase.3.*retro/i, fn: () => guardReflectionComplete(cwd) },
     ];
 
