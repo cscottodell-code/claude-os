@@ -9,6 +9,10 @@ Retire the git-push guard. Claude Code's built-in permission prompt already gate
 - **Updated `hooks/pretooluse-router.ts`:** Removed git-push guard dispatch (Guard 1). Import replaced with comment explaining retirement.
 - **NEW rule in `rules/claude-behavior.md`:** Added "Git Operations" section. Never commit/push autonomously, but execute immediately when Scott asks. Claude Code's permission prompt is the safety net.
 
+### Bug Fixes
+- **Fixed workflow gate blocking routine git commands:** The `/changelog/i` regex in `pretooluse-router.ts` matched any command containing "CHANGELOG" (e.g., `git add CHANGELOG.md`), not just toolkit-update workflow actions. Narrowed to only match explicit phase references.
+- **Fixed GSD hook relative paths in `settings.json`:** `gsd-validate-commit.sh` and `gsd-workflow-guard.js` used relative paths (`.claude/hooks/...`) that failed when cwd wasn't `$HOME`. Changed to `$HOME/.claude/hooks/...`.
+
 ## v6.2.0 - 2026-04-08
 
 Audit round 2: close the learning loop, fix stale references, consolidate skills, standardize error files.
