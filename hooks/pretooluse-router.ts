@@ -127,7 +127,7 @@ async function main() {
     const gates = [
       { pattern: /design.proof|phase.6|impeccable.*teach/i, fn: () => guardProjectScaffolded(cwd) },
       { pattern: /build.milestone|phase.7|gsd.*execute/i, fn: () => guardDesignApproved(cwd) },
-      { pattern: /changelog|phase.4.*toolkit/i, fn: () => guardChangesDrafted(cwd) },
+      { pattern: /phase.4.*toolkit|update.changelog.*phase/i, fn: () => guardChangesDrafted(cwd) },
       { pattern: /generate.retro|phase.3.*retro/i, fn: () => guardReflectionComplete(cwd) },
     ];
 
