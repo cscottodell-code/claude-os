@@ -19,52 +19,22 @@ import {
 } from "../hooks/guards/workflow-gates.js";
 
 // ---------------------------------------------------------------------------
-// guardGitPush — "fail-closed: blocks git push"
+// guardGitPush — RETIRED v6.2.1 (always allows, kept for GuardResult export)
 // ---------------------------------------------------------------------------
 
-describe("guardGitPush", () => {
-  test("blocks simple git push", () => {
+describe("guardGitPush (retired — always allows)", () => {
+  test("allows git push (guard retired)", () => {
     const result = guardGitPush("git push", "{}");
-    expect(result.allow).toBe(false);
+    expect(result.allow).toBe(true);
   });
 
-  test("blocks git push with remote and branch", () => {
+  test("allows git push with remote and branch", () => {
     const result = guardGitPush("git push origin main", "{}");
-    expect(result.allow).toBe(false);
-  });
-
-  test("blocks git push --force", () => {
-    const result = guardGitPush("git push --force origin main", "{}");
-    expect(result.allow).toBe(false);
-  });
-
-  test("blocks git push in a chain (&&)", () => {
-    const result = guardGitPush(
-      "git add -A && git commit -m 'wip' && git push",
-      "{}"
-    );
-    expect(result.allow).toBe(false);
-  });
-
-  test("does NOT block git pull", () => {
-    const result = guardGitPush("git pull origin main", "{}");
     expect(result.allow).toBe(true);
   });
 
-  test("does NOT block echo containing 'git push'", () => {
-    // "git push" inside a quoted string should be stripped
-    const result = guardGitPush("echo 'git push is blocked'", "{}");
-    expect(result.allow).toBe(true);
-  });
-
-  test("fail-closed: blocks when command is null but rawInput exists", () => {
-    const result = guardGitPush(null, '{"something":"unparseable"}');
-    expect(result.allow).toBe(false);
-    expect(result.message).toContain("fail-closed");
-  });
-
-  test("allows when both command and rawInput are empty", () => {
-    const result = guardGitPush(null, "");
+  test("allows when command is null", () => {
+    const result = guardGitPush(null, "{}");
     expect(result.allow).toBe(true);
   });
 });

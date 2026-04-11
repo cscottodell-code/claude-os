@@ -34,7 +34,7 @@ scott-toolkit/
 │   │   └── platform.ts            #     shortHash(), fileMtime(), now(), dateStr(), daysBetween()
 │   │
 │   ├── guards/                     #   PreToolUse guard modules (imported by router)
-│   │   ├── git-push.ts             #     Fail-closed: blocks git push
+│   │   ├── git-push.ts             #     RETIRED v6.2.1: no-op (exports GuardResult type only)
 │   │   ├── destructive.ts          #     Blocks rm -rf, git reset --hard, etc.
 │   │   ├── npm-install.ts          #     Blocks installs + stack-lock drift detection
 │   │   ├── phase-completion.ts     #     Blocks phase complete without closeout marker
@@ -133,7 +133,7 @@ All hooks follow these rules:
 `pretooluse-router.ts` is the single entry point for Bash commands. It:
 1. Reads stdin once (not 6 times like the old subprocess model)
 2. Logs the command to `~/.claude/bash-commands.log`
-3. Runs guards in order: git push -> destructive -> npm install -> phase completion -> git commit (GSD) -> SurrealDB (advisory)
+3. Runs guards in order: destructive -> npm install -> phase completion -> git commit (GSD) -> SurrealDB (advisory)
 4. Each guard is a pure function imported from `hooks/guards/`
 5. GSD's validate-commit is called via `Bun.spawn()` to preserve GSD ownership
 

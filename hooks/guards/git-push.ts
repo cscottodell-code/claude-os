@@ -1,9 +1,15 @@
 /**
- * Guard: Block git push commands.
- * SECURITY: Fail-closed — if input is unparseable, block.
+ * Guard: git-push (RETIRED v6.2.1)
+ *
+ * Previously blocked all git push commands unconditionally.
+ * Removed because Claude Code's built-in permission system already prompts
+ * the user before executing any Bash command, making this guard redundant.
+ * The behavior rule in claude-behavior.md still instructs Claude to never
+ * push autonomously — only when Scott explicitly asks.
+ *
+ * This file is kept as a no-op so the import in pretooluse-router.ts
+ * doesn't break. The router no longer calls it.
  */
-
-import { stripQuoted } from "../lib/stdin.js";
 
 export interface GuardResult {
   allow: boolean;
@@ -11,29 +17,8 @@ export interface GuardResult {
 }
 
 export function guardGitPush(
-  command: string | null,
-  rawInput: string
+  _command: string | null,
+  _rawInput: string
 ): GuardResult {
-  // Fail closed: if we can't determine the command, block if there was input
-  if (!command) {
-    if (rawInput) {
-      return {
-        allow: false,
-        message:
-          "guard-git-push: failed to parse input — blocking (fail-closed).",
-      };
-    }
-    return { allow: true };
-  }
-
-  const stripped = stripQuoted(command);
-  if (/git\s+push/.test(stripped)) {
-    return {
-      allow: false,
-      message:
-        "Git push blocked — use /scott:bypass or confirm manually.",
-    };
-  }
-
   return { allow: true };
 }

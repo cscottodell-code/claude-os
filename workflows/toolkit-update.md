@@ -166,7 +166,7 @@ Save the changes and sync so both machines have the update.
 ### Steps
 1. Stage all changed files
 2. Commit with a descriptive message: "Update [files]: [reason]"
-3. Push to GitHub (use `/scott:bypass` if the guard hook blocks it)
+3. Push to GitHub
 
 ### Output
 Changes committed and pushed.

@@ -73,6 +73,14 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
   4. ~/.claude/instinct-candidates.md (session learnings captured by extract-instincts hook)
   Do NOT continue work based on assumptions about what was in context before compaction.
 
+### Git Operations (commit, push, branch)
+- **Never commit or push autonomously.** Only run `git commit`, `git push`, or branch operations when Scott explicitly asks (e.g., "commit this", "push it", "commit and push").
+- When Scott asks you to commit and/or push, do it directly. No second-guessing, no "are you sure?" -- just execute.
+- Claude Code's built-in permission prompt is the safety net. Scott sees every command before it runs and can approve or deny.
+- Two exceptions where proactive commits are expected:
+  1. Checkpoint commits before significant refactors (see Planning below).
+  2. Toolkit artifact commits: changes to `~/Sites/Global/scott-toolkit/` must be committed before session ends (see Verification below).
+
 ### Planning
 - Enter plan mode for any non-trivial task (3+ steps or architectural decisions)
 - Write the plan to tasks/todo.md with checkable items before starting

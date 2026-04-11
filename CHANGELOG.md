@@ -1,5 +1,14 @@
 # Toolkit Changelog
 
+## v6.2.1 - 2026-04-10
+
+Retire the git-push guard. Claude Code's built-in permission prompt already gates every Bash command, making the blanket block redundant. Claude can now commit and push when Scott explicitly asks.
+
+### Git Operations
+- **Retired `hooks/guards/git-push.ts`:** Converted to no-op. Previously blocked all `git push` commands unconditionally, with no way to distinguish "Claude decided to push" from "Scott asked Claude to push."
+- **Updated `hooks/pretooluse-router.ts`:** Removed git-push guard dispatch (Guard 1). Import replaced with comment explaining retirement.
+- **NEW rule in `rules/claude-behavior.md`:** Added "Git Operations" section. Never commit/push autonomously, but execute immediately when Scott asks. Claude Code's permission prompt is the safety net.
+
 ## v6.2.0 - 2026-04-08
 
 Audit round 2: close the learning loop, fix stale references, consolidate skills, standardize error files.

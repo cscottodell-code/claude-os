@@ -103,7 +103,7 @@ You don't need to memorize these. Just describe what you want to do and Claude w
 - This is your safety net — even if you forget, the reminder fires
 
 ### Guard hooks (always running)
-- **git push blocked** — prevents accidental pushes (use `/scott:bypass` or confirm manually)
+- **git push** — Claude only pushes when you explicitly ask; Claude Code's permission prompt is the safety net
 - **Destructive commands blocked** — `rm -rf`, `git reset --hard`, etc. require explanation
 - **CLAUDE.md protected** — can't be overwritten without confirmation
 - **npm install blocked** — new dependencies need your approval
@@ -230,7 +230,7 @@ You never create, edit, or delete these files. They're machine-to-machine commun
 | **session-start.sh** | Every time you open Claude Code | Scans for resume files, rebuilds active projects list, checks plugin-project alignment, tells Claude what context exists | A 2-3 line message at the top of your session (plus plugin mismatch warning if applicable) |
 | **pre-compact.sh** | When the context window is about to compress | Saves mechanical backup, tells Claude to write the resume file immediately | Claude suddenly writing a file — that's normal |
 | **session-end.sh** | When Claude Code is closing | Reminds Claude to write resume file + update docs | A short checklist reminder |
-| **guard-git-push.sh** | Every time Claude tries to `git push` | Blocks it until you confirm | "Git push blocked" message |
+| **guard-git-push.sh** | _(retired v6.2.1)_ | No longer blocks; Claude Code's permission prompt gates pushes | N/A |
 | **guard-destructive.sh** | Every time Claude tries `rm -rf`, `git reset --hard`, etc. | Blocks it and explains why | "Blocked: [command] would..." message |
 | **guard-claude-md.sh** | Every time Claude tries to edit CLAUDE.md or MEMORY.md | Blocks it until you confirm | "CLAUDE.md modification blocked" message |
 | **guard-npm-install.sh** | Every time Claude tries to install packages | Blocks it and lists the packages | "npm install blocked -- packages: ..." message |

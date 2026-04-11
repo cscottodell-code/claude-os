@@ -11,7 +11,7 @@ import { appendFile } from "fs/promises";
 import { resolve } from "path";
 import { homedir } from "os";
 import { readStdin, getCommand, getFilePath, stripQuoted } from "./lib/stdin.js";
-import { guardGitPush } from "./guards/git-push.js";
+// guardGitPush retired in v6.2.1 — Claude Code's permission prompt is the safety net
 import { guardDestructive } from "./guards/destructive.js";
 import { guardNpmInstall } from "./guards/npm-install.js";
 import { guardPhaseCompletion } from "./guards/phase-completion.js";
@@ -56,14 +56,10 @@ async function main() {
 
   const stripped = command ? stripQuoted(command) : "";
 
-  // --- Guard 1: git push ---
-  if (command && /(?:^|\s|&&|\|)git\s+push(?:\s|$)/.test(stripped)) {
-    const result = guardGitPush(command, rawInput);
-    if (!result.allow) {
-      if (result.message) console.log(result.message);
-      process.exit(2);
-    }
-  }
+  // --- Guard 1: git push (RETIRED v6.2.1) ---
+  // Previously blocked all git push commands unconditionally.
+  // Removed: Claude Code's built-in permission prompt already gates Bash commands.
+  // Behavior rule in claude-behavior.md instructs Claude to only push when asked.
 
   // --- Guard 2: destructive operations ---
   if (
