@@ -38,7 +38,7 @@ function gate(
   }
 
   // Default: block
-  return { allow: false, message: msg + " Blocked. Use /scott:bypass to override." };
+  return { allow: false, message: msg + " Blocked. To bypass: mv the guard .ts file to .ts.disabled, run the command, then mv it back." };
 }
 
 /** new-project Phase 5 must complete before Phase 6+ */

@@ -75,7 +75,7 @@ export function guardPhaseCompletion(command: string): GuardResult {
       "",
       "Run /scott:phase-closeout first. It handles verify, review, reflect, and gate.",
       "The marker file is created automatically when phase-closeout completes.",
-      "To bypass: /scott:bypass",
+      "To bypass: mv the guard .ts file to .ts.disabled, run the command, then mv it back.",
     ].join("\n"),
   };
 }
