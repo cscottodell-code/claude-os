@@ -377,4 +377,5 @@ Data pipeline integrations: Airbyte, Dagster, Fivetran, n8n
 - `surrealdb-v3-vector-search.md` - HNSW indexes, KNN search, embedding patterns
 - `surrealdb-v3-spectron.md` - Spectron memory system (5 types, bi-temporal, multi-agent)
 - `surrealdb-v3-realtime.md` - Events, changefeeds, live queries, agent coordination
+- `surrealdb-v3-agent-typescript.md` - TypeScript application layer (read/reason/extract/write loop, Nuxt integration)
 - `../../docs/training-surrealdb-agents.md` - Hands-on walkthrough for all patterns above

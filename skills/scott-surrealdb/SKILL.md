@@ -249,4 +249,5 @@ await db.query<[Msg[]]>('SELECT * FROM messages WHERE conversation = $conv', { c
 | Context7 JS SDK | `/surrealdb/surrealdb.js` (87 snippets) |
 | Context7 SurrealQL | `/surrealdb/docs.surrealdb.com` (8588 snippets) |
 | Eleanor-specific patterns | Eleanor's CLAUDE.md + tasks/lessons.md |
+| Agent TypeScript layer | `skills/scott-surrealdb/references/surrealdb-v3-agent-typescript.md` |
 | Agent training walkthrough | `docs/training-surrealdb-agents.md` |

@@ -11,6 +11,9 @@ SurrealDB agent architecture patterns: add context layer, hybrid RAG, and agent 
 - **MODIFIED `references/surrealdb-v3-spectron.md`:** Added training doc to Companion Files.
 - **NEW `docs/training-surrealdb-agents.md`:** 5-section hands-on walkthrough (vector search, graph+vector, Spectron memory, LIVE SELECT, agent loop). Fixed 9 syntax issues caught by live testing: missing space, double-prefixed INSERT IDs, single-quote RELATE IDs, ORDER BY rule, UNION (doesn't exist in SurrealQL), IF NOT EXISTS position, collapsed lines.
 
+### Agent Application Layer
+- **NEW `references/surrealdb-v3-agent-typescript.md`:** TypeScript code that bridges the SurrealQL patterns to a running agent. Covers: read context (vector+graph+memory in one query), call Claude (Anthropic SDK with adaptive thinking and streaming), extract entities (structured output with Zod), write results (atomic transaction), the full loop, and Nuxt API route integration. Uses Haiku for cheap entity extraction, Opus for reasoning.
+
 ### Consolidation
 - **REFACTORED `references/surrealdb-v3-ai-patterns.md`:** Removed 195 duplicate lines of Spectron content (schemas, bi-temporal versioning, connection discovery, multi-agent permissions, Eleanor integration). Replaced with 3-line pointer to canonical `surrealdb-v3-spectron.md`. File went from 575 to 380 lines, zero information lost.
 
