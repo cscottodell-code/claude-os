@@ -56,7 +56,7 @@ These are your workflows. Type them and Claude walks you through each one.
 |---------|---------------|
 | `/scott:debug` | Debug a problem with structured diagnosis |
 | `/scott:n8n-reference` | Complete n8n workflow reference (patterns, code nodes, expressions, validation) |
-| `/scott:surrealdb` | SurrealDB query patterns, schema design, and connection setup |
+| `/scott:surrealdb` | SurrealDB query patterns, schema design, AI agent architecture, and connection setup |
 <!-- /AUTO:commands-reference -->
 
 ### Tools & Utilities

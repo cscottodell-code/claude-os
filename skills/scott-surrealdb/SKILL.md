@@ -7,7 +7,7 @@ description: |
   Also use when asking about record links, events, indexes, vector search, agent
   memory (Spectron), or the context layer pattern.
 user_invocable: true
-invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and connection setup
+invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, AI agent architecture, and connection setup
 section: reference
 ---
 

@@ -45,7 +45,7 @@ All workflows are invoked via slash commands:
 | `/scott:pause` | Generate a resume prompt for picking up later |
 | `/scott:phase-closeout` | Run the mandatory phase closeout (verify, review, reflect, gate) |
 | `/scott:resume` | Pick up where you left off on a project |
-| `/scott:surrealdb` | SurrealDB query patterns, schema design, and connection setup |
+| `/scott:surrealdb` | SurrealDB query patterns, schema design, AI agent architecture, and connection setup |
 | `/scott:toolkit-briefing` | Deep-read the toolkit so Claude fully understands it |
 | `/scott:update-toolkit` | Update the scott-toolkit with new lessons or patterns |
 <!-- /AUTO:commands -->
