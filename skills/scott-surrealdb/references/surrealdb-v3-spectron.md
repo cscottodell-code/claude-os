@@ -471,3 +471,4 @@ RETURN {
 - `surrealdb-v3-vector-search.md` - HNSW indexes, KNN search, embedding patterns
 - `surrealdb-v3-ai-patterns.md` - RAG schemas, agent memory patterns, framework integrations
 - `surrealdb-v3-realtime.md` - Events, changefeeds, live queries
+- `../../docs/training-surrealdb-agents.md` - Hands-on walkthrough (vectors, graph, memory, live queries, agent loop)

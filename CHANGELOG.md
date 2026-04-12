@@ -1,5 +1,23 @@
 # Toolkit Changelog
 
+## v6.2.2 - 2026-04-11
+
+SurrealDB agent architecture patterns: add context layer, hybrid RAG, and agent coordination docs. Fix broken SurrealQL from Cowork session (7 of 8 tests failed against live v3.0.2).
+
+### SurrealDB Skill
+- **MODIFIED `references/surrealdb-v3-ai-patterns.md`:** Added "Context Layer Loop" (read-reason-write transaction pattern) and "Hybrid RAG: Two Query Strategies" (entity-first vs similarity-first). Fixed ORDER BY without field in SELECT (v3 requirement). Added Companion Files section.
+- **MODIFIED `references/surrealdb-v3-realtime.md`:** Added "Agent-to-Agent Coordination with LIVE SELECT" (task queue, reactive pipeline, TABLE events, Kafka comparison). Fixed variable RELATE table name (not supported in SurrealQL, changed to literal table with type field).
+- **MODIFIED `SKILL.md`:** Expanded description to cover AI agent architecture. Added Context Layer Loop and Hybrid RAG as settled architecture decisions. Added training doc to Deep References table.
+- **MODIFIED `references/surrealdb-v3-spectron.md`:** Added training doc to Companion Files.
+- **NEW `docs/training-surrealdb-agents.md`:** 5-section hands-on walkthrough (vector search, graph+vector, Spectron memory, LIVE SELECT, agent loop). Fixed 9 syntax issues caught by live testing: missing space, double-prefixed INSERT IDs, single-quote RELATE IDs, ORDER BY rule, UNION (doesn't exist in SurrealQL), IF NOT EXISTS position, collapsed lines.
+
+### Lessons Learned
+- Cowork-generated SurrealQL looks plausible but frequently breaks against a live instance. Always test reference patterns before committing.
+- SurrealDB v3 requires ORDER BY fields to appear in the SELECT clause.
+- RELATE table names must be literal identifiers, not variables.
+- SurrealQL has no UNION keyword. Use separate queries or array operations.
+- INSERT INTO with `id: 'table:key'` creates double-prefixed IDs. Use CREATE or omit the table prefix.
+
 ## v6.2.1 - 2026-04-10
 
 Retire the git-push guard. Claude Code's built-in permission prompt already gates every Bash command, making the blanket block redundant. Claude can now commit and push when Scott explicitly asks.

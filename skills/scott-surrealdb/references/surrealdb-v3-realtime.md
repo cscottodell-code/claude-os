@@ -246,6 +246,126 @@ LIVE SELECT * FROM monthly_revenue;
 -- Fires whenever the underlying `sale` table changes
 ```
 
+### Agent-to-Agent Coordination with LIVE SELECT
+
+In a multi-agent system, agents need to coordinate: Agent A produces output that Agent B consumes. Traditionally this requires a message broker (Kafka, Redis Pub/Sub, RabbitMQ) as middleware. With SurrealDB, Agent B just runs `LIVE SELECT * FROM agent_a_output WHERE status = 'ready'` and gets pushed updates whenever Agent A writes new results. The database IS the message bus. No extra infrastructure.
+
+#### Agent Task Queue
+
+```surql
+-- Shared task table
+DEFINE TABLE agent_task SCHEMAFULL;
+DEFINE FIELD task_type ON agent_task TYPE string;
+DEFINE FIELD payload ON agent_task TYPE object FLEXIBLE;
+DEFINE FIELD status ON agent_task TYPE string DEFAULT 'pending'
+  ASSERT $value IN ['pending', 'claimed', 'processing', 'done', 'failed'];
+DEFINE FIELD assigned_to ON agent_task TYPE option<string>;
+DEFINE FIELD created_at ON agent_task TYPE datetime DEFAULT time::now() READONLY;
+DEFINE FIELD completed_at ON agent_task TYPE option<datetime>;
+
+-- Agent subscribes to pending tasks of its type
+-- LIVE SELECT * FROM agent_task WHERE task_type = 'extract_entities' AND status = 'pending';
+
+-- Agent claims a task (atomic update prevents double-claiming)
+UPDATE agent_task:$task_id SET
+  status = 'claimed',
+  assigned_to = $agent_id
+WHERE status = 'pending';
+```
+
+#### Reactive Pipeline (TypeScript)
+
+Three agents form a pipeline: extract > map relationships > update knowledge graph. Each agent subscribes to the previous agent's output table.
+
+```typescript
+import Surreal, { Table } from 'surrealdb';
+
+// Agent A: Entity Extractor
+// Writes extraction results, then Agent B picks them up automatically
+async function agentA(db: Surreal) {
+  // ... runs extraction logic, writes results:
+  await db.create(new Table('extracted_entities'), {
+    document_id: 'doc:abc',
+    entities: [{ name: 'Acme Corp', type: 'company' }],
+    status: 'ready',
+  });
+}
+
+// Agent B: Relationship Mapper
+// Subscribes to extracted_entities, maps relationships, writes to entity_relationships
+async function agentB(db: Surreal) {
+  const sub = await db.live<ExtractedEntity>(new Table('extracted_entities'));
+  for await (const { action, value } of sub) {
+    if (action === 'CREATE' && value.status === 'ready') {
+      const relationships = await mapRelationships(value.entities);
+      await db.create(new Table('entity_relationships'), {
+        source_id: value.id,
+        relationships,
+        status: 'ready',
+      });
+    }
+  }
+}
+
+// Agent C: Knowledge Graph Builder
+// Subscribes to entity_relationships, updates the graph
+async function agentC(db: Surreal) {
+  const sub = await db.live<EntityRelationship>(new Table('entity_relationships'));
+  for await (const { action, value } of sub) {
+    if (action === 'CREATE' && value.status === 'ready') {
+      for (const rel of value.relationships) {
+        // Note: RELATE requires a literal table name — variables can't be used
+        // as the relation table. Use a fixed relation table for all edge types,
+        // with a 'type' field to distinguish them.
+        await db.query(
+          'RELATE $from->related_to->$to SET type = $rel_type, confidence = $conf',
+          { from: rel.from, rel_type: rel.type, to: rel.to, conf: rel.confidence }
+        );
+      }
+    }
+  }
+}
+```
+
+#### TABLE Events for Auto-Triggering Agents
+
+Use DEFINE EVENT to automatically create tasks when data changes. No polling needed.
+
+```surql
+-- When a new document is ingested, auto-trigger the chunking agent
+DEFINE EVENT trigger_chunking ON TABLE document ASYNC
+  WHEN $event = 'CREATE'
+  THEN {
+    CREATE agent_task SET
+      task_type = 'chunk_document',
+      payload = { document_id: $after.id, title: $after.title },
+      status = 'pending';
+  };
+
+-- When chunks are created, auto-trigger the embedding agent
+DEFINE EVENT trigger_embedding ON TABLE chunk ASYNC
+  WHEN $event = 'CREATE'
+  THEN {
+    CREATE agent_task SET
+      task_type = 'embed_chunk',
+      payload = { chunk_id: $after.id, content: $after.content },
+      status = 'pending';
+  };
+```
+
+#### Comparison: Message Broker vs LIVE SELECT
+
+| Feature | Kafka/Redis Pub/Sub | SurrealDB LIVE SELECT |
+|---|---|---|
+| Extra infrastructure | Yes (broker cluster) | No (same DB) |
+| Message persistence | Kafka yes, Redis no | Yes (it's a table) |
+| Query filtering | Limited | Full SurrealQL WHERE |
+| ACID with data | No (separate system) | Yes (same transaction) |
+| Scale limit | Very high | Moderate (hundreds of subscriptions, not thousands) |
+| Best for | High-throughput event streaming | Agent coordination, reactive workflows |
+
+> **When to use this pattern:** Use LIVE SELECT coordination when you have fewer than ~50 agents coordinating around shared data. For high-throughput event streaming (thousands of events/sec), a dedicated broker is still the right call. For agent coordination where the data and the messages live in the same place, LIVE SELECT eliminates an entire infrastructure layer.
+
 ### Important Notes
 
 - Live queries require **WebSocket** connection (not HTTP)

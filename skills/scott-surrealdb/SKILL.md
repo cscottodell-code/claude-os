@@ -1,10 +1,11 @@
 ---
 name: scott:surrealdb
 description: |
-  SurrealQL syntax, schema design patterns, and query optimization for SurrealDB.
-  Use whenever the user writes SurrealQL, designs a database schema, asks about
-  SurrealDB features, or connects SurrealDB to n8n. Also use when asking about
-  record links, events, indexes, or query optimization.
+  SurrealQL syntax, schema design patterns, query optimization, and AI agent
+  architecture for SurrealDB. Use whenever the user writes SurrealQL, designs a
+  database schema, builds AI agents with SurrealDB, or connects SurrealDB to n8n.
+  Also use when asking about record links, events, indexes, vector search, agent
+  memory (Spectron), or the context layer pattern.
 user_invocable: true
 invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, and connection setup
 section: reference
@@ -229,6 +230,10 @@ await db.query<[Msg[]]>('SELECT * FROM messages WHERE conversation = $conv', { c
 
 **Spectron (ADOPTED):** SurrealDB's official AI agent memory layer. 5 memory types: working, semantic, episodic, procedural, preference. Runs on same SurrealDB instance. Use for Eleanor's persistent memory. See `~/Sites/Global/scott-toolkit/skills/scott-surrealdb/references/surrealdb-v3-spectron.md` for schemas and patterns.
 
+**Context Layer Loop:** The core agent execution pattern. One SurrealQL transaction combines vector search + graph traversal + memory lookup (read), passes to LLM (reason), then atomically writes back results + entities + relationships (write). All new agents should follow this pattern. See `surrealdb-v3-ai-patterns.md` "The Context Layer Loop" section.
+
+**Hybrid RAG:** Two query strategies depending on what you know at query time. Entity-first (graph→vector) when you know the entity; similarity-first (vector→graph) when exploring. See `surrealdb-v3-ai-patterns.md` "Hybrid RAG" section.
+
 ## Deep References (read on-demand, not auto-loaded)
 
 | Need | File |
@@ -244,3 +249,4 @@ await db.query<[Msg[]]>('SELECT * FROM messages WHERE conversation = $conv', { c
 | Context7 JS SDK | `/surrealdb/surrealdb.js` (87 snippets) |
 | Context7 SurrealQL | `/surrealdb/docs.surrealdb.com` (8588 snippets) |
 | Eleanor-specific patterns | Eleanor's CLAUDE.md + tasks/lessons.md |
+| Agent training walkthrough | `docs/training-surrealdb-agents.md` |

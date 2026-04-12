@@ -77,6 +77,77 @@ LET $related = SELECT ->mentions->entity.* FROM $chunks;
 RETURN { chunks: $chunks, entities: $related };
 ```
 
+### Hybrid RAG: Two Query Strategies
+
+The Multi-Modal and Hop-and-Search examples above are both instances of a broader pattern: combining graph traversal with vector search. The question is which one you start with. Pick the strategy based on what you know at query time.
+
+| Question | Use Entity-First | Use Similarity-First |
+|---|---|---|
+| Do I know the entity? | Yes | No |
+| Is my query structured? | Yes | No, it's natural language |
+| Am I exploring or retrieving? | Retrieving | Exploring |
+| Example | "Get all docs about [X]" | "How do we handle [situation]?" |
+
+#### Pattern 1: Entity-First (Graph to Vector)
+
+**When to use:** You know WHAT you're looking for (a specific entity, relationship, or structured attribute), but need to find RELATED unstructured content.
+
+**Example:** "What do we know about Advosy's lead conversion process?" Start from the entity "Advosy" + relationship "lead_conversion", traverse graph, THEN vector-search for related chunks.
+
+```surql
+-- Entity-First: Start from known entity, expand via graph, enrich with vectors
+LET $entity = SELECT * FROM entity WHERE name = $entity_name LIMIT 1;
+
+-- Traverse graph: what's connected to this entity?
+LET $related = SELECT
+  ->related_to->entity.{ id, name, type } AS neighbors,
+  <-mentions<-chunk.{ id, content } AS direct_chunks
+FROM $entity;
+
+-- Enrich: find more chunks similar to the direct chunks' embeddings
+LET $enriched = SELECT id, content, vector::distance::knn() AS dist
+FROM chunk
+WHERE embedding <|5, 40|> $query_vec
+AND id NOT IN $related.direct_chunks.id
+ORDER BY dist ASC;
+
+RETURN { entity: $entity, graph_context: $related, vector_enriched: $enriched };
+```
+
+#### Pattern 2: Similarity-First (Vector to Graph)
+
+**When to use:** You DON'T know what entity you need. You have a vague question or natural language query, and want to discover structure.
+
+**Example:** "How should we handle homeowners who say they need to think about it?" Vector search finds relevant chunks, THEN graph traversal discovers the entities and relationships those chunks connect to.
+
+```surql
+-- Similarity-First: Start from vector search, discover structure via graph
+LET $similar = SELECT id, content, vector::distance::knn() AS dist
+FROM chunk
+WHERE embedding <|5, 40|> $query_vec
+ORDER BY dist ASC;
+
+-- Discover: what entities do these chunks mention?
+LET $discovered = SELECT
+  ->mentions->entity.{ id, name, type, mention_count } AS entities
+FROM $similar;
+
+-- Expand: traverse from discovered entities to find more context
+LET $expanded = SELECT
+  id, name, type, mention_count,
+  ->related_to->entity.{ name, type } AS connections,
+  <-mentions<-chunk.content AS all_chunks
+FROM $discovered.entities
+ORDER BY mention_count DESC
+LIMIT 5;
+
+RETURN {
+  similar_chunks: $similar,
+  discovered_entities: $discovered,
+  expanded_context: $expanded
+};
+```
+
 ---
 
 ## Agent Memory Patterns
@@ -169,6 +240,88 @@ FROM $also_bought
 ORDER BY relevance DESC
 LIMIT 10;
 ```
+
+---
+
+## The Context Layer Loop
+
+The context layer loop is the core execution cycle for any agent backed by SurrealDB. It ties together the vector search, graph traversal, and memory patterns above into a single, repeatable workflow. Because SurrealDB handles documents, graphs, and vectors in one engine, the entire read-reason-write cycle can run inside a single transaction. That means no stale reads between your vector store and your graph database, no orphaned writes when one system succeeds and another fails, and no glue code trying to keep Pinecone, Neo4j, and Postgres in sync.
+
+The loop has three steps:
+
+1. **Read context** - One SurrealQL query combines vector search + graph traversal + memory lookup. This replaces 3 separate database calls in a traditional stack.
+2. **Reason** - Pass the assembled context to the LLM. This step happens outside SurrealDB.
+3. **Write results** - Atomically write back the agent's response, any new entities extracted, updated memory, and relationship edges. All in one transaction.
+
+### Full Loop as a Transaction
+
+```surql
+BEGIN TRANSACTION;
+
+-- STEP 1: READ CONTEXT
+-- Vector search on chunks for relevant knowledge
+LET $chunks = SELECT id, content, vector::distance::knn() AS dist
+  FROM chunk
+  WHERE embedding <|5, 40|> $query_vec
+  ORDER BY dist ASC;
+
+-- Graph hop to entities mentioned in those chunks
+LET $entities = SELECT ->mentions->entity.{ id, name, type } AS entities
+  FROM $chunks;
+
+-- Fetch working memory for this session
+LET $memory = SELECT key, value FROM working_memory
+  WHERE session_id = $session_id
+  AND agent_id = $agent_id;
+
+-- (LLM reasoning happens here, outside the database.
+--  The application sends $chunks, $entities, and $memory to the LLM,
+--  then uses the LLM's response in the write step below.)
+
+-- STEP 3: WRITE RESULTS
+-- Save the agent's response
+CREATE message SET
+  conversation = $conversation_id,
+  role = 'assistant',
+  content = $llm_response,
+  token_count = $response_tokens,
+  created_at = time::now();
+
+-- Create or update entities the LLM extracted
+LET $new_entity = CREATE entity SET
+  name = $extracted_name,
+  type = $extracted_type,
+  embedding = $entity_embedding,
+  mention_count = 1;
+
+-- Connect the new entity to existing ones
+RELATE $new_entity->related_to->$existing_entity_id SET
+  relationship = $relationship_label,
+  confidence = $confidence_score,
+  discovered_at = time::now();
+
+-- Update working memory with current task state
+UPDATE working_memory SET value = $updated_value
+  WHERE session_id = $session_id
+  AND agent_id = $agent_id
+  AND key = 'current_context';
+
+COMMIT TRANSACTION;
+```
+
+### Traditional Stack vs Context Layer
+
+| Step | Traditional Stack | Context Layer (SurrealDB) |
+|---|---|---|
+| Vector search | Call Pinecone API | `SELECT ... WHERE embedding <\|5, 40\|> $vec` |
+| Graph traversal | Call Neo4j API | `->mentions->entity` in the same query |
+| Memory lookup | Query Postgres / Redis | `SELECT FROM working_memory` in the same query |
+| Write response | INSERT into Postgres | `CREATE message` in the same transaction |
+| Store entities | INSERT into Neo4j | `CREATE entity` in the same transaction |
+| Link relationships | CREATE in Neo4j | `RELATE` in the same transaction |
+| Sync guarantee | Hope nothing fails mid-way | ACID transaction, all or nothing |
+
+> **Why this works:** This pattern works because SurrealDB combines document, graph, and vector in one engine. If you need to split the read and write across different databases, the atomicity guarantee breaks. One failed write leaves your knowledge graph out of sync with your memory store, and you are stuck writing reconciliation logic instead of agent logic.
 
 ---
 
@@ -407,3 +560,13 @@ Data pipeline integrations: Airbyte, Dagster, Fivetran, n8n
 | Real-time AI updates | Yes, LIVE SELECT | No |
 | Managed vector pipelines | No | Pinecone, Weaviate |
 | Simple embeddings search only | Either works | Pinecone if managed preferred |
+
+---
+
+## Companion Files
+
+- `surrealdb-v3-master-reference.md` - Complete reference (this file was extracted from it)
+- `surrealdb-v3-vector-search.md` - HNSW indexes, KNN search, embedding patterns
+- `surrealdb-v3-spectron.md` - Spectron memory system (5 types, bi-temporal, multi-agent)
+- `surrealdb-v3-realtime.md` - Events, changefeeds, live queries, agent coordination
+- `../../docs/training-surrealdb-agents.md` - Hands-on walkthrough for all patterns above
