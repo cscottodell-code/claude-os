@@ -1,5 +1,36 @@
 # Toolkit Changelog
 
+## v6.2.3 - 2026-04-13
+
+SurrealDB enforcement overhaul: 5 hooks, updated rules, updated skill, and reusable test template. Triggered by Eleanor Phase 4 where mock-only tests hid 4 real schema bugs (invalid ASSERT values, unsupported multi-field FULLTEXT, missing FLEXIBLE, invalid IF/THEN/END syntax).
+
+### New Hooks
+- **NEW `guards/surrealdb-validate-write.ts` (PostToolUse):** Validates .surql syntax against live SurrealDB HTTP API on every Write/Edit. Also reminds about Context7 verification when writing .ts files with surql imports.
+- **NEW `guards/surrealdb-integration-tests.ts` (PreToolUse):** Two guards in one file:
+  - Guard 7a (advisory): Warns on test commands if project has SurrealDB migrations but no live integration tests.
+  - Guard 4b (blocking): BLOCKS phase completion if phase modified SurrealDB files but no live integration tests exist.
+
+### Modified Hooks
+- **MODIFIED `pretooluse-router.ts`:** Wired Guard 7a (advisory on test runs) and Guard 4b (blocking on phase complete). Added import for new guards.
+- **MODIFIED `guards/surrealdb-inject.ts`:** Injected context now includes mandatory verification protocol (5 steps) and v3 syntax traps list alongside the skill content.
+
+### Rules
+- **MODIFIED `rules/claude-behavior.md`:** Expanded SurrealDB knowledge rule from 1 line to full enforcement section: hook chain documentation, 5-step verification protocol, 6 syntax traps, template path reference.
+
+### SurrealDB Skill
+- **MODIFIED `skills/scott-surrealdb/SKILL.md`:** Added 6 new traps to Known Traps list (FULLTEXT single-field, FLEXIBLE position, IF syntax, ORDER BY, RELATE with LET, multi-statement indexing). Added mandatory integration test requirement with template path.
+
+### Templates
+- **NEW `references/surrealdb-integration-test-template.ts`:** Copy-ready db-setup.ts for any project. Handles: live SurrealDB connect, namespace/database creation, migration runner with EVENT stripping, statement-by-statement fallback, teardown. Includes vitest.config.ts instructions.
+
+### Lessons Learned
+- Mock tests (`vi.fn()`) do not verify SurrealQL syntax, schema ASSERTs, or field constraints. 4 real bugs shipped in Eleanor Phase 4 hidden by mocks.
+- SurrealDB v3 FULLTEXT indexes support one field per index only. Multi-field silently fails.
+- `TYPE object FLEXIBLE` (not `FLEXIBLE TYPE object`) in v3.0.2.
+- `IF cond { expr } ELSE { expr }` is SurrealQL. `IF/THEN/ELSE/END` is ANSI SQL and fails.
+- ORDER BY only accepts field references. Use computed AS fields in SELECT for custom sort.
+- RELATE cannot use type::record() inline. Use LET binding for dynamic record IDs.
+
 ## v6.2.2 - 2026-04-11
 
 SurrealDB agent architecture patterns: add context layer, hybrid RAG, and agent coordination docs. Fix broken SurrealQL from Cowork session (7 of 8 tests failed against live v3.0.2).

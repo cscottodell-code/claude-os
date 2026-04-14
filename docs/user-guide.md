@@ -107,6 +107,10 @@ You don't need to memorize these. Just describe what you want to do and Claude w
 - **Destructive commands blocked** — `rm -rf`, `git reset --hard`, etc. require explanation
 - **CLAUDE.md protected** — can't be overwritten without confirmation
 - **npm install blocked** — new dependencies need your approval
+- **SurrealDB syntax validation** — every .surql file write is validated against the live SurrealDB instance; parse errors are reported immediately
+- **SurrealDB Context7 reminder** — writing .ts files with surql imports triggers a reminder to verify against docs, not general knowledge
+- **SurrealDB integration test advisory** — running tests in a SurrealDB project without live integration tests triggers a warning
+- **SurrealDB integration test gate** — phase completion is BLOCKED if the phase touched SurrealDB files but no live integration tests exist (copy template from `~/Sites/Global/scott-toolkit/references/surrealdb-integration-test-template.ts`)
 
 ---
 
