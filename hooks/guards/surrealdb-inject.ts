@@ -74,7 +74,19 @@ export async function injectSurrealDB(
       "[WARNING] SurrealDB server is NOT running on localhost:8000. Start it with: ~/Sites/Global/scott-toolkit/start-surreal.sh\n\n";
   }
 
-  return `${healthWarning}[SurrealDB Skill Auto-Loaded] ${content}`;
+  const verifyProtocol = [
+    "",
+    "[MANDATORY VERIFICATION PROTOCOL]",
+    "NEVER write SurrealQL from general knowledge or training data.",
+    "BEFORE writing any SurrealQL or JS SDK code:",
+    "  1. Query Context7: mcp__context7__query-docs with libraryId=/surrealdb/docs.surrealdb.com",
+    "  2. If MCP server available: test queries against live SurrealDB via mcp__surrealdb__query",
+    "  3. Copy syntax from verified docs or existing working migrations, never from memory",
+    "Known v3 gotchas: single-field FULLTEXT only, TYPE object FLEXIBLE, IF { } ELSE { } (not THEN/END),",
+    "RELATE needs LET for dynamic IDs, ORDER BY only supports field refs (use computed AS fields).",
+  ].join("\n");
+
+  return `${healthWarning}[SurrealDB Skill Auto-Loaded] ${content}${verifyProtocol}`;
 }
 
 /** GuardResult wrapper for the router (always allows, may have context) */
