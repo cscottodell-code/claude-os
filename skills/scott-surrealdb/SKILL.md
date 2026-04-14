@@ -40,6 +40,17 @@ If you cannot verify a syntax pattern against Context7 or the reference files, d
 - `$input` IS available in DEFINE EVENT handlers
 - DEFINE API works WITHOUT experimental flags on v3.0.2
 - `type::is::record()` RENAMED -- use `type::is_record()` (underscore, not double colon). Same for all type checks: `type::is_string()`, `type::is_number()`, `type::is_bool()`, `type::is_array()`, `type::is_object()`, `type::is_datetime()`, `type::is_none()`
+- FULLTEXT indexes: ONE field per index only. `FIELDS name, role FULLTEXT ...` silently fails. Create separate indexes.
+- FLEXIBLE keyword: `TYPE object FLEXIBLE` (FLEXIBLE goes AFTER TYPE, not before)
+- IF expressions: `IF cond { expr } ELSE IF cond { expr } ELSE { expr }` -- NOT `IF/THEN/ELSE/END` (that is ANSI SQL, not SurrealQL)
+- ORDER BY: field references only, no inline expressions. Use computed `AS` fields in SELECT for custom sort order.
+- RELATE: cannot use `type::record()` inline in arrow syntax. Use `LET $from = type::record($id); RELATE $from->edge->$to`
+- Multi-statement query results: `LET` returns null at each index. Count statements and index explicitly: `results[2]` not `results[0]`.
+
+## MANDATORY: Integration Test Requirement
+Every phase that touches SurrealDB MUST have integration tests against a live instance.
+Mock tests (`vi.fn()`) do NOT verify SurrealQL syntax, schema ASSERTs, or field constraints.
+Template: `~/Sites/Global/scott-toolkit/references/surrealdb-integration-test-template.ts`
 
 ## Project Versions (don't mix these up)
 

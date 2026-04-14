@@ -48,7 +48,24 @@ Plugin IDs (Vercel, Superpowers, Impeccable) are cataloged in the `plugins` sect
 - Phase closeout includes a stack audit (Phase 1.5) that runs technology-specific checks
 - Stack drift (installing packages that conflict with stack-lock.json) is caught by the npm-install guard in `guards/npm-install.ts`
 - Lessons tagged with `[stack:<tech>]` feed back into check files via the learning loop
-- **SurrealDB knowledge rule:** NEVER write SurrealQL from general SQL knowledge or LLM training data. Always verify syntax against Context7 (`/surrealdb/docs.surrealdb.com`), the skill traps list, or reference files before writing any query. The `guards/surrealdb-inject.ts` hook enforces this by auto-loading the skill on first SurrealDB file touch and checking that the live instance is running on `localhost:8000`.
+- **SurrealDB knowledge rule:** NEVER write SurrealQL from general SQL knowledge or LLM training data. Always verify syntax against Context7 (`/surrealdb/docs.surrealdb.com`), the skill traps list, or reference files before writing any query. Hook enforcement chain:
+  - `surrealdb-inject.ts` (PreToolUse): auto-loads skill + verification protocol on first SurrealDB file touch
+  - `surrealdb-validate-write.ts` (PostToolUse): validates .surql syntax against live SurrealDB on every write
+  - `surrealdb-integration-tests.ts` Guard 7a (PreToolUse): warns on test runs if no live DB integration tests
+  - `surrealdb-integration-tests.ts` Guard 4b (PreToolUse): BLOCKS phase completion if SurrealDB files changed but no live integration tests exist
+- **SurrealDB verification protocol (mandatory for all projects):**
+  1. Before writing: query Context7 for correct syntax (`/surrealdb/docs.surrealdb.com`)
+  2. Before committing: test queries against live SurrealDB via MCP or integration tests
+  3. Before shipping: integration tests MUST run against live SurrealDB instance
+  4. Copy from working code: use existing migrations as templates, never write from training data
+  5. Template: `~/Sites/Global/scott-toolkit/references/surrealdb-integration-test-template.ts`
+- **SurrealDB v3 syntax traps (verified against live instance):**
+  - FULLTEXT indexes: one field per index only. `FIELDS name, role` fails silently.
+  - FLEXIBLE keyword: `TYPE object FLEXIBLE` (not `FLEXIBLE TYPE object`)
+  - IF expressions: `IF cond { expr } ELSE { expr }` (not `IF/THEN/ELSE/END`)
+  - ORDER BY: field refs only. Use computed `AS` fields in SELECT for custom sort.
+  - RELATE: cannot use `type::record()` inline. Use `LET $from = type::record($id); RELATE $from->edge->$to`
+  - Multi-statement results: `LET` returns null at each index. Count statements and index explicitly.
 
 ### Context Engineering (-> Toolkit)
 - After ANY correction from Scott: update `tasks/lessons.md`
