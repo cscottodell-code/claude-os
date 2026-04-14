@@ -22,6 +22,10 @@ import {
   guardDesignApproved,
   guardReflectionComplete,
 } from "./guards/workflow-gates.js";
+import {
+  guardSurrealTestAdvisory,
+  guardSurrealPhaseComplete,
+} from "./guards/surrealdb-integration-tests.js";
 
 async function main() {
   const stdinResult = await readStdin();
@@ -93,6 +97,12 @@ async function main() {
       if (result.message) console.log(result.message);
       process.exit(2);
     }
+    // Also check SurrealDB integration test requirement (blocking)
+    const surrealResult = guardSurrealPhaseComplete(stripped, process.cwd());
+    if (!surrealResult.allow) {
+      if (surrealResult.message) console.log(surrealResult.message);
+      process.exit(2);
+    }
   }
 
   // --- Guard 5: git commit validation (GSD-owned) ---
@@ -140,7 +150,17 @@ async function main() {
     }
   }
 
-  // --- Guard 7: SurrealDB skill injection (advisory, non-blocking) ---
+  // --- Guard 7a: SurrealDB integration test warning (advisory, non-blocking) ---
+  if (command && /vitest|npx\s+test|pnpm\s+test/.test(stripped)) {
+    const surrealTestResult = guardSurrealTestAdvisory(stripped, process.cwd());
+    if (surrealTestResult.additionalContext) {
+      console.log(
+        JSON.stringify({ additionalContext: surrealTestResult.additionalContext })
+      );
+    }
+  }
+
+  // --- Guard 7b: SurrealDB skill injection (advisory, non-blocking) ---
   if (
     (command &&
       /surreal|surrealdb|surql|localhost:800[0-9]/i.test(command)) ||
