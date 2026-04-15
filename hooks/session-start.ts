@@ -45,7 +45,7 @@ if (existsSync(bashLog)) {
 // --- 1. Rebuild ACTIVE-PROJECTS.md ---
 const activeProjectsPath = resolve(
   SITES_DIR,
-  "Global/knowledge/ACTIVE-PROJECTS.md"
+  "Global/scott-context/wiki/global/ACTIVE-PROJECTS.md"
 );
 
 const rows: string[] = [];
@@ -214,7 +214,7 @@ if (existsSync(claudeMd)) {
   const count = rows.length;
   if (count > 0) {
     console.log(
-      `Active projects (${count}): see ~/Sites/Global/knowledge/ACTIVE-PROJECTS.md`
+      `Active projects (${count}): see ~/Sites/Global/scott-context/wiki/global/ACTIVE-PROJECTS.md`
     );
   }
 }
