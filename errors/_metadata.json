@@ -1,5 +1,5 @@
 {
-  "next_id": 36,
+  "next_id": 39,
   "description": "Counter for error log IDs. Incremented by /scott:phase-closeout reflect phase.",
   "naming": "NNN-short-description.md (e.g., 011-missed-context-window.md).",
   "fields": {
