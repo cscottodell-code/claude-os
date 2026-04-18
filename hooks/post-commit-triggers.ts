@@ -1,12 +1,12 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node --experimental-strip-types --no-warnings
 /**
  * post-commit-triggers.ts — PostToolUse: suggest skills after git commits.
  */
 
 import { existsSync } from "fs";
 import { resolve } from "path";
-import { readStdin, getCommand, stripQuoted } from "./lib/stdin.js";
-import { exec } from "../src/exec.js";
+import { readStdin, getCommand, stripQuoted } from "./lib/stdin.ts";
+import { exec } from "../src/exec.ts";
 
 const input = await readStdin();
 if (!input) process.exit(0);

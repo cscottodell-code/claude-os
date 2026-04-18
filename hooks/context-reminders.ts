@@ -1,11 +1,11 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node --experimental-strip-types --no-warnings
 /**
  * context-reminders.ts — PostToolUse: track session duration and tool count.
  * Warns at thresholds: 60min then every 30min, 100 tools then every 50.
  */
 
-import { existsSync, readFileSync } from "fs";
-import { shortHash, dateStr, now } from "./lib/platform.js";
+import { existsSync, readFileSync, writeFileSync } from "fs";
+import { shortHash, dateStr, now } from "./lib/platform.ts";
 
 interface ContextState {
   start_time: number;
@@ -52,7 +52,7 @@ if (toolBracket > state.warned_tools) {
 }
 
 // Save state
-await Bun.write(stateFile, JSON.stringify(state));
+writeFileSync(stateFile, JSON.stringify(state));
 
 if (warnings.length > 0) {
   console.log(`\n--- Context Health ---`);
