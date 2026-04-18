@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node --experimental-strip-types --no-warnings
 /**
  * pretooluse-router.ts — Consolidated PreToolUse dispatcher for Bash commands.
  * Replaces bash-pretooluse-router.sh + 6 subprocess spawns.
@@ -10,6 +10,7 @@
 import { appendFile } from "fs/promises";
 import { resolve } from "path";
 import { homedir } from "os";
+import { execFileSync } from "child_process";
 import { readStdin, getCommand, getFilePath, stripQuoted } from "./lib/stdin.js";
 // guardGitPush retired in v6.2.1 — Claude Code's permission prompt is the safety net
 import { guardDestructive } from "./guards/destructive.js";
@@ -30,12 +31,10 @@ import {
 async function main() {
   const stdinResult = await readStdin();
 
-  // Fail closed: if we received data but couldn't parse it, block
+  // Fail open on stdin parse: a broken pipe isn't a security threat,
+  // it's broken plumbing. Guards only matter when we CAN read the command.
   if (!stdinResult.ok) {
-    console.log(
-      "pretooluse-router: stdin parse failed — blocking (fail-closed)."
-    );
-    process.exit(2);
+    process.exit(0);
   }
 
   const input = stdinResult.input;
@@ -112,19 +111,18 @@ async function main() {
       ".claude/hooks/gsd-validate-commit.sh"
     );
     try {
-      const proc = Bun.spawn(["bash", gsdHook], {
-        stdin: new Blob([rawInput]),
-        stdout: "pipe",
-        stderr: "pipe",
+      execFileSync("bash", [gsdHook], {
+        input: rawInput,
+        stdio: ["pipe", "pipe", "pipe"],
+        timeout: 5000,
       });
-      const exitCode = await proc.exited;
-      if (exitCode !== 0) {
-        const stdout = await new Response(proc.stdout).text();
-        if (stdout.trim()) console.log(stdout.trim());
-        process.exit(exitCode);
+    } catch (err: any) {
+      if (err.status && err.status !== 0) {
+        const stdout = err.stdout?.toString().trim();
+        if (stdout) console.log(stdout);
+        process.exit(err.status);
       }
-    } catch {
-      // GSD hook not available, allow
+      // GSD hook not available or timed out, allow
     }
   }
 

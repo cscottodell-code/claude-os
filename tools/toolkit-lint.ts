@@ -229,8 +229,10 @@ async function checkHookIntegrity() {
     : [];
 
   for (const hookName of hooksOnDisk) {
+    // Match by filename or by stem (e.g., pretooluse-router.ts is the source for pretooluse-router.cjs)
+    const stem = hookName.replace(/\.[^.]+$/, "");
     const isRegistered = registeredCommands.some((cmd) =>
-      cmd.includes(hookName)
+      cmd.includes(hookName) || cmd.includes(stem)
     );
     if (!isRegistered) {
       issue(

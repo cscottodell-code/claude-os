@@ -7,7 +7,7 @@
  * Deduplicates per session via /tmp marker file (same pattern as surrealdb-inject).
  */
 
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 import type { GuardResult } from "./git-push.js";
 import { readJson } from "../../src/json.js";
@@ -70,7 +70,7 @@ export async function guardLessonsInject(
   if (!shouldInject(true, lessons.length)) return { allow: true };
 
   // Mark as injected
-  await Bun.write(dedupFile, "");
+  writeFileSync(dedupFile, "");
 
   const header = `[Lessons Auto-Loaded] ${lessons.length} past lesson(s) for this project's stack. Review before writing code:\n`;
   const body = lessons.map((l) => `  ${l}`).join("\n");

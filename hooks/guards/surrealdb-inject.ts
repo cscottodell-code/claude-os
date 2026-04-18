@@ -3,7 +3,7 @@
  * Non-blocking — always returns allow: true, but outputs additionalContext.
  */
 
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 import { homedir } from "os";
 import type { GuardResult } from "./git-push.js";
@@ -53,7 +53,7 @@ export async function injectSurrealDB(
   if (!existsSync(SKILL_FILE)) return null;
 
   // Mark as injected
-  await Bun.write(dedupFile, "");
+  writeFileSync(dedupFile, "");
 
   // Read skill content, strip YAML frontmatter
   let content = readFileSync(SKILL_FILE, "utf-8");
