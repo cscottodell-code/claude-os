@@ -1,24 +1,12 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --experimental-strip-types --no-warnings
 
-// Crash logger
-process.on('uncaughtException', (err) => {
-  require('fs').appendFileSync('/tmp/hook-crash.log',
-    new Date().toISOString() + ' UNCAUGHT: ' + err.stack + '\n');
-  process.exit(0);
-});
-process.on('unhandledRejection', (err) => {
-  require('fs').appendFileSync('/tmp/hook-crash.log',
-    new Date().toISOString() + ' UNHANDLED: ' + String(err) + '\n');
-  process.exit(0);
-});
-
-// ../../Global/scott-toolkit/hooks/pretooluse-router.ts
+// hooks/pretooluse-router.ts
 var import_promises2 = require("fs/promises");
-var import_path7 = require("path");
+var import_path6 = require("path");
 var import_os2 = require("os");
 var import_child_process = require("child_process");
 
-// ../../Global/scott-toolkit/hooks/lib/stdin.ts
+// hooks/lib/stdin.ts
 function collectStdin() {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -59,7 +47,7 @@ function stripQuoted(command) {
   return command.replace(/'[^']*'/g, "").replace(/"[^"]*"/g, "");
 }
 
-// ../../Global/scott-toolkit/hooks/guards/destructive.ts
+// hooks/guards/destructive.ts
 var PATTERNS = [
   {
     regex: /rm\s+-rf/,
@@ -88,7 +76,7 @@ function guardDestructive(command) {
   return { allow: true };
 }
 
-// ../../Global/scott-toolkit/hooks/guards/npm-install.ts
+// hooks/guards/npm-install.ts
 var import_fs = require("fs");
 var import_path = require("path");
 function checkStackDrift(packages) {
@@ -165,7 +153,7 @@ function guardNpmInstall(command) {
   return { allow: true };
 }
 
-// ../../Global/scott-toolkit/hooks/guards/phase-completion.ts
+// hooks/guards/phase-completion.ts
 var import_fs2 = require("fs");
 var import_path2 = require("path");
 function guardPhaseCompletion(command) {
@@ -213,7 +201,7 @@ function guardPhaseCompletion(command) {
   };
 }
 
-// ../../Global/scott-toolkit/hooks/guards/surrealdb-inject.ts
+// hooks/guards/surrealdb-inject.ts
 var import_fs3 = require("fs");
 var import_path3 = require("path");
 var import_os = require("os");
@@ -286,11 +274,11 @@ async function guardSurrealdbInject(filePath, command) {
   return { allow: true };
 }
 
-// ../../Global/scott-toolkit/hooks/guards/lessons-inject.ts
+// hooks/guards/lessons-inject.ts
 var import_fs5 = require("fs");
 var import_path4 = require("path");
 
-// ../../Global/scott-toolkit/src/json.ts
+// src/json.ts
 var import_promises = require("fs/promises");
 var import_fs4 = require("fs");
 async function readJson(path) {
@@ -306,7 +294,7 @@ async function readJson(path) {
   }
 }
 
-// ../../Global/scott-toolkit/hooks/guards/lessons-inject.ts
+// hooks/guards/lessons-inject.ts
 function extractTaggedLessons(content, techFilter) {
   const lines = content.split(`
 `);
@@ -355,53 +343,28 @@ async function guardLessonsInject(cwd) {
   };
 }
 
-// ../../Global/scott-toolkit/hooks/guards/workflow-gates.ts
+// hooks/guards/surrealdb-integration-tests.ts
 var import_fs6 = require("fs");
 var import_path5 = require("path");
-var ADVISORY_MODE = process.env.WORKFLOW_GATES_ADVISORY === "1";
-function gate(markerFile, projectDir, workflow, prerequisitePhase, blockedPhase) {
-  const markerPath = import_path5.resolve(projectDir, markerFile);
-  if (import_fs6.existsSync(markerPath)) {
-    return { allow: true };
-  }
-  const msg = `${workflow}: ${blockedPhase} requires ${prerequisitePhase} to complete first (missing ${markerFile}).`;
-  if (ADVISORY_MODE) {
-    return { allow: true, message: msg + " (advisory — set WORKFLOW_GATES_ADVISORY=0 to enforce)" };
-  }
-  return { allow: false, message: msg + " Blocked. To bypass: mv the guard .ts file to .ts.disabled, run the command, then mv it back." };
-}
-function guardProjectScaffolded(projectDir) {
-  return gate(".project-scaffolded", projectDir, "new-project", "Phase 5 (Create Repo)", "Phase 6+ (Design Proof)");
-}
-function guardDesignApproved(projectDir) {
-  return gate(".design-approved", projectDir, "new-project", "Phase 6 (Design Proof)", "Phase 7+ (Build)");
-}
-function guardReflectionComplete(projectDir) {
-  return gate(".reflection-complete", projectDir, "retro", "Phase 2 (Guided Reflection)", "Phase 3+ (Generate Retro Document)");
-}
-
-// ../../Global/scott-toolkit/hooks/guards/surrealdb-integration-tests.ts
-var import_fs7 = require("fs");
-var import_path6 = require("path");
 function hasSurrealMigrations(cwd) {
-  const migrationsDir = import_path6.resolve(cwd, "server/migrations");
-  if (!import_fs7.existsSync(migrationsDir))
+  const migrationsDir = import_path5.resolve(cwd, "server/migrations");
+  if (!import_fs6.existsSync(migrationsDir))
     return false;
   try {
-    return import_fs7.readdirSync(migrationsDir).some((f) => f.endsWith(".surql"));
+    return import_fs6.readdirSync(migrationsDir).some((f) => f.endsWith(".surql"));
   } catch {
     return false;
   }
 }
 function hasLiveIntegrationTests(cwd) {
-  const integrationDir = import_path6.resolve(cwd, "tests/integration");
-  if (!import_fs7.existsSync(integrationDir))
+  const integrationDir = import_path5.resolve(cwd, "tests/integration");
+  if (!import_fs6.existsSync(integrationDir))
     return false;
   try {
-    const files = import_fs7.readdirSync(integrationDir).filter((f) => f.endsWith(".test.ts"));
+    const files = import_fs6.readdirSync(integrationDir).filter((f) => f.endsWith(".test.ts"));
     return files.some((f) => {
       try {
-        const content = import_fs7.readFileSync(import_path6.join(integrationDir, f), "utf-8");
+        const content = import_fs6.readFileSync(import_path5.join(integrationDir, f), "utf-8");
         return content.includes("db-setup") || content.includes("setup()");
       } catch {
         return false;
@@ -412,20 +375,20 @@ function hasLiveIntegrationTests(cwd) {
   }
 }
 function phaseModifiedSurrealFiles(cwd, phaseNum) {
-  const phasesDir = import_path6.resolve(cwd, ".planning/phases");
-  if (!import_fs7.existsSync(phasesDir))
+  const phasesDir = import_path5.resolve(cwd, ".planning/phases");
+  if (!import_fs6.existsSync(phasesDir))
     return false;
   try {
-    const dirs = import_fs7.readdirSync(phasesDir);
+    const dirs = import_fs6.readdirSync(phasesDir);
     const padded = phaseNum.padStart(2, "0");
     const phaseDir = dirs.find((d) => d === phaseNum || d.startsWith(`${phaseNum}-`) || d === padded || d.startsWith(`${padded}-`));
     if (!phaseDir)
       return false;
-    const fullPhaseDir = import_path6.resolve(phasesDir, phaseDir);
-    const summaries = import_fs7.readdirSync(fullPhaseDir).filter((f) => f.endsWith("-SUMMARY.md"));
+    const fullPhaseDir = import_path5.resolve(phasesDir, phaseDir);
+    const summaries = import_fs6.readdirSync(fullPhaseDir).filter((f) => f.endsWith("-SUMMARY.md"));
     for (const summary of summaries) {
       try {
-        const content = import_fs7.readFileSync(import_path6.join(fullPhaseDir, summary), "utf-8");
+        const content = import_fs6.readFileSync(import_path5.join(fullPhaseDir, summary), "utf-8");
         if (content.includes(".surql") || content.includes("encryption.ts") || content.includes("entity-types.ts") || content.includes("surql`") || content.includes("surrealdb")) {
           return true;
         }
@@ -489,7 +452,7 @@ function guardSurrealPhaseComplete(command, cwd) {
   return { allow: true };
 }
 
-// ../../Global/scott-toolkit/hooks/pretooluse-router.ts
+// hooks/pretooluse-router.ts
 async function main() {
   const stdinResult = await readStdin();
   if (!stdinResult.ok) {
@@ -503,7 +466,7 @@ async function main() {
     process.exit(0);
   }
   if (command) {
-    const logFile = import_path7.resolve(import_os2.homedir(), ".claude/bash-commands.log");
+    const logFile = import_path6.resolve(import_os2.homedir(), ".claude/bash-commands.log");
     const timestamp = new Date().toISOString().replace("T", " ").slice(0, 19);
     await import_promises2.appendFile(logFile, `[${timestamp}] ${command}
 `).catch(() => {});
@@ -513,7 +476,7 @@ async function main() {
     const result = guardDestructive(command);
     if (!result.allow) {
       if (result.message)
-        console.log(result.message);
+        console.error(result.message);
       process.exit(2);
     }
   }
@@ -521,7 +484,7 @@ async function main() {
     const result = guardNpmInstall(command);
     if (!result.allow) {
       if (result.message)
-        console.log(result.message);
+        console.error(result.message);
       process.exit(2);
     }
   }
@@ -529,18 +492,18 @@ async function main() {
     const result = guardPhaseCompletion(command);
     if (!result.allow) {
       if (result.message)
-        console.log(result.message);
+        console.error(result.message);
       process.exit(2);
     }
     const surrealResult = guardSurrealPhaseComplete(stripped, process.cwd());
     if (!surrealResult.allow) {
       if (surrealResult.message)
-        console.log(surrealResult.message);
+        console.error(surrealResult.message);
       process.exit(2);
     }
   }
   if (command && /(?:^|\s|&&|\|)git\s+commit/.test(stripped)) {
-    const gsdHook = import_path7.resolve(import_os2.homedir(), ".claude/hooks/gsd-validate-commit.sh");
+    const gsdHook = import_path6.resolve(import_os2.homedir(), ".claude/hooks/gsd-validate-commit.sh");
     try {
       import_child_process.execFileSync("bash", [gsdHook], {
         input: rawInput,
@@ -551,25 +514,8 @@ async function main() {
       if (err.status && err.status !== 0) {
         const stdout = err.stdout?.toString().trim();
         if (stdout)
-          console.log(stdout);
+          console.error(stdout);
         process.exit(err.status);
-      }
-    }
-  }
-  if (command) {
-    const cwd = process.cwd();
-    const gates = [
-      { pattern: /design.proof|phase.6|impeccable.*teach/i, fn: () => guardProjectScaffolded(cwd) },
-      { pattern: /build.milestone|phase.7|gsd.*execute/i, fn: () => guardDesignApproved(cwd) },
-      { pattern: /generate.retro|phase.3.*retro/i, fn: () => guardReflectionComplete(cwd) }
-    ];
-    for (const g of gates) {
-      if (g.pattern.test(command) || g.pattern.test(rawInput)) {
-        const result = g.fn();
-        if (result.message)
-          console.log(result.message);
-        if (!result.allow)
-          process.exit(2);
       }
     }
   }
