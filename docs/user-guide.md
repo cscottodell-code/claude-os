@@ -1,4 +1,4 @@
-# Scott-Toolkit v5.2 — How to Use It
+# Scott-Toolkit v6.2.4 — How to Use It
 
 This is your personal cheat sheet. The toolkit handles context engineering -- making sure Claude Code always knows where you left off, what you're building, and what lessons you've learned. It also enforces stack-specific correctness, detects plugin-project misalignment, and feeds lessons back into reusable checks. It works alongside GSD (project management) and Superpowers (dev methodology).
 
@@ -266,6 +266,8 @@ These rules live in `~/.claude/rules/` and Claude reads them automatically in ev
 ### Symlinks (why updates "just work")
 
 The hooks and rules in `~/.claude/` are symlinks — shortcuts that point back to `~/Sites/Global/scott-toolkit/`. When you `git pull` toolkit updates, the symlinks still point to the same files, so the updates take effect instantly. No re-deploy needed unless brand new files were added.
+
+**Exception:** The pretooluse-router runs as a bundled CJS file (`pretooluse-router.cjs`) under Node instead of Bun, because Bun has a stdin race condition with Claude Code. The TS source files are still the source of truth, but after editing them you must rebuild: `bun build hooks/pretooluse-router.ts --outfile hooks/pretooluse-router.cjs --target node --format cjs`
 
 ---
 

@@ -1,5 +1,24 @@
 # Toolkit Changelog
 
+## v6.2.4 - 2026-04-18
+
+Fix intermittent pretooluse-router failures caused by Bun.stdin.text() race condition with Claude Code's pipe delivery. Router now runs as bundled CJS under Node instead of Bun. Triggered by Eleanor Phase 6 session where all git add/commit commands were blocked.
+
+### Modified Hooks
+- **MODIFIED `hooks/lib/stdin.ts`:** Replaced `Bun.stdin.text()` with `process.stdin` event-based reader with 3s timeout. Works in both Bun and Node.
+- **MODIFIED `hooks/pretooluse-router.ts`:** Fail-open on stdin parse failures (broken pipe is not a security threat). Replaced `Bun.spawn` with `execFileSync` for git commit validation subprocess.
+- **MODIFIED `hooks/guards/lessons-inject.ts`:** Replaced `Bun.write` with `writeFileSync`.
+- **MODIFIED `hooks/guards/surrealdb-inject.ts`:** Replaced `Bun.write` with `writeFileSync`.
+
+### New Files
+- **NEW `hooks/pretooluse-router.cjs`:** Bundled CJS build artifact. settings.json now points here with `node` runner and 5s timeout. Rebuild after TS edits: `bun build hooks/pretooluse-router.ts --outfile hooks/pretooluse-router.cjs --target node --format cjs`
+
+### Tools
+- **MODIFIED `tools/toolkit-lint.ts`:** Hook integrity check now matches by filename stem (e.g., `pretooluse-router.ts` recognized as source for `pretooluse-router.cjs`).
+
+### Root Cause
+`Bun.stdin.text()` intermittently fails when Claude Code pipes JSON to the hook process. Manual piping (`echo | bun run`) always works because stdin closes synchronously. Claude Code's internal pipe timing exposes a Bun race condition. Switching to Node's event-based `process.stdin` eliminates the issue entirely.
+
 ## v6.2.3 - 2026-04-13
 
 SurrealDB enforcement overhaul: 5 hooks, updated rules, updated skill, and reusable test template. Triggered by Eleanor Phase 4 where mock-only tests hid 4 real schema bugs (invalid ASSERT values, unsupported multi-field FULLTEXT, missing FLEXIBLE, invalid IF/THEN/END syntax).
