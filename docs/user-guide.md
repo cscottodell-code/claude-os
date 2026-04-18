@@ -64,6 +64,7 @@ These are your workflows. Type them and Claude walks you through each one.
 <!-- AUTO:commands-tools -->
 | Command | When to use it |
 |---------|---------------|
+| `/scott:learn` | Learning operations manager for Scott's Knowledge Engine |
 | `/scott:pause` | Generate a resume prompt for picking up later |
 | `/scott:toolkit-briefing` | Deep-read the toolkit so Claude fully understands it |
 <!-- /AUTO:commands-tools -->

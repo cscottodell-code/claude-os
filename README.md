@@ -39,6 +39,7 @@ All workflows are invoked via slash commands:
 | `/scott:stack-review` | Monthly stack health dashboard (check metrics, learning loop) |
 | `/scott:compare-sources` | Compare new sources against your toolkit and surface what's actionable |
 | `/scott:debug` | Debug a problem with structured diagnosis |
+| `/scott:learn` | Learning operations manager for Scott's Knowledge Engine |
 | `/scott:n8n-reference` | Complete n8n workflow reference (patterns, code nodes, expressions, validation) |
 | `/scott:new-feature` | Add a feature to the current project with guided workflow |
 | `/scott:new-project` | Start a new project with the guided 8-phase workflow |
