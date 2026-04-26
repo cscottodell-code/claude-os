@@ -7,6 +7,7 @@ Every wiki page that participates in the depth tracking system has YAML frontmat
 ```yaml
 ---
 depth: findable        # findable | understood | internalized | applied
+notebook_id: null      # NotebookLM notebook slug for this topic, null if none created yet
 last_reviewed: null    # ISO date of last review session, null if never reviewed
 next_review: null      # ISO date when next review is due, null if not scheduled
 review_count: 0        # total number of review sessions
@@ -19,7 +20,7 @@ exploration:           # which session types have been completed
   connection: false
   teaching: false
 mastery_phase: apprenticeship  # apprenticeship | creative | mastery (Greene phases)
-history: []            # array of review records
+history: []            # array of review records and consumption events
 mastery_notes: ""      # free-text notes about current understanding gaps
 ---
 ```
@@ -36,6 +37,13 @@ Current depth level. Progression: findable --> understood --> internalized --> a
 | internalized | Can teach and adapt | Can apply to novel situations. 3 successful applications across contexts. |
 | applied | Behavior has changed | Evidence of real-world application. |
 
+### notebook_id (optional)
+Slug of the primary NotebookLM notebook for this topic. One notebook per topic, lifelong — sources accumulate over time. `null` if no notebook has been created yet.
+
+Forking a notebook (via `--fork` or one of the 5 trigger conditions) does NOT change this ID; the fork becomes a new wiki page with its own `notebook_id`. The original page keeps pointing at the original notebook.
+
+Used by `scott-notebooklm` to detect existing notebooks before creation and to log `consumption` events back to the right wiki page.
+
 ### Spaced repetition schedule
 
 | After successful review | Next review in |
@@ -50,7 +58,9 @@ Failed review resets next_review to 2 days from now.
 
 ### history (array of records)
 
-Each entry:
+Two record shapes share the array, distinguished by `type`:
+
+**Review records** (logged via `/scott:learn --log` — these CAN promote depth):
 ```yaml
 - date: 2026-04-18
   type: quiz           # overview | vocabulary | quiz | application | connection | teaching
@@ -60,6 +70,17 @@ Each entry:
   promoted_from: null   # previous depth level if promoted
   promoted_to: null     # new depth level if promoted
 ```
+
+**Consumption events** (logged when a standalone `scott-notebooklm` session runs — these do NOT promote depth):
+```yaml
+- date: 2026-04-26
+  type: consumption
+  notebook_id: "claude-api-tool-use"   # which notebook was consumed (may differ from page's primary if forked)
+  output_type: audio                    # audio | chat | study | reference | none
+  notes: "Listened to 12-min audio overview while driving"
+```
+
+Consumption events are append-only breadcrumbs of engagement. They never set `promoted`, `result`, or any depth field. Depth advances only through `/scott:learn --log` with a rating.
 
 ### mastery_phase (Greene mapping)
 
