@@ -95,11 +95,11 @@ write `- .planning/phases/03-goals-weights/03-CONTEXT.md - decisions for phase 3
 The next session will read the file.
 
 **Be specific about the stopping point.** "Working on Phase 3" is too vague.
-"Phase 3 context gathered, ready for /gsd:plan-phase 3" is specific.
+"Phase 3 context gathered, ready to start planning" is specific.
 
 **Include the next command if applicable.** If the next step is running a
-specific slash command or CLI command, include it. `/gsd:plan-phase 3` or
-`npm run dev` saves the next session from figuring it out.
+specific slash command or CLI command, include it. `npm run dev` or
+`bun run test:integration` saves the next session from figuring it out.
 
 **Decisions are gold.** The most expensive thing to re-derive is decisions
 that were made through discussion. Include the ones that affect future work.
@@ -120,13 +120,6 @@ for to trigger AUTO-RESUME in the next session.
 echo "[resume prompt content]" > .claude-resume.md
 ```
 
-If using GSD, also update STATE.md:
-```bash
-node "$HOME/.claude/get-shit-done/bin/gsd-tools.cjs" state record-session \
-  --stopped-at "[stopping point description]" \
-  --resume-file ".claude-resume.md"
-```
-
 ### Step 5: Sync Up [AUTO]
 
 Run `/scott:sync-up` to push all config and code changes to GitHub before ending the session.
@@ -144,7 +137,7 @@ To pick up later, paste it at the start of a fresh session.
 
 ## Examples
 
-**Good resume prompt (GSD project):**
+**Good resume prompt (project with planning notes):**
 ```
 Continue work on Sales Ops Hub Phase 3: Goals & Weights
 
@@ -162,9 +155,9 @@ Key decisions made this session:
 Key files:
 - .planning/ROADMAP.md - phase definitions and progress
 - .planning/phases/03-goals-weights/03-CONTEXT.md - all Phase 3 decisions
-- .planning/STATE.md - current project state
 
-Next step: /gsd:plan-phase 3
+Next step: write the Phase 3 plan in .planning/phases/03-goals-weights/03-PLAN.md
+then start execution with TDD via the `tdd` operation.
 ```
 
 **Good resume prompt (non-project work):**
