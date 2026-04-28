@@ -1,5 +1,55 @@
 # Toolkit Changelog
 
+## v7.0.0 - 2026-04-28
+
+The v7 rip-and-rebuild. Abandons GSD entirely. Collapses the four-system architecture (toolkit + GSD + Superpowers + Impeccable) into a two-system model (`scott-toolkit/` for Claude Code config; `scott-context/` for everything else, with `wiki/identity.md` as the LLM-agnostic identity layer). Driven by a focused weekend of 5 interview rounds + multi-channel YouTube research, anchored on Karpathy primary-source quotes (Apr 24 2025 tight-leash tweet, Jan 26 2026 failure-mode list, LLM Wiki gist).
+
+Tagged rollback points: `pre-v7-demolition`, `phase-a-complete`, `phase-b-complete`.
+
+### Removed (Phase B core demolition)
+- **GSD plugin entirely.** 79 GSD skills deleted from `~/.claude/skills/`. 10 GSD hooks deleted from `~/.claude/hooks/`. 9 GSD entries removed from `~/.claude/settings.json` (snapshot at `~/.claude/backups/settings.pre-v7-demolition.json`).
+- **7 GSD-shaped toolkit skills:** `scott-phase-closeout`, `scott-toolkit-briefing`, `scott-update-toolkit`, `scott-compare-sources`, `scott-stack-baseline`, `scott-stack-review`, `skill-creator`.
+- **4 GSD-shaped hook guards:** `phase-completion.ts`, `workflow-gates.ts`, `lessons-inject.ts`, `git-push.ts`.
+- **6 stack-enforcement tools:** `stack-check.ts`, `stack-detect.ts`, `stack-metrics.ts`, `stack-preflight.ts`, `validate-stack-lock.ts`, `toolkit-graph.ts`. Entire `checks/` directory deleted (12 JSON check files + test fixtures).
+- **`scott-n8n-reference` skill** (n8n is dead-weight per Trigger.dev decision in MEMORY.md).
+- **`tasks/lessons.md`** (auto-memory replaces).
+- **`config/toolkit-graph.json`** (catalog stale; builder removed).
+
+### Migrated to scott-context
+- **12 SurrealDB reference files (~7,500 lines)** moved from `skills/scott-surrealdb/references/` to `~/Sites/Global/scott-context/wiki/references/surrealdb/`. Skill paths updated. Knowledge centralizes in the LLM Wiki where Obsidian graph + search apply.
+
+### Changed (Phase B identity migration)
+- **`config/interfaces.json`:** schema bumped to 2.0. Dropped GSD operations (plan_phase, execute_phase, verify_work, quick_task, debug_gsd, add_tests, phase_closeout). Dropped lenses block (referenced deleted checks/). Downgraded Superpowers + Impeccable from `required: true` to `required: false` (opportunistic, not orchestrated).
+- **`rules/claude-behavior.md`:** 165 -> 60 lines. Hard rules, anti-patterns, posture, Karpathy quotes now live in `scott-context/wiki/identity.md` (LLM-agnostic). This file only carries Claude-Code-specific operational config.
+- **`README.md`:** dropped "four-system" framing. Documents two-system model.
+- **`setup.sh`:** dropped checks/ deployment + verification. Renumbered steps. Bumped banner v6.0 -> v7.
+
+### New scott-context infrastructure (Phase A, additive)
+- **`wiki/identity.md`** (Identity layer) — values, decision rules, hard rules, verified preferences, Karpathy Anti-patterns section, tool stitching. Read by every LLM session as system context.
+- **`wiki/capture-pipeline.md`** — Siri Shortcut + Voice Memos + Reminders mirror flow.
+- **`templates/daily-note.md`** — Templater-ready daily-note scaffolding.
+- **`daily/YYYY/MM/`** — daily notes folder structure.
+- **`log.md`** entry recording Phase A completion (file already existed; appended).
+
+### Surviving toolkit (the minimum harness)
+- **6 hook guards:** `claude-md.ts`, `destructive.ts`, `npm-install.ts`, `surrealdb-inject.ts`, `surrealdb-validate-write.ts`, `surrealdb-integration-tests.ts`.
+- **All session hooks:** `session-start.ts`, `session-end.ts`, `pre-compact.ts`, `pre-completion-checklist.ts`, `context-reminders.ts`, `auto-format.ts`, `pretooluse-router.ts`/`.cjs`, `extract-instincts.ts`, etc.
+- **3 toolkit tools:** `toolkit-sync.ts`, `toolkit-lint.ts`, `pre-commit-hook.ts`.
+- **12 skills:** advosy-context, advosy-claimsforce, advosy-crm, scott-debug, scott-learn, scott-pause, scott-resume, scott-new-project, scott-new-feature, scott-surrealdb (thin pointer at scott-context wiki), scott-uiux.
+
+### Verification
+- `grep -r "gsd:" scott-toolkit/` (excluding CHANGELOG) returns 0 in active source.
+- `grep -r "phase-closeout" scott-toolkit/` returns hits only in historical successes/ (not active source).
+- `grep -r "stack-lock" scott-toolkit/` returns hits only in historical RETRO.md, README mentions of decommission, code-style.md (which references the *concept*, not the deleted tooling).
+- All toolkit deletions committed to branch `v7-rip-and-rebuild`.
+- Commits: `a3bbf49` (Phase B demolition), `3fb382e` (Phase B identity migration).
+
+### Carried forward
+- Phase C (vault flatten — 107 wiki pages from `wiki/[org]/...` to flat `wiki/` with frontmatter tags) deferred. Requires hands-on time with Obsidian official CLI.
+- Optional reorganization of remaining 12 skills into function folders (sales/coder/personal/founder) deferred — minimum-harness rule says don't restructure what isn't broken.
+- `kepano/obsidian-skills` + `jackal092927/obsidian-official-cli-skills` companion install deferred to next session (~30 min).
+- session-start.ts identity.md injection deferred. Identity is referenced via `rules/claude-behavior.md` (auto-loaded), so the LLM finds it at first behavioral decision point.
+
 ## v6.2.4 - 2026-04-18
 
 Fix intermittent pretooluse-router failures caused by Bun.stdin.text() race condition with Claude Code's pipe delivery. Router now runs as bundled CJS under Node instead of Bun. Triggered by Eleanor Phase 6 session where all git add/commit commands were blocked.
