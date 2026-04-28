@@ -1,5 +1,5 @@
 #!/bin/bash
-# Scott-Toolkit v5.2 Setup Script
+# Scott-Toolkit v7 Setup Script
 # Deploys the toolkit to ~/.claude/ using symlinks where possible.
 # Run after cloning: ./setup.sh
 # On other machines: ./setup.sh --toolkit-path /path/to/scott-toolkit
@@ -54,11 +54,10 @@ CLAUDE_DIR="$HOME/.claude"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 RULES_DIR="$CLAUDE_DIR/rules"
 SKILLS_DIR="$CLAUDE_DIR/skills"
-CHECKS_DIR="$CLAUDE_DIR/checks"
 TOOLS_DIR="$CLAUDE_DIR/tools"
 CONFIG_DIR="$CLAUDE_DIR/config"
 
-echo "Scott-Toolkit v6.0 Setup"
+echo "Scott-Toolkit v7 Setup"
 echo "======================"
 echo "Toolkit path: $TOOLKIT_PATH"
 echo "Claude dir:   $CLAUDE_DIR"
@@ -74,7 +73,7 @@ fi
 if [ "$VERIFY_ONLY" != true ]; then
 
 # --- Create directories ---
-mkdir -p "$HOOKS_DIR" "$RULES_DIR" "$SKILLS_DIR" "$CHECKS_DIR" "$TOOLS_DIR" "$CONFIG_DIR"
+mkdir -p "$HOOKS_DIR" "$RULES_DIR" "$SKILLS_DIR" "$TOOLS_DIR" "$CONFIG_DIR"
 
 # --- 1. Deploy hooks (symlinks) ---
 echo "1. Deploying hooks..."
@@ -149,22 +148,8 @@ for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
   done
 done
 
-# --- 4. Deploy checks (symlinks) ---
-echo "4. Deploying checks..."
-for check_file in "$TOOLKIT_PATH"/checks/*.json; do
-  check_name="$(basename "$check_file")"
-  target="$CHECKS_DIR/$check_name"
-
-  if [ -e "$target" ] || [ -L "$target" ]; then
-    rm "$target"
-  fi
-
-  ln -s "$check_file" "$target"
-  echo "   -> $check_name"
-done
-
-# --- 6. Deploy tools (symlinks, ensure executable) ---
-echo "5. Deploying tools..."
+# --- 4. Deploy tools (symlinks, ensure executable) ---
+echo "4. Deploying tools..."
 for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
   [ -f "$tool_file" ] || continue
   tool_name="$(basename "$tool_file")"
@@ -179,8 +164,8 @@ for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
   echo "   -> $tool_name"
 done
 
-# --- 7. Deploy config (symlinks) ---
-echo "6. Deploying config..."
+# --- 5. Deploy config (symlinks) ---
+echo "5. Deploying config..."
 if [ -d "$TOOLKIT_PATH/config" ]; then
   for config_file in "$TOOLKIT_PATH"/config/*; do
     [ -f "$config_file" ] || continue
@@ -205,7 +190,7 @@ if [ "$VERIFY_ONLY" = true ]; then
   echo "Verify-only mode — skipping deployment"
   echo ""
 fi
-echo "7. Verifying deployment..."
+echo "6. Verifying deployment..."
 
 ERRORS=0
 
@@ -242,27 +227,6 @@ for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
     ERRORS=$((ERRORS + 1))
   fi
 done
-# Also check workflow-generated skills
-for workflow_skill in scott-new-feature scott-new-project; do
-  if [ -f "$SKILLS_DIR/$workflow_skill/SKILL.md" ]; then
-    : # OK
-  else
-    echo "   WARNING: Workflow skill $workflow_skill not deployed"
-    ERRORS=$((ERRORS + 1))
-  fi
-done
-
-# Check check files (scan directory dynamically)
-for check_file in "$TOOLKIT_PATH"/checks/*.json; do
-  check_name="$(basename "$check_file")"
-  if [ -L "$CHECKS_DIR/$check_name" ] && [ -e "$CHECKS_DIR/$check_name" ]; then
-    : # OK
-  else
-    echo "   WARNING: Check file $check_name not properly linked"
-    ERRORS=$((ERRORS + 1))
-  fi
-done
-
 # Check tools (scan directory dynamically — .ts files post-M1)
 for tool_file in "$TOOLKIT_PATH"/tools/*.ts; do
   [ -f "$tool_file" ] || continue
@@ -284,7 +248,7 @@ fi
 # --- 9. Update paths (if --update-paths was used) ---
 if [ "$VERIFY_ONLY" != true ] && [ "$UPDATE_PATHS" = true ] && [ -n "$OLD_TOOLKIT_PATH" ]; then
   echo ""
-  echo "9. Updating paths: $OLD_TOOLKIT_PATH -> $TOOLKIT_PATH"
+  echo "7. Updating paths: $OLD_TOOLKIT_PATH -> $TOOLKIT_PATH"
   # Escape sed-special characters in paths (& and \ in replacement string)
   ESCAPED_OLD=$(printf '%s\n' "$OLD_TOOLKIT_PATH" | sed 's/[&/\]/\\&/g')
   ESCAPED_NEW=$(printf '%s\n' "$TOOLKIT_PATH" | sed 's/[&/\]/\\&/g')

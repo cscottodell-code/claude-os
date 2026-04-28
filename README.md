@@ -1,19 +1,24 @@
-# Scott's Toolkit v6.1
+# Scott's Toolkit v7
 
-A context engineering toolkit for building apps with Claude Code. Owns session management, templates, domain knowledge, stack enforcement, plugin awareness, and learning capture. Delegates project management to GSD and development methodology to Superpowers.
+Claude Code config for Scott's machines. Hooks (safety), a small set of high-leverage skills, and light rules pointing at the LLM Wiki at `~/Sites/Global/scott-context/`.
 
 **Runtime:** Bun (TypeScript). All hooks and tools are `.ts` files.
 
 Lives at `~/Sites/Global/scott-toolkit/` on all of Scott's machines. Deployed to `~/.claude/` via `setup.sh`.
 
-## Who It's For
+## Two-system model
 
-- **Scott O'Dell** — AI orchestrator building prototypes with Claude Code (MacBook Air + Mac Studio)
+| System | Owns |
+|---|---|
+| **`scott-toolkit/`** | Claude Code config: hooks (safety), small set of skills, light rules pointing at the vault |
+| **`scott-context/`** | The personal OS: identity, knowledge, daily notes, log, capture pipeline |
+
+Plugins (Superpowers, Impeccable) are opportunistic — used skill-by-skill, not orchestrated. GSD was abandoned 2026-04-28 (v7 demolition).
 
 ## Quick Start
 
 ```bash
-# Install Bun (required for v6.0+)
+# Install Bun (required for v6+)
 curl -fsSL https://bun.sh/install | bash
 
 # Clone the repo
@@ -25,9 +30,7 @@ cd ~/Sites/Global/scott-toolkit && bun install && ./setup.sh
 
 The setup script creates symlinks from `~/.claude/` to the repo. Update the repo once, every machine benefits after `git pull && ./setup.sh`.
 
-## How to Use It
-
-All workflows are invoked via slash commands:
+## Commands
 
 <!-- AUTO:commands -->
 | Command | What it does |
@@ -44,32 +47,9 @@ All workflows are invoked via slash commands:
 | `/scott:surrealdb` | SurrealDB query patterns, schema design, AI agent architecture, and connection setup |
 <!-- /AUTO:commands -->
 
-## Four-System Architecture
+## Decoupling
 
-| System | Owns | Use for |
-|--------|------|---------|
-| **Scott-toolkit** | Context engineering | Session management, templates, domain knowledge, stack enforcement, learning capture |
-| **GSD** | Project management | Phases, milestones, execution, task tracking, verification |
-| **Superpowers** | Development methodology | TDD, git worktrees, code review, plan writing, debugging |
-| **Impeccable** | UI/UX quality | Design critique, polish, accessibility audits |
-
-Toolkit workflows are **orchestrators** -- they call GSD and Superpowers at the right moments. Command names are decoupled via `config/interfaces.json` so renaming a GSD command requires updating one line, not ten files.
-
-## Key Systems (v5+)
-
-Three systems built on top of the base toolkit, plus plugin awareness:
-
-### Stack Enforcement
-Technology-specific checks that catch version gotchas at build time. Check files per technology (`checks/*.json`), CLI tools (`tools/stack-detect.ts`, `tools/stack-check.ts`, `tools/stack-preflight.ts`), and integration into phase closeout as a stack audit step.
-
-### Learning Loop
-Lessons from each project feed back into the toolkit. `[stack]`-tagged lessons become check candidates. `tools/stack-metrics.ts` aggregates audit data across all projects. `/scott:stack-review` presents a dashboard for human-approved promotion of lessons to checks.
-
-### Decoupling
-Abstract operation names (`plan_phase`, `tdd`, `code_review`) mapped to concrete commands via `config/interfaces.json`. Toolkit files reference operations, not tool-specific commands. Claude resolves them by reading `config/interfaces.json` directly (see `rules/claude-behavior.md` Operation Resolution section). To find where an operation is used: `grep -r "operation_name" workflows/ skills/ rules/`.
-
-### Plugin Awareness (v5.1)
-Bidirectional plugin-project alignment detection. The `plugins` section in `config/interfaces.json` catalogs known plugins (Vercel, Superpowers, Impeccable) with `required` flags. The session-start hook checks whether active plugins match the project's technology stack and warns about misalignment (e.g., Vercel plugin active on a non-Vercel project wastes ~52K tokens). New projects generate `.claude/settings.json` to disable irrelevant plugins.
+Abstract operation names (`tdd`, `code_review`, `git_worktree`, `resume`) map to concrete commands via `config/interfaces.json`. Toolkit files reference operations, not tool-specific commands. Renaming a command requires editing one line. Plugin IDs and MCP server registrations are cataloged in the same file.
 
 ## Repo Structure
 
@@ -78,88 +58,66 @@ scott-toolkit/
 ├── README.md
 ├── CHANGELOG.md
 ├── package.json                      # Bun project config (zero runtime deps)
-├── tsconfig.json                     # Strict TS, ES2022 target
-├── setup.sh                          # One-command deploy to ~/.claude/ (stays bash)
+├── setup.sh                          # One-command deploy to ~/.claude/
 │
 ├── src/                              # Shared TypeScript utilities
-│   ├── paths.ts                      #   Path resolution (TOOLKIT_DIR, CLAUDE_DIR)
-│   ├── json.ts                       #   Safe JSON read/write with generics
-│   ├── semver.ts                     #   Version parsing and comparison
-│   └── exec.ts                       #   Shell execution with timeout (Bun.spawn)
+│   ├── paths.ts                      # Path resolution (TOOLKIT_DIR, CLAUDE_DIR)
+│   ├── json.ts                       # Safe JSON read/write
+│   ├── semver.ts                     # Version parsing
+│   └── exec.ts                       # Shell execution with timeout
 │
-├── hooks/                            # Claude Code hooks (TypeScript, -> ~/.claude/hooks/)
-│   ├── lib/                          #   Shared hook utilities
-│   ├── guards/                       #   PreToolUse guard modules
-│   ├── pretooluse-router.ts          #   Main Bash command dispatcher
+├── hooks/                            # Claude Code hooks (-> ~/.claude/hooks/)
+│   ├── lib/                          # Shared hook utilities
+│   ├── guards/                       # PreToolUse guards
+│   │   ├── claude-md.ts              # Block edits to CLAUDE.md/MEMORY.md
+│   │   ├── destructive.ts            # Block rm -rf, reset --hard, etc
+│   │   ├── npm-install.ts            # Gate dependency installs
+│   │   ├── surrealdb-inject.ts       # Auto-load SurrealDB skill
+│   │   ├── surrealdb-validate-write.ts
+│   │   └── surrealdb-integration-tests.ts
+│   ├── pretooluse-router.ts          # Main Bash command dispatcher
 │   ├── session-start.ts, session-end.ts, pre-compact.ts
 │   ├── pre-completion-checklist.ts, context-reminders.ts
-│   └── (13 more hooks)              #   See docs/architecture.md for full list
+│   └── auto-format.ts, check-file-test-trigger.ts, etc
 │
-├── tools/                            # CLI tools (TypeScript, -> ~/.claude/tools/)
-│   ├── toolkit-sync.ts               #   Auto-sync docs from skill frontmatter
-│   ├── toolkit-graph.ts              #   Dependency graph (JSON-backed)
-│   ├── toolkit-lint.ts               #   Toolkit integrity checker
-│   ├── pre-commit-hook.ts            #   Git pre-commit: sync -> lint -> graph
-│   ├── stack-detect.ts, stack-check.ts, stack-preflight.ts
-│   ├── stack-metrics.ts              #   Aggregate audit data for learning loop
-│   └── validate-stack-lock.ts        #   Stack-lock schema + staleness validator
-│
-├── checks/                           # Stack enforcement check files (11 technologies)
-│   ├── stack-lock.schema.json
-│   └── fixtures/                     #   Good/bad samples for check validation
+├── tools/                            # CLI tools (-> ~/.claude/tools/)
+│   ├── toolkit-sync.ts               # Auto-sync README from skill frontmatter
+│   ├── toolkit-lint.ts               # Toolkit integrity checker
+│   └── pre-commit-hook.ts            # Git pre-commit: sync -> lint
 │
 ├── config/                           # Toolkit configuration
-│   ├── interfaces.json               #   Abstract operations -> concrete commands
-│   └── version-manifest.json         #   Version tracking + banned patterns
+│   └── interfaces.json               # Abstract operations -> concrete commands
 │
-├── workflows/                        # Interactive step-by-step processes (10 files)
-├── context/                          # Templates for new projects
 ├── rules/                            # Behavior rules (-> ~/.claude/rules/)
-├── skills/                           # Skill files (-> ~/.claude/skills/, 18 skills)
-│   └── (some SKILL.md files are symlinks to workflows/)
-├── references/                       # Business context (loaded on demand)
-├── docs/                             # Design documents and guides
-│   ├── architecture.md               #   HOW THE TOOLKIT WORKS (start here)
-│   └── user-guide.md
-├── retros/, errors/, successes/      # Learning capture outputs
+│   ├── claude-behavior.md            # Slim Claude-Code-specific config
+│   └── code-style.md                 # Code style guide
+│
+├── skills/                           # Skill files (-> ~/.claude/skills/, 12 skills)
+│   ├── advosy-context, advosy-claimsforce, advosy-crm
+│   ├── scott-debug, scott-learn, scott-pause, scott-resume
+│   ├── scott-new-project, scott-new-feature
+│   ├── scott-surrealdb (thin pointer at scott-context wiki)
+│   └── scott-uiux
+│
 └── backups/                          # Settings snapshots (gitignored)
 ```
 
-> **For the full architecture guide:** see `docs/architecture.md`. It covers how hooks work, how to add/modify components safely, deployment mechanics, and troubleshooting.
+The vault that scott-context maintains (`~/Sites/Global/scott-context/`) holds the durable layer: `wiki/identity.md`, knowledge, daily notes, logs.
 
 ## Multi-Machine Sync
 
 ```bash
-git pull                              # Get latest from GitHub
-bun install                           # Update dependencies (if package.json changed)
+git pull                              # Latest from GitHub
+bun install                           # Dependency updates if package.json changed
 ./setup.sh                            # Re-deploy symlinks
 ```
 
 ## Contributing Rules
 
-- Always update CHANGELOG.md when modifying hooks or skills
-- Do not modify `~/.claude/settings.json` directly during a session (use the `update-config` skill)
-- All new hooks and tools must be TypeScript (no new .sh files)
+- Always update `CHANGELOG.md` when modifying hooks or skills
+- Do not modify `~/.claude/settings.json` directly during a session (rule lives in `wiki/identity.md`)
+- All new hooks and tools must be TypeScript
 - Hooks import shared utilities from `hooks/lib/`, tools from `src/`
-- Guards go in `hooks/guards/` and are imported by the router
-- Each skill lives in its own subfolder: `skills/<name>/SKILL.md` (max 200 lines for standalone skills; workflow-backed skills symlink to workflow files which may exceed this — the full workflow is needed for multi-phase orchestration)
-- Check files go in `checks/<technology>.json` following the schema in `checks/stack-lock.schema.json`
-- Abstract operation names go in `config/interfaces.json`, not hardcoded in workflows
+- Each skill lives in its own subfolder: `skills/<name>/SKILL.md`
 - Run `bun run tools/toolkit-lint.ts` before committing (pre-commit hook enforces this)
-- See `docs/architecture.md` for the full "how to change things safely" guide
-
-## How It Improves Over Time
-
-```
-Start project (use toolkit)
-  -> Build with Claude Code + GSD + Superpowers
-  -> Phase completes
-  -> Run /scott:phase-closeout (verify, stack audit, review, reflect)
-  -> Error logs + success logs + RETRO.md + lessons.md (tagged)
-  -> [stack]-tagged lessons become check candidates
-  -> /scott:stack-review to review and promote
-  -> Checks apply to ALL future projects
-  -> /scott:update-toolkit to apply other improvements
-  -> Push to GitHub
-  -> Next project starts smarter
-```
+- Identity and behavioral rules live in `~/Sites/Global/scott-context/wiki/identity.md` (LLM-agnostic) — keep this README focused on Claude Code mechanics
