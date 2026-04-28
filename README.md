@@ -35,20 +35,13 @@ All workflows are invoked via slash commands:
 | `/advosy:context` | Get Advosy company context (leadership, subsidiaries, contacts) |
 | `/advosy:claimsforce` | Get Claimsforce automation context (workflows, placeholders, webhooks) |
 | `/advosy:crm` | CRM design system, mockup patterns, and page prototyping context |
-| `/scott:stack-baseline` | First-run stack audit for existing projects |
-| `/scott:stack-review` | Monthly stack health dashboard (check metrics, learning loop) |
-| `/scott:compare-sources` | Compare new sources against your toolkit and surface what's actionable |
 | `/scott:debug` | Debug a problem with structured diagnosis |
 | `/scott:learn` | Learning operations manager for Scott's Knowledge Engine |
-| `/scott:n8n-reference` | Complete n8n workflow reference (patterns, code nodes, expressions, validation) |
 | `/scott:new-feature` | Add a feature to the current project with guided workflow |
 | `/scott:new-project` | Start a new project with the guided 8-phase workflow |
 | `/scott:pause` | Generate a resume prompt for picking up later |
-| `/scott:phase-closeout` | Run the mandatory phase closeout (verify, review, reflect, gate) |
 | `/scott:resume` | Pick up where you left off on a project |
 | `/scott:surrealdb` | SurrealDB query patterns, schema design, AI agent architecture, and connection setup |
-| `/scott:toolkit-briefing` | Deep-read the toolkit so Claude fully understands it |
-| `/scott:update-toolkit` | Update the scott-toolkit with new lessons or patterns |
 <!-- /AUTO:commands -->
 
 ## Four-System Architecture

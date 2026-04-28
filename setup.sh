@@ -243,7 +243,7 @@ for skill_dir in "$TOOLKIT_PATH"/skills/*/; do
   fi
 done
 # Also check workflow-generated skills
-for workflow_skill in scott-compare-sources scott-new-feature scott-new-project scott-phase-closeout scott-update-toolkit; do
+for workflow_skill in scott-new-feature scott-new-project; do
   if [ -f "$SKILLS_DIR/$workflow_skill/SKILL.md" ]; then
     : # OK
   else

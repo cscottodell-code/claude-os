@@ -1,6 +1,6 @@
 {
-  "_readme": "Maps toolkit operations to external tool commands, catalogs known plugins, and tracks MCP servers. Update here when GSD or Superpowers change.",
-  "schema_version": "1.2",
+  "_readme": "Maps toolkit operations to external tool commands, catalogs known plugins, and tracks MCP servers. GSD operations removed in v7 demolition (2026-04-28).",
+  "schema_version": "2.0",
   "plugins": {
     "vercel": {
       "claude_id": "vercel@claude-plugins-official",
@@ -9,17 +9,17 @@
     },
     "superpowers": {
       "claude_id": "superpowers@claude-plugins-official",
-      "required": true,
-      "description": "Development methodology — TDD, code review, git worktrees, debugging, planning."
+      "required": false,
+      "description": "Development methodology — TDD, code review, git worktrees, debugging, planning. Opportunistic, not mandatory."
     },
     "impeccable": {
       "claude_id": "impeccable@impeccable",
-      "required": true,
-      "description": "UI/UX design quality — critique, polish, audit, animate, normalize."
+      "required": false,
+      "description": "UI/UX design quality — critique, polish, audit, animate, normalize. Opportunistic."
     }
   },
   "mcp_servers": {
-    "_readme": "Catalogs MCP servers with per-project relevance. Session-start hook checks alignment like plugins. Servers not needed for a project waste tokens on tool schema registration.",
+    "_readme": "Catalogs MCP servers with per-project relevance.",
     "context7": {
       "config_name": "context7",
       "required": true,
@@ -35,60 +35,7 @@
       "estimated_tokens": 500
     }
   },
-  "lenses": {
-    "_readme": "Specialist review lenses dispatched during phase-closeout Phase 2. Each lens restricts scope to one concern. The base code_review still runs for general quality. Add new lenses here as evidence justifies them.",
-    "schema": {
-      "description": "SurrealDB field-by-field SCHEMAFULL compliance",
-      "applies_when": ["surrealdb"],
-      "context_files": ["checks/surrealdb.json", "stack-lock.json"],
-      "file_patterns": ["*.surql", "**/db/**", "**/*.ts"],
-      "prompt": "Compare every db.query(), db.create(), db.update(), and db.select() call against the SCHEMAFULL table definitions. Flag: missing required fields, extra undefined fields, wrong field types, use of type::thing() (v2 only), missing ASSERT constraints. Ignore files outside the diff range."
-    },
-    "security": {
-      "description": "OWASP Top 10 + injection patterns",
-      "applies_when": ["always"],
-      "context_files": [],
-      "file_patterns": ["**/*.ts", "**/*.vue", "**/api/**", "**/server/**"],
-      "prompt": "Check for: SQL/SurrealQL injection via string concatenation, XSS in rendered output, missing auth checks on API routes, hardcoded secrets, insecure direct object references. Only review files in the diff range."
-    }
-  },
   "operations": {
-    "plan_phase": {
-      "command": "/gsd:plan-phase",
-      "provider": "gsd",
-      "type": "command",
-      "description": "Create a detailed phase plan"
-    },
-    "execute_phase": {
-      "command": "/gsd:execute-phase",
-      "provider": "gsd",
-      "type": "command",
-      "description": "Execute all plans in a phase"
-    },
-    "verify_work": {
-      "command": "/gsd:verify-work",
-      "provider": "gsd",
-      "type": "command",
-      "description": "Validate built features through UAT"
-    },
-    "quick_task": {
-      "command": "/gsd:quick",
-      "provider": "gsd",
-      "type": "command",
-      "description": "Execute a quick task with GSD guarantees"
-    },
-    "debug_gsd": {
-      "command": "/gsd:debug",
-      "provider": "gsd",
-      "type": "command",
-      "description": "GSD systematic debugging"
-    },
-    "add_tests": {
-      "command": "/gsd:add-tests",
-      "provider": "gsd",
-      "type": "command",
-      "description": "Generate tests for completed phase"
-    },
     "code_review": {
       "command": "superpowers:requesting-code-review",
       "provider": "superpowers",
@@ -130,12 +77,6 @@
       "provider": "toolkit",
       "type": "command",
       "description": "Systematic debugging with lesson capture"
-    },
-    "phase_closeout": {
-      "command": "/scott:phase-closeout",
-      "provider": "toolkit",
-      "type": "command",
-      "description": "Mandatory post-execution closeout"
     },
     "resume": {
       "command": "/scott:resume",

@@ -27,26 +27,19 @@ These are your workflows. Type them and Claude walks you through each one.
 |---------|---------------|
 | `/scott:new-feature` | Add a feature to the current project with guided workflow |
 | `/scott:new-project` | Start a new project with the guided 8-phase workflow |
-| `/scott:phase-closeout` | Run the mandatory phase closeout (verify, review, reflect, gate) |
 | `/scott:resume` | Pick up where you left off on a project |
 <!-- /AUTO:commands-project -->
 
 ### Stack Enforcement & Learning
 
 <!-- AUTO:commands-stack -->
-| Command | When to use it |
-|---------|---------------|
-| `/scott:stack-baseline` | First-run stack audit for existing projects |
-| `/scott:stack-review` | Monthly stack health dashboard (check metrics, learning loop) |
+_No commands in this section._
 <!-- /AUTO:commands-stack -->
 
 ### Learning & Improvement
 
 <!-- AUTO:commands-learning -->
-| Command | When to use it |
-|---------|---------------|
-| `/scott:compare-sources` | Compare new sources against your toolkit and surface what's actionable |
-| `/scott:update-toolkit` | Update the scott-toolkit with new lessons or patterns |
+_No commands in this section._
 <!-- /AUTO:commands-learning -->
 
 ### Reference & Knowledge
@@ -55,7 +48,6 @@ These are your workflows. Type them and Claude walks you through each one.
 | Command | When to use it |
 |---------|---------------|
 | `/scott:debug` | Debug a problem with structured diagnosis |
-| `/scott:n8n-reference` | Complete n8n workflow reference (patterns, code nodes, expressions, validation) |
 | `/scott:surrealdb` | SurrealDB query patterns, schema design, AI agent architecture, and connection setup |
 <!-- /AUTO:commands-reference -->
 
@@ -66,7 +58,6 @@ These are your workflows. Type them and Claude walks you through each one.
 |---------|---------------|
 | `/scott:learn` | Learning operations manager for Scott's Knowledge Engine |
 | `/scott:pause` | Generate a resume prompt for picking up later |
-| `/scott:toolkit-briefing` | Deep-read the toolkit so Claude fully understands it |
 <!-- /AUTO:commands-tools -->
 
 ### Business Context (Advosy)
