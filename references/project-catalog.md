@@ -48,7 +48,7 @@ Knowledge is centralized in `~/Sites/Global/scott-context/` (wiki/ for compiled,
 | Raw sources | ~/Sites/Global/scott-context/raw/ | Research, transcripts, artifacts (immutable, never edit) |
 
 ## People Directory
-All people notes: ~/Sites/Global/scott-context/wiki/global/people/
+All people notes: ~/Sites/Global/scott-context/wiki/global/ (Title Case `.md` files, flat)
 (Brett Arrington, Brett Ray, Gary Fenn, Brandon Cruz, Chandler Ricks, Josh Williamson, Kris Davis, Melissa Lunt, Wesley Hathcock, Jeramy Hubbard, Scott O'Dell)
 
 ## Research & Decisions
@@ -56,19 +56,23 @@ All people notes: ~/Sites/Global/scott-context/wiki/global/people/
 | Type | Path |
 |------|------|
 | Global research | ~/Sites/Global/scott-context/raw/research/global/ |
-| ADR decisions | ~/Sites/Global/scott-context/wiki/global/decisions/ |
+| ADR decisions | ~/Sites/Global/scott-context/wiki/global/ (ADR-001-*.md, ADR-002-*.md, ADR-003-*.md) |
 | Bresco research | ~/Sites/Global/scott-context/raw/research/bresco-research/ |
 | Bresco v1 planning | ~/Sites/Global/scott-context/raw/research/bresco-v1-planning/ |
 | Deep research | ~/Sites/Global/scott-context/raw/research/deep-research/ |
 
 ## Learning Materials
-~/Sites/Global/scott-context/wiki/personal/learning/
-- 01-claude-api-and-tool-use.md
-- 02-mcp-server-development.md
-- 03-knowledge-engineering.md
-- 04-agentic-workflow-patterns.md
-- 05-structured-prompt-engineering.md
-- study/ (flashcards, quizzes, audio notes)
+~/Sites/Global/scott-context/wiki/personal/ (Title Case `.md` files, flat)
+- Claude API and Tool Use.md
+- MCP Server Development.md
+- Knowledge Engineering.md
+- Agentic Workflow Patterns.md
+- Structured Prompt Engineering.md
+- SurrealDB v3.md
+- UIUX.md
+- Study Flashcards.md, Study Quizzes.md, Study Audio Prompts.md, Study Content Creation Prompts.md, Study Reference Tables.md
+- Greene Mastery.md, Greene 48 Laws of Power.md, Greene 33 Strategies of War.md, Greene Laws of Human Nature.md
+- 100M Leads Offers Models.md, Master Storytelling.md, Choices.md, Era of Personal Knowledge Assistants.md, The Living Christ.md
 
 ## GitHub Repos
 
