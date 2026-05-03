@@ -68,7 +68,7 @@ async function checkStalePatterns() {
 
   // Active scope: dirs Scott actively edits. Excludes archival
   // (decisions/, retros/, successes/, docs/, tasks/, references/) and
-  // deletion-pending (workflows/, CHANGELOG.md). Mirrors the integrity-test scope.
+  // deletion-pending (CHANGELOG.md). Mirrors the integrity-test scope.
   const activeDirs = [
     "rules",
     "context",
@@ -179,32 +179,6 @@ async function checkSkillIntegrity() {
     }
   }
 
-  // Check workflow-generated skills have source workflows
-  const workflowsDir = toolkitPath("workflows");
-  if (existsSync(workflowsDir)) {
-    const workflows = readdirSync(workflowsDir).filter((f) =>
-      f.endsWith(".md")
-    );
-
-    for (const dir of skillDirs) {
-      const skillMd = resolve(skillsSource, dir, "SKILL.md");
-      if (!existsSync(skillMd)) continue;
-
-      const content = readFileSync(skillMd, "utf-8");
-      if (content.includes("workflow-generated")) {
-        const workflowName = dir.replace("scott-", "") + ".md";
-        const hasWorkflow = workflows.some(
-          (w) => w === workflowName || w === dir + ".md"
-        );
-        if (!hasWorkflow) {
-          issue(
-            "skills",
-            `${dir}/ marked workflow-generated but no matching workflow found`
-          );
-        }
-      }
-    }
-  }
 }
 
 // --- Section 3: Hook Integrity ---

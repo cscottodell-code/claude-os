@@ -3,8 +3,6 @@
  *
  * These verify the structural promises the toolkit makes:
  * - Skills exist and have valid frontmatter
- * - Symlinks resolve correctly
- * - Workflow-backed skills point to real workflow files
  * - interfaces.json operations map to real commands
  * - The dependency graph between files is consistent
  *
@@ -75,39 +73,7 @@ describe("skill integrity", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Symlinked skills — "symlinks point to real workflow files"
-// ---------------------------------------------------------------------------
-
-describe("symlinked skills", () => {
-  const skillsDir = toolkitPath("skills");
-  const skillDirs = readdirSync(skillsDir, { withFileTypes: true })
-    .filter((d) => d.isDirectory())
-    .map((d) => d.name);
-
-  for (const dir of skillDirs) {
-    const skillMd = resolve(skillsDir, dir, "SKILL.md");
-    if (!existsSync(skillMd)) continue;
-
-    const stat = lstatSync(skillMd);
-    if (!stat.isSymbolicLink()) continue;
-
-    test(`${dir}/SKILL.md symlink resolves`, () => {
-      const target = readlinkSync(skillMd);
-      const resolvedTarget = resolve(skillsDir, dir, target);
-      expect(existsSync(resolvedTarget)).toBe(true);
-    });
-
-    test(`${dir}/SKILL.md symlink points to a workflow file`, () => {
-      const target = readlinkSync(skillMd);
-      // Should point to ../../workflows/<name>.md
-      expect(target).toContain("workflows/");
-      expect(target).toMatch(/\.md$/);
-    });
-  }
-});
-
-// ---------------------------------------------------------------------------
-// interfaces.json — "operations map to real providers"
+// interfaces.json -- "operations map to real providers"
 // ---------------------------------------------------------------------------
 
 describe("interfaces.json", () => {
@@ -154,28 +120,14 @@ describe("interfaces.json", () => {
     }
   });
 
-  test("toolkit-provided operations have matching skills or workflows", async () => {
+  test("toolkit-provided operations have matching skills", async () => {
     data = (await readJson<Interfaces>(interfacesPath))!;
     for (const [, op] of Object.entries(data.operations)) {
       if (op.provider !== "toolkit") continue;
 
-      // Toolkit operations should map to /scott:<something>
-      // The skill should exist in skills/
       const skillName = op.command.replace("/scott:", "scott-");
       const skillPath = toolkitPath("skills", skillName, "SKILL.md");
-
-      // Either a direct skill or a workflow-backed skill
-      if (!existsSync(skillPath)) {
-        // Check if there's a workflow
-        const workflowName = op.command.replace("/scott:", "") + ".md";
-        const possibleWorkflows = [
-          toolkitPath("workflows", workflowName),
-          toolkitPath("workflows", workflowName.replace("-", "-")),
-        ];
-        const hasWorkflow = possibleWorkflows.some(existsSync);
-        // At least one should exist
-        expect(existsSync(skillPath) || hasWorkflow).toBe(true);
-      }
+      expect(existsSync(skillPath)).toBe(true);
     }
   });
 });
@@ -215,7 +167,7 @@ describe("version-manifest.json", () => {
     const banned = data!.cross_reference_patterns?.banned ?? [];
 
     // Check only active code files, not historical docs or design specs
-    const dirsToCheck = ["rules", "workflows", "context"];
+    const dirsToCheck = ["rules", "context"];
     const skipFiles = new Set([
       "v5-unified-design.md",
       "v4-file-audit.md",
@@ -278,7 +230,7 @@ describe("deployment symlinks", () => {
       if (!stat.isSymbolicLink()) return;
 
       const target = readlinkSync(deployed);
-      expect(target).toContain("scott-toolkit");
+      expect(target).toContain("claude-os");
     });
   }
 });

@@ -1,11 +1,10 @@
 #!/usr/bin/env bun
 /**
- * toolkit-sync.ts — Auto-sync generated sections in toolkit docs.
+ * toolkit-sync.ts -- Auto-sync generated sections in toolkit docs.
  *
  * Reads skill frontmatter as source of truth and updates:
  *   - README.md command table
  *   - docs/user-guide.md command tables (grouped by section)
- *   - setup.sh workflow skill verification list
  *
  * Generated sections are delimited by marker comments:
  *   <!-- AUTO:name -->...<!-- /AUTO:name -->
@@ -15,7 +14,7 @@
  *   bun run tools/toolkit-sync.ts --check  # Check if targets are current (exit 1 if stale)
  */
 
-import { readdirSync, readFileSync, writeFileSync, existsSync, lstatSync } from "fs";
+import { readdirSync, readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import { toolkitPath } from "../src/paths.js";
 
@@ -186,22 +185,6 @@ function generateUserGuideSection(skills: SkillInfo[], section: string): string 
   return lines.join("\n");
 }
 
-function generateSetupVerifyList(skills: SkillInfo[]): string {
-  // All skills that are workflow-backed (symlinked to workflows/)
-  const workflowSkills: string[] = [];
-  const skillsDir = resolve(TOOLKIT, "skills");
-
-  for (const s of skills) {
-    const skillMd = resolve(skillsDir, s.dirName, "SKILL.md");
-    const stat = lstatSync(skillMd);
-    if (stat.isSymbolicLink()) {
-      workflowSkills.push(s.dirName);
-    }
-  }
-
-  return workflowSkills.sort().join(" ");
-}
-
 // --- Main ---
 
 async function main() {
@@ -252,28 +235,6 @@ async function main() {
     }
   } else {
     console.log("  OK: docs/user-guide.md command tables");
-  }
-
-  // 3. setup.sh workflow skill verification
-  const setupPath = resolve(TOOLKIT, "setup.sh");
-  const setupOrig = readFileSync(setupPath, "utf-8");
-  const workflowList = generateSetupVerifyList(skills);
-
-  const setupNew = setupOrig.replace(
-    /for workflow_skill in [^;]+;/,
-    `for workflow_skill in ${workflowList};`
-  );
-
-  if (setupNew !== setupOrig) {
-    if (checkOnly) {
-      console.log("  STALE: setup.sh workflow skill list");
-      stale = true;
-    } else {
-      writeFileSync(setupPath, setupNew, "utf-8");
-      console.log("  UPDATED: setup.sh workflow skill list");
-    }
-  } else {
-    console.log("  OK: setup.sh workflow skill list");
   }
 
   if (checkOnly && stale) {
