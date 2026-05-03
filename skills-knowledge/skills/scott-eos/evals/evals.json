@@ -1,0 +1,26 @@
+{
+  "skill_name": "scott-eos",
+  "evals": [
+    {
+      "id": 0,
+      "name": "right-person-wrong-seat",
+      "prompt": "We've got a guy on our crew who's amazing at installs but terrible at managing people. We promoted him to ops manager and it's been rough. What does EOS say about this?",
+      "expected_output": "Should identify this as a Right Person, Wrong Seat problem, reference the GWC filter (fails Want It or Capacity), recommend moving him back to a technical role, and mention the Accountability Chart",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "l10-meeting-setup",
+      "prompt": "I want to set up a weekly leadership meeting at Advosy. What should the agenda look like and how long should it take?",
+      "expected_output": "Should describe the Level 10 Meeting format: 90 minutes, 7-segment agenda (Segue, Scorecard, Rock Review, Headlines, To-Do List, IDS, Conclude) with time allocations, emphasize same day/time every week",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "too-many-priorities",
+      "prompt": "Our leadership team can't seem to agree on priorities. We come out of every quarterly planning meeting with 15 things we want to do and nothing gets finished.",
+      "expected_output": "Should reference Rocks (limit to 3-7), the 90-Day World concept, IDS for resolving disagreements, and the Covey rocks/sand analogy. Should emphasize that less is more and each Rock needs one owner.",
+      "files": []
+    }
+  ]
+}

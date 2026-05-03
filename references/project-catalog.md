@@ -1,88 +1,92 @@
 # Project Catalog
 
 ## Metadata
-- Last updated: 2026-04-14
-- Version: 4.0
-- Note: Paths updated after machine cleanup (Phases 1-4). Knowledge centralized in scott-context.
+- Last updated: 2026-05-02
+- Version: 5.0
+- Note: Restructured 2026-05-02. ~/Sites demolished, replaced with ~/Scott/{claude-os, claude-projects, growth-os}.
 
 ## Folder Structure
+
 ```
-Sites/
-  Advosy/          # Work projects (repos flat at root)
-  Bresco/          # SaaS business (repos flat at root)
-  Personal/        # Personal projects (repos flat at root)
-  Global/          # Cross-org tools and knowledge
-    scott-context/ # Centralized knowledge (Karpathy LLM Wiki)
-    scott-toolkit/ # Claude Code config (skills, hooks, rules)
+~/Scott/
+  claude-os/         # Claude Code config (hooks, skills, rules)
+  claude-projects/   # All coded apps (flat, org metadata in this catalog)
+  growth-os/         # Knowledge wiki (six domains + system + raw sources)
 ```
 
-Knowledge is centralized in `~/Sites/Global/scott-context/` (wiki/ for compiled, raw/ for sources).
+Knowledge lives in `~/Scott/growth-os/` (`wiki/` for compiled, `raw/` for sources).
+Each project has its own CLAUDE.md inside the project folder.
 
 ## Active Code Projects
 
 | Keywords | Project | Org | Path | Status |
 |----------|---------|-----|------|--------|
-| advosy sales, sales hub, kpi | Advosy Sales | Advosy | ~/Sites/Advosy/advosy-sales/ | Active build, consolidation target |
-| payroll, pay, d2d pay | D2D Payroll | Advosy | ~/Sites/Advosy/d2d-payroll/ | Being replaced by Advosy Sales |
-| spotio, sf, webhook sync | Spotio-CF | Advosy | ~/Sites/Advosy/spotio-cf/ | Code complete |
-| d2d apps, d2d tools, sales tools | D2D Apps | Advosy | ~/Sites/Advosy/d2d-apps/ | Prototype, winding down |
-| bresco, platform, saas | Bresco Platform | Bresco | ~/Sites/Bresco/platform/ | Turbo monorepo (apps/web, apps/api, packages/) |
-| bresco automation, automation business | Bresco Automation | Bresco | ~/Sites/Bresco/automation-business/ | Standalone Nuxt app |
-| eleanor, ellie, assistant, chief of staff | Eleanor | Personal | ~/Sites/Personal/eleanor/ | Active build (Tauri desktop) |
-| life os, life, habits, reviews, bops | Life OS | Personal | ~/Sites/Personal/life-os/ | Bug fixes only (Eleanor replacing) |
-| sales methodology, sales training | Sales Methodology | Personal | ~/Sites/Personal/sales-methodology/ | Active |
-| supplementiq | SupplementIQ | Personal | ~/Sites/Personal/supplementiq/ | Active |
-| toolkit, skills, hooks, rules | Scott Toolkit | Global | ~/Sites/Global/scott-toolkit/ | Active |
-| context engineering, ce, synthesis | Context Engineering | Global | ~/Sites/Global/context-engineering/ | Complete (reference) |
-| knowledge skills, books, research, council | Scott Knowledge | Personal | ~/Sites/Personal/scott-knowledge/ | Active (bridge to Eleanor M3) |
-| wiki, knowledge base, scott-context | Scott Context (Wiki) | Global | ~/Sites/Global/scott-context/ | Active (Karpathy LLM Wiki) |
+| advosy sales, sales hub, kpi | Advosy Sales | Advosy | ~/Scott/claude-projects/advosy-sales/ | Active build, consolidation target |
+| advosy crm, crm reference, mockups | Advosy CRM Reference | Advosy | ~/Scott/claude-projects/advosy-crm/ | Reference bench (CRM design specs, mockups, screenshots) |
+| payroll, pay, d2d pay | D2D Payroll | Advosy | ~/Scott/claude-projects/d2d-payroll/ | Being replaced by Advosy Sales |
+| spotio, sf, webhook sync | Spotio-CF | Advosy | ~/Scott/claude-projects/spotio-cf/ | Code complete |
+| d2d apps, d2d tools, sales tools | D2D Apps | Advosy | ~/Scott/claude-projects/d2d-apps/ | Prototype, winding down |
+| automations, n8n workflows | Automations | Advosy | ~/Scott/claude-projects/automations/ | n8n workflow docs |
+| savvynth, platform, saas | Savvynth Platform | Savvynth (was Bresco) | ~/Scott/claude-projects/savvynth-platform/ | Turbo monorepo (apps/web, apps/api, packages/) |
+| automation business | Automation Business | Savvynth | ~/Scott/claude-projects/automation-business/ | Standalone Nuxt app |
+| eleanor, ellie, assistant, chief of staff | Eleanor | Personal | ~/Scott/claude-projects/eleanor/ | Active build (Tauri desktop) |
+| life os, life, habits, reviews, bops | Life OS | Personal | ~/Scott/claude-projects/life-os/ | Bug fixes only (Eleanor replacing) |
+| supplementiq | SupplementIQ | Personal | ~/Scott/claude-projects/supplementiq/ | Active |
+| surrealdb, local db, dev db | SurrealDB Local | Infra | ~/Scott/claude-projects/surrealdb-local/ | Local dev SurrealDB instance (start.sh, data/, README) |
 
-## Knowledge (centralized in scott-context)
+## Knowledge (six domains in growth-os/wiki/)
 
-| Section | Path | Contents |
-|---------|------|----------|
-| Advosy | ~/Sites/Global/scott-context/wiki/advosy/ | Corporate structure, leadership, CRM specs, CF docs, EOS, systems |
-| Bresco | ~/Sites/Global/scott-context/wiki/bresco/ | Platform overview, financial model, competitive landscape, decisions |
-| Personal | ~/Sites/Global/scott-context/wiki/personal/ | Eleanor notes, Life OS, BOPs, learning guides, study materials |
-| Global | ~/Sites/Global/scott-context/wiki/global/ | People, ADR decisions, infrastructure, toolkit, context engineering |
-| Raw sources | ~/Sites/Global/scott-context/raw/ | Research, transcripts, artifacts (immutable, never edit) |
+| Domain | Path | Contents |
+|--------|------|----------|
+| Church | ~/Scott/growth-os/wiki/Church/ | Faith, scripture, principles |
+| Health | ~/Scott/growth-os/wiki/Health/ | Recomp plan, food, supplements, training, weekly summary |
+| People | ~/Scott/growth-os/wiki/People/ | One file per person (role, context, notes) |
+| Knowledge | ~/Scott/growth-os/wiki/Knowledge/ | Frameworks (`frameworks/`), study aids (`study-aids/`), context engineering, sales methodology, technical refs |
+| Work | ~/Scott/growth-os/wiki/Work/ | `Work/advosy/` (Advosy company docs, EOS, CRM context); `Work/savvynth/` (Savvynth platform docs, brand) |
+| Finances | ~/Scott/growth-os/wiki/Finances/ | (placeholder) |
+| system | ~/Scott/growth-os/wiki/system/ | Capture pipeline, knowledge engine, ADRs, project specs (`system/projects/`) |
+
+Plus root: `Home.md` (index), `identity.md` (LLM identity layer), `commands/` (suite definition), `data/` (health data), `references/` (SurrealDB).
+
+Raw sources: ~/Scott/growth-os/raw/ (research, sources, synthesis, inbox, staging — immutable).
 
 ## People Directory
-All people notes: ~/Sites/Global/scott-context/wiki/global/ (Title Case `.md` files, flat)
-(Brett Arrington, Brett Ray, Gary Fenn, Brandon Cruz, Chandler Ricks, Josh Williamson, Kris Davis, Melissa Lunt, Wesley Hathcock, Jeramy Hubbard, Scott O'Dell)
+
+All people files: ~/Scott/growth-os/wiki/People/ (Title Case `.md` files, flat)
+- Brett Arrington, Brett Ray, Gary Fenn, Brandon Cruz, Chandler Ricks, Josh Williamson, Kris Davis, Melissa Lunt, Wesley Hathcock, Jeramy Hubbard, Scott O'Dell
 
 ## Research & Decisions
 
 | Type | Path |
 |------|------|
-| Global research | ~/Sites/Global/scott-context/raw/research/global/ |
-| ADR decisions | ~/Sites/Global/scott-context/wiki/global/ (ADR-001-*.md, ADR-002-*.md, ADR-003-*.md) |
-| Bresco research | ~/Sites/Global/scott-context/raw/research/bresco-research/ |
-| Bresco v1 planning | ~/Sites/Global/scott-context/raw/research/bresco-v1-planning/ |
-| Deep research | ~/Sites/Global/scott-context/raw/research/deep-research/ |
+| ADR decisions | ~/Scott/growth-os/wiki/system/ (ADR-001-*.md, ADR-002-*.md, ADR-003-*.md) |
+| Toolkit decisions (post-restructure) | ~/Scott/claude-os/decisions/ |
+| Context-engineering sources | ~/Scott/growth-os/raw/sources/context-engineering/ |
+| Context-engineering synthesis | ~/Scott/growth-os/raw/synthesis/context-engineering-2026-03/ |
 
 ## Learning Materials
-~/Sites/Global/scott-context/wiki/personal/ (Title Case `.md` files, flat)
-- Claude API and Tool Use.md
-- MCP Server Development.md
-- Knowledge Engineering.md
-- Agentic Workflow Patterns.md
-- Structured Prompt Engineering.md
-- SurrealDB v3.md
-- UIUX.md
-- Study Flashcards.md, Study Quizzes.md, Study Audio Prompts.md, Study Content Creation Prompts.md, Study Reference Tables.md
-- Greene Mastery.md, Greene 48 Laws of Power.md, Greene 33 Strategies of War.md, Greene Laws of Human Nature.md
-- 100M Leads Offers Models.md, Master Storytelling.md, Choices.md, Era of Personal Knowledge Assistants.md, The Living Christ.md
+
+~/Scott/growth-os/wiki/Knowledge/ (Title Case `.md` files)
+
+- Frameworks (`Knowledge/frameworks/`): Atomic Habits, Background Ops, Greene Mastery, Greene 33 Strategies of War, Greene 48 Laws of Power, Greene Laws of Human Nature, Master Storytelling, Eleanor Eternal Wisdom, Eleanor Temporal Wisdom
+- Study aids (`Knowledge/study-aids/`): Study Flashcards, Study Quizzes, Study Audio Prompts, Study Content Creation Prompts, Study Reference Tables
+- Knowledge root (flat): Claude API and Tool Use, MCP Server Development, Knowledge Engineering, Agentic Workflow Patterns, Structured Prompt Engineering, UIUX, PKM Architecture, Era of Personal Knowledge Assistants, 100M Leads Offers Models
+- Sales methodology: `Knowledge/sales-methodology/` (multi-folder repo, content reshape pending)
+- Context engineering: `Knowledge/context-engineering/` (index.md + synthesis.md + principles.md)
 
 ## GitHub Repos
 
-| Repo | Project |
-|------|---------|
-| cscottodell-code/life-os | Life OS |
-| cscottodell-code/automation-business | Bresco Automation |
-| cscottodell-code/d2d-payroll | D2D Payroll |
-| cscottodell-code/advosy-context | Advosy Context (knowledge git repo) |
-| cscottodell-code/scott-toolkit | Scott Toolkit |
-| cscottodell-code/scott-context | Scott Context (LLM Wiki) |
-| advosy-hq/advosy-sales | Advosy Sales (company remote) |
-| cscottodell-code/advosy-sales | Advosy Sales (personal remote) |
+Note: GitHub repo names not yet renamed post-restructure. Local dirs are the new names; GitHub remotes still use old names. Plan to rename at Phase 11 follow-up.
+
+| Repo | Project | Local path |
+|------|---------|------------|
+| cscottodell-code/life-os | Life OS | ~/Scott/claude-projects/life-os/ |
+| cscottodell-code/automation-business | Automation Business | ~/Scott/claude-projects/automation-business/ |
+| cscottodell-code/d2d-payroll | D2D Payroll | ~/Scott/claude-projects/d2d-payroll/ |
+| cscottodell-code/advosy-context | Advosy CRM Reference (rename pending) | ~/Scott/claude-projects/advosy-crm/ |
+| cscottodell-code/advosy-knowledge | (orphaned, to be archived) | (content merged into wiki) |
+| cscottodell-code/scott-toolkit | Claude OS (rename pending) | ~/Scott/claude-os/ |
+| cscottodell-code/scott-context | Growth OS (rename pending) | ~/Scott/growth-os/ |
+| cscottodell-code/bresco-platform | Savvynth Platform (rename pending) | ~/Scott/claude-projects/savvynth-platform/ |
+| advosy-hq/advosy-sales | Advosy Sales (company remote) | ~/Scott/claude-projects/advosy-sales/ |
+| cscottodell-code/advosy-sales | Advosy Sales (personal remote) | ~/Scott/claude-projects/advosy-sales/ |
