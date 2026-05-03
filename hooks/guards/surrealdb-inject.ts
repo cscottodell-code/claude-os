@@ -71,7 +71,7 @@ export async function injectSurrealDB(
     if (!resp.ok) throw new Error("unhealthy");
   } catch {
     healthWarning =
-      "[WARNING] SurrealDB server is NOT running on localhost:8000. Start it with: ~/Sites/Global/scott-toolkit/start-surreal.sh\n\n";
+      "[WARNING] SurrealDB server is NOT running on localhost:8000. Start it with: ~/Scott/claude-os/start-surreal.sh\n\n";
   }
 
   const verifyProtocol = [

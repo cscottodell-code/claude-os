@@ -5,7 +5,7 @@
 Before any other work, check if a notebook already exists for this topic.
 
 1. Compute the topic slug from the topic name (kebab-case)
-2. Find the corresponding wiki page in `~/Sites/Global/scott-context/wiki/`
+2. Find the corresponding wiki page in `~/Scott/growth-os/wiki/`
 3. Read its frontmatter for `notebook_id`
 4. If `notebook_id` exists:
    a. Run `notebooklm metadata -n <id> --json` to get current state
@@ -244,7 +244,7 @@ Persona and studio prompt are crafted. Proceed to source document writing.
 
 ## Phase 4: Write Source Documents [AUTO]
 
-1. Create the output directory: `~/Sites/Global/scott-context/raw/transcripts/notebooklm-<topic-slug>/`
+1. Create the output directory: `~/Scott/growth-os/raw/transcripts/notebooklm-<topic-slug>/`
 
 2. Write each source document as a markdown file. Writing guidelines:
    - **Technical but accessible**: Explain concepts clearly without oversimplifying
@@ -285,7 +285,7 @@ parallel-safe and avoids the global `use` context (which collides between subage
 ### 2. Upload all source documents sequentially
 
 ```bash
-cd ~/Sites/Global/scott-context/raw/transcripts/notebooklm-<topic-slug>/
+cd ~/Scott/growth-os/raw/transcripts/notebooklm-<topic-slug>/
 for f in *.md; do
   notebooklm source add "$f" -n <notebook-id> --json
 done
@@ -385,7 +385,7 @@ generated. Scott can use ad-hoc with `notebooklm ask "..." -n <id>`.
 
 For ANY notebook session (not just --learning):
 
-1. Find the corresponding wiki page in `~/Sites/Global/scott-context/wiki/`
+1. Find the corresponding wiki page in `~/Scott/growth-os/wiki/`
 2. If no wiki page exists, ask Scott: *"No wiki page exists for this topic. Should I create one? It would carry the notebook_id and depth metadata going forward."*
 3. Update wiki page frontmatter:
    - Set `notebook_id: <id>` (if not already set)
@@ -411,7 +411,7 @@ This is a CONSUMPTION event. It does NOT update `depth`, `last_reviewed`, `revie
 **Notebook:** <name> (<id>)
 **Decision:** <new | extended | forked from <old-id>>
 **Sources:** <count> documents (<total words> words)
-**Location:** ~/Sites/Global/scott-context/raw/transcripts/notebooklm-<topic-slug>/
+**Location:** ~/Scott/growth-os/raw/transcripts/notebooklm-<topic-slug>/
 
 **Source documents:**
 | # | File | Words | Covers |

@@ -194,7 +194,7 @@ Every council session produces a permanent record. Two-tier output, based on wei
 
 ### Tier 1: ADR — always
 
-Write to `~/Sites/Global/scott-context/wiki/global/ADR-NNN-<topic-slug>.md`.
+Write to `~/Scott/growth-os/wiki/global/ADR-NNN-<topic-slug>.md`.
 
 **Numbering**: scan `wiki/global/` for `ADR-NNN-*.md`, take the max NNN, increment by 1, zero-pad to 3 digits. (Existing as of 2026-04: ADR-001 through ADR-003.)
 
@@ -245,7 +245,7 @@ Trigger any one of:
 
 Quick 3-member triads with a single round get **ADR only** — no Tier 2.
 
-Write to `~/Sites/Global/scott-context/raw/sessions/<YYYY-MM-DD>-council-<topic-slug>/`:
+Write to `~/Scott/growth-os/raw/sessions/<YYYY-MM-DD>-council-<topic-slug>/`:
 
 | File | Contents |
 |------|----------|

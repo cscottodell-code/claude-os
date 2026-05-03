@@ -28,11 +28,10 @@ Standards for TypeScript, Vue, and JavaScript files.
 - v4 class renames: `shadow-sm` -> `shadow-xs`, `outline-none` -> `outline-hidden`, `ring` -> `ring-3`
 
 ## Version Compliance
-- Use APIs and patterns matching the versions in `stack-lock.json` (if the project has one)
 - SurrealDB v3: use `type::record()` (not `type::thing()`), COMPUTED fields (not `<future>`), expect errors on undefined SCHEMAFULL fields
 - Tailwind CSS v4: CSS-first config with `@theme`, updated class names (`shadow-xs`, `outline-hidden`, `ring-3`)
 - Nuxt 4: follow the latest Nuxt 4 conventions
-- When unsure about version-specific syntax, check `~/Sites/Global/scott-toolkit/checks/<technology>.json` for known patterns
+- When unsure about version-specific syntax, look up the library via Context7 (`/scott:surrealdb` skill auto-loads current SurrealDB v3 patterns)
 
 ## Code Quality
 - Add comments only for complex logic

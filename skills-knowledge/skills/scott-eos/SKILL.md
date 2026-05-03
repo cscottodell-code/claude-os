@@ -70,7 +70,7 @@ Look up a specific concept. Pull from `references/eos-complete-reference.md`.
 
 ## Advosy Context
 
-Before advising on Advosy-specific EOS questions, check if `~/Sites/Global/scott-context/wiki/advosy/` contains populated EOS files (Title Case, flat). Also read the `advosy-context` skill for org structure and terminology.
+Before advising on Advosy-specific EOS questions, check if `~/Scott/growth-os/wiki/advosy/` contains populated EOS files (Title Case, flat). Also read the `advosy-context` skill for org structure and terminology.
 
 | File | Read when... |
 |------|-------------|

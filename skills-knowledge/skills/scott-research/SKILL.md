@@ -53,7 +53,7 @@ Ask Scott:
 3. **Scope check**: If too broad, decompose. If very narrow, suggest skipping thin lenses.
 4. **Output location** (convention — enforced, not default):
    ```
-   ~/Sites/Global/scott-context/raw/research/<scope>/RESEARCH-<topic-slug>-<date>.md
+   ~/Scott/growth-os/raw/research/<scope>/RESEARCH-<topic-slug>-<date>.md
    ```
    - **`<scope>`**: `global` (default) | `advosy` | `bresco` | `personal`. Pick from the decision anchor or topic domain. When unsure, use `global`.
    - **`<topic-slug>`**: kebab-case, lowercase, alphanumerics and hyphens only. Strip articles (`the`, `a`, `an`) and filler. Max ~60 chars. Examples: `surrealdb-v3-migration`, `market-research-product-development`, `100m-leads-offers-models`.

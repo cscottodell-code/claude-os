@@ -18,7 +18,7 @@ invocation_hint: /scott:council <question> - Deliberate a decision from multiple
 input_examples:
   - "/scott:council should we consolidate d2d-payroll into advosy-sales now?"
   - "/scott:council --triad architecture monorepo or polyrepo for Bresco?"
-  - "/scott:council --from-research ~/Sites/Global/scott-context/raw/research/global/RESEARCH-memberships-2026-03-28.md"
+  - "/scott:council --from-research ~/Scott/growth-os/raw/research/global/RESEARCH-memberships-2026-03-28.md"
   - "/scott:council --triad product what pricing model for Advosy memberships?"
 section: tools
 ---

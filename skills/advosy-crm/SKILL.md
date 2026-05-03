@@ -21,9 +21,9 @@ prototypes new pages as standalone HTML mockups that match Gary's design exactly
 can reference them when building in the real app.
 
 **Key files:**
-- Context doc: `~/Sites/Advosy/advosy-context/crm/CONTEXT.md`
-- Screenshots: `~/Sites/Advosy/advosy-context/crm/screenshots/` (01 through 16)
-- Mockups: `~/Sites/Advosy/advosy-context/crm/mockups/`
+- Context doc: `~/Scott/claude-projects/advosy-crm/CONTEXT.md`
+- Screenshots: `~/Scott/claude-projects/advosy-crm/screenshots/` (01 through 16)
+- Mockups: `~/Scott/claude-projects/advosy-crm/mockups/`
 
 ## Mockup Tech Stack
 
@@ -172,9 +172,9 @@ Read `references/d2d-payroll.md` for the complete breakdown of:
 
 When Scott asks for a new CRM page mockup:
 
-1. **Read the context doc** (`~/Sites/Advosy/advosy-context/crm/CONTEXT.md`) for page-specific details
-2. **Check screenshots** in `~/Sites/Advosy/advosy-context/crm/screenshots/` for visual reference
+1. **Read the context doc** (`~/Scott/claude-projects/advosy-crm/CONTEXT.md`) for page-specific details
+2. **Check screenshots** in `~/Scott/claude-projects/advosy-crm/screenshots/` for visual reference
 3. **Start from the closest existing mockup** — copy the HTML shell (Menu Rail, top bar, sub-header)
 4. **Use the Tailwind config** from this skill — never deviate from the CRM token palette
 5. **Match interaction patterns**: dropdowns, expandable rows, modals as documented above
-6. **Save to** `~/Sites/Advosy/advosy-context/crm/mockups/` as a single HTML file
+6. **Save to** `~/Scott/claude-projects/advosy-crm/mockups/` as a single HTML file

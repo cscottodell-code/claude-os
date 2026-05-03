@@ -15,10 +15,10 @@ section: reference
 
 **Version:** SurrealDB v3.0.2 server (latest: v3.0.5) + JS SDK surrealdb@2.0.x (npm)
 **Verified:** 2026-04-03 via live testing on v3.0.2. All examples confirmed working.
-**Master reference:** `~/Sites/Global/scott-context/wiki/references/surrealdb/surrealdb-v3-master-reference.md` (DEFINE API, auth, permissions, full-text search, HNSW, events, functions catalog, SurrealQL language, JS SDK 2.0 complete API, Spectron, real-time best practices)
-**Functions catalog:** `~/Sites/Global/scott-context/wiki/references/surrealdb/surrealdb-v3-functions-catalog.md` (325+ built-in functions)
-**Language reference:** `~/Sites/Global/scott-context/wiki/references/surrealdb/surrealql-language-reference.md` (control flow, closures, operators, types, transactions)
-**Deep reference:** `~/Sites/Global/scott-context/wiki/references/surrealdb/surrealdb-v3-reference.md`
+**Master reference:** `~/Scott/growth-os/wiki/references/surrealdb/surrealdb-v3-master-reference.md` (DEFINE API, auth, permissions, full-text search, HNSW, events, functions catalog, SurrealQL language, JS SDK 2.0 complete API, Spectron, real-time best practices)
+**Functions catalog:** `~/Scott/growth-os/wiki/references/surrealdb/surrealdb-v3-functions-catalog.md` (325+ built-in functions)
+**Language reference:** `~/Scott/growth-os/wiki/references/surrealdb/surrealql-language-reference.md` (control flow, closures, operators, types, transactions)
+**Deep reference:** `~/Scott/growth-os/wiki/references/surrealdb/surrealdb-v3-reference.md`
 **Context7 library:** `/surrealdb/docs.surrealdb.com`
 
 ## MANDATORY: No General Knowledge for SurrealQL
@@ -50,7 +50,7 @@ If you cannot verify a syntax pattern against Context7 or the reference files, d
 ## MANDATORY: Integration Test Requirement
 Every phase that touches SurrealDB MUST have integration tests against a live instance.
 Mock tests (`vi.fn()`) do NOT verify SurrealQL syntax, schema ASSERTs, or field constraints.
-Template: `~/Sites/Global/scott-toolkit/references/surrealdb-integration-test-template.ts`
+Template: `~/Scott/claude-os/references/surrealdb-integration-test-template.ts`
 
 ## Project Versions (don't mix these up)
 
@@ -239,7 +239,7 @@ await db.query<[Msg[]]>('SELECT * FROM messages WHERE conversation = $conv', { c
 
 **Array Record IDs for time-series:** Use compound IDs like `metric:['rep_alice', '2026-04-02']` for time-series data (sales metrics, activity logs) where you need range queries. Use auto-generated IDs for batch data (payroll). Only deploy on v3 JS SDK projects (eleanor, advosy-sales). Don't retrofit into v2 WASM projects.
 
-**Spectron (ADOPTED):** SurrealDB's official AI agent memory layer. 5 memory types: working, semantic, episodic, procedural, preference. Runs on same SurrealDB instance. Use for Eleanor's persistent memory. See `~/Sites/Global/scott-context/wiki/references/surrealdb/surrealdb-v3-spectron.md` for schemas and patterns.
+**Spectron (ADOPTED):** SurrealDB's official AI agent memory layer. 5 memory types: working, semantic, episodic, procedural, preference. Runs on same SurrealDB instance. Use for Eleanor's persistent memory. See `~/Scott/growth-os/wiki/references/surrealdb/surrealdb-v3-spectron.md` for schemas and patterns.
 
 **Context Layer Loop:** The core agent execution pattern. One SurrealQL transaction combines vector search + graph traversal + memory lookup (read), passes to LLM (reason), then atomically writes back results + entities + relationships (write). All new agents should follow this pattern. See `surrealdb-v3-ai-patterns.md` "The Context Layer Loop" section.
 

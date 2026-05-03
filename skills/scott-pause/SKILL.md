@@ -141,7 +141,7 @@ To pick up later, paste it at the start of a fresh session.
 ```
 Continue work on Sales Ops Hub Phase 3: Goals & Weights
 
-Working directory: ~/Sites/Advosy/sales-ops-hub
+Working directory: ~/Scott/claude-projects/advosy-sales
 
 Where we left off: Phase 3 context gathered, ready to plan. All implementation
 decisions captured in CONTEXT.md.
@@ -164,7 +164,7 @@ then start execution with TDD via the `tdd` operation.
 ```
 Continue helping me set up n8n webhook sync between Spotio and Claimsforce
 
-Working directory: ~/Sites/Advosy/automations
+Working directory: ~/Scott/claude-projects/automations
 
 Where we left off: Webhook endpoint is working, tested with curl. Still need
 to map Spotio "status" field values to CF stage names.

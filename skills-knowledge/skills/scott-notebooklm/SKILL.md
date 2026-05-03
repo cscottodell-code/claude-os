@@ -28,7 +28,7 @@ description: |
 user_invocable: true
 invocation_hint: /scott:notebooklm <topic> [--output audio|chat|study|reference|none] [--from-research path] [--learning] [--fork] - Create a NotebookLM notebook with explicit output choice
 input_examples:
-  - "/scott:notebooklm --from-research ~/Sites/Global/scott-context/raw/research/global/RESEARCH-memberships-2026-03-28.md"
+  - "/scott:notebooklm --from-research ~/Scott/growth-os/raw/research/global/RESEARCH-memberships-2026-03-28.md"
   - "/scott:notebooklm context engineering best practices"
   - "/scott:notebooklm how SurrealDB v3 works --output none"
   - "/scott:notebooklm the scott-toolkit --fork"

@@ -43,7 +43,7 @@ Get fully up to speed on the project's current state by reading all relevant fil
 
 ### Files to read
 
-**Standard context:** Read `~/Sites/Global/scott-toolkit/context/_gather-project-context.md` and gather all listed files (including GSD context if `.planning/` exists).
+**Standard context:** Read `~/Scott/claude-os/context/_gather-project-context.md` and gather all listed files (including GSD context if `.planning/` exists).
 
 **Resume-specific additions:**
 - Read any `.planning/phases/*/PLAN.md` for active phase details
@@ -92,7 +92,7 @@ Check whether priorities have changed since the last session.
 2. Have your priorities changed since we last worked on this?
 3. Is there anything new you want to add or change before we continue?
 4. Do you want to continue with the planned next task, or pivot to something else?
-5. (Work projects only — Advosy or Bresco) Any feedback from team members since the last session? **NEVER ask this on personal projects** (~/Sites/Personal/, Eleanor, Life OS, toolkit work). Personal projects are solo — no team input involved.
+5. (Work projects only — Advosy or Savvynth) Any feedback from team members since the last session? **NEVER ask this on personal projects** (Eleanor, Life OS, toolkit work, or anything else under ~/Scott/claude-projects/ that isn't an Advosy/Savvynth shared repo). Personal projects are solo — no team input involved.
 
 ### Output
 Confirmed direction for this session.

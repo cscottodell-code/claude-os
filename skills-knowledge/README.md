@@ -23,7 +23,7 @@ Personal knowledge and productivity skills for Claude Code. Extracted from scott
 ## Setup
 
 ```bash
-cd ~/Sites/Personal/scott-knowledge
+cd ~/Scott/claude-os/skills-knowledge
 ./setup.sh
 ```
 

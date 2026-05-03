@@ -55,7 +55,7 @@ if (triggers.length === 0) {
   );
   if (planningExists) {
     triggers.push(
-      "Commit in GSD project. Log successes in ~/Sites/Global/scott-toolkit/successes/"
+      "Commit in GSD project. Log successes in ~/Scott/claude-os/successes/"
     );
   }
 }

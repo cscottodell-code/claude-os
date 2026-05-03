@@ -188,11 +188,10 @@ Covers sales for ALL companies under Advosy.
 
 | Project | Location | Status | Purpose |
 |---------|----------|--------|---------|
-| D2D Payroll | ~/Sites/Advosy/d2d-payroll/ | ~90% complete | Payroll calculator for D2D reps |
-| Spotio-CF | ~/Sites/Advosy/spotio-cf/ | Code complete | Spotio → Claimsforce integration |
-| D2D Income Tool | ~/Sites/Advosy/d2d-income-tool/ | Prototype | Income calculator (Nuxt version) |
-| D2D Apps | ~/Sites/Advosy/d2d-apps/ | Prototype | React D2D apps (outlier, being replaced) |
-| CF Automations | ~/Sites/Advosy/automations/ | Active | n8n workflow automations |
+| D2D Payroll | ~/Scott/claude-projects/d2d-payroll/ | ~90% complete | Payroll calculator for D2D reps |
+| Spotio-CF | ~/Scott/claude-projects/spotio-cf/ | Code complete | Spotio → Claimsforce integration |
+| D2D Apps | ~/Scott/claude-projects/d2d-apps/ | Prototype | React D2D apps (outlier, being replaced) |
+| CF Automations | ~/Scott/claude-projects/automations/ | Active | n8n workflow automations |
 | Advosy CRM | advosy.app | Active | Custom CRM (Gary's build, Nuxt 4 + Nuxt UI + SurrealDB) |
 
 **Legacy v2 projects:** d2d-payroll and spotio-cf still on SurrealDB v2 + WASM SDK v1.3.2 (will migrate when consolidated into advosy-sales).
@@ -227,4 +226,4 @@ When building tools for Advosy:
 ## Full Resources
 
 - **Employee Directory:** Google Sheet (requires authentication, ask Scott for access if needed)
-- **Full Context Doc:** ~/Sites/Advosy/advosy-context/company/structure.md
+- **Full Context Doc:** ~/Scott/growth-os/wiki/Work/advosy/Corporate Structure.md

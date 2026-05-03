@@ -214,7 +214,7 @@ if (existsSync(claudeMd)) {
   const count = rows.length;
   if (count > 0) {
     console.log(
-      `Active projects (${count}): see ~/Sites/Global/scott-context/wiki/global/ACTIVE-PROJECTS.md`
+      `Active projects (${count}): see ~/Scott/growth-os/wiki/global/ACTIVE-PROJECTS.md`
     );
   }
 }

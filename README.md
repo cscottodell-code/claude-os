@@ -1,10 +1,10 @@
 # Scott's Toolkit v7
 
-Claude Code config for Scott's machines. Hooks (safety), a small set of high-leverage skills, and light rules pointing at the LLM Wiki at `~/Sites/Global/scott-context/`.
+Claude Code config for Scott's machines. Hooks (safety), a small set of high-leverage skills, and light rules pointing at the LLM Wiki at `~/Scott/growth-os/`.
 
 **Runtime:** Bun (TypeScript). All hooks and tools are `.ts` files.
 
-Lives at `~/Sites/Global/scott-toolkit/` on all of Scott's machines. Deployed to `~/.claude/` via `setup.sh`.
+Lives at `~/Scott/claude-os/` on all of Scott's machines. Deployed to `~/.claude/` via `setup.sh`.
 
 ## Two-system model
 
@@ -22,10 +22,10 @@ Plugins (Superpowers, Impeccable) are opportunistic — used skill-by-skill, not
 curl -fsSL https://bun.sh/install | bash
 
 # Clone the repo
-git clone git@github.com:cscottodell-code/scott-toolkit.git ~/Sites/Global/scott-toolkit
+git clone git@github.com:cscottodell-code/scott-toolkit.git ~/Scott/scott-toolkit
 
 # Install dev dependencies and deploy to ~/.claude/
-cd ~/Sites/Global/scott-toolkit && bun install && ./setup.sh
+cd ~/Scott/scott-toolkit && bun install && ./setup.sh
 ```
 
 The setup script creates symlinks from `~/.claude/` to the repo. Update the repo once, every machine benefits after `git pull && ./setup.sh`.
@@ -102,7 +102,7 @@ scott-toolkit/
 └── backups/                          # Settings snapshots (gitignored)
 ```
 
-The vault that scott-context maintains (`~/Sites/Global/scott-context/`) holds the durable layer: `wiki/identity.md`, knowledge, daily notes, logs.
+The vault that scott-context maintains (`~/Scott/growth-os/`) holds the durable layer: `wiki/identity.md`, knowledge, daily notes, logs.
 
 ## Multi-Machine Sync
 
@@ -120,4 +120,4 @@ bun install                           # Dependency updates if package.json chang
 - Hooks import shared utilities from `hooks/lib/`, tools from `src/`
 - Each skill lives in its own subfolder: `skills/<name>/SKILL.md`
 - Run `bun run tools/toolkit-lint.ts` before committing (pre-commit hook enforces this)
-- Identity and behavioral rules live in `~/Sites/Global/scott-context/wiki/identity.md` (LLM-agnostic) — keep this README focused on Claude Code mechanics
+- Identity and behavioral rules live in `~/Scott/growth-os/wiki/identity.md` (LLM-agnostic) — keep this README focused on Claude Code mechanics

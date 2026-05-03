@@ -6,7 +6,7 @@
  */
 
 import { existsSync, readFileSync } from "fs";
-import { resolve, relative } from "path";
+import { resolve } from "path";
 import { homedir } from "os";
 import { readJson } from "../src/json.js";
 import { toolkitPath } from "../src/paths.js";
@@ -113,11 +113,11 @@ for (const entry of manifest.files ?? []) {
 }
 
 // Check external files
-const sitesDir = resolve(homedir(), "Sites");
+const scottDir = resolve(homedir(), "Scott");
 for (const entry of manifest.external_files ?? []) {
   const result = checkFile(
-    resolve(sitesDir, entry.path),
-    `~/Sites/${entry.path}`,
+    resolve(scottDir, entry.path),
+    `~/Scott/${entry.path}`,
     entry.description ?? "",
     entry.check ?? ""
   );

@@ -291,7 +291,7 @@ If no connection is real, omit entirely. Do not force it.*
 Apply the naming convention from `SKILL.md` Phase 1.4. Final path:
 
 ```
-~/Sites/Global/scott-context/raw/research/<scope>/RESEARCH-<topic-slug>-<date>.md
+~/Scott/growth-os/raw/research/<scope>/RESEARCH-<topic-slug>-<date>.md
 ```
 
 **Slug derivation** (turn the topic into `<topic-slug>`):

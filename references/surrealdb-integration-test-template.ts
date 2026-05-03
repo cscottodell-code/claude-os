@@ -6,7 +6,7 @@
  * runs all migrations, and tears down after tests complete.
  *
  * Prerequisites:
- *   - SurrealDB running on localhost:8000 (start with: ~/Sites/Global/scott-toolkit/start-surreal.sh)
+ *   - SurrealDB running on localhost:8000 (start with: ~/Scott/claude-os/start-surreal.sh)
  *   - Migrations in server/migrations/*.surql
  *   - vitest.config.ts must route tests/integration/** to node environment:
  *

@@ -93,7 +93,7 @@ updates in the file but stay true to the source's structure and intent.
 
 ## Step 6: Save Location
 
-Save to `~/Sites/Global/scott-context/raw/research/global/` by default. No need to ask unless Scott specifies a different path.
+Save to `~/Scott/growth-os/raw/research/global/` by default. No need to ask unless Scott specifies a different path.
 
 ## Step 7: Write the Source File
 

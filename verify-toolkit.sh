@@ -3,7 +3,7 @@
 # Run this after every milestone merge to confirm working state
 set -e
 
-TOOLKIT_DIR="${SCOTT_TOOLKIT_DIR:-$HOME/Sites/Global/scott-toolkit}"
+TOOLKIT_DIR="${CLAUDE_OS_DIR:-$HOME/Sites/Global/scott-toolkit}"
 CLAUDE_DIR="$HOME/.claude"
 ERRORS=0
 WARNINGS=0
