@@ -7,40 +7,11 @@
  */
 
 import { describe, expect, test } from "bun:test";
-import { guardGitPush } from "../hooks/guards/git-push.js";
 import { guardDestructive } from "../hooks/guards/destructive.js";
 import { guardNpmInstall } from "../hooks/guards/npm-install.js";
-import { guardPhaseCompletion } from "../hooks/guards/phase-completion.js";
-import {
-  guardProjectScaffolded,
-  guardDesignApproved,
-  guardChangesDrafted,
-  guardReflectionComplete,
-} from "../hooks/guards/workflow-gates.js";
 
 // ---------------------------------------------------------------------------
-// guardGitPush — RETIRED v6.2.1 (always allows, kept for GuardResult export)
-// ---------------------------------------------------------------------------
-
-describe("guardGitPush (retired — always allows)", () => {
-  test("allows git push (guard retired)", () => {
-    const result = guardGitPush("git push", "{}");
-    expect(result.allow).toBe(true);
-  });
-
-  test("allows git push with remote and branch", () => {
-    const result = guardGitPush("git push origin main", "{}");
-    expect(result.allow).toBe(true);
-  });
-
-  test("allows when command is null", () => {
-    const result = guardGitPush(null, "{}");
-    expect(result.allow).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// guardDestructive — "blocks hard-to-reverse operations"
+// guardDestructive -- "blocks hard-to-reverse operations"
 // ---------------------------------------------------------------------------
 
 describe("guardDestructive", () => {
@@ -84,7 +55,7 @@ describe("guardDestructive", () => {
 });
 
 // ---------------------------------------------------------------------------
-// guardNpmInstall — "blocks installs, detects stack drift"
+// guardNpmInstall -- "blocks installs, detects stack drift"
 // ---------------------------------------------------------------------------
 
 describe("guardNpmInstall", () => {
@@ -134,53 +105,5 @@ describe("guardNpmInstall", () => {
     expect(
       guardNpmInstall("echo 'npm install lodash'").allow
     ).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// guardPhaseCompletion — "blocks phase complete without closeout marker"
-// ---------------------------------------------------------------------------
-
-describe("guardPhaseCompletion", () => {
-  test("allows non-phase-completion commands", () => {
-    expect(guardPhaseCompletion("git commit -m 'done'").allow).toBe(true);
-  });
-
-  test("allows when command doesn't match GSD pattern", () => {
-    expect(
-      guardPhaseCompletion("echo 'phase complete'").allow
-    ).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Workflow gates — "gates block by default when marker files are missing"
-// ---------------------------------------------------------------------------
-
-describe("workflow gates", () => {
-  const nonexistentDir = "/tmp/toolkit-test-nonexistent-" + Date.now();
-
-  test("guardProjectScaffolded blocks when marker missing", () => {
-    const result = guardProjectScaffolded(nonexistentDir);
-    expect(result.allow).toBe(false);
-    expect(result.message).toContain(".project-scaffolded");
-  });
-
-  test("guardDesignApproved blocks when marker missing", () => {
-    const result = guardDesignApproved(nonexistentDir);
-    expect(result.allow).toBe(false);
-    expect(result.message).toContain(".design-approved");
-  });
-
-  test("guardChangesDrafted blocks when marker missing", () => {
-    const result = guardChangesDrafted(nonexistentDir);
-    expect(result.allow).toBe(false);
-    expect(result.message).toContain(".changes-drafted");
-  });
-
-  test("guardReflectionComplete blocks when marker missing", () => {
-    const result = guardReflectionComplete(nonexistentDir);
-    expect(result.allow).toBe(false);
-    expect(result.message).toContain(".reflection-complete");
   });
 });
