@@ -20,11 +20,7 @@ are the same for every project.
 - **PRD:** See PRD.md in this repo
 - **Type:** Global / Personal / Advosy / Bresco
 - **Target:** Desktop (Tauri) / Web / Both
-- **PM Mode:** GSD + Superpowers
-  - **GSD** = orchestration engine: **plan_phase** (planning), **execute_phase** (execution), **verify_work** (UAT), **add_tests** (coverage). State tracked in `.planning/`.
-  - **Superpowers** = discipline layer: **git_worktree** (isolation), **tdd** (TDD during execution), **code_review** (after execution), **finish_branch** (merge/PR).
-  - **Build loop:** Worktree -> Plan -> Execute with TDD -> Review -> Verify -> Finish branch
-  - **Resolution:** Abstract operation names resolve via `~/Scott/claude-os/config/interfaces.json`
+- **Methodology:** Karpathy posture (tight leash, small increments). Superpowers + Impeccable used opportunistically, not orchestrated. See `~/Scott/growth-os/wiki/identity.md`.
 
 ## Tech Stack
 <!-- [PRE-FILLED] Scott's standard stack. Add project-specific items below. -->
