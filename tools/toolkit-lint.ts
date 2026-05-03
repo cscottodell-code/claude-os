@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * toolkit-lint.ts — Comprehensive integrity checker for scott-toolkit.
+ * toolkit-lint.ts: comprehensive integrity checker for claude-os.
  * Three sections: stale patterns, skill integrity, hook integrity.
  *
  * Usage: bun run tools/toolkit-lint.ts [--section=patterns|skills|hooks] [--fix]
@@ -39,58 +39,87 @@ function issue(section: string, msg: string) {
 async function checkStalePatterns() {
   console.log("1. Checking stale patterns...");
 
+  interface BannedEntry {
+    pattern: string;
+    replacement: string;
+    reason: string;
+    // Default true. Set false to skip in batch lint while still letting the
+    // per-edit hook (toolkit-coherence-check.ts) warn. Used for rules where
+    // pre-existing violations should not be refactored proactively (e.g. em dashes).
+    lint?: boolean;
+  }
   interface VersionManifest {
-    banned_patterns?: Array<{
-      pattern: string;
-      replacement: string;
-      description: string;
-    }>;
+    cross_reference_patterns?: {
+      banned?: BannedEntry[];
+    };
   }
 
   const manifest = await readJson<VersionManifest>(
     toolkitPath("config", "version-manifest.json")
   );
 
-  if (!manifest?.banned_patterns) {
-    console.log("   SKIP: No banned_patterns in version-manifest.json");
+  const banned = manifest?.cross_reference_patterns?.banned;
+  if (!banned || banned.length === 0) {
+    console.log(
+      "   SKIP: No cross_reference_patterns.banned in version-manifest.json"
+    );
     return;
   }
 
-  // Scan all .md files in toolkit
-  const result = await exec(
-    `find ${toolkitPath()} -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*'`,
-    { timeout: 10_000 }
-  );
+  // Active scope: dirs Scott actively edits. Excludes archival
+  // (decisions/, retros/, successes/, docs/, tasks/, references/) and
+  // deletion-pending (workflows/, CHANGELOG.md). Mirrors the integrity-test scope.
+  const activeDirs = [
+    "rules",
+    "context",
+    "skills",
+    "skills-knowledge/skills",
+  ];
+  const activeFiles = ["README.md"];
 
-  const mdFiles = result.stdout.split("\n").filter(Boolean);
+  const dirArgs = activeDirs
+    .map((d) => toolkitPath(d))
+    .filter(existsSync)
+    .join(" ");
+  const result = dirArgs
+    ? await exec(
+        `find ${dirArgs} -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*'`,
+        { timeout: 10_000 }
+      )
+    : { stdout: "" };
 
-  // Also check external CLAUDE.md files
+  const dirFiles = result.stdout.split("\n").filter(Boolean);
+  const topFiles = activeFiles.map((f) => toolkitPath(f)).filter(existsSync);
+
+  // Also check external CLAUDE.md files (Scott's identity layer)
   const externalFiles = [
     claudePath("CLAUDE.md"),
     resolve(toolkitPath(), "../../CLAUDE.md"),
   ].filter(existsSync);
 
-  const allFiles = [...mdFiles, ...externalFiles];
+  const allFiles = [...dirFiles, ...topFiles, ...externalFiles];
 
-  for (const banned of manifest.banned_patterns) {
+  for (const entry of banned) {
+    if (entry.lint === false) continue;
+
     for (const filePath of allFiles) {
       try {
         const content = readFileSync(filePath, "utf-8");
-        if (content.includes(banned.pattern)) {
+        if (content.includes(entry.pattern)) {
           const display = relative(toolkitPath(), filePath) || filePath;
           issue(
             "patterns",
-            `"${banned.pattern}" in ${display} — ${banned.description}`
+            `"${entry.pattern}" in ${display}: ${entry.reason}`
           );
 
           if (fixMode) {
             const updated = content.replaceAll(
-              banned.pattern,
-              banned.replacement
+              entry.pattern,
+              entry.replacement
             );
             await Bun.write(filePath, updated);
             console.log(
-              `         FIXED: replaced with "${banned.replacement}"`
+              `         FIXED: replaced with "${entry.replacement}"`
             );
           }
         }
@@ -262,7 +291,7 @@ async function checkHookIntegrity() {
     if (!existsSync(fullPath)) {
       issue(
         "hooks",
-        `${hookFile} — file not found`
+        `${hookFile}: file not found`
       );
     }
   }
@@ -274,7 +303,7 @@ async function checkHookIntegrity() {
         cmd.match(/([^/]+\.(?:sh|ts))/)?.[ 1] ?? "unknown";
       issue(
         "hooks",
-        `settings.json uses direct toolkit path for '${hookFile}' — should use $HOME/.claude/hooks/`
+        `settings.json uses direct toolkit path for '${hookFile}': should use $HOME/.claude/hooks/`
       );
     }
   }

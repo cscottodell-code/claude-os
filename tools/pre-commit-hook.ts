@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * pre-commit-hook.ts — Git pre-commit hook for scott-toolkit repo.
+ * pre-commit-hook.ts: git pre-commit hook for claude-os repo.
  * Runs sync, lint, and graph rebuild on every commit.
  */
 
@@ -41,7 +41,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log("Lint clean — commit allowed.");
+  console.log("Lint clean: commit allowed.");
 
   // Auto-rebuild dependency graph so impact analysis stays current
   const graphResult = await exec(
