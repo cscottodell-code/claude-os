@@ -34,7 +34,7 @@ complete PRD, project repo, and design proof before any features are built.
 Use this whenever Scott says something like "let's start a new project" or "I want to build..."
 
 ## Prerequisites
-- The toolkit repo exists at ~/Sites/Global/scott-toolkit/
+- The toolkit repo exists at ~/Scott/claude-os/
 - Scott has a rough idea of what he wants to build (doesn't need to be detailed)
 
 ## Instructions for Claude Code
@@ -115,7 +115,7 @@ Load the PRD template and draft all sections using the brain dump answers.
 
 ### Steps
 
-1. Read ~/Sites/Global/scott-toolkit/context/PRD-TEMPLATE.md
+1. Read ~/Scott/claude-os/context/PRD-TEMPLATE.md
 2. For each section (1-11):
    a. Draft the content using the brain dump and clarification answers
    b. Use the template's guidance comments to inform each section
@@ -202,14 +202,14 @@ Set up the project repo with the proper file structure and configuration files.
 
 ### Steps
 1. Create the project directory based on work context:
-   - Global → ~/Sites/Global/[project-name]
-   - Personal → ~/Sites/Personal/[project-name]
-   - Advosy → ~/Sites/Advosy/[project-name]
-   - Bresco → ~/Sites/Bresco/[project-name]
+   - Global → ~/Scott/claude-projects/[project-name]
+   - Personal → ~/Scott/claude-projects/[project-name]
+   - Advosy → ~/Scott/claude-projects/[project-name]
+   - Bresco → ~/Scott/claude-projects/[project-name]
 2. Initialize git
-3. Read ~/Sites/Global/scott-toolkit/context/FILE-STRUCTURE-TEMPLATE.md
+3. Read ~/Scott/claude-os/context/FILE-STRUCTURE-TEMPLATE.md
 4. Create the directory structure matching the deployment target (web/desktop/both)
-5. Generate CLAUDE.md from ~/Sites/Global/scott-toolkit/context/CLAUDE-MD-TEMPLATE.md:
+5. Generate CLAUDE.md from ~/Scott/claude-os/context/CLAUDE-MD-TEMPLATE.md:
    - Fill in project context from the PRD
    - Fill in tech stack (standard + any project-specific additions)
    - List relevant toolkit skill files in External References
@@ -219,7 +219,7 @@ Set up the project repo with the proper file structure and configuration files.
 7. Create tasks/todo.md with Milestone 1 tasks
 8. Create tasks/lessons.md (empty, with header)
 9. Generate `stack-lock.json` using `stack-detect.ts`:
-   - Run `bun run ~/Sites/Global/scott-toolkit/tools/stack-detect.ts .`
+   - Run `bun run ~/Scott/claude-os/tools/stack-detect.ts .`
    - Review the auto-detected technologies with Scott
    - Scott approves or adjusts, then change `approved_by` from "pending" to "scott"
    - Change `tier` from "experiment" to "full" for production projects

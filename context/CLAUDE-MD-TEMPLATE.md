@@ -3,7 +3,7 @@
 <!--
 WHAT THIS IS: This is Claude Code's instruction manual for this project. Claude Code
 reads this file before doing any work. Think of it like onboarding notes for a new
-team member — it tells them everything they need to know about the project.
+team member: it tells them everything they need to know about the project.
 
 HOW TO USE: Copy this template into your project repo as CLAUDE.md. Fill in the
 project-specific sections. Leave the pre-filled sections (like Claude Code Behavior
@@ -24,7 +24,7 @@ are the same for every project.
   - **GSD** = orchestration engine: **plan_phase** (planning), **execute_phase** (execution), **verify_work** (UAT), **add_tests** (coverage). State tracked in `.planning/`.
   - **Superpowers** = discipline layer: **git_worktree** (isolation), **tdd** (TDD during execution), **code_review** (after execution), **finish_branch** (merge/PR).
   - **Build loop:** Worktree -> Plan -> Execute with TDD -> Review -> Verify -> Finish branch
-  - **Resolution:** Abstract operation names resolve via `~/Sites/Global/scott-toolkit/config/interfaces.json`
+  - **Resolution:** Abstract operation names resolve via `~/Scott/claude-os/config/interfaces.json`
 
 ## Tech Stack
 <!-- [PRE-FILLED] Scott's standard stack. Add project-specific items below. -->

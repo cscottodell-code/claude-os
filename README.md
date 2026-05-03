@@ -10,10 +10,10 @@ Lives at `~/Scott/claude-os/` on all of Scott's machines. Deployed to `~/.claude
 
 | System | Owns |
 |---|---|
-| **`scott-toolkit/`** | Claude Code config: hooks (safety), small set of skills, light rules pointing at the vault |
-| **`scott-context/`** | The personal OS: identity, knowledge, daily notes, log, capture pipeline |
+| **`claude-os/`** | Claude Code config: hooks (safety), small set of skills, light rules pointing at the vault |
+| **`growth-os/`** | The personal OS: identity, knowledge, daily notes, log, capture pipeline |
 
-Plugins (Superpowers, Impeccable) are opportunistic — used skill-by-skill, not orchestrated. GSD was abandoned 2026-04-28 (v7 demolition).
+Plugins (Superpowers, Impeccable) are opportunistic, used skill-by-skill, not orchestrated. GSD was abandoned 2026-04-28 (v7 demolition).
 
 ## Quick Start
 
@@ -22,10 +22,10 @@ Plugins (Superpowers, Impeccable) are opportunistic — used skill-by-skill, not
 curl -fsSL https://bun.sh/install | bash
 
 # Clone the repo
-git clone git@github.com:cscottodell-code/scott-toolkit.git ~/Scott/scott-toolkit
+git clone git@github.com:cscottodell-code/scott-toolkit.git ~/Scott/claude-os
 
 # Install dev dependencies and deploy to ~/.claude/
-cd ~/Scott/scott-toolkit && bun install && ./setup.sh
+cd ~/Scott/claude-os && bun install && ./setup.sh
 ```
 
 The setup script creates symlinks from `~/.claude/` to the repo. Update the repo once, every machine benefits after `git pull && ./setup.sh`.
@@ -54,7 +54,7 @@ Abstract operation names (`tdd`, `code_review`, `git_worktree`, `resume`) map to
 ## Repo Structure
 
 ```
-scott-toolkit/
+claude-os/
 ├── README.md
 ├── CHANGELOG.md
 ├── package.json                      # Bun project config (zero runtime deps)
@@ -96,13 +96,13 @@ scott-toolkit/
 │   ├── advosy-context, advosy-claimsforce, advosy-crm
 │   ├── scott-debug, scott-learn, scott-pause, scott-resume
 │   ├── scott-new-project, scott-new-feature
-│   ├── scott-surrealdb (thin pointer at scott-context wiki)
+│   ├── scott-surrealdb (thin pointer at growth-os wiki)
 │   └── scott-uiux
 │
 └── backups/                          # Settings snapshots (gitignored)
 ```
 
-The vault that scott-context maintains (`~/Scott/growth-os/`) holds the durable layer: `wiki/identity.md`, knowledge, daily notes, logs.
+The vault that growth-os maintains (`~/Scott/growth-os/`) holds the durable layer: `wiki/identity.md`, knowledge, daily notes, logs.
 
 ## Multi-Machine Sync
 
@@ -120,4 +120,4 @@ bun install                           # Dependency updates if package.json chang
 - Hooks import shared utilities from `hooks/lib/`, tools from `src/`
 - Each skill lives in its own subfolder: `skills/<name>/SKILL.md`
 - Run `bun run tools/toolkit-lint.ts` before committing (pre-commit hook enforces this)
-- Identity and behavioral rules live in `~/Scott/growth-os/wiki/identity.md` (LLM-agnostic) — keep this README focused on Claude Code mechanics
+- Identity and behavioral rules live in `~/Scott/growth-os/wiki/identity.md` (LLM-agnostic). Keep this README focused on Claude Code mechanics.
