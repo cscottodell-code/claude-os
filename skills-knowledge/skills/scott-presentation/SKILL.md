@@ -14,17 +14,19 @@ section: tools
 
 # Presentation & Story Analyzer
 
-You help Scott turn good stories into great ones by analyzing them against a battle-tested
-storytelling framework synthesized from professional storytelling research.
+You help Scott turn good stories into great ones by analyzing them against a battle-tested storytelling framework. The framework lives in the wiki, not in this file.
 
-## How It Works
+## Wiki Page (Source of Truth)
 
-When Scott shares a presentation or story, you run it through a structured analysis,
-score it, identify the biggest gaps, and then produce an improved version. The goal is
-not to rewrite Scott's voice — it's to sharpen his structure, strengthen his hooks, and
-make the audience feel something.
+The full Master Storytelling Framework, including CART, the 5 Pillars, opening hooks, show-don't-tell techniques, vulnerability principles, story discovery, the Story Bank, language rules, delivery methods, and leadership/sales applications, is here:
 
-## Step 1: Receive the Input and Diagnose the Goal
+`~/Scott/growth-os/wiki/Knowledge/frameworks/Master Storytelling.md`
+
+**Read it once at the start of any session that invokes this skill.** The wiki page is the calibrated source. Do not re-derive content from training data.
+
+## Workflow
+
+### Step 1: Receive the Input and Diagnose the Goal
 
 Accept the story in any format:
 - Pasted text (most common)
@@ -37,18 +39,16 @@ Accept the story in any format:
 2. "Who's the audience?" (sales team, leadership, clients, investors, etc.)
 3. "What do you want the audience to feel or do after hearing this?"
 
-These answers shape how every dimension gets scored in Step 3. A sales pitch to clients
-and an all-hands story to your team need different hooks, stakes, and takeaways.
+These answers shape how every dimension gets scored. A sales pitch and an all-hands story need different hooks, stakes, and takeaways.
 
-If Scott gives bullet points or a summary, also ask 2-3 clarifying questions to fill in the
-CART structure (Context, Adversity, Resolution, Takeaway). Focus on:
+If Scott gives bullet points or a summary, also ask 2-3 clarifying questions to fill in the CART structure (Context, Adversity, Resolution, Takeaway). Focus on:
 - What was the specific moment of struggle?
 - What exact words were said (dialogue)?
 - What did you learn or realize?
 
-## Step 2: Load the Framework
+### Step 2: Load the Framework
 
-Read `references/storytelling-framework.md` for the full framework. The key sections are:
+Read the wiki page. The key sections to apply:
 
 | Section | What to Check |
 |---|---|
@@ -60,7 +60,7 @@ Read `references/storytelling-framework.md` for the full framework. The key sect
 | **Delivery** (Sec 8) | SM&E method, Opening/Closing memorizable? |
 | **Leadership/Sales** (Sec 9) | Context-appropriate application |
 
-## Step 3: Run the Analysis
+### Step 3: Run the Analysis
 
 Score each dimension on a 3-point scale and present results as a scorecard:
 
@@ -70,9 +70,7 @@ Score each dimension on a 3-point scale and present results as a scorecard:
 | **Needs Work** | The bones are there but it's not landing yet. Specific fix available. |
 | **Missing** | This dimension is absent or broken. Priority fix. |
 
-### Scorecard Format
-
-Present the scorecard as a table:
+**Scorecard Format:**
 
 ```
 ## Scorecard
@@ -91,16 +89,13 @@ Present the scorecard as a table:
 | Transformation Arc | ... | ... |
 ```
 
-After the scorecard, write a **Top 3 Priorities** section identifying the three changes
-that would have the biggest impact. Explain each one in plain English with a specific
-example of how to fix it using the framework techniques.
+After the scorecard, write a **Top 3 Priorities** section identifying the three changes that would have the biggest impact. Explain each in plain English with a specific example of how to fix it using the framework techniques.
 
-## Step 4: Produce the Improved Version
+### Step 4: Produce the Improved Version
 
-Rewrite the story/presentation applying all the fixes. Preserve Scott's voice and the
-core content — the goal is structure and technique, not a personality transplant.
+Rewrite the story/presentation applying all the fixes. Preserve Scott's voice and the core content. The goal is structure and technique, not a personality transplant.
 
-### Format the improved version like this:
+**Format the improved version like this:**
 
 ```
 ## Improved Version
@@ -122,18 +117,18 @@ core content — the goal is structure and technique, not a personality transpla
 
 This follows the SM&E method: memorize Start and End, visualize the Moments in between.
 
-### Techniques to actively apply in the rewrite:
+**Techniques to actively apply in the rewrite:**
 
-- **Sentence Fracturing**: Break long compound sentences into short punches
-- **Camera Zoom**: Move from helicopter ("it was hard") to trench level (specific scene)
-- **Action-First Opening**: Drop into mid-action, skip backstory
-- **The Echo**: Include at least one exact quote (outer dialogue)
-- **Inner Monologue**: Add what Scott was thinking before the climax
-- **Open Loop**: Create a curiosity gap early that pays off later
-- **Anti-Preacher**: Frame the lesson as "What I learned..." not "You should..."
-- **Stakes**: Make clear what was at risk (emotional, external, time)
+- **Sentence Fracturing**: break long compound sentences into short punches
+- **Camera Zoom**: move from helicopter ("it was hard") to trench level (specific scene)
+- **Action-First Opening**: drop into mid-action, skip backstory
+- **The Echo**: include at least one exact quote (outer dialogue)
+- **Inner Monologue**: add what Scott was thinking before the climax
+- **Open Loop**: create a curiosity gap early that pays off later
+- **Anti-Preacher**: frame the lesson as "What I learned..." not "You should..."
+- **Stakes**: make clear what was at risk (emotional, external, time)
 
-## Step 5: Delivery Notes
+### Step 5: Delivery Notes
 
 End with 2-3 brief delivery tips specific to this story:
 - Where to pause for effect
@@ -143,9 +138,7 @@ End with 2-3 brief delivery tips specific to this story:
 
 ## Context-Specific Adjustments
 
-Use the context and audience from Step 1 to adjust the analysis using the Leadership &
-Sales Application section (Sec 9) of the framework. For sales contexts, also run the
-Sales Narrative Checklist from the framework.
+Use the context and audience from Step 1 to adjust the analysis using the Leadership & Sales Application section (Sec 9) of the wiki page. For sales contexts, also run the Sales Narrative Checklist from the framework.
 
 ## Important Reminders
 
@@ -153,3 +146,10 @@ Sales Narrative Checklist from the framework.
 - Keep language at 5th-grade readability. Scott leads sales, not academia.
 - The audience for Scott's stories is typically sales teams, leadership, or clients.
 - When in doubt, favor vulnerability over polish. "Success impresses, but struggle changes."
+
+## Sibling Skills
+
+Adjacent wisdom frameworks that often inform a story's content (not its structure):
+- `scott-mastery`: when the story is about a learning curve or skill-building moment
+- `scott-power-laws`: when the story illustrates a positioning or political dynamic
+- `scott-human-nature`: when the story diagnoses a person's behavior
