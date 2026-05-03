@@ -1,19 +1,20 @@
 #!/usr/bin/env bun
 /**
- * toolkit-coherence-check.ts — PostToolUse: validate cross-references
- * when toolkit files are modified.
+ * toolkit-coherence-check.ts: PostToolUse hook that validates cross-references
+ * when toolkit files are modified. Reads banned patterns from
+ * config/version-manifest.json and warns on any matches in the edited file.
  */
 
 import { readFileSync } from "fs";
-import { readStdin, getFilePath } from "./lib/stdin.js";
+import { readStdinSimple, getFilePath } from "./lib/stdin.js";
 import { readJson } from "../src/json.js";
 import { toolkitPath } from "../src/paths.js";
 
-const input = await readStdin();
+const input = await readStdinSimple();
 if (!input) process.exit(0);
 
 const filePath = getFilePath(input);
-if (!filePath || !filePath.includes("scott-toolkit")) process.exit(0);
+if (!filePath || !filePath.includes("claude-os")) process.exit(0);
 
 interface Manifest {
   cross_reference_patterns?: {
@@ -39,7 +40,7 @@ try {
   for (const entry of banned) {
     if (content.includes(entry.pattern)) {
       warnings.push(
-        `  "${entry.pattern}" — ${entry.reason}\n  Replace with: ${entry.replacement}`
+        `  "${entry.pattern}": ${entry.reason}\n  Replace with: ${entry.replacement}`
       );
     }
   }
