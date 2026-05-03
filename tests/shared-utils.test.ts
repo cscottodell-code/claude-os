@@ -8,7 +8,7 @@
 import { describe, expect, test } from "bun:test";
 import { parseSemver, compareSemver, satisfies } from "../src/semver.js";
 import { readJson, readJsonOr, writeJson } from "../src/json.js";
-import { toolkitPath, claudePath, sitesPath, TOOLKIT_DIR } from "../src/paths.js";
+import { toolkitPath, claudePath, TOOLKIT_DIR } from "../src/paths.js";
 import { getFilePath, getCommand, stripQuoted, type HookInput } from "../hooks/lib/stdin.js";
 import { shortHash, fileMtime, dateStr, daysBetween } from "../hooks/lib/platform.js";
 import { resolve } from "path";
@@ -193,10 +193,9 @@ describe("writeJson", () => {
 
 describe("paths", () => {
   test("TOOLKIT_DIR resolves to expected location", () => {
-    // Unless SCOTT_TOOLKIT_DIR env var overrides, should be ~/Sites/Global/scott-toolkit
     const expected =
-      process.env.SCOTT_TOOLKIT_DIR ??
-      resolve(homedir(), "Sites/Global/scott-toolkit");
+      process.env.CLAUDE_OS_DIR ??
+      resolve(homedir(), "Scott/claude-os");
     expect(TOOLKIT_DIR).toBe(expected);
   });
 
@@ -210,10 +209,6 @@ describe("paths", () => {
     expect(claudePath("settings.json")).toBe(
       resolve(homedir(), ".claude/settings.json")
     );
-  });
-
-  test("sitesPath resolves to ~/Sites", () => {
-    expect(sitesPath("Personal")).toBe(resolve(homedir(), "Sites/Personal"));
   });
 });
 

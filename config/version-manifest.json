@@ -1,12 +1,6 @@
 {
-  "_readme": "Files that must reference the current toolkit version. Used by version-propagate.sh to detect stale references after CHANGELOG.md updates. 'files' are relative to toolkit dir, 'external_files' use ~/Sites/ as base.",
+  "_readme": "Files that must reference the current toolkit version. Used by version-propagate to detect stale references after CHANGELOG.md updates. Paths are relative to claude-os/.",
   "version_source": "CHANGELOG.md",
-  "external_files": [
-    {
-      "path": "Global/context-engineering/compared-sources/toolkit-v5-optimization-brief.md",
-      "description": "Optimization brief from compare-sources review"
-    }
-  ],
   "files": [
     {
       "path": "README.md",
@@ -19,11 +13,6 @@
       "description": "Title heading"
     },
     {
-      "path": "docs/v5-unified-design.md",
-      "pattern": "Toolkit v{VERSION}",
-      "description": "Design doc title"
-    },
-    {
       "path": "setup.sh",
       "pattern": "Toolkit v{VERSION}",
       "description": "Setup script comment and banner"
@@ -33,46 +22,24 @@
       "pattern": "Last updated:",
       "check": "date_freshness",
       "description": "Last updated date should match CHANGELOG date"
-    },
-    {
-      "path": "skills/scott-toolkit-briefing/SKILL.md",
-      "pattern": "CHANGELOG v{MAJOR_MINOR}",
-      "description": "Constraint list should reference latest version"
-    },
-    {
-      "path": "hooks/toolkit-coherence-check.sh",
-      "pattern": "none",
-      "check": "exists",
-      "description": "Coherence check hook must exist"
     }
   ],
   "cross_reference_patterns": {
-    "_readme": "Single source of truth for stale patterns. Read by toolkit-coherence-check.sh (real-time) and toolkit-lint.sh (batch). When renaming files or directories, add an entry here instead of hunting references manually.",
+    "_readme": "Single source of truth for stale patterns. Read by toolkit-coherence-check (real-time) and toolkit-lint (batch). When renaming files or directories, add an entry here instead of hunting references manually.",
     "banned": [
-      { "pattern": "~/scott-toolkit/", "replacement": "~/Sites/Global/scott-toolkit/", "reason": "Old shorthand path" },
-      { "pattern": "scott-toolkit/templates/", "replacement": "scott-toolkit/context/", "reason": "Directory renamed in v4" },
-      { "pattern": "toolkit/templates/", "replacement": "toolkit/context/", "reason": "Directory renamed in v4 (short form)" },
-      { "pattern": "scott-toolkit-instructions.md", "replacement": "docs/user-guide.md", "reason": "File renamed in v5" },
-      { "pattern": "skills/reference/", "replacement": "~/.claude/skills/ (skill system)", "reason": "Directory deleted in v4" },
-      { "pattern": "stack-check.sh", "replacement": "stack-check.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
-      { "pattern": "stack-detect.sh", "replacement": "stack-detect.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
-      { "pattern": "stack-preflight.sh", "replacement": "stack-preflight.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
-      { "pattern": "toolkit-lint.sh", "replacement": "toolkit-lint.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
-      { "pattern": "guard-phase-completion.sh", "replacement": "guards/phase-completion.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" },
-      { "pattern": "stack-metrics.sh", "replacement": "stack-metrics.ts", "reason": "Migrated to TypeScript in v6.0 (M1)" },
-      { "pattern": "guard-git-push.sh", "replacement": "hooks/guards/git-push.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" },
-      { "pattern": "guard-destructive.sh", "replacement": "hooks/guards/destructive.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" },
-      { "pattern": "guard-claude-md.sh", "replacement": "hooks/guards/claude-md.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" },
-      { "pattern": "guard-npm-install.sh", "replacement": "hooks/guards/npm-install.ts", "reason": "Migrated to TypeScript in v6.0 (M2)" }
+      { "pattern": "~/Sites/Global/scott-toolkit/", "replacement": "~/Scott/claude-os/", "reason": "Restructure 2026-05: scott-toolkit renamed and moved" },
+      { "pattern": "~/Sites/Global/scott-context/", "replacement": "~/Scott/growth-os/", "reason": "Restructure 2026-05: scott-context renamed and moved" },
+      { "pattern": "~/Sites/Personal/scott-knowledge/", "replacement": "~/Scott/claude-os/skills-knowledge/", "reason": "Restructure 2026-05: scott-knowledge consolidated into claude-os" },
+      { "pattern": "~/Sites/", "replacement": "~/Scott/", "reason": "Restructure 2026-05: ~/Sites was demolished" },
+      { "pattern": "SCOTT_TOOLKIT_DIR", "replacement": "CLAUDE_OS_DIR", "reason": "Restructure 2026-05: env var renamed in ~/.zshrc" },
+      { "pattern": "scott-toolkit/", "replacement": "claude-os/", "reason": "Restructure 2026-05: project renamed" },
+      { "pattern": "scott-context/", "replacement": "growth-os/", "reason": "Restructure 2026-05: project renamed" }
     ],
     "scan_paths": {
-      "_readme": "Paths to scan during full lint. Relative to ~/Sites/.",
-      "toolkit": "Global/scott-toolkit",
-      "external_claude_md": [
-        "Advosy/*/CLAUDE.md",
-        "Bresco/*/CLAUDE.md",
-        "Personal/*/CLAUDE.md"
-      ]
+      "_readme": "Paths to scan during full lint. Relative to $HOME.",
+      "toolkit": "Scott/claude-os",
+      "wiki": "Scott/growth-os",
+      "projects": "Scott/claude-projects"
     }
   }
 }

@@ -7,7 +7,7 @@ Loaded automatically for all projects via the rules system.
 
 Personal rules, decision principles, hard rules, anti-patterns, and Karpathy-grounded posture live in:
 
-`~/Sites/Global/scott-context/wiki/identity.md`
+`~/Scott/growth-os/wiki/identity.md`
 
 Read it first. Apply it. This file only carries Claude Code-specific operational config that doesn't belong in the LLM-agnostic identity layer.
 
@@ -15,14 +15,14 @@ Read it first. Apply it. This file only carries Claude Code-specific operational
 
 | System | Purpose |
 |---|---|
-| `scott-toolkit/` | Claude Code config: hooks, skills, light pointers |
-| `scott-context/` | Knowledge, identity, daily notes, log, capture pipeline |
+| `~/Scott/claude-os/` | Claude Code config: hooks, skills, light pointers |
+| `~/Scott/growth-os/` | Knowledge, identity, daily notes, log, capture pipeline |
 
 GSD: abandoned 2026-04-28. Superpowers + Impeccable: opportunistic plugins, used skill-by-skill, not orchestrated.
 
 ## Operation resolution
 
-When a workflow or skill references an abstract operation name (`tdd`, `code_review`, `git_worktree`), resolve it via `~/Sites/Global/scott-toolkit/config/interfaces.json`. Plugin IDs and MCP servers are cataloged there.
+When a workflow or skill references an abstract operation name (`tdd`, `code_review`, `git_worktree`), resolve it via `~/Scott/claude-os/config/interfaces.json`. Plugin IDs and MCP servers are cataloged there.
 
 ## Development methodology (when invoked)
 
@@ -62,7 +62,7 @@ Do NOT continue work based on assumptions about what was in context before compa
 
 ## Toolkit artifact commits (mandatory)
 
-Changes to `~/Sites/Global/scott-toolkit/` must be `git add` + `git commit` before session ends. Uncommitted toolkit files are silently lost when the next session's sync runs. Real data loss has happened (scott-research, scott-council, 2026-03-28).
+Changes to `~/Scott/claude-os/` must be `git add` + `git commit` before session ends. Uncommitted toolkit files are silently lost when the next session's sync runs. Real data loss has happened (scott-research, scott-council, 2026-03-28).
 
 ## What survives from prior versions
 
