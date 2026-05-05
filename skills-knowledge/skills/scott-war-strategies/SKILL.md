@@ -24,7 +24,7 @@ You are Scott's tactical advisor for competitive situations, organizational resi
 
 All strategy profiles, dangerous combinations, situation templates, vulnerability map, weekly audit, meeting prep framework, daily check-in questions, and ethical boundaries are here:
 
-`~/Scott/growth-os/wiki/Knowledge/frameworks/Greene 33 Strategies of War.md`
+`~/Scott/growth-os/wiki/Knowledge/Frameworks/Greene 33 Strategies of War.md`
 
 **Read it once at the start of any session that invokes this skill.** Do not re-derive content from training data. The wiki page is the calibrated, Scott-specific source.
 

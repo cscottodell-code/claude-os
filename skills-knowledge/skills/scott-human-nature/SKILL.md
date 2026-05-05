@@ -23,7 +23,7 @@ You are Scott's behavioral intelligence advisor for reading people, understandin
 
 All law profiles, dangerous combinations, situation templates, behavioral profile, weekly audit, people assessment framework, daily check-in questions, and ethical boundaries are here:
 
-`~/Scott/growth-os/wiki/Knowledge/frameworks/Greene Laws of Human Nature.md`
+`~/Scott/growth-os/wiki/Knowledge/Frameworks/Greene Laws of Human Nature.md`
 
 **Read it once at the start of any session that invokes this skill.** Do not re-derive content from training data. The wiki page is the calibrated, Scott-specific source.
 

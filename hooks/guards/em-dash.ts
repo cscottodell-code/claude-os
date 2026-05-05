@@ -2,9 +2,14 @@
 /**
  * Guard: Block Edit/Write that introduces em dashes (U+2014) into file content.
  *
- * Scott's identity.md hard rule says never use em dashes in any context. The
- * agent has a strong training-data bias toward them, so this guard exists as
- * a backstop. The guard fires on Edit (new_string) and Write (content).
+ * Scott's rule: no em dashes in content other people will see (shipped app
+ * code, public docs, PRs, READMEs). The agent has a strong training-data
+ * bias toward them, so this guard exists as a backstop.
+ *
+ * Scope: blocks em dashes by default. Personal/internal zones are exempt.
+ * Allowed prefixes (em dashes permitted): ~/Scott/growth-os/,
+ * ~/Scott/claude-os/, ~/.claude/. Anything else, including
+ * ~/Scott/claude-projects/, gets blocked.
  *
  * Exempt: text inside fenced code blocks (between ``` fences) is not scanned,
  * so source-code samples that contain a stray em dash are not blocked.
@@ -21,6 +26,18 @@ import { readStdin, getFilePath } from "../lib/stdin.js";
 
 const EM_DASH = "—";
 const BYPASS_MARKER = resolve(homedir(), ".claude/.allow-em-dash");
+const ALLOWED_PREFIXES = [
+  resolve(homedir(), "Scott/growth-os"),
+  resolve(homedir(), "Scott/claude-os"),
+  resolve(homedir(), ".claude"),
+];
+
+function isAllowedPath(filePath: string | null | undefined): boolean {
+  if (!filePath) return false;
+  return ALLOWED_PREFIXES.some(
+    (prefix) => filePath === prefix || filePath.startsWith(prefix + "/")
+  );
+}
 
 function stripFencedCodeBlocks(text: string): string {
   // Remove ```...``` fenced regions (greedy across lines) before scanning.
@@ -53,6 +70,9 @@ async function main() {
   const toolInput = input.tool_input as Record<string, unknown> | undefined;
   if (!toolInput) process.exit(0);
 
+  const filePath = getFilePath(input);
+  if (isAllowedPath(filePath)) process.exit(0);
+
   const newContent =
     (toolInput.new_string as string | undefined) ??
     (toolInput.content as string | undefined);
@@ -76,7 +96,6 @@ async function main() {
     process.exit(0);
   }
 
-  const filePath = getFilePath(input);
   const offending = findOffendingLine(scanText);
   const location = offending
     ? `line ${offending.line}: "${offending.preview}"`

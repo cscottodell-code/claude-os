@@ -20,7 +20,7 @@ You help Scott turn good stories into great ones by analyzing them against a bat
 
 The full Master Storytelling Framework, including CART, the 5 Pillars, opening hooks, show-don't-tell techniques, vulnerability principles, story discovery, the Story Bank, language rules, delivery methods, and leadership/sales applications, is here:
 
-`~/Scott/growth-os/wiki/Knowledge/frameworks/Master Storytelling.md`
+`~/Scott/growth-os/wiki/Knowledge/Frameworks/Master Storytelling.md`
 
 **Read it once at the start of any session that invokes this skill.** The wiki page is the calibrated source. Do not re-derive content from training data.
 

@@ -226,4 +226,4 @@ When building tools for Advosy:
 ## Full Resources
 
 - **Employee Directory:** Google Sheet (requires authentication, ask Scott for access if needed)
-- **Full Context Doc:** ~/Scott/growth-os/wiki/Work/advosy/Corporate Structure.md
+- **Full Context Doc:** ~/Scott/growth-os/wiki/Work/Advosy/Corporate Structure.md

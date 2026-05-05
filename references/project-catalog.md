@@ -42,11 +42,11 @@ Each project has its own CLAUDE.md inside the project folder.
 | Health | ~/Scott/growth-os/wiki/Health/ | Recomp plan, food, supplements, training, weekly summary |
 | People | ~/Scott/growth-os/wiki/People/ | One file per person (role, context, notes) |
 | Knowledge | ~/Scott/growth-os/wiki/Knowledge/ | Frameworks (`frameworks/`), study aids (`study-aids/`), context engineering, sales methodology, technical refs |
-| Work | ~/Scott/growth-os/wiki/Work/ | `Work/advosy/` (Advosy company docs, EOS, CRM context); `Work/savvynth/` (Savvynth platform docs, brand) |
+| Work | ~/Scott/growth-os/wiki/Work/ | `Work/Advosy/` (Advosy company docs, EOS, CRM context); `Work/Savvynth/` (Savvynth platform docs, brand) |
 | Finances | ~/Scott/growth-os/wiki/Finances/ | (placeholder) |
 | system | ~/Scott/growth-os/wiki/system/ | Capture pipeline, knowledge engine, ADRs, project specs (`system/projects/`) |
 
-Plus root: `Home.md` (index), `identity.md` (LLM identity layer), `commands/` (suite definition), `data/` (health data), `references/` (SurrealDB).
+Plus root: `Home.md` (index), `identity.md` (LLM identity layer).
 
 Raw sources: ~/Scott/growth-os/raw/ (research, sources, synthesis, inbox, staging — immutable).
 
@@ -68,11 +68,11 @@ All people files: ~/Scott/growth-os/wiki/People/ (Title Case `.md` files, flat)
 
 ~/Scott/growth-os/wiki/Knowledge/ (Title Case `.md` files)
 
-- Frameworks (`Knowledge/frameworks/`): Atomic Habits, Background Ops, Greene Mastery, Greene 33 Strategies of War, Greene 48 Laws of Power, Greene Laws of Human Nature, Master Storytelling, Eleanor Eternal Wisdom, Eleanor Temporal Wisdom
-- Study aids (`Knowledge/study-aids/`): Study Flashcards, Study Quizzes, Study Audio Prompts, Study Content Creation Prompts, Study Reference Tables
+- Frameworks (`Knowledge/Frameworks/`): Atomic Habits, Background Ops, Greene Mastery, Greene 33 Strategies of War, Greene 48 Laws of Power, Greene Laws of Human Nature, Master Storytelling, Eleanor Eternal Wisdom, Eleanor Temporal Wisdom
+- Study aids (`Knowledge/Study Aids/`): Study Flashcards, Study Quizzes, Study Audio Prompts, Study Content Creation Prompts, Study Reference Tables
 - Knowledge root (flat): Claude API and Tool Use, MCP Server Development, Knowledge Engineering, Agentic Workflow Patterns, Structured Prompt Engineering, UIUX, PKM Architecture, Era of Personal Knowledge Assistants, 100M Leads Offers Models
-- Sales methodology: `Knowledge/sales-methodology/` (multi-folder repo, content reshape pending)
-- Context engineering: `Knowledge/context-engineering/` (index.md + synthesis.md + principles.md)
+- Sales methodology: `Knowledge/Sales Methodology/` (multi-folder repo, content reshape pending)
+- Context engineering: `Knowledge/Context Engineering/` (index.md + synthesis.md + principles.md)
 
 ## GitHub Repos
 

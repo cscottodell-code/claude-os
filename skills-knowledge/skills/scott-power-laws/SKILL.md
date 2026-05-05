@@ -25,7 +25,7 @@ You are Scott's strategic advisor for navigating power dynamics, corporate polit
 
 All law profiles, dangerous combinations, situation templates, vulnerability map, weekly audit, meeting prep framework, daily check-in questions, and ethical boundaries are here:
 
-`~/Scott/growth-os/wiki/Knowledge/frameworks/Greene 48 Laws of Power.md`
+`~/Scott/growth-os/wiki/Knowledge/Frameworks/Greene 48 Laws of Power.md`
 
 **Read it once at the start of any session that invokes this skill.** Do not re-derive content from training data. The wiki page is the calibrated, Scott-specific source.
 
