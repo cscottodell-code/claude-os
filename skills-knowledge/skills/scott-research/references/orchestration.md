@@ -268,6 +268,17 @@ If no connection is real, omit entirely. Do not force it.*
 
 ---
 
+## Recommended Actions
+
+*Generate 6-12 concrete next steps. Each card includes a ready-to-paste
+prompt so Scott can start the work in a fresh session without rebuilding
+context. See `references/recommended-actions.md` for the full catalog,
+priority rules, and prompt-template starting points.*
+
+[Action cards go here, one per concrete next step]
+
+---
+
 ## Research Metadata
 
 | Metric | Value |
@@ -326,5 +337,54 @@ Review all findings against Scott's personal frameworks and active projects:
 - **Temporal wisdom**: Are key findings specific to the current moment?
 - **Eleanor**: Do findings suggest a feature or design pattern for the desktop app?
 - **Other projects**: Do findings connect to Advosy, Bresco, or other active work?
+
+If no genuine connections exist, omit the Connections section entirely.
+
+### Step 5: Recommended Actions Pass
+
+The most important step in the synthesis. Without this, the report ends with
+findings and forces Scott to translate them into work himself. The action
+section closes the loop.
+
+Read `references/recommended-actions.md` for the full method. Summary:
+
+1. Generate 6-12 concrete next steps. Each must reference specific findings.
+2. Pick the right type per action: Build Training, Create Skill, Deep Dive,
+   NotebookLM Prep, Build Process, Write Document, Test/Experiment, or
+   Council Deliberation.
+3. Assign priority: Do Now (high confidence + ready to execute), Queue (high
+   confidence but has dependencies), or Explore (moderate confidence, needs
+   testing).
+4. Aim for a mix: 2-4 Do Now, 3-5 Queue, 2-3 Explore. If everything is Do Now
+   the action set is unrealistic; if everything is Explore the research did
+   not produce enough actionable findings.
+5. For each action, write a complete ready-to-paste prompt in a fenced code
+   block. The prompt must reference the RESEARCH.md filename so the next
+   session can locate it.
+
+The action card format (markdown):
+
+````
+### Action N: [Specific, descriptive title]
+
+- **Type:** [type]
+- **Priority:** [Do Now | Queue | Explore]
+- **Supports findings:** F1 (label), F3 (label)
+- **What:** [2-3 sentence description]
+
+**Prompt to start:**
+
+```
+[Complete prompt that Claude can act on without follow-up questions.
+Reference findings from this RESEARCH.md by filename.]
+```
+````
+
+Note the four-backtick outer fence: required when the inner prompt is itself
+a triple-backtick code block.
+
+If a finding does not naturally produce an action, that finding is
+informational rather than actionable. That is fine. Not every finding has
+to become work.
 
 If no genuine connections exist, omit the Connections section entirely.

@@ -5,8 +5,9 @@ description: |
   from different angles (Historical, Academic, Book, Current Application, Social, Technical,
   Risk, Contrarian, Economic, Adjacent), then synthesizes findings into a single RESEARCH.md
   with 5-dimension analysis (strongly supported, congruencies, discrepancies, unique ideas,
-  weakly supported). Includes anti-hallucination guardrails, source verification, and an
-  optional Decision-Ready Brief for downstream tools.
+  weakly supported). Includes anti-hallucination guardrails, source verification, an
+  optional Decision-Ready Brief, and a Recommended Actions section that turns each
+  high-confidence finding into a concrete next step with a ready-to-paste prompt.
 
   Use this skill whenever Scott says "research X", "investigate X", "look into X", "what do
   we know about X", "dig into X", "explore X from all angles", or any variation of wanting
@@ -72,8 +73,14 @@ presentation protocol. It contains:
 - Phase 2: Dispatch (subagent prompts, lens-specific search instructions)
 - Phase 2.25: Assess & Reallocate (weak lens handling)
 - Phase 2.5: Verify Sources (fact-checking protocol)
-- Phase 3: Synthesize (cross-lens analysis, RESEARCH.md structure)
+- Phase 3: Synthesize (cross-lens analysis, RESEARCH.md structure, Connections, Recommended Actions)
 - Phase 4: Present to Scott
+
+The Recommended Actions section is mandatory and uses a separate reference. Read
+`references/recommended-actions.md` for the action-types catalog (Build Training,
+Create Skill, Deep Dive, NotebookLM Prep, Build Process, Write Document,
+Test/Experiment, Council Deliberation), the priority assignment rules
+(Do Now, Queue, Explore), and the prompt-template starting points.
 
 ## Edge Cases
 
