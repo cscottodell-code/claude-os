@@ -4,7 +4,9 @@
 
 Spawn up to 10 parallel subagents, one per selected lens.
 
-**Tools allowed for each subagent:** WebSearch, WebFetch, Skill, Read, Grep, Glob, ToolSearch. No Bash, Write, Edit, or NotebookEdit. The Skill tool is the only path to defuddle and firecrawl; subagents cannot invoke shell commands directly. If the Skill tool's schema is not yet loaded in the subagent's context, call `ToolSearch({query: "select:Skill", max_results: 1})` first.
+**Tools allowed for each subagent:** WebSearch, WebFetch, Skill, Read, Grep, Glob, ToolSearch. No Bash, Write, Edit, or NotebookEdit. The Skill tool is the only path to defuddle and firecrawl; subagents cannot invoke shell commands directly.
+
+**MANDATORY first tool call (before any file reads or web searches):** every subagent must call `ToolSearch({query: "select:Skill", max_results: 1})` as the literal first action of the run. This guarantees the Skill tool schema is loaded into the subagent's context. Reason: deferred tools (like Skill) are not auto-loaded; without this call, an agent that tries `Skill(defuddle)` may receive an InputValidationError and incorrectly conclude that defuddle is unavailable, falsely classifying URLs as unfetchable. This was observed during May 2026 testing when one subagent reported "defuddle requires Bash" while a parallel subagent successfully used `Skill(defuddle)` on the same kind of URL. Mandating the call eliminates the variance.
 
 ### Subagent Prompt
 
@@ -276,13 +278,24 @@ Categorize all findings across the 5 analytical dimensions:
 
 | Dimension | How to Identify |
 |-----------|-----------------|
-| **Strongly Supported** | 4+ lenses found it independently, multiple sources per lens, AND <50% of supporting sources are T3 (T3 cap rule) |
+| **Strongly Supported** | 4+ lenses found it independently, multiple sources per lens, AND <50% of supporting sources are T3 (T3 cap rule), AND no numerical discrepancies (Numerical Discrepancy Rule) |
 | **Congruencies** | 2-3 lenses align, but using different sources (not the same URL) |
 | **Discrepancies** | Lenses actively contradict each other (state the tension explicitly) |
 | **Unique Ideas** | Only 1 lens found it (flag as potential breakthrough or outlier) |
 | **Weakly Supported** | 1-2 lenses, thin sources, Low confidence |
 
 **T3 cap rule**: Any finding where >=50% of its supporting sources across all lenses are T3 cannot be classified as Strongly Supported. Cap such findings at Congruencies. This prevents 4 aggregator sources from creating false High confidence. Note the T3 cap application explicitly when it triggers.
+
+**Numerical Discrepancy Rule**: When 2+ verified sources cite different numbers for the same fact (price, count, percentage, date, version, install base, or any quantitative claim), the finding goes to **Discrepancies**, not Strongly Supported, regardless of how many lenses cited it. The synthesis must add a "Resolution required before action" note next to the finding and include the conflicting numbers explicitly so the reader can see the spread.
+
+Reasoning: an action plan cannot be built on uncertainty like "$10 to $30/mo" or "150k to 944k installs." Numerical disagreement signals that the underlying fact is unsettled, even if the surrounding qualitative claim is widely repeated. Examples that would trigger this rule:
+- Pro tier price cited as $10/mo (one source), $20/mo (another), $30/mo (vendor page)
+- Adoption stats cited as "60% unpaid" (one survey) vs. "73% unpaid" (different survey)
+- Release dates cited as "Dec 9, 2025" (commit hash trace) vs. "December 2025" (vague)
+
+The third example is borderline: same fact, different precision. Apply judgment. The rule fires when the numbers actually conflict, not when one is more precise than another.
+
+When the rule fires, it does not prevent the underlying qualitative finding from being reported. It just routes the numerical claim to Discrepancies and forces explicit acknowledgment of the spread.
 
 ### Step 2: Circular Source Detection
 
