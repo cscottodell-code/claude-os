@@ -86,7 +86,7 @@ When invoked with `--deepen <RESEARCH.md path> <finding-id>`, the skill takes a 
 
 Output path: `~/Scott/growth-os/raw/research/<scope>/RESEARCH-<topic-slug>-DEEPEN-<finding-id>-<date>.md`
 
-Read `references/orchestration.md` "Deepen Mode Orchestration" section for the full deepen-mode protocol.
+Read `references/synthesis.md` "Deepen Mode Orchestration" section for the full deepen-mode protocol.
 
 **When to use deepen mode**: a prior research surfaced a Strongly Supported finding with a Gaps subsection that points at unresolved sub-questions. Deepen lets you spend a small additional budget to close the most important gaps without re-running the entire 10-lens dispatch.
 
@@ -94,17 +94,12 @@ Read `references/orchestration.md` "Deepen Mode Orchestration" section for the f
 
 ---
 
-## Phases 2-4: Orchestration
+## Phases 1.5-4: Orchestration
 
-Read `references/orchestration.md` for the full dispatch, verification, synthesis, and
-presentation protocol. It contains:
+The orchestration is split across two reference files:
 
-- Phase 2: Dispatch (subagent prompts, lens-specific search instructions)
-- Phase 2.1: Triage Fetch Failures (auto-retry then abort)
-- Phase 2.25: Assess & Reallocate (weak lens handling)
-- Phase 2.5: Verify Sources (fact-checking protocol)
-- Phase 3: Synthesize (cross-lens analysis, RESEARCH.md structure, Connections, Recommended Actions)
-- Phase 4: Present to Scott
+- `references/dispatch.md`: Phase 1.5 (topic anchoring), Phase 2 (subagent dispatch + lens-specific instructions + subagent prompt + output format), Phase 2.1 (fetch-failure triage), Phase 2.25 (assess and reallocate), Phase 2.5 (verification). Lens subagents and the verification subagent both read this.
+- `references/synthesis.md`: Phase 3 (cross-lens analysis, RESEARCH.md template, recommended actions pass) plus Deepen Mode Orchestration (Phases D1-D3). The orchestrator reads this when synthesizing or handling --deepen.
 
 Source curation rules (which sources count, tier weights, recency rules, fetch fallback chain) live in `references/source-curation.md`. Every lens subagent and the verification subagent must Read that file as their first action. The orchestrator does not need to load it directly; it propagates through subagent prompts.
 

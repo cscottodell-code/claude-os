@@ -2,7 +2,7 @@
 
 ## Why this exists
 
-Source-integrity rules in `orchestration.md` define how an agent should cite. This file defines what an agent is allowed to cite in the first place. Together they prevent two failure modes: fabricated quotes (integrity), and confident findings backed entirely by AI-generated aggregator content (curation).
+Source-integrity rules in `dispatch.md` define how an agent should cite. This file defines what an agent is allowed to cite in the first place. Together they prevent two failure modes: fabricated quotes (integrity), and confident findings backed entirely by AI-generated aggregator content (curation).
 
 This file is loaded by every lens subagent and the verification subagent. It is also consulted at synthesis time when computing confidence levels.
 
@@ -192,11 +192,11 @@ This is the structural fix for the "WebFetch was widely blocked" failure mode th
 
 ## 9. Plumbing into Synthesis
 
-Synthesis (Phase 3 in `orchestration.md`) must:
+Synthesis (Phase 3 in `synthesis.md`) must:
 
 1. **Carry tier labels through.** Every finding in the synthesized RESEARCH.md must show its supporting sources with tier labels in the format `[T1]`, `[T2]`, `[T3]`, or `[T3, stale]`.
 2. **Apply the T3 cap.** Before classifying any finding as Strongly Supported, count T3 sources. If ≥50%, cap at Congruent.
-3. **Apply circular source detection** as currently specified in `orchestration.md` (same domain across lenses = single source). This rule remains unchanged.
+3. **Apply circular source detection** as currently specified in `synthesis.md` (same domain across lenses = single source). This rule remains unchanged.
 4. **Report curation metrics** in the metadata table:
    - Sources by tier: `T1: N | T2: N | T3: N | R: N`
    - Stale sources flagged: `N`
