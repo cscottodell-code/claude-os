@@ -138,6 +138,46 @@ Total: 6-12 actions per report.
 
 ---
 
+## Sourcing Constraints
+
+Actions are how research turns into commitment of Scott's time and money. They cannot be backed by weak evidence. The following rules are hard, not soft.
+
+### Eligibility rule
+
+Every action's "Supports findings" list must reference at least one finding that meets one of these conditions:
+
+1. The finding is classified Strongly Supported in the synthesis, OR
+2. The finding is backed by at least one verified T1 source, OR
+3. The finding is backed by at least two verified T2 sources from different domains.
+
+If none of an action's supporting findings meet the eligibility rule, the action is **not allowed**. Drop it.
+
+### What this excludes
+
+- Actions sourced only from Weakly Supported findings.
+- Actions sourced only from T3 (aggregator) clusters.
+- Actions sourced from findings that were paraphrased from search snippets because all fetch attempts failed (these are excluded from the source table at the lens level, but residual paraphrased content sometimes survives into Unique Ideas; do not act on it).
+- Actions sourced from findings whose only verified sources came from a single domain or single author (these are flagged as "single-sourced, widely repeated" by Phase 3 Step 2; treat them as informational, not actionable).
+
+### Tier evidence requirement on the action card
+
+Every action's "Supports findings" entry must include the tier evidence, formatted as:
+
+`F[number] (short label, [tier breakdown])`
+
+Examples:
+- `F1 (status quo bias is #1 lost-deal cause, 2xT1 + 1xT2)`
+- `F3 (loss-frame outperforms gain-frame, 1xT1 + 3xT2)`
+- `F7 (membership pricing produces 23% LTV lift, Strongly Supported, 4 lenses)`
+
+Tier evidence makes it visible at-a-glance whether an action is well-sourced. Reviewing the report a month later, Scott can tell which actions were built on solid ground without re-reading the full lens output.
+
+### When in doubt
+
+If an action would be valuable but no finding clears the eligibility rule, the right move is a **Deep Dive** action (queue research to surface T1/T2 evidence first), not a direct action sourced on weak grounds.
+
+---
+
 ## Markdown Card Format
 
 Each action card in the RESEARCH.md uses this structure. Note the prompt is in a fenced code block so Scott can copy-paste it directly into a new Claude session.
@@ -147,7 +187,7 @@ Each action card in the RESEARCH.md uses this structure. Note the prompt is in a
 
 - **Type:** [Build Training | Create Skill | Deep Dive | NotebookLM Prep | Build Process | Write Document | Test/Experiment | Council Deliberation]
 - **Priority:** [Do Now | Queue | Explore]
-- **Supports findings:** F1 (short label), F3 (short label)
+- **Supports findings:** F1 (short label, tier breakdown), F3 (short label, tier breakdown)
 - **What:** [2-3 sentence description: what to do, why, and how]
 
 **Prompt to start:**
@@ -189,7 +229,7 @@ Use these as the opening line of the inner prompt. Customize the rest.
 
 - **Type:** Build Process
 - **Priority:** Do Now
-- **Supports findings:** F1 (status quo bias is #1 lost-deal cause, 40% of pipeline), F3 (loss-frame outperforms gain-frame 2.3x)
+- **Supports findings:** F1 (status quo bias is #1 lost-deal cause, 40% of pipeline, Strongly Supported, 2xT1 + 3xT2), F3 (loss-frame outperforms gain-frame 2.3x, 1xT1 + 2xT2)
 - **What:** Apply the BOPs EIB Protocol to systematize objection handling. Build a 5-question diagnostic that fires when an objection appears, mapping it to its psychological root and providing the matched talk track. Replaces gut-feel responses currently in use.
 
 **Prompt to start:**
