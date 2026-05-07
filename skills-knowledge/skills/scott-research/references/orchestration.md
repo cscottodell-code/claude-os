@@ -1,5 +1,46 @@
 # Multi-Lens Research: Orchestration Reference
 
+## Phase 1.5: Topic Anchoring [AUTO]
+
+After Phase 1 confirms topic, type, scope, and lens selection, the orchestrator performs one consolidation step before dispatching lens subagents.
+
+### Identify canonical URLs
+
+Run 1-2 broad WebSearch queries on the topic and identify the obvious canonical sources that any thorough research would cite. Typical anchors:
+
+- The project's official website or documentation
+- The primary GitHub repository
+- The announcement post or controversy thread that defines the topic
+- A high-engagement community thread (HN, Reddit, forum) that documents the broader conversation
+
+Aim for 3 to 5 anchors total. These are URLs the orchestrator believes any honest lens would touch on regardless of its specific angle. Do not pre-fetch these; just identify and list them.
+
+### Include anchors in lens dispatch prompts
+
+Each lens subagent prompt gains a new section:
+
+```
+## Topic anchors (orchestrator-identified canonical sources)
+
+The orchestrator identified these canonical URLs for this topic. Consider them as starter sources, not requirements; cite only those relevant to your lens. Multiple lenses citing the same anchor URL will be flagged "single-sourced, widely repeated" by Phase 3 circular source detection, so do not over-rely on anchors.
+
+- [Anchor 1 URL] [brief description]
+- [Anchor 2 URL] [brief description]
+[...]
+```
+
+### Why this exists
+
+Convergence acceleration: lens agents identify load-bearing canonical sources faster, spending less search time on rediscovery. Side benefit: Phase 3 circular source detection has cleaner inputs because anchors are explicitly known.
+
+This is not a fetch-cache layer. Each lens still fetches anchors it cites. True fetch deduplication would require an orchestrator-side cache, which is out of scope for this version.
+
+### Done when
+
+Orchestrator has 3 to 5 canonical URLs listed and ready to inject into lens dispatch prompts.
+
+---
+
 ## Phase 2: Dispatch Research Lenses [AUTO]
 
 Spawn up to 10 parallel subagents, one per selected lens.
@@ -132,9 +173,11 @@ Return your findings in exactly this structure:
 - [Finding 3+] [T3] [Source Title](URL) ([date])
 
 #### Sources Consulted
-| # | Source | URL | Date | Tier | Flags | What It Contributed |
-|---|--------|-----|------|------|-------|---------------------|
-| 1 | [Title] | [URL] | [date] | T1 | (none, or comma-separated: stale, archived, undated, unverified, 404) | [one-line summary] |
+| # | Source | URL | Date | Tier | Flags | LB | What It Contributed |
+|---|--------|-----|------|------|-------|-----|---------------------|
+| 1 | [Title] | [URL] | [date] | T1 | (none, or comma-separated: stale, archived, undated, unverified, 404) | * | [one-line summary] |
+
+**LB column ("Load-Bearing").** Mark with `*` any source that is the sole or primary basis for a Key Finding (typically your top 1-3 findings). Phase 2.5 verifier prioritizes Load-Bearing sources for verification. Other sources get random sampling for breadth. Aim for 1-3 LB sources per lens, not more.
 
 #### Confidence Level
 
@@ -249,7 +292,11 @@ Spawn a single **verification subagent** (completely separate from the lens agen
 The verification agent must Read source-curation.md as its first action and apply the same fetch fallback chain as the lens agents.
 
 Process:
-1. Randomly select 2 cited URLs from each lens (up to 20 URLs total). Stratify the sample to include at least one T1 source per lens when present, EXCEPT the Social lens (where T1 sources are tweets, HN threads, and Reddit posts that are inherently transient and not worth load-bearing verification effort). For Social, take a uniform random sample.
+1. Build the verification sample for each lens using priority order:
+   a. **All Load-Bearing (`LB = *`) sources** are included automatically (typically 1-3 per lens). These are where false claims would do the most damage at synthesis time.
+   b. **Stratification gap-fill**: if the LB set does not already contain a T1 source for the lens, add 1 random T1 from the remaining sources, EXCEPT for Social lens (where T1 sources are inherently transient tweets/HN/Reddit).
+   c. **Breadth fill**: add 1 random non-LB source per lens for sample diversity.
+   Cap total sample at 20 URLs across all lenses; if LB sources alone exceed 20, drop breadth-fill first, then gap-fill.
 2. Fetch each URL via the fallback chain (WebFetch -> defuddle -> firecrawl -> archive.org).
 3. For each, confirm:
    - (a) The URL resolves (not 404)
@@ -315,6 +362,20 @@ Use this exact structure:
 *Generated [date] via 10-lens research skill*
 *Topic type: [TIME-SENSITIVE | DURABLE-KNOWLEDGE | MIXED]*
 *Decision anchor: [the decision/action this informs, if provided]*
+
+## TL;DR (5-minute read)
+
+If you only read 5 bullets, read these. Each bullet is a one-line summary of a Strongly Supported finding. The full report follows for context, sourcing, and decision support.
+
+- [One-line summary of F1, with concrete specifics]
+- [One-line summary of F2]
+- [One-line summary of F3]
+- [One-line summary of F4]
+- [One-line summary of F5]
+
+If there are fewer than 5 Strongly Supported findings, list what you have and add 1-2 lines from the most consequential Discrepancies or Unique Ideas to fill the slot. Cap at 5 bullets total. The TL;DR is for re-skimming the report a month later, so make each line useful without context from the full body.
+
+---
 
 ## Research Summary
 
@@ -395,27 +456,39 @@ priority rules, and prompt-template starting points.*
 
 ## Research Metadata
 
-| Metric | Value |
-|--------|-------|
-| Date | [date] |
-| Topic | [topic] |
-| Topic type | [TIME-SENSITIVE / DURABLE-KNOWLEDGE / MIXED] |
-| Lenses run | [list] |
-| Lenses skipped (Phase 1 exclusion) | [list, if any] |
-| Lenses aborted (fetch threshold) | [list, if any] |
-| Total sources cited | [N] |
-| Sources by tier | T1: [N] | T2: [N] | T3: [N] | R: [N flagged, 0 cited] |
-| Stale sources flagged | [N] |
-| Unfetchable sources excluded | [N] |
-| Fetch fallback rescues | defuddle: [N], firecrawl: [N], archive.org: [N] |
-| Total URLs fetched | [N] |
-| Total search queries | [N] |
-| Sources verified | [N of M checked] |
-| Sources flagged unverified or 404 | [N, with weight-0 penalty applied] |
-| Per-lens confidence | [table: lens to High/Medium/Low with weighted sum] |
-| Reallocation | [which lenses received extra budget, if any] |
-| Sources older than per-lens cutoff | [N, flagged stale] |
-| T3 cap triggered | [list of findings capped, if any] |
+All counts in this table MUST be computed by summing rows in the lens-output Sources Consulted tables, not estimated. The synthesizer's job is to add the rows up; do not eyeball.
+
+| Metric | Value | How to compute |
+|--------|-------|---------------|
+| Date | [date] | today's ISO 8601 date |
+| Topic | [topic] | from Phase 1 |
+| Topic type | [TIME-SENSITIVE / DURABLE-KNOWLEDGE / MIXED] | from Phase 1 |
+| Lenses run | [list] | lens names whose output reached synthesis |
+| Lenses skipped (Phase 1 exclusion) | [list, if any] | lenses dropped in Phase 1 |
+| Lenses aborted (fetch threshold) | [list, if any] | lenses excluded by Phase 2.1 |
+| Total sources cited | [N] | sum of rows in all lens Sources Consulted tables |
+| Sources by tier | T1: [N], T2: [N], T3: [N], R: [N flagged, 0 cited] | count rows by Tier column |
+| Stale sources flagged | [N] | rows where Flags column contains "stale" |
+| Unfetchable sources excluded | [N] | rows where Flags column contains "unfetchable" or "404" |
+| Fetch fallback rescues | defuddle: [N], firecrawl: [N], archive.org: [N] | sum across lens Fetch Failure Reports |
+| Total URLs fetched | [N] | sum of "Total URLs attempted" across lens Fetch Failure Reports |
+| Total search queries | [N] | sum of Search Queries Used lengths |
+| Sources verified | [N of M checked] | from Phase 2.5 verification table |
+| Sources flagged unverified or 404 | [N, with weight-0.25 penalty applied] | from Phase 2.5; verify count matches the verification table |
+| Load-bearing sources verified | [N of LB-marked total] | from Phase 2.5; how many `LB = *` sources got checked |
+| Per-lens confidence | [table: lens to High/Medium/Low with weighted sum] | from each lens's Confidence Level itemized total, post-verification adjustments |
+| Reallocation | [which lenses received extra budget, if any] | from Phase 2.25 |
+| Sources older than per-lens cutoff | [N, flagged stale] | same as Stale sources flagged; cross-check |
+| T3 cap triggered | [list of findings capped, if any] | findings where >=50% T3 forced cap to Congruency |
+| Numerical Discrepancy Rule triggered | [list of findings routed to Discrepancies, if any] | findings flagged by Phase 3 Step 1 Numerical Discrepancy Rule |
+
+### Cross-checks the synthesizer must run before finalizing
+
+- Total sources cited = sum of T1 + T2 + T3 cited rows. R-tier sources are flagged but not cited; they should not appear in tier counts.
+- Stale sources flagged should match Sources older than per-lens cutoff (these are the same metric, named differently for legacy reasons).
+- Per-lens confidence weighted sums should equal the sum of weights in each lens's Sources Consulted table (after verification adjustments). If they do not, recompute and fix the lens output before synthesis.
+
+If any cross-check fails, the metadata table is wrong; fix it rather than ship inconsistent numbers.
 ```
 
 ### Step 3.5: Determine Final File Path
@@ -497,3 +570,115 @@ Note the four-backtick outer fence: required when the inner prompt is itself a t
 If a finding does not naturally produce an action, that finding is informational rather than actionable. That is fine. Not every finding has to become work.
 
 If no genuine connections exist, omit the Connections section entirely.
+
+---
+
+## Deepen Mode Orchestration [AUTO]
+
+When invoked via `/scott:research --deepen <RESEARCH.md path> <finding-id>`, the orchestrator follows this divergent path instead of Phases 1-3.
+
+### Phase D1: Read and confirm [STOP]
+
+1. Read the RESEARCH.md at the provided path.
+2. Locate the finding referenced by `<finding-id>` (e.g., F3, F7). The finding can be in any classification (Strongly Supported, Congruencies, Discrepancies, Unique Ideas, Weakly Supported); Gaps may exist on any.
+3. Extract:
+   - The finding statement (one or two sentences)
+   - The supporting sources cited for it (URLs and tier labels)
+   - Any per-lens Gaps subsection that touches the finding
+4. Formulate 1 to 3 sub-questions from the Gaps. Each sub-question must be answerable by lens research, not by abstract reasoning.
+5. Present to Scott:
+   - Original finding statement
+   - Original supporting sources (count + tier breakdown)
+   - Gaps as identified
+   - Proposed sub-questions
+   - Proposed lens selection (typically 2-3 of the original lenses, picked for relevance to the sub-questions)
+6. Wait for Scott to confirm or adjust.
+
+If the finding has no Gaps subsection or Gaps are too broad to formulate sub-questions, abort: tell Scott "this finding does not have actionable Gaps; consider running a fresh `/scott:research` with a narrower topic instead."
+
+### Phase D2: Targeted dispatch [AUTO]
+
+Dispatch 2 to 3 lens subagents (per Scott's Phase D1 confirmation) with focused prompts:
+
+- **Topic**: original topic + " (deepening F[N])"
+- **Topic type**: inherited from original RESEARCH.md
+- **Mission**: investigate the specific sub-questions; do not re-research the broader topic
+- **Topic anchors**: the original RESEARCH.md path + the original finding's supporting URLs
+
+Standard subagent rules apply: source-curation read first, fetch fallback chain, output format with TLB column. Tier definitions and weights are inherited from source-curation.md.
+
+Word limit per lens: 300-500 words (tighter than standard, since the scope is narrower).
+
+### Phase D3: Verify and synthesize [AUTO]
+
+Phase 2.5 verification runs proportionally smaller: sample at least all Load-Bearing sources, plus 1 random per lens. With 2-3 lenses, this is typically 4-9 URLs.
+
+Phase 3 synthesis produces a deepening report:
+
+```markdown
+# Research Deepening: [Finding statement] (originally F[N])
+
+*Generated [date] via deepen mode of 10-lens research skill*
+*Original RESEARCH.md: [path]*
+*Finding deepened: F[N] from original*
+*Sub-questions investigated: [list]*
+
+## Original Finding (verbatim from RESEARCH.md)
+[finding statement and original supporting sources]
+
+## Gaps That Triggered This Deepening
+[the specific Gaps text from the original]
+
+## Sub-Questions
+1. [sub-question 1]
+2. [sub-question 2]
+3. [sub-question 3, if applicable]
+
+## TL;DR (3-minute read)
+- [one-line summary per sub-question's resolution status]
+
+## Sub-Question Findings
+
+### Sub-Question 1: [restate]
+[Lens findings synthesized; tier breakdown noted; resolution status: ANSWERED / PARTIALLY ANSWERED / STILL OPEN]
+
+### Sub-Question 2: ...
+
+## Resolution Status
+- Sub-question 1: [ANSWERED | PARTIALLY ANSWERED | STILL OPEN] [one-line reason]
+- Sub-question 2: ...
+
+## Implications for the Original Finding
+- Does the deepening confirm, refine, contradict, or expand the original F[N]?
+- Should the original RESEARCH.md be updated? If so, what specifically?
+
+## Lens Outputs (compressed, preamble stripped)
+[Each lens's full output, post-strip]
+
+---
+
+## Deepen Metadata
+| Metric | Value |
+|---|---|
+| Date | [date] |
+| Original RESEARCH.md | [path] |
+| Finding deepened | F[N] |
+| Sub-questions | [count] |
+| Lenses dispatched | [list] |
+| Total sources cited | [N] |
+| Sources by tier | T1: [N], T2: [N], T3: [N] |
+| Verification: LB-only / breadth | [N / N] |
+| Resolution: ANSWERED / PARTIAL / OPEN | [count split] |
+```
+
+### Output path
+
+`~/Scott/growth-os/raw/research/<scope>/RESEARCH-<topic-slug>-DEEPEN-F[N]-<date>.md`
+
+Same naming convention as standard research, with `DEEPEN-F[N]` inserted before the date so the file sorts adjacent to the original alphabetically.
+
+### When the deepening should update the original
+
+If the deepening's "Implications for the Original Finding" answer is "contradicts" or "significantly refines," propose an update to the original RESEARCH.md. Do not silently rewrite. Show the diff and let Scott decide.
+
+If the deepening only confirms or expands, no update needed; the deepening file stands alone as supplementary research.

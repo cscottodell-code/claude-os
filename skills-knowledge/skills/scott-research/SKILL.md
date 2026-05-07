@@ -16,12 +16,15 @@ description: |
   Even for seemingly simple research requests, this skill adds rigor that ad-hoc searching
   cannot match.
 user_invocable: true
-invocation_hint: /scott:research <topic> [--notebooklm] [--council <triad>] - Research a topic from 10 angles with source verification
+invocation_hint: |
+  Standard:  /scott:research <topic> [--notebooklm] [--council <triad>]
+  Deepen:    /scott:research --deepen <RESEARCH.md path> <finding-id>
 input_examples:
   - "/scott:research how market research applies to product development"
   - "/scott:research SurrealDB v3 migration strategies"
   - "/scott:research membership pricing models for home services --notebooklm"
   - "/scott:research background operations methodology --council strategy"
+  - "/scott:research --deepen ~/Scott/growth-os/raw/research/global/RESEARCH-foo-2026-05-01.md F3"
 section: tools
 ---
 
@@ -70,6 +73,26 @@ Ask Scott:
 
 ### Done when
 Scott confirms the topic, topic type, scope, and lens selection.
+
+## Deepen Mode
+
+When invoked with `--deepen <RESEARCH.md path> <finding-id>`, the skill takes a different path:
+
+1. Reads the existing RESEARCH.md from the given path.
+2. Identifies the named finding (e.g., F3) and extracts its statement, supporting sources, and Gaps subsection.
+3. Confirms 1 to 3 sub-questions with Scott (drawn from the Gaps).
+4. Dispatches 2 to 3 lens subagents on the focused sub-questions (typically the lenses most relevant; Scott can override).
+5. Verifies and synthesizes a "deepening report" that links back to the original.
+
+Output path: `~/Scott/growth-os/raw/research/<scope>/RESEARCH-<topic-slug>-DEEPEN-<finding-id>-<date>.md`
+
+Read `references/orchestration.md` "Deepen Mode Orchestration" section for the full deepen-mode protocol.
+
+**When to use deepen mode**: a prior research surfaced a Strongly Supported finding with a Gaps subsection that points at unresolved sub-questions. Deepen lets you spend a small additional budget to close the most important gaps without re-running the entire 10-lens dispatch.
+
+**When NOT to use**: the original finding has no Gaps, or the Gaps are too broad to formulate sub-questions from. In that case, run a fresh /scott:research with a narrower topic instead.
+
+---
 
 ## Phases 2-4: Orchestration
 
