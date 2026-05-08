@@ -3,7 +3,7 @@ name: scott:new-feature
 description: >-
   Add a new feature to an existing project using the scott-toolkit workflow.
   Walks through 5 phases: Feature Description, Impact Assessment, Mini-PRD,
-  Build (delegated to GSD + Superpowers), and Update CLAUDE.md.
+  Build (using Superpowers + Impeccable), and Update CLAUDE.md.
 user_invocable: true
 invocation_hint: /scott:new-feature - Add a feature to the current project with guided workflow
 section: project
@@ -111,29 +111,28 @@ Scott approves the mini-PRD.
 ## Phase 4: Build (Delegated) [DELEGATE]
 
 ### What this phase does
-Implement the feature using GSD for execution and Superpowers for methodology.
+Implement the feature using Superpowers operations for methodology and Impeccable for design polish.
 
-### GSD + Superpowers Build Loop
+### Build Loop
 
 Follow this sequence in order. Each step hands off to the next.
 
-1. **Worktree** (Superpowers) -- **git_worktree** operation
+1. **Worktree** -- **git_worktree** operation
    Create a feature branch in a worktree for isolation
-2. **Plan** (GSD) -- **plan_phase** operation
-   Feed the mini-PRD from Phase 3 into GSD for structured task breakdown
-3. **Execute** (GSD) -- **execute_phase** operation
-   GSD orchestrates execution. TDD discipline from the **tdd** operation
-   applies to every task (write failing test, implement, refactor). Atomic commits per task.
-4. **Code review** (Superpowers) -- **code_review** operation
-   Two-stage review after GSD execution completes. Fix Critical issues immediately,
+2. **Plan** -- **write_plan** operation
+   Convert the mini-PRD from Phase 3 into an executable plan with task breakdown and dependencies
+3. **Execute** -- work the plan task by task
+   The **tdd** operation applies to every task (write failing test, implement, refactor).
+   Atomic commits per task.
+4. **Code review** -- **code_review** operation
+   Two-stage review once execution is complete. Fix Critical issues immediately,
    Important issues before proceeding.
-5. **Verify** (GSD) -- **verify_work** operation
-   UAT against the mini-PRD's acceptance criteria
-6. **Test gaps** -- if coverage is thin on critical logic, use the **add_tests** operation
+5. **Verify** -- run UAT against the mini-PRD's acceptance criteria
+6. **Test gaps** -- if coverage is thin on critical logic, write more tests
 7. **Design review** (if significant UI changes):
    - Run `/impeccable:critique` for visual quality feedback
    - Run `/impeccable:polish` as a final detail pass
-8. **Finish branch** (Superpowers) -- **finish_branch** operation
+8. **Finish branch** -- **finish_branch** operation
    Merge the worktree back to main or create a PR
 
 ### Output
@@ -163,7 +162,7 @@ CLAUDE.md accurately reflects the current state of the project.
 - [ ] Feature clearly described
 - [ ] Impact on existing code assessed
 - [ ] Mini-PRD written and approved
-- [ ] Feature built and verified (via GSD + Superpowers)
+- [ ] Feature built and verified (via Superpowers)
 - [ ] Design review completed (if UI-heavy feature)
 - [ ] CLAUDE.md updated
 - [ ] tasks/todo.md updated

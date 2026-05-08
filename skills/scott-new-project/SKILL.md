@@ -299,11 +299,10 @@ Begin building the first milestone (usually data model + basic CRUD).
    Create a worktree for this milestone, isolating work on a separate branch
 2. Read tasks/todo.md for the milestone tasks
 3. Read tasks/lessons.md (may be empty for first milestone)
-4. **Plan the work** -- **plan_phase** operation
-   Feed the milestone tasks into GSD for structured task breakdown and dependency tracking
-5. **Execute the plan** -- **execute_phase** operation
-   GSD orchestrates execution. TDD discipline from the **tdd** operation
-   applies to every task (write failing test, implement, refactor).
+4. **Plan the work** -- **write_plan** operation
+   Convert the milestone's tasks into an executable plan with task breakdown and dependencies
+5. **Execute the plan** -- work the plan task by task
+   The **tdd** operation applies to every task (write failing test, implement, refactor).
    Update tasks/todo.md as you go.
    After each execution step, `stack-check.ts` runs static checks on changed files.
    Fix any errors before proceeding to the next step.
@@ -312,12 +311,12 @@ Begin building the first milestone (usually data model + basic CRUD).
 8. For error/edge case hardening on key pages, use `/impeccable:harden`
 9. **Review test coverage** -- after all milestone tasks are complete:
     - Run the project's test suite to verify all tests pass
-    - If coverage is thin on critical business logic, use the **add_tests** operation
+    - If coverage is thin on critical business logic, write more tests
     - Focus on data model operations and key user flows
 10. **Code review** -- **code_review** operation
     Two-stage review (spec compliance + code quality). Fix Critical issues immediately,
     Important issues before proceeding.
-11. **Verify** -- **verify_work** operation for UAT against acceptance criteria
+11. **Verify** -- run UAT against acceptance criteria
 12. **Finish branch** -- **finish_branch** operation
     Merge the worktree back to main
 13. Check in at the end of the milestone for review
@@ -346,9 +345,7 @@ Demo what was built and get Scott's feedback before proceeding.
 8. Update CLAUDE.md's Current Status section
 9. Discuss next milestone or scope adjustments
 
-**Note:** Code review and branch merging happen in Phase 7 (Build) as part of the
-GSD+Superpowers build loop. By the time Phase 8 starts, code is already reviewed
-and merged to main.
+**Note:** Code review and branch merging happen in Phase 7 (Build). By the time Phase 8 starts, code is already reviewed and merged to main.
 
 ### Output
 - Updated CLAUDE.md with current status

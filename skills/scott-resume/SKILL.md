@@ -3,7 +3,7 @@ name: scott:resume
 description: >-
   Resume work on an existing project using the scott-toolkit workflow.
   Walks through 4 phases: Read Context, Summarize State, Confirm Direction,
-  and Resume Work. Delegates to GSD for .planning/ state recovery.
+  and Resume Work.
 user_invocable: true
 invocation_hint: /scott:resume - Pick up where you left off on a project
 section: project
@@ -43,10 +43,9 @@ Get fully up to speed on the project's current state by reading all relevant fil
 
 ### Files to read
 
-**Standard context:** Read `~/Scott/claude-os/context/_gather-project-context.md` and gather all listed files (including GSD context if `.planning/` exists).
+**Standard context:** Read `~/Scott/claude-os/context/_gather-project-context.md` and gather all listed files. If a `.planning/` directory exists from prior work, read its current state files too.
 
 **Resume-specific additions:**
-- Read any `.planning/phases/*/PLAN.md` for active phase details
 - Check for open issues or pending work not captured in todo.md
 
 ### Stack-Lock Staleness Check
@@ -57,7 +56,7 @@ If the project has a `stack-lock.json`:
 
 ### Output
 A mental model of where the project stands — both the human context (CLAUDE.md, PRD)
-and the build state (GSD planning files).
+and the build state.
 
 ### Done when
 All context files have been reviewed.
@@ -74,7 +73,6 @@ Present a summary like this:
 
 **Last completed:** [what was finished in the last session]
 **Current milestone:** [which milestone we're on] — [X of Y tasks done]
-**GSD phase status:** [if GSD-managed: current phase, % complete, next step]
 **Next up:** [what the next task or feature is]
 **Known issues:** [any bugs or problems noted in CLAUDE.md or lessons.md]
 **Time since last work:** [based on git log dates]"
@@ -109,12 +107,9 @@ Continue from where the project left off, using the appropriate tools.
 1. Review tasks/lessons.md to avoid repeating past mistakes
 2. Pick up the next task from tasks/todo.md
 3. If Scott redirected to something else, update tasks/todo.md accordingly
-
-4. Use the **execute_phase** operation to continue the current phase,
-   or the **plan_phase** operation if starting a new phase
-5. For quick tasks: Use the **quick_task** operation for ad-hoc work with state tracking
-6. Follow the project's CLAUDE.md behavior rules
-7. Work through tasks, checking in as appropriate
+4. If starting a new feature, use the **new_feature** operation. For continuing in-flight work, follow tasks/todo.md.
+5. Follow the project's CLAUDE.md behavior rules
+6. Work through tasks, checking in as appropriate
 
 **Superpowers discipline applies during execution:**
 - TDD: **tdd** operation for all feature and bug fix tasks
@@ -129,7 +124,7 @@ Progress on the project.
 The session's work is complete (either the task is done or Scott ends the session).
 
 ## Completion Checklist
-- [ ] Project context fully read (including .planning/ if GSD-managed)
+- [ ] Project context fully read
 - [ ] State summarized for Scott
 - [ ] Direction confirmed
 - [ ] Work resumed (or redirected based on Scott's input)
