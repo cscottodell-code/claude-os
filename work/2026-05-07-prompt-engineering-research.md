@@ -1,7 +1,7 @@
 # Prompt Engineering Best Practices Synthesis (Working Doc)
 
-**Status:** Draft 1, research and audit complete, awaiting approach selection
-**Date:** 2026-05-07
+**Status:** SHIPPED 2026-05-08 (3 sessions). See Part 8 for closeout.
+**Date:** 2026-05-07 to 2026-05-08
 **Owner:** Scott + Claude (Opus 4.7, 1M context)
 **Goal:** Update Scott's persistent Claude instructions with best 2025-26 prompt engineering practices, plus a subagent template that all future agents inherit.
 
@@ -640,3 +640,34 @@ Not draft text; execution items:
 6. **NEW: Review style:** holistic review of this working doc, OR batch-by-batch walkthrough with approval at each batch?
 7. **NEW: Approve draft rule text in Part 6?** Once approved, Session 2 applies them.
 
+
+---
+
+## Part 8: Final Closeout (Session 3, 2026-05-08)
+
+All planned work completed across 3 sessions.
+
+### Open decisions resolved (Part 7)
+1. **Approach B-with-verification-first** — followed; no surprises in verification.
+2. **identity.md auto-load via @import** — verified working at start of Session 3 (identity.md content appears in the injected CLAUDE.md context). Hook fallback not needed.
+3. **Subagent template location** — created at `~/Scott/claude-os/rules/subagent-template.md` (Session 2). `claude-behavior.md` "Subagent and agent prompt template" section points at it.
+4. **Cleanup scope** — full B applied. 31 gsd-* agents archived to `~/.claude/agents/.archive-2026-04-28-gsd-demolition/`. 3 legacy directories (`get-shit-done/`, `gsd-file-manifest.json`, `gsd-local-patches/`) deleted. `cowork-global-instructions.md` removed (not rebuilt). GSD operation references stripped from 4 scott-* skills.
+5. **identity.md placeholder sections** — moot. Current identity.md does not contain Values or Decision Rules placeholder sections; cleaned up before Session 3 started. Sections present: Personal foundation, Posture, Hard rules, Verified preferences, Tag taxonomy, Anti-patterns, Tool stitching, How this file is maintained.
+6. **Review style** — hybrid worked: sequential edits with batched parallel reads at phase boundaries.
+7. **Draft rule text approval** — applied Session 2.
+
+### What ships
+- LLM-agnostic identity rules in `growth-os/wiki/identity.md` (10 new hard rules including anti-sycophancy blocklist, anti-anchoring, when-to-ask threshold, disagreement protocol).
+- Claude-specific harness rules in `claude-os/rules/claude-behavior.md` (subagent template integration).
+- Subagent template at `claude-os/rules/subagent-template.md` (~6KB, hoisted from scott-research dispatch rules).
+- Lean `~/.claude/CLAUDE.md` (35 lines, @imports identity.md).
+- Cleaned `~/.claude/agents/` directory (5 active, 31 archived).
+- Updated `MEMORY.md` (stale Eleanor PM-mode line removed; demolition record kept).
+
+### Commits
+- Session 1+2 commits (rule changes, subagent template, scott-research updates) — pushed before Session 3.
+- Session 3 commit `d30238d` (skills GSD cleanup) — pushed at end of Session 3.
+
+### Followups outside this project
+- scott-research updates in progress in another session (not touched here).
+- Other SYNC-DIRTY items at session start (rules, CLAUDE.md, scott-research) resolve when the other session pushes its work.
