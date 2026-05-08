@@ -95,6 +95,20 @@ Pick the type that fits each finding. Not every finding needs every type. Skip w
 
 ---
 
+## Mode-conditional action sets
+
+Action types and counts vary by mode. Match the mode to keep output proportional to the research depth.
+
+| Mode | Action count | Action types favored | Notes |
+|---|---|---|---|
+| **Decision** | 6-12 | All types eligible | Full action set with mix of Do Now / Queue / Explore |
+| **Learning** | 2-4 | Deep Dive, NotebookLM Prep, Write Document | Learning produces knowledge artifacts more than direct work |
+| **Tech** | 2-4 | Build Process, Test/Experiment, Write Document, Create Skill | Tech actions are concrete and runnable |
+| **Quick** | 0-2 | Deep Dive primarily ("worth a full Decision-mode research?") | Quick is exploratory; if a Decision is warranted, that IS the action |
+| **Deep** | 4-8 per session + cross-cutting "domain actions" | Build Training, Create Skill, Deep Dive, Build Process | Deep mode also produces "domain actions" stored in `index.md`: longer-horizon work that spans sessions |
+
+If a mode's action count exceeds these bounds, prune to the most decision-relevant.
+
 ## Priority Assignment
 
 | Priority | Criteria |
@@ -110,6 +124,8 @@ Rules of thumb:
 - "NotebookLM Prep" actions are usually Queue (need to compile material)
 - "Council Deliberation" actions on discrepancies are usually Do Now (the disagreement is the signal)
 - "Create Skill" depends on how well-defined the scope is
+
+In Quick mode, the dominant action is "run a full Decision-mode research on [topic] if [condition]." This is the natural escalation path from exploratory scan to committed research.
 
 ---
 
