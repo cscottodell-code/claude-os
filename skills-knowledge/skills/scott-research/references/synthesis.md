@@ -20,28 +20,68 @@ Strip everything that appears before the first `###` header. Subagents commonly 
 
 If a lens output contains genuinely informative content in its preamble (e.g., a Skill failure note that didn't make it into the Fetch Failure Report), the orchestrator may move that content into the Gaps section of the synthesized RESEARCH.md, but only after explicit review. Default behavior is silent strip.
 
-**Pass 2: Validate source curation acknowledgment line.**
+**Pass 2: Validate source curation comprehension block (3 lines).**
 
-**Validation locus.** Run this check on the raw subagent output as it returns from dispatch, BEFORE any synthesis-time compression or rewriting. Once you compress a lens output for inclusion in the final RESEARCH.md (Step 3 templates the lens sections), the acknowledgment line will typically be dropped by the compression itself, and re-validating the synthesized doc would falsely fail every lens. Validation happens once, on the raw output, with results carried forward as the `[CURATION-UNREAD]` tag and banner.
+**Validation locus.** Run this check on the raw subagent output as it returns from dispatch, BEFORE any synthesis-time compression or rewriting. Once you compress a lens output for inclusion in the final RESEARCH.md (Step 3 templates the lens sections), the comprehension block will typically be dropped by the compression itself, and re-validating the synthesized doc would falsely fail every lens. Validation happens once, on the raw output, with results carried forward as the `[CURATION-UNREAD]` tag and banner.
 
-The first non-empty line after the `### [Lens Name] Lens` header in the raw output MUST match this literal pattern (whitespace-trimmed, exact text):
+The first three non-empty lines after the `### [Lens Name] Lens` header in the raw output MUST form a comprehension block proving the subagent read source-curation.md (not just pattern-matched the dispatch prompt).
+
+Expected format:
 
 ```
-> Source curation read: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.
+> Source curation read:
+> - Weights: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.
+> - My lens (<LENS>) recency cutoff: <per-lens cutoff from source-curation.md §6>
+> - My lens T1 example pattern: <one or more per-lens T1 examples from source-curation.md §3>
 ```
 
-Match is strict. Any deviation counts as missing:
-- Line absent
-- Paraphrased ("> Source curation acknowledged" or similar)
-- Different numbers (`T1=3.0` etc.)
-- Extra qualifiers or trailing prose
-- Located after Key Findings instead of immediately after the header
+The orchestrator runs THREE sub-checks per lens. Any sub-check failure flags the lens.
 
-The literal line is a proxy for "subagent actually Read source-curation.md and dispatch.md before searching." Subagents that skip the read have empirically also skipped tier-label discipline, fetch-fallback discipline, and the confidence-math template. Format compliance correlates 1:1 with whether the reference reads happened (observed across May 2026 test runs: 3/7 lenses that included the line followed full protocol; 4/7 that omitted the line produced training-data inference with non-standard format).
+### Sub-check 1: Weights line
 
-**Failure consequences for Pass 2 (auto-applied, mechanical):**
+Whitespace-tolerant literal match for: `Weights: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.`
 
-When a lens fails the acknowledgment check, the orchestrator MUST apply all of the following before synthesis. This is not negotiable. Do not let a flagged lens contribute to Strongly Supported or Congruencies.
+### Sub-check 2: Recency-cutoff line matches lens-specific cutoff
+
+The cutoff stated in the agent's block must match one of the listed forms for that lens in source-curation.md §6. Phrasing tolerance applies.
+
+| Lens | Valid cutoff phrasings (any one suffices) |
+|---|---|
+| Historical | "none", "no cutoff", "no recency limit", "uncapped" |
+| Academic | "<5 years for empirical" OR "no cutoff for foundational" (mentioning either branch is sufficient) |
+| Book | "none", "no cutoff", "no recency limit" |
+| Current Application | "<2 years", "less than 2 years", "2 years (hard)", "24 months" |
+| Social | "<6 months", "less than 6 months", "6 months (hard)" |
+| Technical | "<2 years for evolving tools" OR "<5 years for stable APIs" (either branch sufficient) |
+| Risk | "none for eternal pitfalls" OR "<3 years for tool-specific" (either branch sufficient) |
+| Contrarian | "none for principle critiques" OR "<2 years for trend critiques" (either branch sufficient) |
+| Economic | "<2 years", "less than 2 years", "2 years (hard)", "24 months" |
+| Adjacent | "inherits from adjacent domain", "domain-paced", or any concrete cutoff if a domain is named |
+
+Numerical equivalents are accepted (24 months = 2 years; 60 months = 5 years).
+
+### Sub-check 3: T1 example line references a per-lens T1 example
+
+The agent's T1 example must reference at least one of the listed T1 example types for that lens in source-curation.md §3. Phrasing tolerance applies.
+
+| Lens | Valid T1 example references (any one suffices) |
+|---|---|
+| Historical | "primary documents", "peer-reviewed history papers", "foundational books in original print" |
+| Academic | "peer-reviewed journals", "conference proceedings" (NeurIPS/ICML/etc.), "arXiv preprints with named authors" |
+| Book | "direct excerpts", "author interviews", "official author sites", "transcripts of talks by the author" |
+| Current Application | "engineering blogs from named companies" (Stripe/Anthropic/Vercel/etc.), "case studies with named clients", "conference talks with slides" |
+| Social | "Twitter/X via fxtwitter", "Hacker News threads with >50 comments", "Reddit posts with >100 upvotes", "GitHub Issues with named-maintainer participation" |
+| Technical | "official docs", "source code", "RFCs", "GitHub issues and PRs from maintainers" |
+| Risk | "postmortems from named companies", "CVE filings", "regulatory filings", "GitHub Issues with reproductions" |
+| Contrarian | "critical academic papers", "formal rebuttals", "named-expert dissent essays" |
+| Economic | "primary data" (Gartner/IDC/Pitchbook/etc.), "official earnings", "government statistics" |
+| Adjacent | "domain-authoritative sources from the adjacent field", or a named example with domain context |
+
+Substring matching is sufficient; the agent need not list ALL examples for the lens, just at least one.
+
+### Failure consequences for Pass 2 (auto-applied, mechanical)
+
+When a lens fails ANY of the three sub-checks, the orchestrator MUST apply all of the following before synthesis. This is not negotiable. Do not let a flagged lens contribute to Strongly Supported or Congruencies.
 
 1. Annotate the lens header in the synthesized RESEARCH.md with `[CURATION-UNREAD]` suffix:
    ```markdown
@@ -50,8 +90,10 @@ When a lens fails the acknowledgment check, the orchestrator MUST apply all of t
 
 2. Insert this banner as the first content under the lens header (before any findings):
    ```markdown
-   > **WARNING: Curation acknowledgment line missing.** This lens did not include the required `> Source curation read: ...` line, indicating source-curation.md and dispatch.md were likely not read before research. Tier labels, confidence math, and source verification cannot be trusted. Findings below are training-data inference, not verified research. All findings from this lens are treated as Weakly Supported regardless of stated confidence.
+   > **WARNING: Curation comprehension block missing or invalid.** This lens did not produce a valid `> Source curation read: ...` 3-line block matching the per-lens facts in source-curation.md. This likely indicates source-curation.md was not read before research, OR a sub-check (weights, recency cutoff, T1 example) failed for [reason: list which sub-check]. Tier labels, confidence math, and source verification cannot be confidently trusted. Findings below are likely training-data inference rather than verified research; treat as Weakly Supported regardless of stated confidence.
    ```
+
+   The banner names the specific sub-check that failed (sub-check 1, 2, or 3) so debugging is fast.
 
 3. Cap the lens's effective confidence at **Low** for cross-lens analysis, regardless of its self-reported weighted sum. The original sum is preserved in the lens output for transparency, but synthesis ignores it.
 
@@ -61,11 +103,17 @@ When a lens fails the acknowledgment check, the orchestrator MUST apply all of t
 
 6. Findings unique to a CURATION-UNREAD lens may appear in Unique Ideas (with `[CURATION-UNREAD]` flag) or Weakly Supported only. They cannot be promoted higher.
 
-7. Add the lens name to the metadata row "Lenses with curation acknowledgment missing".
+7. Add the lens name and the sub-check that failed to the metadata row "Lenses with curation comprehension failures".
 
 8. If 3 or more lenses fail this check, surface the failure in the Decision-Ready Brief under "What's uncertain": "Note: [N] of [M] lenses skipped curation protocol; cross-lens convergence is structurally reduced. Consider re-running with stricter dispatch."
 
-**Why this enforcement lives in synthesis, not dispatch:**
+### Why three sub-checks instead of one
+
+The original Rule 3 (single literal-string acknowledgment) was gameable: a 200-char literal can be echoed without reading source-curation.md by pattern-matching the dispatch prompt. The 3-line block requires the agent to retrieve LENS-SPECIFIC facts (recency cutoff, T1 example) that vary per lens and aren't fully present in the dispatch prompt. To produce them correctly, the agent must actually read source-curation.md and extract the right facts for THEIR lens.
+
+This raises the gaming bar significantly. A determined agent could still memorize the per-lens facts over time without reading the file, but on first-encounter and after source-curation.md changes, the proxy works as designed.
+
+### Why this enforcement lives in synthesis, not dispatch
 
 Hardening dispatch-prompt language has hit diminishing returns. The most-violated rules in production are still violated even when marked HIGHEST PRIORITY in dispatch.md. Synthesis-side validation lets the failure happen but degrades the output to honest territory: unverified training-data inference is labeled as such, rather than parading as a Strongly Supported finding next to verified research.
 
@@ -233,7 +281,7 @@ All counts in this table MUST be computed by summing rows in the lens-output Sou
 | Sources older than per-lens cutoff | [N, flagged stale] | same as Stale sources flagged; cross-check |
 | T3 cap triggered | [list of findings capped, if any] | findings where >=50% T3 forced cap to Congruency |
 | Numerical Discrepancy Rule triggered | [list of findings routed to Discrepancies, if any] | findings flagged by Phase 3 Step 1 Numerical Discrepancy Rule |
-| Lenses with curation acknowledgment missing | [list, or "none"] | lenses that failed Phase 3 prologue Pass 2 and were demoted to CURATION-UNREAD |
+| Lenses with curation comprehension failures | [list with sub-check that failed: lens-name (sub-check N), or "none"] | lenses that failed Phase 3 prologue Pass 2 (any of 3 sub-checks) and were demoted to CURATION-UNREAD |
 
 ### Cross-checks the synthesizer must run before finalizing
 

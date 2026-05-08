@@ -135,13 +135,47 @@ Inline tier labels must be EXACTLY one of: `[T1]`, `[T2]`, `[T3]`, `[R]`. No qua
 
 All flags go in the Flags column of Sources Consulted, not inline. Valid flags: `stale`, `archived`, `undated`, `unverified`, `404`. Multiple flags are comma-separated.
 
-### Rule 3: Source curation acknowledgment
+### Rule 3: Source curation comprehension block (3 lines)
 
-First line after the lens header must be exactly:
+The first three non-empty lines after the lens header MUST be a comprehension block proving you actually read source-curation.md (not just pattern-matched its existence).
 
-`> Source curation read: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.`
+Format:
 
-**Consequence of omission (enforced at synthesis):** the orchestrator runs a literal-string check for this line. If missing, paraphrased, or relocated, the entire lens output is auto-flagged `[CURATION-UNREAD]`, capped at Low confidence regardless of weighted sum, and excluded from "4+ lenses" Strongly Supported counts and "2-3 lenses align" Congruency counts. All findings from a flagged lens are demoted to Weakly Supported and visibly banner-warned in the final RESEARCH.md as "training-data inference, not verified research." This is mechanical, not negotiable. The line is the proxy for actually reading source-curation.md; agents that skip it have empirically also skipped tier discipline and fetch fallbacks.
+```
+> Source curation read:
+> - Weights: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.
+> - My lens (<LENS-NAME>) recency cutoff: <cutoff specific to this lens, from source-curation.md §6>
+> - My lens T1 example pattern: <one of the listed T1 example types for this lens, from source-curation.md §3>
+```
+
+Concrete examples:
+
+For Risk lens:
+```
+> Source curation read:
+> - Weights: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.
+> - My lens (Risk) recency cutoff: none for eternal pitfalls; <3 years for tool-specific failures.
+> - My lens T1 example pattern: postmortems from named companies, CVE filings, GitHub issues with reproductions.
+```
+
+For Social lens:
+```
+> Source curation read:
+> - Weights: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.
+> - My lens (Social) recency cutoff: <6 months (hard).
+> - My lens T1 example pattern: Twitter/X via fxtwitter, Hacker News threads with >50 comments, Reddit posts with >100 upvotes.
+```
+
+The lens-specific facts (recency cutoff, T1 example pattern) come from source-curation.md and DIFFER per lens. To produce them correctly, you must actually read source-curation.md and extract the right facts for YOUR specific lens. The dispatch prompt does not contain these per-lens specifics in any form you could echo without reading the reference file.
+
+**Phrasing tolerance.** Validation accepts equivalent phrasings. "<6 months" and "less than 6 months" and "6 months" are all valid. "no cutoff" / "no recency limit" / "uncapped" are all valid. The cutoff must be ONE of the per-lens cutoff forms listed in source-curation.md §6 for your lens. The T1 example pattern must reference at least ONE of the per-lens T1 examples listed in source-curation.md §3 for your lens.
+
+**Consequence of omission or mismatch (enforced at synthesis):** the orchestrator runs three sub-checks:
+1. Weights line literal-string match (whitespace-tolerant)
+2. Recency-cutoff line matches the lens's listed cutoff per source-curation.md §6
+3. T1 example line references at least one listed T1 example for the lens per source-curation.md §3
+
+ANY sub-check failure flags the entire lens output `[CURATION-UNREAD]`, caps it at Low confidence regardless of weighted sum, and excludes it from "4+ lenses" Strongly Supported counts and "2-3 lenses align" Congruency counts. All findings from a flagged lens are demoted to Weakly Supported and visibly banner-warned. This is mechanical, not negotiable. See `synthesis.md` Phase 3 prologue Pass 2 for the lookup table and exact validation rules.
 
 ### Rule 4: Confidence math is itemized and mechanical
 
@@ -173,7 +207,10 @@ Return your findings in exactly this structure:
 
 ### [Lens Name] Lens
 
-> Source curation read: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.
+> Source curation read:
+> - Weights: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.
+> - My lens ([Lens Name]) recency cutoff: [cutoff from source-curation.md §6 for your lens]
+> - My lens T1 example pattern: [one or more T1 example types from source-curation.md §3 for your lens]
 
 #### Key Findings
 - [Finding 1] [T1] [Source Title](URL) ([date])
