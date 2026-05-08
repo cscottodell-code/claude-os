@@ -50,15 +50,21 @@ After any compaction, immediately re-read:
 
 Do NOT continue work based on assumptions about what was in context before compaction.
 
-## Subagent rules
+## Subagent and agent prompt template
 
-- Use subagents for research, exploration, parallel analysis (3+ files, independent queries).
-- One objective per subagent. Match tool set to role:
-  - Researcher/Explorer: Read, Grep, Glob, WebSearch, WebFetch
-  - Planner / Reviewer / Security Auditor: Read, Grep, Glob (+ Bash for Reviewer)
-  - Executor: full tools
-- Brief every subagent with: objective, files, constraints, output format, prior knowledge.
+When dispatching ANY subagent (Task tool, Agent tool, scheduled remote agents, custom agents in `~/.claude/agents/`, or skills that produce LLM behavior), apply the template at `@~/Scott/claude-os/rules/subagent-template.md`.
+
+Quick rules (full template at the path above):
+
+- One objective per subagent. Do not bundle.
+- Match tool set to role. Researcher: Read/Grep/Glob/WebSearch/WebFetch. Reviewer: same plus Bash. Executor: full tools. Scope deliberately; omitting `tools` grants all by default.
+- Brief format: objective, files, constraints, output format, prior knowledge, termination criterion.
+- Return format: distilled summary 1-2K tokens, not raw output.
+- No preamble, no closing commentary in returned output.
 - Verify subagent findings against primary sources before presenting to Scott.
+- Spawn in parallel when fanning out. Do not spawn for work doable in one response.
+
+Inheritance is by convention, not enforcement: every new agent file in `~/.claude/agents/` and every new skill in `~/.claude/skills/` should reference this template in its description or header. Anthropic's harness does not auto-import the template into agent prompts; the orchestrator (Claude) is responsible for applying it when crafting agent briefs.
 
 ## Toolkit artifact commits (mandatory)
 
