@@ -141,6 +141,8 @@ First line after the lens header must be exactly:
 
 `> Source curation read: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.`
 
+**Consequence of omission (enforced at synthesis):** the orchestrator runs a literal-string check for this line. If missing, paraphrased, or relocated, the entire lens output is auto-flagged `[CURATION-UNREAD]`, capped at Low confidence regardless of weighted sum, and excluded from "4+ lenses" Strongly Supported counts and "2-3 lenses align" Congruency counts. All findings from a flagged lens are demoted to Weakly Supported and visibly banner-warned in the final RESEARCH.md as "training-data inference, not verified research." This is mechanical, not negotiable. The line is the proxy for actually reading source-curation.md; agents that skip it have empirically also skipped tier discipline and fetch fallbacks.
+
 ### Rule 4: Confidence math is itemized and mechanical
 
 Use the strict template in the output structure below. Fill in counts (use `0` for unused rows). Multiply by the per-row weight. Sum. Map to confidence per source-curation.md §7 thresholds.

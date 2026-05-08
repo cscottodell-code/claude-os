@@ -10,13 +10,66 @@ For dispatch and verification, see `dispatch.md`. For tier definitions and per-l
 
 ## Phase 3: Synthesize [AUTO]
 
-### Phase 3 prologue: Strip preamble (mandatory)
+### Phase 3 prologue: Strip preamble and validate acknowledgment (mandatory)
 
-Before processing any lens output, strip everything that appears before the first `###` header. Subagents commonly prepend thinking commentary like "Now I'll compose the report" or "I have enough material" despite explicit instructions. The orchestrator treats all pre-`###` content as discarded.
+Before processing any lens output, the orchestrator runs two structural passes per lens. Both are mechanical, not judgment calls.
+
+**Pass 1: Strip preamble.**
+
+Strip everything that appears before the first `###` header. Subagents commonly prepend thinking commentary like "Now I'll compose the report" or "I have enough material" despite explicit instructions. The orchestrator treats all pre-`###` content as discarded.
 
 If a lens output contains genuinely informative content in its preamble (e.g., a Skill failure note that didn't make it into the Fetch Failure Report), the orchestrator may move that content into the Gaps section of the synthesized RESEARCH.md, but only after explicit review. Default behavior is silent strip.
 
-Read all surviving lens outputs (post-strip) and the verification report, then build the unified RESEARCH.md.
+**Pass 2: Validate source curation acknowledgment line.**
+
+**Validation locus.** Run this check on the raw subagent output as it returns from dispatch, BEFORE any synthesis-time compression or rewriting. Once you compress a lens output for inclusion in the final RESEARCH.md (Step 3 templates the lens sections), the acknowledgment line will typically be dropped by the compression itself, and re-validating the synthesized doc would falsely fail every lens. Validation happens once, on the raw output, with results carried forward as the `[CURATION-UNREAD]` tag and banner.
+
+The first non-empty line after the `### [Lens Name] Lens` header in the raw output MUST match this literal pattern (whitespace-trimmed, exact text):
+
+```
+> Source curation read: T1=2.0, T2=1.0, T3=0.5, R=0; stale halves; verification fail = 0.25.
+```
+
+Match is strict. Any deviation counts as missing:
+- Line absent
+- Paraphrased ("> Source curation acknowledged" or similar)
+- Different numbers (`T1=3.0` etc.)
+- Extra qualifiers or trailing prose
+- Located after Key Findings instead of immediately after the header
+
+The literal line is a proxy for "subagent actually Read source-curation.md and dispatch.md before searching." Subagents that skip the read have empirically also skipped tier-label discipline, fetch-fallback discipline, and the confidence-math template. Format compliance correlates 1:1 with whether the reference reads happened (observed across May 2026 test runs: 3/7 lenses that included the line followed full protocol; 4/7 that omitted the line produced training-data inference with non-standard format).
+
+**Failure consequences for Pass 2 (auto-applied, mechanical):**
+
+When a lens fails the acknowledgment check, the orchestrator MUST apply all of the following before synthesis. This is not negotiable. Do not let a flagged lens contribute to Strongly Supported or Congruencies.
+
+1. Annotate the lens header in the synthesized RESEARCH.md with `[CURATION-UNREAD]` suffix:
+   ```markdown
+   ## Historical Lens [CURATION-UNREAD]
+   ```
+
+2. Insert this banner as the first content under the lens header (before any findings):
+   ```markdown
+   > **WARNING: Curation acknowledgment line missing.** This lens did not include the required `> Source curation read: ...` line, indicating source-curation.md and dispatch.md were likely not read before research. Tier labels, confidence math, and source verification cannot be trusted. Findings below are training-data inference, not verified research. All findings from this lens are treated as Weakly Supported regardless of stated confidence.
+   ```
+
+3. Cap the lens's effective confidence at **Low** for cross-lens analysis, regardless of its self-reported weighted sum. The original sum is preserved in the lens output for transparency, but synthesis ignores it.
+
+4. **Exclude the lens from "4+ lenses found it" counts for Strongly Supported.** A finding that requires a CURATION-UNREAD lens to reach 4 lenses cannot be classified Strongly Supported.
+
+5. **Exclude the lens from "2-3 lenses align" counts for Congruencies.** A CURATION-UNREAD lens cannot be one of the 2-3 supporting lenses.
+
+6. Findings unique to a CURATION-UNREAD lens may appear in Unique Ideas (with `[CURATION-UNREAD]` flag) or Weakly Supported only. They cannot be promoted higher.
+
+7. Add the lens name to the metadata row "Lenses with curation acknowledgment missing".
+
+8. If 3 or more lenses fail this check, surface the failure in the Decision-Ready Brief under "What's uncertain": "Note: [N] of [M] lenses skipped curation protocol; cross-lens convergence is structurally reduced. Consider re-running with stricter dispatch."
+
+**Why this enforcement lives in synthesis, not dispatch:**
+
+Hardening dispatch-prompt language has hit diminishing returns. The most-violated rules in production are still violated even when marked HIGHEST PRIORITY in dispatch.md. Synthesis-side validation lets the failure happen but degrades the output to honest territory: unverified training-data inference is labeled as such, rather than parading as a Strongly Supported finding next to verified research.
+
+After both passes, read all surviving lens outputs (post-strip, post-validation, with banners and downgrades applied) and the verification report, then build the unified RESEARCH.md.
 
 ### Step 1: Cross-Lens Analysis
 
@@ -180,6 +233,7 @@ All counts in this table MUST be computed by summing rows in the lens-output Sou
 | Sources older than per-lens cutoff | [N, flagged stale] | same as Stale sources flagged; cross-check |
 | T3 cap triggered | [list of findings capped, if any] | findings where >=50% T3 forced cap to Congruency |
 | Numerical Discrepancy Rule triggered | [list of findings routed to Discrepancies, if any] | findings flagged by Phase 3 Step 1 Numerical Discrepancy Rule |
+| Lenses with curation acknowledgment missing | [list, or "none"] | lenses that failed Phase 3 prologue Pass 2 and were demoted to CURATION-UNREAD |
 
 ### Cross-checks the synthesizer must run before finalizing
 
