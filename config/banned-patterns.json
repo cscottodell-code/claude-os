@@ -1,0 +1,58 @@
+{
+  "_readme": "Banned cross-reference patterns. Single source of truth replacing version-manifest.json's cross_reference_patterns.banned section. Read by hooks/toolkit-coherence-check.ts (filtered by scope harness|both) and hooks/guards/coherence-check-vault.ts (filtered by scope vault|both). When renaming files or directories, add an entry here.",
+  "schema_version": "1.0",
+  "scopes": {
+    "_readme": "harness = claude-os/ files only. vault = growth-os/ files only. both = either.",
+    "values": ["harness", "vault", "both"]
+  },
+  "scan_paths": {
+    "_readme": "Paths to scan during full lint. Relative to $HOME.",
+    "harness": "Scott/claude-os",
+    "vault": "Scott/growth-os",
+    "projects": "Scott/claude-projects"
+  },
+  "banned": [
+    {
+      "pattern": "~/Sites/Global/scott-toolkit/",
+      "replacement": "~/Scott/claude-os/",
+      "reason": "Restructure 2026-05: scott-toolkit renamed and moved",
+      "scope": "both"
+    },
+    {
+      "pattern": "~/Sites/Global/scott-context/",
+      "replacement": "~/Scott/growth-os/",
+      "reason": "Restructure 2026-05: scott-context renamed and moved",
+      "scope": "both"
+    },
+    {
+      "pattern": "~/Sites/Personal/scott-knowledge/",
+      "replacement": "~/Scott/claude-os/skills-knowledge/",
+      "reason": "Restructure 2026-05: scott-knowledge consolidated into claude-os",
+      "scope": "both"
+    },
+    {
+      "pattern": "~/Sites/",
+      "replacement": "~/Scott/",
+      "reason": "Restructure 2026-05: ~/Sites was demolished",
+      "scope": "both"
+    },
+    {
+      "pattern": "SCOTT_TOOLKIT_DIR",
+      "replacement": "CLAUDE_OS_DIR",
+      "reason": "Restructure 2026-05: env var renamed in ~/.zshrc",
+      "scope": "harness"
+    },
+    {
+      "pattern": "scott-toolkit/",
+      "replacement": "claude-os/",
+      "reason": "Restructure 2026-05: project renamed",
+      "scope": "both"
+    },
+    {
+      "pattern": "scott-context/",
+      "replacement": "growth-os/",
+      "reason": "Restructure 2026-05: project renamed",
+      "scope": "both"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "_readme": "Files that must reference the current toolkit version. Used by version-propagate to detect stale references after CHANGELOG.md updates. Paths are relative to claude-os/.",
+  "_readme": "Files that must reference the current toolkit version. Used by version-propagate to detect stale references after CHANGELOG.md updates. Paths are relative to claude-os/. Cross-reference banned patterns moved to config/banned-patterns.json (Phase 4 Rule 5: rules-as-config with scope field).",
   "version_source": "CHANGELOG.md",
   "files": [
     {
@@ -23,23 +23,5 @@
       "check": "date_freshness",
       "description": "Last updated date should match CHANGELOG date"
     }
-  ],
-  "cross_reference_patterns": {
-    "_readme": "Single source of truth for stale patterns. Read by toolkit-coherence-check (real-time) and toolkit-lint (batch). When renaming files or directories, add an entry here instead of hunting references manually.",
-    "banned": [
-      { "pattern": "~/Sites/Global/scott-toolkit/", "replacement": "~/Scott/claude-os/", "reason": "Restructure 2026-05: scott-toolkit renamed and moved" },
-      { "pattern": "~/Sites/Global/scott-context/", "replacement": "~/Scott/growth-os/", "reason": "Restructure 2026-05: scott-context renamed and moved" },
-      { "pattern": "~/Sites/Personal/scott-knowledge/", "replacement": "~/Scott/claude-os/skills-knowledge/", "reason": "Restructure 2026-05: scott-knowledge consolidated into claude-os" },
-      { "pattern": "~/Sites/", "replacement": "~/Scott/", "reason": "Restructure 2026-05: ~/Sites was demolished" },
-      { "pattern": "SCOTT_TOOLKIT_DIR", "replacement": "CLAUDE_OS_DIR", "reason": "Restructure 2026-05: env var renamed in ~/.zshrc" },
-      { "pattern": "scott-toolkit/", "replacement": "claude-os/", "reason": "Restructure 2026-05: project renamed" },
-      { "pattern": "scott-context/", "replacement": "growth-os/", "reason": "Restructure 2026-05: project renamed" }
-    ],
-    "scan_paths": {
-      "_readme": "Paths to scan during full lint. Relative to $HOME.",
-      "toolkit": "Scott/claude-os",
-      "wiki": "Scott/growth-os",
-      "projects": "Scott/claude-projects"
-    }
-  }
+  ]
 }

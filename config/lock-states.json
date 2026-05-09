@@ -1,0 +1,23 @@
+{
+  "_readme": "Lock-state vocabulary per construction-process artifact type. Source of truth: wiki/system/build-plans/phase-4-envelope.md Rule 4. Read by hooks/guards/lock-state.ts. Edits to artifacts whose lock-state field has a locked value require a revision-history entry dated today, added in the same edit.",
+  "schema_version": "1.0",
+  "artifact_types": {
+    "phase-plan": {
+      "_readme": "Build-plan phase plans under wiki/system/build-plans/.",
+      "path_pattern": ".*/Scott/growth-os/wiki/system/build-plans/phase-[^/]+\\.md$",
+      "lock_field": "phase-status",
+      "locked_values": ["locked"]
+    },
+    "adr": {
+      "_readme": "Architecture decision records under wiki/system/adrs/. Both Accepted and Decided-Conditional count as locked.",
+      "path_pattern": ".*/Scott/growth-os/wiki/system/adrs/.*\\.md$",
+      "lock_field": "status",
+      "locked_values": ["Accepted", "Decided-Conditional"]
+    }
+  },
+  "revision_history": {
+    "_readme": "How the guard recognizes a today-dated revision-history entry in the new content. The pattern matches the canonical format: hyphen-bullet, two-asterisk-bold, ISO-8601 date, period, two-asterisk-bold close.",
+    "today_entry_pattern": "(?:^|\\n)\\s*-\\s*\\*\\*{TODAY}\\.\\*\\*",
+    "today_format": "YYYY-MM-DD"
+  }
+}

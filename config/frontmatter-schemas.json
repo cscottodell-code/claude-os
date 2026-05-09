@@ -1,0 +1,117 @@
+{
+  "_readme": "Per-type and per-subtype frontmatter required-fields schemas for the growth-os vault. Source of truth: wiki/system/build-plans/phase-3a-tanks.md. Read by hooks/guards/frontmatter.ts. Phase 3a Rule 5 governs evolution: non-retroactive, no field-name aliasing, sub-type vocab is open.",
+  "schema_version": "1.0",
+  "type_lookup": {
+    "_readme": "How the guard determines a note's type. Precedence: (1) top-level `type:` field if present, else (2) tags array containing exactly one `types/X` value. Multiple `types/X` tags or no type-axis tag and no `type:` field means the guard cannot classify; for Edit, advise; for Write, block.",
+    "field_name": "type",
+    "tag_axis_prefix": "types/"
+  },
+  "universal_baseline": {
+    "_readme": "Required on every note regardless of type. `tags:` must include at minimum the `types/*` and `source/*` axis values. `confidence/*` required only when the type schema below names it.",
+    "required_fields": ["tags"],
+    "tags_required_axes": ["types", "source"]
+  },
+  "types": {
+    "record": {
+      "_readme": "A captured fact or observation. Static-ish.",
+      "required_fields": [],
+      "optional_fields": ["aliases", "last-updated"]
+    },
+    "entity": {
+      "_readme": "A person, organization, tool, or place referenced from other notes.",
+      "required_fields": [],
+      "optional_fields": ["aliases", "last-updated"],
+      "subtype_vocab_open": true,
+      "known_subtypes": ["person", "org", "tool", "place"]
+    },
+    "idea": {
+      "_readme": "A concept, framework, insight, or learnable. Content evolves.",
+      "required_fields": [],
+      "tags_required_axes": ["confidence"],
+      "optional_fields": ["aliases", "last-updated"]
+    },
+    "commitment": {
+      "_readme": "A decision, rule, or commitment. Highest-stakes type.",
+      "required_fields": ["last-updated"],
+      "tags_required_axes": ["confidence"],
+      "subtype_vocab_open": true,
+      "known_subtypes": ["adr", "phase-plan", "hard-rule"]
+    },
+    "process": {
+      "_readme": "A workflow, pipeline, or procedure. Operational content that evolves.",
+      "required_fields": ["last-updated"],
+      "tags_required_axes": ["confidence"]
+    },
+    "navigation": {
+      "_readme": "A hub, index, or navigation aid. Pointer-only content.",
+      "required_fields": [],
+      "optional_fields": ["aliases"]
+    }
+  },
+  "subtype_unlocks": {
+    "_readme": "Sub-type-specific required fields and closed vocabs. Each entry's `applies_when` clause must all match for the unlock to fire. Keys are descriptive only; the guard iterates entries and matches on `applies_when`.",
+    "idea_external": {
+      "applies_when": { "type": "idea", "tags_axis": { "source": "external" } },
+      "required_fields": ["medium"],
+      "field_vocabs": {
+        "medium": ["book", "article", "paper", "podcast", "post", "video", "conversation"]
+      }
+    },
+    "idea_framework": {
+      "applies_when": { "type": "idea", "subtype": "framework" },
+      "_readme": "Depth-metadata fields are required; schema declared by reference at ~/.claude/skills/scott-learn/references/depth-schema.md. Phase 3a names the rule; scott-learn owns the field set. The guard does not enforce the depth-metadata field set itself; that is a scott-learn-skill concern.",
+      "required_fields": []
+    },
+    "commitment_adr": {
+      "applies_when": { "type": "commitment", "subtype": "adr" },
+      "required_fields": ["status"],
+      "optional_fields": ["date-decided"],
+      "field_vocabs": {
+        "status": ["Proposed", "Accepted", "Deprecated", "Decided-Conditional", "Superseded"]
+      }
+    },
+    "commitment_phase_plan": {
+      "applies_when": { "type": "commitment", "subtype": "phase-plan" },
+      "required_fields": ["phase", "phase-name", "layers", "phase-status"],
+      "field_vocabs": {
+        "phase-status": ["draft", "locked", "re-opened"]
+      },
+      "_readme": "re-open-trigger required only when phase-status is re-opened. The guard treats this as a conditional required field via the conditional_required_fields key below."
+    }
+  },
+  "conditional_required_fields": {
+    "_readme": "Fields required only when another field has a specific value. Each entry: when the trigger field/value matches, the listed fields must be present.",
+    "phase_status_re_opened": {
+      "trigger": { "field": "phase-status", "value": "re-opened" },
+      "required_fields": ["re-open-trigger"]
+    }
+  },
+  "tag_axis_vocabs": {
+    "_readme": "Closed vocabularies for tag axes per Phase 1 Item 4. Used to validate `types/X`, `source/X`, `confidence/X` tag values when present.",
+    "types": ["record", "entity", "idea", "commitment", "process", "navigation"],
+    "source": ["scott", "external", "llm"],
+    "confidence": ["conceptual", "planning", "testing", "adopted", "archived"]
+  },
+  "format_conventions": {
+    "_readme": "Phase 3a Rule 4 mechanical format conventions. The guard validates field-name shape; field-value format checks (date format, etc.) are advisory in this version.",
+    "field_name_pattern": "^[a-z][a-z0-9-]*$"
+  },
+  "forbidden_link_fields": {
+    "_readme": "Phase 3a Rule 3: inter-note relationships live in body wikilinks and prose. These frontmatter fields are forbidden. Block on Write or Edit that introduces them.",
+    "fields": [
+      "supersedes",
+      "superseded-by",
+      "derived-from",
+      "applies-to",
+      "related",
+      "links-to",
+      "depends-on"
+    ]
+  },
+  "scope": {
+    "_readme": "Path scope for the frontmatter guard. Only files matching one of these prefixes (relative to $HOME) are validated. Daily notes are excluded because their schema is operational, not Phase 3a-governed.",
+    "include_prefixes": ["Scott/growth-os/wiki/"],
+    "exclude_prefixes": ["Scott/growth-os/wiki/daily/"],
+    "exclude_filenames": ["Home.md", "identity.md"]
+  }
+}

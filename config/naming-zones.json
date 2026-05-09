@@ -1,0 +1,67 @@
+{
+  "_readme": "Wiki vs Tooling zone classification per Phase 2 Rule 1. Source of truth: wiki/system/build-plans/phase-2-framing.md. Read by hooks/guards/naming-zone.ts (standalone Write) and pretooluse-router.ts (Bash mv / obsidian move). Boundary test from Rule 1: 'Will a human read this primarily by clicking a wikilink in Obsidian?' Yes routes to Wiki zone, no routes to Tooling zone.",
+  "schema_version": "1.0",
+  "classification_rules": {
+    "_readme": "Path-prefix and path-pattern rules to determine a destination's zone. Evaluated in order; first match wins. Patterns are JS regex strings, anchored to the full absolute path.",
+    "rules": [
+      {
+        "_match": "Tooling-zone subfolders under wiki/system/ (build-plans, projects, adrs)",
+        "path_pattern": ".*/Scott/growth-os/wiki/system/(build-plans|projects|adrs)/[^/]+\\.md$",
+        "zone": "tooling"
+      },
+      {
+        "_match": "Wiki-zone topic hubs at wiki/system/ root",
+        "path_pattern": ".*/Scott/growth-os/wiki/system/[^/]+\\.md$",
+        "zone": "wiki"
+      },
+      {
+        "_match": "Wiki-zone six domains and root files",
+        "path_pattern": ".*/Scott/growth-os/wiki/(Church|Health|People|Knowledge|Work|Finances)/.*\\.md$",
+        "zone": "wiki"
+      },
+      {
+        "_match": "Wiki-zone root inhabitants (Home.md, identity.md)",
+        "path_pattern": ".*/Scott/growth-os/wiki/(Home|identity)\\.md$",
+        "zone": "wiki"
+      },
+      {
+        "_match": "Tooling-zone raw/",
+        "path_pattern": ".*/Scott/growth-os/raw/.*$",
+        "zone": "tooling"
+      },
+      {
+        "_match": "Tooling-zone claude-os/",
+        "path_pattern": ".*/Scott/claude-os/.*$",
+        "zone": "tooling"
+      }
+    ]
+  },
+  "zone_filename_patterns": {
+    "_readme": "Filename validation per zone. Wiki: Title Case + spaces, acronyms preserved. Tooling: lowercase-hyphen, with ADR-NNN- and phase-N- prefixes preserved as written, plus YYYY-MM-DD- dated artifact prefix.",
+    "wiki": {
+      "valid_pattern": "^[A-Z][A-Za-z0-9 -]*\\.(md|base|canvas)$",
+      "_readme": "Filename starts with uppercase letter, contains letters, digits, spaces, hyphens. Acronyms (CF, EOS, CRM, ADR, MOC, etc.) are all-caps and naturally fit this pattern."
+    },
+    "tooling": {
+      "valid_patterns": [
+        "^[a-z0-9][a-z0-9-]*(\\.[a-z0-9-]+)*$",
+        "^(ADR|phase)-[A-Za-z0-9-]+(\\.[a-z0-9-]+)*$",
+        "^\\d{4}-\\d{2}-\\d{2}-[a-z0-9-]+(\\.[a-z0-9-]+)*$"
+      ],
+      "_readme": "Lowercase-hyphen base pattern, OR acronym-prefixed (ADR-NNN-name, phase-N-name), OR YYYY-MM-DD-name dated artifact."
+    }
+  },
+  "exempt_files": {
+    "_readme": "Files exempt from naming-zone validation. Knowledge/References/SurrealDB/ uses technical lowercase-hyphen naming (Phase 2 open question; deferred to Cleanup Candidates).",
+    "path_prefixes": [
+      "Scott/growth-os/wiki/Knowledge/References/"
+    ]
+  },
+  "scope": {
+    "_readme": "Path scope. Only file creations or moves whose destination matches one of these prefixes are validated.",
+    "include_prefixes": [
+      "Scott/growth-os/",
+      "Scott/claude-os/"
+    ]
+  }
+}
