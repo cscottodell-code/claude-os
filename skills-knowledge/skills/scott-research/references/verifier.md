@@ -65,6 +65,14 @@ You ARE here to:
 
 For each finding in scope:
 
+### Step 0: Decompose the claim
+
+Before fetching anything, list the atomic claims the finding makes. An atomic claim is a single factual assertion that could be true or false independently of the others.
+
+If the finding has only one atomic claim, write `claim_decomposition` with a single entry. If it has multiple, write each on its own line. This decomposition is the basis for label assignment in Step 6. Do not collapse multi-part claims to a single CORRECT/INCORRECT verdict; multi-part claims with M of N parts supported (1 <= M < N) are PARTIAL.
+
+Example: a finding asserting "billyGO grew $0 to $7.5M in 3 years with 2,000+ subscribers; $99/year membership produced $200K direct recurring revenue plus $1.6M projected pull-through" decomposes to three atomic claims (revenue+subscribers, $99 membership recurring revenue, projected pull-through).
+
 ### Step 1: Fetch the cited source
 
 Use the fetch fallback chain:
@@ -77,11 +85,18 @@ If all four fail, label the finding UNVERIFIABLE; log all four attempts in the r
 
 ### Step 2: Quote check
 
-Locate the lens-cited direct quote in the fetched content.
+Locate the lens-cited direct quote in the fetched content. Apply these rules:
 
-- FOUND_VERBATIM: word-for-word match (whitespace-tolerant)
-- FOUND_PARAPHRASED: source says it but in different words. The lens fabricated quotation marks around a paraphrase.
-- NOT_FOUND: quote does not appear in any form
+**Truncation rule.** A character-for-character substring of source text, truncated at a logical boundary that does NOT elide a qualifier, counter-view, contradiction, or material that changes the quote's meaning, IS FOUND_VERBATIM. Example: source says "Netflix and Hulu to delivery services like Amazon Prime to health and workout apps like Peloton" and lens cites only "Netflix and Hulu to delivery services like Amazon Prime" — that's FOUND_VERBATIM (truncation drops a third illustrative example, doesn't change meaning). If truncation drops a "however" or a number that contradicts the quote's framing, that's FOUND_PARAPHRASED.
+
+**No-cited-quote rule.** If the finding has no cited quote (the cited_quote field is null or missing), set quote_check to FOUND_VERBATIM if the finding's prose paraphrases content directly visible in the snippet. A finding without a cited quote is not a defect — many lens outputs paraphrase rather than quote. Quote-integrity failures only apply when a quote IS cited but doesn't match the source.
+
+**Cited-quote-relevance rule.** The cited_quote field needs to be verbatim in source. It does NOT need to be the most-supportive quote for the finding's specific claim. If the lens cited a definitional sentence and the finding is about a different fact also visible on the same page, that's not a verification failure as long as the claim itself is supported by the snippet. Quote choice is a stylistic decision; quote accuracy is the verification target.
+
+Label values:
+- FOUND_VERBATIM: character-for-character identical to source text (whitespace tolerant; punctuation tolerant only when meaning is preserved). Verb substitution (e.g., "generated" for "accounted for") is NOT verbatim. If you mentally paraphrased while comparing, the answer is FOUND_PARAPHRASED.
+- FOUND_PARAPHRASED: source says it but in different words. The lens fabricated quotation marks around a paraphrase, OR truncation elided meaning-changing material. This is a quote-integrity failure and is grounds for PARTIAL at minimum, even if the underlying claim is supported.
+- NOT_FOUND: quote does not appear in any form, AND there is no null/missing quote (which would route to the no-cited-quote rule above).
 
 ### Step 3: Summary fairness check
 
@@ -126,6 +141,9 @@ findings:
     label: CORRECT
     quote_check: FOUND_VERBATIM
     tier_check: TIER_CORRECT
+    claim_decomposition:
+      - claim: "SurrealDB v3 ships an export CLI command for full-database backup"
+        snippet_support: SUPPORTED
     contrary_search:
       queries:
         - "Coolify SurrealDB backup failure 2026"
@@ -133,11 +151,16 @@ findings:
       contrary_findings_count: 0
       highest_quality_contrary: null
     spot_check_priority: LOW
-    rationale: "Quote 'A command to export...' appears verbatim at https://surrealdb.com/docs/surrealdb/cli/export paragraph 1. Finding fairly summarizes source. Independent contrary searches surfaced no high-quality alternatives."
+    rationale: "Quote 'A command to export...' appears verbatim at https://surrealdb.com/docs/surrealdb/cli/export paragraph 1. Single atomic claim, supported. Independent contrary searches surfaced no high-quality alternatives."
   - finding_id: F2
     label: PARTIAL
     quote_check: FOUND_VERBATIM
     tier_check: TIER_DOWNGRADE_TO_T2
+    claim_decomposition:
+      - claim: "Coolify Hetzner Object Storage backup integration is broken"
+        snippet_support: SUPPORTED
+      - claim: "The bug remains unfixed as of finding time"
+        snippet_support: NOT_SUPPORTED
     contrary_search:
       queries:
         - "Coolify Hetzner Object Storage bug status"
@@ -147,7 +170,7 @@ findings:
         tier: T1
         brief_claim: "Hetzner backup bug fixed in beta.510 per maintainer note 2026-04-02"
     spot_check_priority: HIGH
-    rationale: "Quote verbatim, but lens labeled T1; this is a closed issue (T2 per source-curation §3 Risk lens). Finding also misses the recent fix per contrary search."
+    rationale: "Quote verbatim, but lens labeled T1; this is a closed issue (T2 per source-curation §3 Risk lens). Multi-part claim: bug existence supported, but 'remains unfixed' contradicted by recent fix per contrary search. 1 of 2 atomic claims supported -> PARTIAL."
   - ...
 ```
 
@@ -155,12 +178,16 @@ After the YAML block, output ends. No closing commentary, no methodology summary
 
 ## Forbidden behaviors
 
+- Don't over-call PARTIAL. Skeptical disposition means: don't rubber-stamp findings that look reasonable. It does NOT mean: invent additional requirements not in the rubric. If all atomic claims are SUPPORTED, the cited quote is FOUND_VERBATIM (or null/missing per no-cited-quote rule), and tier is correct, the label is CORRECT. Do not downgrade to PARTIAL unless a specific PARTIAL criterion in labeling-rubric.md §1 applies.
 - Don't side with the lens agent. Default skepticism.
 - Don't accept search snippets as a substitute for full-source reads.
 - Don't mark UNVERIFIABLE without logging all four fallback attempts.
+- Don't use UNVERIFIABLE as a hedge. UNVERIFIABLE is only for cases where ALL four fetch fallbacks failed and you have no snippet. If you have a snippet, the finding gets CORRECT, PARTIAL, or INCORRECT.
+- Don't accept page metadata, URL slugs, or general knowledge as evidence. Only what appears in the fetched snippet counts as support for a claim. If the snippet doesn't say it, the claim is not supported by it.
 - Don't skip the contrary-search step.
 - Don't add commentary outside the YAML structured output.
 - Don't paraphrase the source to make it match the finding's quote. Quote-check is verbatim or it isn't.
+- Don't skip claim decomposition (Step 0). Findings with multiple atomic claims must be decomposed before labeling.
 
 ## Word limits
 
@@ -177,7 +204,9 @@ The orchestrator parses the YAML block and validates:
 4. **Tier-check values**: must be one of the four values (CORRECT or DOWNGRADE_TO_<T2|T3> or UPGRADE_TO_T1).
 5. **Spot-check priority**: must be HIGH/MEDIUM/LOW.
 6. **Contrary-search**: queries field must have at least 1 query per finding (anti-skip enforcement).
-7. **Spot-check distribution**: HIGH+MEDIUM should be 15-25% of findings; if outside that band, log a warning but accept.
+7. **Claim decomposition**: must have at least 1 entry per finding; each entry must have `claim` (string) and `snippet_support` (one of SUPPORTED, NOT_SUPPORTED, PARTIAL).
+8. **Decomposition-label consistency**: if all atomic claims are SUPPORTED and quote_check is FOUND_VERBATIM and tier_check is TIER_CORRECT, label must be CORRECT (or PARTIAL if a caveat-omission rationale is given). If any atomic claim is NOT_SUPPORTED while at least one is SUPPORTED, label must be PARTIAL. If all atomic claims are NOT_SUPPORTED, label must be INCORRECT. Mismatch logs a warning but is not auto-rejected (the verifier's rationale may justify deviation).
+9. **Spot-check distribution**: HIGH+MEDIUM should be 15-25% of findings; if outside that band, log a warning but accept.
 
 A verifier report that fails YAML parse triggers one re-dispatch with a stricter prompt. Two failures = abort verification, mark all findings UNVERIFIABLE-VERIFIER-FAILED.
 
@@ -208,4 +237,4 @@ Token cost is acceptable on Claude Max per Scott's Q3 confirmation.
 - Synthesis and Phase 2.5 integration: `synthesis.md`
 - Mode-specific dispatch contexts: `SKILL.md`
 
-Last updated: 2026-05-08
+Last updated: 2026-05-09 (v3: added truncation rule, no-cited-quote rule, cited-quote-relevance rule to Step 2, added anti-overcaution forbidden behavior. v2: added Step 0 claim decomposition, tightened FOUND_VERBATIM definition, added UNVERIFIABLE-as-hedge and snippet-only-evidence forbidden behaviors, added claim_decomposition output field)
