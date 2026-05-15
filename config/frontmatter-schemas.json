@@ -46,6 +46,11 @@
       "_readme": "A hub, index, or navigation aid. Pointer-only content.",
       "required_fields": [],
       "optional_fields": ["aliases"]
+    },
+    "reference": {
+      "_readme": "Externally-sourced reference material. Documents capabilities of tools, libraries, services, APIs, models, plugins. Evolves with upstream; exists to be queried.",
+      "required_fields": ["last-updated"],
+      "optional_fields": ["aliases"]
     }
   },
   "subtype_unlocks": {
@@ -88,7 +93,7 @@
   },
   "tag_axis_vocabs": {
     "_readme": "Closed vocabularies for tag axes per Phase 1 Item 4. Used to validate `types/X`, `source/X`, `confidence/X` tag values when present.",
-    "types": ["record", "entity", "idea", "commitment", "process", "navigation"],
+    "types": ["record", "entity", "idea", "commitment", "process", "navigation", "reference"],
     "source": ["scott", "external", "llm"],
     "confidence": ["conceptual", "planning", "testing", "adopted", "archived"]
   },
