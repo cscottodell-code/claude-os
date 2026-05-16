@@ -16,6 +16,8 @@ description: >
 category: knowledge
 ---
 
+> **Authoritative source:** `wiki/system/skills/scott-bops.md` in the growth-os vault. Edit there; this file may lag.
+
 # Background Operations
 
 A personal operating system that moves repetitive decisions and tasks from conscious

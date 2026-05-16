@@ -10,6 +10,8 @@ invocation_hint: /advosy:context - Get Advosy company context (leadership, subsi
 section: business
 ---
 
+> **Authoritative source:** `wiki/system/skills/advosy-context.md` in the growth-os vault. Edit there; this file may lag.
+
 # Advosy Company Context
 
 ## Quick Reference

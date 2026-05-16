@@ -11,6 +11,8 @@ invocation_hint: /scott:surrealdb - SurrealDB query patterns, schema design, AI 
 section: reference
 ---
 
+> **Authoritative source:** `wiki/system/skills/scott-surrealdb.md` in the growth-os vault. Edit there; this file may lag.
+
 # SurrealDB Quick Reference
 
 **Version:** SurrealDB v3.0.2 server (latest: v3.0.5) + JS SDK surrealdb@2.0.x (npm)
