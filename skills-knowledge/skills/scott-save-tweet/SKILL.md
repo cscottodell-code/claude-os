@@ -1,10 +1,13 @@
 ---
 name: scott:save-tweet
 description: |
-  Extract tweet/thread content from x.com URLs into structured .md files. Handles X's
-  scraping blocks automatically using fxtwitter API, Playwright for X Articles, and
-  WebFetch for linked resources. Produces a comprehensive source file with the tweet
-  content, linked resources (GitHub repos, blog posts, docs), and engagement metrics.
+  Extract a tweet/thread (and any linked resources) into a structured .md research
+  file. Uses the bundled fetch_post.sh script (FxTwitter v2 API, native X Article
+  parsing, single-call threads, VxTwitter fallback) as the primary extraction
+  mechanism. Follows external links (GitHub, blog posts, docs) via WebFetch.
+  Falls back to Playwright + WebSearch only when the script fails. Writes a
+  comprehensive source file with tweet content, linked resources, and engagement
+  metrics.
 
   Use when Scott shares an x.com or twitter.com URL and wants the content captured.
   This is a standalone extraction tool, not tied to any specific downstream workflow.
@@ -17,74 +20,61 @@ input_examples:
 section: tools
 ---
 
-# Tweet to Source
+# Save Tweet
 
-Extract an x.com tweet or thread into a structured `.md` file.
+Extract an x.com tweet or thread into a structured `.md` file, following any linked resources for full context.
 
-## Step 1: Parse the URL
+## Step 1: Extract Tweet Content (Primary)
 
-Extract author handle and tweet ID from the URL. Handle these formats:
-- `https://x.com/[handle]/status/[id]`
-- `https://x.com/[handle]/status/[id]?s=46` (with query params)
-- `https://twitter.com/[handle]/status/[id]` (old domain)
+Run the bundled script. It handles URL parsing, FxTwitter v2 API, VxTwitter fallback, X Article body extraction (Draft.js blocks stitched to markdown), threads, polls, community notes, quote tweets, and reposts in one call.
 
-## Step 2: Extract Tweet Content
+```bash
+# Single post (default):
+bash ~/Scott/claude-os/skills-knowledge/skills/scott-save-tweet/scripts/fetch_post.sh "<url>"
 
-### Primary method: fxtwitter API
-
-Fetch both endpoints in parallel using WebFetch:
-
-```
-https://api.fxtwitter.com/[handle]/status/[tweet_id]
-https://api.vxtwitter.com/[handle]/status/[tweet_id]
+# Full unrolled thread:
+bash ~/Scott/claude-os/skills-knowledge/skills/scott-save-tweet/scripts/fetch_post.sh "<url>" thread
 ```
 
-These return tweet text, author, date, engagement metrics, media URLs, and article
-previews. If one fails, the other usually works. Both support threads, quote tweets,
-and X Articles.
+**When to pass `thread`:** if the tweet looks like the start of a thread (numbered "1/" or visible reply chain by the same author), or if Scott says "the whole thread" or "unrolled."
 
-### X Articles (long-form posts)
+**Script exit codes:**
+- `0` success, output is the formatted extraction
+- `1` bad URL (no post ID found), tell Scott to double-check the URL
+- `2` API error (private, deleted, age-restricted, or both APIs unreachable)
 
-X Articles are long-form posts embedded in tweets. The fxtwitter API returns the title
-and preview text but not the full article body.
+**What the script returns:**
+- Author name + handle, post timestamp, language
+- Full text (including X Article body when present, stitched from Draft.js blocks)
+- Stats: likes, reposts, replies, quotes, bookmarks, views
+- Media URLs (photos + videos)
+- Community Note text when present
 
-**Use Playwright as the primary method for X Articles:**
+## Step 2: Fallbacks (only if Step 1 fails)
 
-1. Navigate to the tweet URL with Playwright
-2. Wait 5 seconds for content to load
-3. Take a snapshot to capture the full article text
-4. The article renders inline in the tweet page when you scroll down
+Only reach for these when the script returns exit code 2 AND the failure is not "private/deleted":
 
-If Playwright fails (browser not available, Chrome already running):
-- Search for the article title + author name via WebSearch
-- The author often published the same content as a blog post elsewhere
-- Use the fxtwitter preview text as a fallback summary
+- **X Article the script could not parse** (rare): Playwright to the tweet URL, wait 5s, snapshot to capture the rendered article body.
+- **fxtwitter and vxtwitter both down**: WebSearch with `site:x.com [handle] [topic keywords]` or `"[exact phrase from snippet]" [handle]`.
+- **Deleted tweet or suspended account**: tell Scott it is gone. Search for cached versions via `"[tweet URL]"` or `cache:[tweet URL]` before giving up.
+- **Private/protected account**: the script will tell you. Tell Scott the account is private.
 
-**How to detect an X Article:** The fxtwitter API response will reference an article URL
-like `x.com/i/article/[id]`, or the tweet text will be minimal with the substance in
-a linked article preview.
+Do NOT use WebFetch or Firecrawl directly on x.com / twitter.com, they fail.
 
-### If both fxtwitter endpoints fail (rare)
+## Step 3: Follow Linked Resources (the high-value step)
 
-Fall back to WebSearch:
-- `site:x.com [handle] [topic keywords]`
-- `[handle] [topic] [year]`
-- `"[exact phrase from snippet]" [handle]`
+Tweets often link to GitHub repos, blog posts, docs, or websites. These ARE fetchable with WebFetch (unlike x.com itself). **Always fetch them.** They usually contain the real substance the tweet is promoting.
 
-## Step 3: Follow Linked Resources
-
-Tweets often link to GitHub repos, blog posts, docs, or websites. These ARE fetchable
-with WebFetch (unlike x.com itself). **Always fetch them.** They usually contain the
-real substance the tweet is promoting.
-
-If WebFetch returns a redirect (e.g., 308 from `anthropic.com` to `claude.com`),
-re-fetch the redirect URL immediately.
+- Pull every non-x.com URL from the post text and media.
+- WebFetch each one in parallel.
+- If WebFetch returns a redirect (e.g., 308 from `anthropic.com` to `claude.com`), re-fetch the redirect URL immediately.
+- If a GitHub repo is linked, also fetch the README and note stars/forks.
 
 ## Step 4: Cross-Reference and Fill Gaps
 
-- If the tweet is a thread, search for follow-up tweets by the same author
-- Use fxtwitter API on any thread tweet URLs found in search results
-- Fetch any non-X links discovered during research
+- If the tweet is a thread but Step 1 was run in `status` mode, re-run in `thread` mode.
+- For multi-tweet threads the API misses (rare), search for follow-ups by the same author and re-run the script on each.
+- Fetch any non-X links discovered during research.
 
 ## Step 5: Update Outdated Information
 
@@ -97,43 +87,83 @@ Save to `~/Scott/growth-os/raw/research/global/` by default. No need to ask unle
 
 ## Step 7: Write the Source File
 
-### File Header Convention
+The output is designed to be opened in Obsidian as a verbatim source-of-record. Frontmatter feeds the Properties panel and Bases queries. Body is the source's own words inside blockquotes, with light section breaks allowed for scannability. NO interpretive synthesis, NO invented section names like "Thesis" or "Closing posture."
 
-Always start with this header:
-
-```markdown
-<!-- Last refreshed: YYYY-MM-DD -->
-**Source:** [Tweet or Article Title](https://x.com/...) by [@handle](https://x.com/handle) — linking to [resource name](url) if applicable
-```
-
-### File Structure
+### File Structure (template)
 
 ```markdown
-<!-- Last refreshed: YYYY-MM-DD -->
-**Source:** [Title](tweet URL) by [@handle](profile URL) linking to [resource](url)
+---
+type: reference
+status: draft
+source_url: <full URL of the original post>
+author: <full name>
+author_handle: <x handle, no @>
+posted: <YYYY-MM-DD, the post's actual date>
+captured: <YYYY-MM-DD, today>
+post_type: <single | thread | x-article>
+post_count: <1 for single/x-article, N for thread>
+likes: <int>
+reposts: <int>
+replies: <int>
+quotes: <int or null>
+bookmarks: <int or null>
+views: <int or null>
+linked_resources:
+  - <url1>
+  - <url2>
+tags:
+  - types/reference
+  - statuses/draft
+---
 
-# [Title]
+# <Title from post or "[Author] on [topic], [Date]" if no natural title>
 
-**Author:** [Name] (@handle) — [brief credentials if findable]
-**Published:** [date]
-**Repository/Resource:** [URL if applicable]
-**License:** [if applicable]
+## Original post
+
+[For a single tweet:]
+> <verbatim text, blockquoted, paragraph breaks preserved as the author wrote them>
+
+[For a thread:]
+### Post 1 of N
+
+> <verbatim text>
+
+### Post 2 of N
+
+> <verbatim text>
+
+[For an X Article: preserve the author's own H2/H3 structure, but demote one level to fit under `## Original post`:]
+### <Author's own section heading>
+
+> <verbatim body>
+
+### <Next author section>
+
+> <verbatim body>
+
+## Linked: <resource name> (<short attribution, e.g. "Simon Willison, Mar 2025">)
+
+> <verbatim body of the linked resource, blockquoted>
+
+[Repeat `## Linked: ...` for each linked resource. Same blockquote treatment.]
 
 ---
 
-## [Core content sections — structure based on what the source contains]
-
-[Stay true to the source. Don't add personal context or customization.]
-
----
-
-## Engagement (as of [month year])
-
-Tweet: [likes] likes, [bookmarks] bookmarks, [views] views
-[Repository: [stars] stars, [forks] forks — if applicable]
-
----
+#types/reference #statuses/draft
 ```
+
+### Format rules
+
+- **Frontmatter only**, no HTML comment header. The `captured:` field replaces `<!-- Last refreshed -->`.
+- **Engagement stats live in frontmatter** as numeric fields, not in a body section. Obsidian's Properties panel surfaces them; Bases queries can filter on them.
+- **All source text goes inside blockquotes** (`>`). The blockquote boundary is what tells future-you (and future-Claude) what is verbatim source vs your own framing.
+- **Only `##` headers you create are `## Original post` and `## Linked: <name>`.** Don't invent additional `##` sections like `## Thesis` or `## Key takeaways`.
+- **`###` sub-headings ARE permitted to break up long verbatim blocks for scannability.** Two valid kinds:
+  1. **Author's own structure**: if the source has its own headings (X Articles often do), demote them by one level and use the author's exact wording. Example: Thariq's `## Why HTML?` becomes `### Why HTML?` under `## Original post`.
+  2. **Navigational labels you create**: short, descriptive, accurate to the verbatim block that follows. Example: `### Karpathy's framing of the posture` over the "tight leash on this new over-eager junior intern savant" paragraph. The text inside the section is still 100% blockquoted source text.
+- **Sub-headings are navigational, not synthesis.** A sub-heading is a label, not a claim. `### Willison's golden rule` (navigational, points to a literal quote of the rule) is fine. `### Willison's optimistic case for beginners` (interpretive framing, characterizes the author's stance) is too far. When in doubt, use the author's own phrase from the text.
+- **Dual-write tags**: include in both YAML frontmatter (`tags:` array) and as body hashtags on the last line. Per Scott's identity.md tag rule, this enables both Bases queries (`file.hasTag()`) and grep / inline context.
+- **Tags at capture, not at promotion**: raw research files get `types/reference` + `statuses/draft` immediately. (This is a deliberate departure from the daily-note capture rule, which stays untagged.)
 
 ### Naming Convention
 
@@ -147,22 +177,22 @@ Examples:
 ## What NOT To Do
 
 - Don't use WebFetch or Firecrawl on x.com/twitter.com directly (they fail)
-- Don't skip the fxtwitter API and go straight to search (API is faster and more reliable)
-- Don't fabricate tweet text you didn't find via API, Playwright, or search snippets
+- Don't bypass the script and try to reconstruct fxtwitter calls via WebFetch (slower, more failure modes, no native X Article handling)
+- Don't fabricate tweet text the script did not return
 - Don't add user-specific context or customization to the source content
 - Don't skip linked resources (they're usually the main content)
 - Don't create thin files with just a tweet's 280 characters (dig into linked resources)
 - Don't overwrite an existing file without asking Scott first
-
-## If Extraction Fails
-
-- **Deleted tweet or suspended account:** Tell Scott the tweet is gone. Search for
-  cached versions via `"[tweet URL]"` or `cache:[tweet URL]` before giving up.
-- **Private/protected account:** fxtwitter will fail. Tell Scott the account is private.
-- **Malformed URL:** If the URL doesn't match expected patterns, ask Scott to double-check it.
+- **Don't invent `##` headers** beyond `## Original post` and `## Linked: <name>`. (Navigational `###` sub-headings are allowed, see Step 7.)
+- **Don't synthesize or paraphrase.** Body text outside a blockquote must be Scott's later annotation, not your interpretation. Capture, don't curate.
+- **Don't reformat verbatim text.** Don't bold keywords the author didn't bold. Don't number items the author didn't number. Don't build summary tables from the author's prose. If the source uses ASCII art, keep it as ASCII art.
 
 ## When Content Is Too Thin
 
-If searches return very little (single tweet with no thread, no linked resources, no
-related content), tell Scott what you found and ask if he wants to proceed with a
-minimal file or skip it.
+If the script returns a short tweet with no thread and no linked resources, tell Scott what you found and ask if he wants to proceed with a minimal file or skip it.
+
+## Script Maintenance
+
+The script lives at `scripts/fetch_post.sh` alongside this SKILL.md. It was absorbed from a separate plugin (`x-post-extractor` v0.1.0) on 2026-05-17 because the v2 FxTwitter endpoint, single-call threads, and native X Article (Draft.js block) parsing were strictly better than the original WebFetch-based approach. The plugin was deleted after merge.
+
+If FxTwitter or VxTwitter changes its response shape, update the python block inside `fetch_post.sh` (the parsing is centralized there, not in this SKILL.md).
