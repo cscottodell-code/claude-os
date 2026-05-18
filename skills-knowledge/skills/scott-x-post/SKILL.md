@@ -1,28 +1,28 @@
 ---
-name: scott:save-tweet
+name: scott:x-post
 description: |
-  Extract a tweet/thread (and any linked resources) into a structured .md research
-  file. Uses the bundled fetch_post.sh script (FxTwitter v2 API, native X Article
-  parsing, single-call threads, VxTwitter fallback) as the primary extraction
-  mechanism. Follows external links (GitHub, blog posts, docs) via WebFetch.
-  Falls back to Playwright + WebSearch only when the script fails. Writes a
-  comprehensive source file with tweet content, linked resources, and engagement
-  metrics.
+  Extract an X post / thread / X Article (and any linked resources) into a
+  structured .md research file. Uses the bundled fetch_post.sh script (FxTwitter
+  v2 API, native X Article parsing, single-call threads, VxTwitter fallback) as
+  the primary extraction mechanism. Follows external links (GitHub, blog posts,
+  docs) via WebFetch. Falls back to Playwright + WebSearch only when the script
+  fails. Writes a comprehensive source file with post content, linked resources,
+  and engagement metrics.
 
   Use when Scott shares an x.com or twitter.com URL and wants the content captured.
   This is a standalone extraction tool, not tied to any specific downstream workflow.
   Scott decides where to save it and what to do with it afterward.
 user_invocable: true
-invocation_hint: /scott:save-tweet <url> - Extract a tweet into a markdown source file
+invocation_hint: /scott:x-post <url> - Extract an X post into a markdown source file
 input_examples:
-  - "/scott:save-tweet https://x.com/anthropic/status/123456789"
-  - "/scott:save-tweet https://x.com/someone/status/987654321"
+  - "/scott:x-post https://x.com/anthropic/status/123456789"
+  - "/scott:x-post https://x.com/someone/status/987654321"
 section: tools
 ---
 
-# Save Tweet
+# X Post
 
-Extract an x.com tweet or thread into a structured `.md` file, following any linked resources for full context.
+Extract an X post or thread into a structured `.md` file, following any linked resources for full context.
 
 ## Step 1: Extract Tweet Content (Primary)
 
@@ -30,10 +30,10 @@ Run the bundled script. It handles URL parsing, FxTwitter v2 API, VxTwitter fall
 
 ```bash
 # Single post (default):
-bash ~/Scott/claude-os/skills-knowledge/skills/scott-save-tweet/scripts/fetch_post.sh "<url>"
+bash ~/Scott/claude-os/skills-knowledge/skills/scott-x-post/scripts/fetch_post.sh "<url>"
 
 # Full unrolled thread:
-bash ~/Scott/claude-os/skills-knowledge/skills/scott-save-tweet/scripts/fetch_post.sh "<url>" thread
+bash ~/Scott/claude-os/skills-knowledge/skills/scott-x-post/scripts/fetch_post.sh "<url>" thread
 ```
 
 **When to pass `thread`:** if the tweet looks like the start of a thread (numbered "1/" or visible reply chain by the same author), or if Scott says "the whole thread" or "unrolled."
@@ -196,3 +196,8 @@ If the script returns a short tweet with no thread and no linked resources, tell
 The script lives at `scripts/fetch_post.sh` alongside this SKILL.md. It was absorbed from a separate plugin (`x-post-extractor` v0.1.0) on 2026-05-17 because the v2 FxTwitter endpoint, single-call threads, and native X Article (Draft.js block) parsing were strictly better than the original WebFetch-based approach. The plugin was deleted after merge.
 
 If FxTwitter or VxTwitter changes its response shape, update the python block inside `fetch_post.sh` (the parsing is centralized there, not in this SKILL.md).
+
+## Rename History
+
+- **2026-05-17** (initial): created as `scott:save-tweet` (when it was a Playwright + WebFetch skill).
+- **2026-05-17** (same day): renamed to `scott:x-post`. The original `save-tweet` name was action-centric (verb + noun); the new `x-post` name is subject-centric and aligns with the absorbed plugin's terminology. The old `~/.claude/skills/scott-save-tweet/` symlink dir was removed and replaced with `~/.claude/skills/scott-x-post/`.

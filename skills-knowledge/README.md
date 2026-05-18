@@ -17,7 +17,7 @@ Personal knowledge and productivity skills for Claude Code. Extracted from scott
 | `/scott:power-laws` | Strategic awareness and power dynamics (48 Laws of Power) |
 | `/scott:presentation` | Analyze and improve presentations, stories, and pitches |
 | `/scott:research` | Multi-lens research dispatching 10 parallel subagents |
-| `/scott:save-tweet` | Extract tweet/thread content into structured markdown |
+| `/scott:x-post` | Extract X post/thread/article content into structured markdown |
 | `/scott:war-strategies` | Strategic warfare and competitive tactics (33 Strategies of War) |
 
 ## Setup
