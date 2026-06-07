@@ -12,9 +12,10 @@ section: project
 # New Project
 
 ## Metadata
-- Last updated: 2026-04-05
-- Version: 1.9
+- Last updated: 2026-06-07
+- Version: 1.10
 - Changelog:
+  - v1.10: Add multi-model fit check (Phase 2) and reframe Phase 3a data model around SurrealDB offerings (progressive disclosure via the fit map)
   - v1.9: Split Phase 3 into 3a/3b/3c (draft, approve, resolve conflicts). Add clear entry/exit criteria per sub-phase.
   - v1.8: Align Phase 7 to GSD+Superpowers integration pattern (GSD orchestrates, Superpowers provides discipline)
   - v1.7: Add follow-up clarifying questions to Phase 1 (from 2026-03-14 source review)
@@ -102,8 +103,11 @@ Based on the brain dump, identify and ask about:
 5. **Data:** "What are the main 'things' in this app? What information does each one have?"
 6. **Conflicts:** "You said [X] earlier but also [Y] -- those seem to conflict. Which takes priority?"
 
+### Multi-model fit check
+Before the data shape hardens into "tables and relationships," run the project's needs against the SurrealDB offering surface. Load `~/Scott/growth-os/wiki/Knowledge/References/SurrealDB/surrealdb-multimodel-fit.md` and scan its symptom rows against this project. For each match (real-time, graph, vector, full-text, embedded, bi-temporal, auth), ask whether the SurrealDB offering collapses an external service or fits the problem better than plain CRUD tables, and surface it to Scott as a design option. Recognition, not recall: read the map, do not rely on memory. Verify any chosen offering against Context7 (`/websites/surrealdb`) before it lands in the PRD.
+
 ### Output
-A cleaned-up version of the brain dump with gaps filled and contradictions resolved.
+A cleaned-up version of the brain dump with gaps filled and contradictions resolved, plus any SurrealDB offerings flagged for the data model.
 
 ### Done when
 Scott has answered all clarifying questions and no major gaps remain.
@@ -122,7 +126,7 @@ Load the PRD template and draft all sections using the brain dump answers.
 3. Pay special attention to:
    - Section 3 (Features): Push Scott to prioritize ruthlessly
    - Section 4 (User Flows): Make these concrete and step-by-step
-   - Section 5 (Data Model): Get the tables and relationships right
+   - Section 5 (Data Model): Apply the Phase 2 multi-model fit check. Choose the right SurrealDB model per entity (document / graph / vector / time-series), not just tables and relationships, and note any offering that collapses an external service
    - Section 8 (Milestones): Milestone 1 = data model + basic CRUD always
 
 ### Output
@@ -357,6 +361,7 @@ Scott confirms the milestone is acceptable and gives direction for what's next.
 ## Completion Checklist
 - [ ] Brain dump captured
 - [ ] Clarifying questions answered
+- [ ] Multi-model fit check run against the SurrealDB map (Phase 2)
 - [ ] PRD drafted (all 11 sections) (Phase 3a)
 - [ ] PRD approved by Scott (Phase 3b)
 - [ ] PRD conflicts resolved or skipped (Phase 3c)

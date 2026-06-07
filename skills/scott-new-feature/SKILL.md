@@ -12,9 +12,10 @@ section: project
 # New Feature
 
 ## Metadata
-- Last updated: 2026-03-14
-- Version: 2.2
+- Last updated: 2026-06-07
+- Version: 2.4
 - Changelog:
+  - v2.4: Add multi-model fit check (Phase 2) so feature data needs are matched to SurrealDB offerings, not defaulted to CRUD tables
   - v2.3: Clarify GSD+Superpowers build loop with explicit linear handoff sequence
   - v2.2: Add clarifying questions step to Phase 1 (from 2026-03-14 source review)
   - v2.1: Add phase auto-advancement tags ([STOP]/[AUTO]/[DELEGATE])
@@ -83,8 +84,11 @@ navigation, etc.
 - Review the current file structure
 - Check for components that might need modification
 
+### Multi-model fit check
+Before assuming "new tables or fields," check whether the feature maps to a SurrealDB offering rather than plain CRUD. Load `~/Scott/growth-os/wiki/Knowledge/References/SurrealDB/surrealdb-multimodel-fit.md` and scan its symptoms against this feature (live updates? relationships / graph? semantic / vector search? full-text? audit / bi-temporal?). If one matches, raise it as a design option instead of defaulting to a table. Recognition, not recall: read the map, do not rely on memory. Verify the chosen offering against Context7 (`/websites/surrealdb`) before building.
+
 ### Output
-A list of files and systems that will be affected, with the nature of each change.
+A list of files and systems that will be affected, with the nature of each change, plus any SurrealDB offering flagged for the feature.
 
 ### Done when
 The full scope of impact is understood.
@@ -161,6 +165,7 @@ CLAUDE.md accurately reflects the current state of the project.
 ## Completion Checklist
 - [ ] Feature clearly described
 - [ ] Impact on existing code assessed
+- [ ] Multi-model fit check run against the SurrealDB map (Phase 2)
 - [ ] Mini-PRD written and approved
 - [ ] Feature built and verified (via Superpowers)
 - [ ] Design review completed (if UI-heavy feature)
