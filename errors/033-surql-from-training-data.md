@@ -18,7 +18,7 @@ Execute plan 04-01 (migration 006 with all Phase 4 tables, edges, indexes, event
 ## What The Prompt Should Have Been
 ```
 Execute plan 04-01. Before writing any SurrealQL, verify syntax against Context7
-(/surrealdb/docs.surrealdb.com) and copy patterns from existing migrations (003, 005).
+(/websites/surrealdb) and copy patterns from existing migrations (003, 005).
 Never write SurrealQL from memory.
 ```
 

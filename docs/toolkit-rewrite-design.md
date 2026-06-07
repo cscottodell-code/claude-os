@@ -116,7 +116,7 @@ Each check file is the single source of truth for validating one technology. Con
   "tools": [
     { "type": "cli", "command": "surreal validate", "for": "schema validation" },
     { "type": "mcp", "server": "surrealdb", "for": "live queries" },
-    { "type": "context7", "id": "/surrealdb/docs.surrealdb.com", "for": "doc reference" },
+    { "type": "context7", "id": "/websites/surrealdb", "for": "doc reference" },
     { "type": "validation_script", "path": "toolkit/scripts/check-surreal-sdk.sh", "for": "SDK version verification" }
   ],
   "checks": {

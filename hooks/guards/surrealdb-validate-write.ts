@@ -80,7 +80,7 @@ async function main() {
               `SurrealDB returned HTTP ${resp.status}: ${text.slice(0, 200)}`,
               "",
               "Fix the SurrealQL syntax before proceeding. Verify against Context7:",
-              "  mcp__context7__query-docs with libraryId=/surrealdb/docs.surrealdb.com",
+              "  mcp__context7__query-docs with libraryId=/websites/surrealdb",
             ].join("\n"),
           })
         );
@@ -103,7 +103,7 @@ async function main() {
                 errorMsgs,
                 "",
                 "Fix these before proceeding. Verify syntax against Context7:",
-                "  mcp__context7__query-docs with libraryId=/surrealdb/docs.surrealdb.com",
+                "  mcp__context7__query-docs with libraryId=/websites/surrealdb",
                 "",
                 "Common v3 gotchas: single-field FULLTEXT only, TYPE object FLEXIBLE (not FLEXIBLE TYPE),",
                 "IF condition { expr } ELSE { expr } (not IF/THEN/END), RELATE needs LET for dynamic IDs.",
@@ -150,7 +150,7 @@ async function main() {
             additionalContext: [
               `[SURQL CONTEXT7 REMINDER] This file uses SurrealDB (surql template tag detected).`,
               "Before writing SurrealQL: verify syntax against Context7 docs, NOT general knowledge.",
-              "  Library ID: /surrealdb/docs.surrealdb.com",
+              "  Library ID: /websites/surrealdb",
               "  Also test queries against the live SurrealDB MCP server when possible.",
             ].join("\n"),
           })

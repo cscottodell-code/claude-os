@@ -21,14 +21,14 @@ section: reference
 **Functions catalog:** `~/Scott/growth-os/wiki/Knowledge/References/SurrealDB/surrealdb-v3-functions-catalog.md` (325+ built-in functions)
 **Language reference:** `~/Scott/growth-os/wiki/Knowledge/References/SurrealDB/surrealql-language-reference.md` (control flow, closures, operators, types, transactions)
 **Deep reference:** `~/Scott/growth-os/wiki/Knowledge/References/SurrealDB/surrealdb-v3-reference.md`
-**Context7 library:** `/surrealdb/docs.surrealdb.com`
+**Context7 library:** `/websites/surrealdb`
 
 ## MANDATORY: No General Knowledge for SurrealQL
 
 **NEVER write SurrealQL from general SQL knowledge or LLM training data.** SurrealQL looks like SQL but diverges in critical ways that will silently produce wrong results or hard errors. Before writing ANY query, schema definition, or SDK call:
 
 1. **Check the traps list below first** (covers the most common mistakes)
-2. **Look up syntax in Context7** (`/surrealdb/docs.surrealdb.com`) or the reference files listed above
+2. **Look up syntax in Context7** (`/websites/surrealdb`) or the reference files listed above
 3. **Verify against a live SurrealDB instance** using MCP tools before committing
 
 If you cannot verify a syntax pattern against Context7 or the reference files, do NOT guess. Ask Scott or flag it as unverified.
@@ -260,7 +260,7 @@ await db.query<[Msg[]]>('SELECT * FROM messages WHERE conversation = $conv', { c
 | Complete master reference | `skills/scott-surrealdb/references/surrealdb-v3-master-reference.md` |
 | SurrealQL language spec | `skills/scott-surrealdb/references/surrealql-language-reference.md` |
 | Context7 JS SDK | `/surrealdb/surrealdb.js` (87 snippets) |
-| Context7 SurrealQL | `/surrealdb/docs.surrealdb.com` (8588 snippets) |
+| Context7 SurrealQL | `/websites/surrealdb` (12312 snippets) |
 | Eleanor-specific patterns | Eleanor's CLAUDE.md + tasks/lessons.md |
 | Agent TypeScript layer | `skills/scott-surrealdb/references/surrealdb-v3-agent-typescript.md` |
 | Agent training walkthrough | `docs/training-surrealdb-agents.md` |

@@ -257,7 +257,7 @@ async function injectSurrealDB(filePath, command) {
     "[MANDATORY VERIFICATION PROTOCOL]",
     "NEVER write SurrealQL from general knowledge or training data.",
     "BEFORE writing any SurrealQL or JS SDK code:",
-    "  1. Query Context7: mcp__context7__query-docs with libraryId=/surrealdb/docs.surrealdb.com",
+    "  1. Query Context7: mcp__context7__query-docs with libraryId=/websites/surrealdb",
     "  2. If MCP server available: test queries against live SurrealDB via mcp__surrealdb__query",
     "  3. Copy syntax from verified docs or existing working migrations, never from memory",
     "Known v3 gotchas: single-field FULLTEXT only, TYPE object FLEXIBLE, IF { } ELSE { } (not THEN/END),",
