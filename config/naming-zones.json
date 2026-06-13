@@ -46,9 +46,10 @@
       "valid_patterns": [
         "^[a-z0-9][a-z0-9-]*(\\.[a-z0-9-]+)*$",
         "^(ADR|phase)-[A-Za-z0-9-]+(\\.[a-z0-9-]+)*$",
-        "^\\d{4}-\\d{2}-\\d{2}-[a-z0-9-]+(\\.[a-z0-9-]+)*$"
+        "^\\d{4}-\\d{2}-\\d{2}-[a-z0-9-]+(\\.[a-z0-9-]+)*$",
+        "^RESEARCH-[A-Za-z0-9-]+(\\.[a-z0-9-]+)*$"
       ],
-      "_readme": "Lowercase-hyphen base pattern, OR acronym-prefixed (ADR-NNN-name, phase-N-name), OR YYYY-MM-DD-name dated artifact."
+      "_readme": "Lowercase-hyphen base pattern, OR acronym-prefixed (ADR-NNN-name, phase-N-name), OR YYYY-MM-DD-name dated artifact, OR RESEARCH-prefixed scott-research output (uppercase prefix + mode segment preserved)."
     }
   },
   "exempt_files": {
