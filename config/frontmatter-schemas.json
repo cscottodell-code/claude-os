@@ -92,10 +92,11 @@
     }
   },
   "tag_axis_vocabs": {
-    "_readme": "Closed vocabularies for tag axes per Phase 1 Item 4. Used to validate `types/X`, `source/X`, `confidence/X` tag values when present.",
+    "_readme": "Closed vocabularies for tag axes. Used to validate `types/X`, `source/X`, `confidence/X`, `statuses/X` tag values when present. `types` and `source` are universally required (see universal_baseline); `confidence` is required on idea/commitment/process types; `statuses` is optional workflow-state, validated only when present.",
     "types": ["record", "entity", "idea", "commitment", "process", "navigation", "reference"],
     "source": ["scott", "external", "llm"],
-    "confidence": ["conceptual", "planning", "testing", "adopted", "archived"]
+    "confidence": ["conceptual", "planning", "testing", "adopted", "archived"],
+    "statuses": ["active", "draft", "archive"]
   },
   "format_conventions": {
     "_readme": "Phase 3a Rule 4 mechanical format conventions. The guard validates field-name shape; field-value format checks (date format, etc.) are advisory in this version.",
